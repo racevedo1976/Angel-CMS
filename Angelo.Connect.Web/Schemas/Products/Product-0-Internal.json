@@ -1,0 +1,145 @@
+﻿{
+  "ProductId": "product-0",
+  "Version": "2019.2.1",
+  "Title": "Internal Corp Plan",
+  "Description": "Internal product used for building PC|Mac demo sites",
+  "Active": true,
+  "BaseSiteMB": "350000",
+  "Features": [
+    {
+      "Id": "Connect-Core",
+      "Type": "",
+      "Title": "Connect Core Functionality",
+      "Settings": {
+
+      }
+    },
+    {
+      "Name": "NotifyMe",
+      "Type": "",
+      "Title": "Notify Me",
+      "Settings": {
+        "enabled": "true"
+      }
+    },
+    {
+      "Name": "notifications",
+      "Type": "",
+      "Title": "Notifications",
+      "Settings": {
+        "enabled": "true"
+      }
+    },
+    {
+      "Name": "Widgets",
+      "Type": "",
+      "Title": "Allowed Widgets",
+      "Settings": {
+        "PageWidgets": [
+          "contactform-1",
+          "html-raw",
+          "icon-1",
+          "image-inline",
+          "title-default",
+          "alert-alert1",
+          "hero-hero1",
+          "search-search1",
+          "blog-posts-normal",
+          "news-posts-normal",
+          "announcement-posts-normal",
+          "calendar-month-view",
+          "calendar-upcoming-events",
+          "document-list",
+          "h-nav-menu",
+          "v-nav-menu",
+          "v-nav-auto",
+          "slideshow-carousel",
+          "media-gallery",
+          "video-player",
+          "carousel",
+          "video-background",
+          "zone-1",
+          "zone-2",
+          "zone-3",
+          "zone-4",
+          "zone-5",
+          "zone-6",
+          "zone-2-10",
+          "zone-3-9",
+          "zone-9-3",
+          "zone-4-8",
+          "zone-8-4",
+          "lightbox-1"
+        ]
+      }
+    },
+    {
+      "Name": "slideshowvideos",
+      "Type": "",
+      "Title": "Slideshow Videos",
+      "Settings": {
+        "enabled": "false"
+      }
+    },
+    {
+      "Name": "alerts",
+      "Type": "",
+      "Title": "Site Alerts",
+      "Settings": {
+        "enabled": "true"
+      }
+    },
+    {
+      "Name": "documentsharing",
+      "Type": "feature",
+      "Title": "Document Sharing",
+      "Settings": {
+        "enabled": "true"
+      }
+    },
+    {
+      "Name": "livevideo",
+      "Type": "",
+      "Title": "Live Video",
+      "Settings": {
+        "enabled": "true"
+      }
+    }
+  ],
+  "SiteTemplates": [
+    "empty-nav-above",
+    "empty-nav-below",
+    "inspiration",
+    "guidance",
+    "cityscape",
+    "essential",
+	  "royal",
+	  "royal1",
+	  "royal2",
+	  "royal3",
+	  "theatrics",
+	  "theatrics1",
+	  "theatrics2",
+	  "nebula",
+	  "nebula1",
+	  "nebula2",
+	  "tidal",
+	  "tidal1",
+	  "tidal2",
+	  "aurora",
+	  "aurora1",
+	  "aurora2",
+	  "matrix",
+	  "matrix1",
+	  "matrix2",
+	  "pinnacle",
+	  "pinnacle1",
+	  "pinnacle2",
+	  "carnival",
+	  "carnival1",
+	  "carnival2",
+	  "sis",
+	  "sis1",
+	  "sis2"
+  ]
+}

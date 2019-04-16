@@ -1,0 +1,89 @@
+/*-------- Begin Exported Site Css, Site: Tidal Demo Site --------*/
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Slabo+27px');
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+    letter-spacing: 0.4px;
+    font-family: "Slabo 27px", Times, "Times New Roman", "serif"; }
+.h1 {
+    font-family: "Slabo 27px", Times, "Times New Roman", "serif"; }
+
+body { 
+    background: #262626 url(/templates/tidal/images/background.jpg) top center no-repeat;  background-attachment: fixed; 
+    margin: 0px;
+    font-family:  "Open Sans", Helvetica, Arial, "sans-serif";}
+
+.text-info {
+    color: #022B3F;}
+
+/* template structure */
+.cs-toolbar{ 
+    padding: 5px 15px 0 15px;
+    background: #000; 
+    color: #fff;}
+
+.cs-header{background: transparent url(/templates/tidal/images/logoback.jpg) top center repeat-y; }
+.cs-header-navbar{}
+.cs-header-content{}
+
+.navbar {
+    border-radius: 0;}
+.navbar .navbar-default {margin-bottom: 0 }
+.navbar-default { border: none;background-color: transparent;} 
+.navbar-brand { 
+    font-family: "Cinzel", Georgia, "Times New Roman", Times, serif;}
+.nav > li > a {
+    font-family: "Cinzel", Georgia, "Times New Roman", Times, serif; color: #333;}
+.navbar-default .navbar-nav > li > a {
+    color: #fff; font-family: "Slabo 27px", Times, "Times New Roman", "serif";  text-transform: uppercase;}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #ccc;}
+
+.cs-homestripes{background: transparent url(/templates/tidal/images/defaultbackground.jpg) top center repeat; padding:10px; }
+
+.cs-page{}
+.cs-page-content{}
+.cs-page-side{}
+
+.cs-homecontent{background: #086584;}
+
+.cs-footer{
+    margin-top: 0px; }
+.cs-footer-content { }
+.cs-footer-info { 
+    text-align: center; 
+    background: #022b3f;
+    width: 1140px; 
+    margin: auto;
+    color: white; }
+.search-field .fa-search {
+    color: #eee;}
+
+.cs-socialmediaback { padding: 4px 10px 10px 10px;}
+.cs-socialmedia a { 
+    padding: 5px;
+    color: #000000;
+    font-size: 20px;
+    background: #cccccc;
+    text-align: center;
+    float: right;
+    width: 36px;
+    height: 36px;  
+    margin-right: 7px; /*space between*/} 
+.cs-socialmedia a i {
+    font-size: 20px;
+    line-height: 38px;
+    color: #000000;}
+
+.cs-page-layout-2 {background: #eaeaea;margin: 0;}
+
+.cs-textgray {color: #eee;}
+
+/* color schemes */
+.bg-default { background: #ffffff;}
+.bg-muted {background: #f1f1f1; }
+.bg-dark {background: #252525; color: #eee; }
+.bg-contrast { background: #022B3F;  }
+.bg-clean { background: #ffffff }
+.bg-fancy { }

@@ -1,0 +1,44 @@
+﻿@model IList<Angelo.Connect.Web.UI.ViewModels.Admin.SiteViewModel>
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+
+@inject Angelo.Connect.UI.Routes Routes
+
+@{
+    string appId = ViewBag.AppId ?? "";
+    var componentId = (string)ViewData["cid"];
+}
+
+
+@(Html.Kendo().Grid<Angelo.Connect.Web.UI.ViewModels.Admin.SiteViewModel>()
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        //columns.CustomEvent(componentId, "nav-to-site-admin", data => {
+        //    data.MapField(m => m.ClientId);
+        //    data.MapField("SiteId", m => m.Id);
+        //    }, IconType.Edit.Render()).Width(35);
+        columns.Bound(p => p.ClientName).Title(Html.ShortNameFor(x => x.First().ClientName).ToString());
+        columns.Bound(p => p.AppName).Title(Html.ShortNameFor(x => x.First().AppName).ToString());
+        columns.Bound(p => p.Title).Title(Html.ShortNameFor(x => x.First().Title).ToString());
+        columns.Bound(p => p.TenantKey).Title(Html.ShortNameFor(x => x.First().TenantKey).ToString()).Width(120);
+        columns.Bound(p => p.Status).Title(Html.ShortNameFor(x => x.First().Status).ToString()).Width(120);
+        columns.Bound(p => p.Id).Hidden(true);
+    })
+    .Pageable()
+    .Sortable(false)
+    .Scrollable(scr => scr.Height(430))
+    .Filterable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(100)
+        .Read(read =>
+        {
+            read.Type(HttpVerbs.Post)
+            .Url(Routes.CorpApi("sites/data")); 
+        })
+    )
+)
+
+

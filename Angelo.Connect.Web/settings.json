@@ -1,0 +1,74 @@
+﻿{
+  "Application": {
+    "Name": "Angelo.Connect",
+    "Version": "0.1.0"
+  },
+
+  "PluginFolder": "Plugins",
+  "TemplatesDirectory": "wwwroot/templates",
+  "SearchIndexRoot": "C:\\Angelo\\Lucene",
+
+  "ConnectionStrings": {
+    "ConnectDB": "[SET_PER_ENVIRONMENT]",
+    "JobsDB": "[SET_PER_ENVIRONMENT]",
+    "IdentityDB": "[SET_PER_ENVIRONMENT]",
+    "DriveDB": "[SET_PER_ENVIRIONMENT]"
+  },
+
+  "OpenIdConnect": {
+    "Authority": "[SET_PER_ENVIRONMENT]",
+    "ClientId": "Angelo.Connect.Web",
+    "ClientSecret": "aries",
+    "IdClaimType": "sub",
+    "NameClaimType": "name",
+    "RoleClaimType": "role",
+    "Scopes": [
+      "openid",
+      "profile",
+      "security",
+      "drive"
+    ]
+  },
+  "WebServer": {
+    "UseHttpsRoutes": "false",
+    "UseHttpsRewriter": "false",
+    "SessionMinutes": 720,
+    "ResourcePath": "Resources",
+    "DefaultCulture": "en-US",
+    "SupportedCultures": [
+      "en-US",
+      "es-US",
+      "ar-LB",
+      "de-DE",
+      "fr-CA"
+    ]
+  },
+  "Drive": {
+    "Authority": "[SET_PER_ENVIRONMENT]"
+  },
+  "NotifyMe": {
+    "UnsubscribeDefaultDomain": "[SET_PER_ENVIRONMENT]",
+    "UnsubscribePath": "[SET_PER_ENVIRONMENT]",
+    "EmailServerHost": "[SET_PER_ENVIRONMENT]"
+  },
+  "Smtp": {
+    "Server": "antispam.pcmac.org",
+    "Port": 25,
+    "RequireSsl": false,
+    "RequireAuthentication": false,
+    "DefaultReplyToAddress": "donotreply@schoolinsites.com",
+    "DefaultFromAddress": "support@schoolinsites.com",
+    "Credentials": {
+      "Username": "",
+      "Password": ""
+    }
+  },
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Warning",
+      "Microsoft": "Warning"
+    }
+  }
+}

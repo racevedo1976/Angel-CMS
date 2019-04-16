@@ -1,0 +1,64 @@
+﻿@using Angelo.Connect.SlideShow.Extensions
+@using Angelo.Connect.SlideShow.Models
+
+@model Parallax
+@{
+    var events = typeof(ParallaxEvent).GetItemsForEnum();
+}
+<h4>Parallax allows background images to move slower than foreground images, creating an illusion of depth</h4>
+<div>
+    <div class="row">
+        <label class="form-label col-sm-3">Enable Parallax</label>
+        <div class="col-sm-4">
+            @Html.EditorFor(x => x.IsEnabled, null, nameof(Parallax.IsEnabled))
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-3">Event</label>
+        <div class="col-sm-4">
+            <select class="form-control" asp-for="ParallaxEvent">
+                @foreach (var item in events)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-5">
+            Choose "Mouse Move", "Scroll Position" (page scrolling) or "Move &amp; Scroll" (first two combined).
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-3">Parallax Origin</label>
+        <div class="col-sm-4">
+            @Html.EditorFor(x => x.Origin, null, nameof(Parallax.Origin))
+        </div>
+        <div class="col-sm-5">
+            Select where the Parallax movement is based.
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-3">Animation Speed</label>
+        <div class="col-sm-4">
+            @Html.EditorFor(x => x.AnimationSpeed, null, nameof(Parallax.AnimationSpeed))
+        </div>
+        <div class="col-sm-5">
+            Use a lower number for fast movement, and a higher number for smoother motion.
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-3">Parallax Level</label>
+        <div class="col-sm-4">
+            @Html.EditorFor(x => x.Level, null, nameof(Parallax.Level))
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-3">Disable on Mobile</label>
+        <div class="col-sm-4">
+            @Html.EditorFor(x => x.IsMobileDisabled, null, nameof(Parallax.IsMobileDisabled))
+        </div>
+    </div>
+    <section>
+        <h4>Parallax Levels</h4>
+        @Html.Partial("~/UI/Views/Components/SlideForm/_ParallaxLevels.cshtml")
+    </section>
+</div>

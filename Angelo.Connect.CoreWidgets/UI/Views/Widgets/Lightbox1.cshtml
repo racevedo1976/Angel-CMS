@@ -1,0 +1,117 @@
+﻿@using Angelo.Connect.Rendering
+@model Angelo.Connect.CoreWidgets.Models.Lightbox
+@{ 
+    var treeContext = ViewData.GetTreeContext();
+
+    var borderRadius = Model.ImageRadius ?? "0px";
+    var width = Model.ImageWidth ?? "100%";
+    var height = Model.ImageHeight ?? "auto";
+    var widthStyle = "max-width: " + width;
+    var heightStyle = "max-height: " + height;
+
+    if (width.Contains("%") && width != "100%")
+    {
+        widthStyle = "width: " + width;
+    }
+
+    var inlineStyle = "border-radius: " + borderRadius + ";" + widthStyle + ";" + heightStyle;
+
+    var defaultText = "Click Me";
+
+    if (!string.IsNullOrEmpty(Model.Text))
+    {
+        defaultText = Model.Text;
+    }
+}
+
+<style>
+    .lightbox-popup {
+        position: absolute !important;
+        background: #fff  !important;
+        top: 100px !important;
+        left: 300px !important;
+        right: 300px !important;
+        min-height: 300px !important;
+        max-height: 500px !important;
+        width: 800px !important;
+        margin: 0 auto !important;
+        padding: 30px !important;
+        z-index: 900 !important;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .lightbox-popup-bg {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        background: rgba(50, 50, 50, .5);
+    }
+
+    .lightbox-close {
+        position: absolute;
+        right: 10px;
+        top: 0px;
+        font-size: 30px;
+    }
+
+
+    .editable .lightbox-close {
+        right: -20px;
+        top: -40px;
+    }
+
+    .lightbox-trigger {
+        cursor: pointer;
+        display: inline-block;
+        width: auto;
+    }
+
+    .lightbox-placeholder 
+    {
+        background: #fafafa;
+        padding: 10px;
+        color: #777;
+    }
+</style>
+
+
+<div data-module="widgets/lightbox" data-editable="@treeContext.Editable" data-widget-id="@Model.Id" data-tree-id="@treeContext.TreeId" data-trigger-type="@Model.TriggerType" data-timer="@Model.Timer">
+
+    <div class="lightbox-trigger" name="lightboxTrigger">
+
+        <div show-if="@(Model.TriggerType == "Image")">
+            @if (string.IsNullOrEmpty(Model.ImageSrc))
+            {
+                <i class="fa fa-picture-o fa-fw content-node-placeholder"></i>
+            }
+            else
+            {
+                <img src="@Model.ImageSrc" class="img-responsive" alt="@Model.Caption" title="@Model.Caption" style="@inlineStyle" />
+            }
+        </div>
+
+        <div show-if="@(Model.TriggerType == "Link")">
+            <a href="#lightbox">@defaultText</a>
+        </div>
+
+        <div show-if="@(Model.TriggerType == "Button")">
+            <a href="#lightbox" class="btn btn-primary">@defaultText</a>
+        </div>
+
+        <div show-if="@(Model.TriggerType == "Timer" && treeContext.Editable)">
+            <div class="lightbox-placeholder" title="@Html.Localize("This will not show on the published page")">
+                <i class="fa fa-clock-o"></i> &nbsp; @Html.Localize("Timer Based Lightbox")
+            </div>
+        </div>
+
+    </div>
+
+    <div class="lightbox-template" style="display: none">
+        <zone name="lightbox-popup" id="@treeContext.NodeId"></zone>
+        <a class="lightbox-close">&times;</a>
+    </div>
+
+</div>

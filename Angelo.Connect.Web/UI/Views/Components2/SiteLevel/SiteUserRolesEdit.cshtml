@@ -1,0 +1,22 @@
+﻿@model IEnumerable<UserRoleViewModel>
+@{
+    var componentId = (string)ViewData["cid"];
+    var userId = (string)ViewData["UserId"];
+
+    var apiUrl = routes.SiteApi($"users/{userId}/roles");
+}
+<form id="@componentId" action="@apiUrl" class="form-horizontal" data-ajax-form>
+    @foreach (var item in Model)
+    {
+        <div class="form-group">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <span>
+                        <input type="checkbox" name="roles" value="@item.RoleId" checked="@item.Selected" class="checkbox-inline" />
+                    </span>
+                    <label class="control-label">@item.RoleName</label>
+                </div>
+            </div>
+        </div>
+    }
+</form>

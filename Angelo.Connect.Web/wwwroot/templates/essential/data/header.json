@@ -1,0 +1,10 @@
+﻿ [
+  {
+    "zone": "header",
+    "type": "image",
+    "model": {
+      "caption": "Site Logo",
+      "src": "/templates/essential/images/logo.png"
+    }
+  }
+]

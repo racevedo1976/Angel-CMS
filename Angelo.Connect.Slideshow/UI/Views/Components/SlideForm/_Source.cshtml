@@ -1,0 +1,60 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Extensions
+
+@model Slide
+@{ 
+    var imageSourceSizes = typeof(Size).GetItemsForEnum();
+    var backgroundFits = typeof(Fit).GetItemsForEnum(); ;
+    var backgroundPositions = typeof(Position).GetItemsForEnum();
+    var backgroundTilings = typeof(Tiling).GetItemsForEnum(); ;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <label class="form-label col-sm-4">Image Source Size</label>
+        <div class="col-sm-4">
+            <select class="form-control" asp-for="ImageSourceSize">
+                @foreach (var item in imageSourceSizes)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-4">Background Fit</label>
+        <div class="col-sm-4">
+            <select class="form-control" asp-for="BackgroundFit">
+                @foreach (var item in backgroundFits)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <label class="form-label col-sm-4">Cover will ensure that your image will always fill the entire size of the slider.</label>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-4">Background Position</label>
+        <div class="col-sm-4">
+            <select class="form-control" asp-for="Position">
+                @foreach (var item in backgroundPositions)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <label class="form-label col-sm-4">The background-position property sets the starting position of a background image.</label>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-4">Background Tiling</label>
+        <div class="col-sm-4">
+            <select class="form-control" asp-for="Tiling">
+                @foreach (var item in backgroundTilings)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <label class="form-label col-sm-4">The background-tiling property sets if/how a background image will be repeated.</label>
+    </div>
+</div>

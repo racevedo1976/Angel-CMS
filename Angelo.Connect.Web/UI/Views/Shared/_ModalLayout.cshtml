@@ -1,0 +1,39 @@
+﻿@{
+    var modalCss = "modal-layout";
+    var iconClass = "fa fa-gear";
+
+    if (ViewData["ModalCssClass"] != null)
+    {
+        modalCss += " " + ViewData["ModalCssClass"].ToString().Trim();
+        ViewData["ModalCssClass"] = null;
+    }
+
+    if (ViewData["ModalIconClass"] != null)
+    {
+        iconClass = ViewData["ModalIconClass"].ToString().Trim();
+        ViewData["ModalIconClass"] = null;
+    }
+
+    var x = 100;
+}
+
+<div class="modal-dialog @modalCss">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">
+                <i class="@iconClass"></i>
+                @RenderSection("ModalTitle", required: false)
+            </div>               
+        </div>
+        <button name="close" class="close modal-button modal-close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-body" style="padding: 20px !important">
+            @RenderSection("ModalBody", required: false)
+            @RenderBody()
+        </div>
+        <div class="modal-footer">
+            @RenderSection("ModalFooter", required: false)
+        </div>
+    </div>
+</div>

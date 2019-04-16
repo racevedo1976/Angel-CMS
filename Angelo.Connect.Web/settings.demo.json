@@ -1,0 +1,54 @@
+﻿{
+  "ConnectionStrings": {
+    "ConnectDB": "Data Source=developmentDB;Initial Catalog=Angelo.Connect;Integrated Security=True;MultipleActiveResultSets=true",
+    "JobsDB": "Data Source=developmentDB;Initial Catalog=Angelo.Connect;Integrated Security=True;MultipleActiveResultSets=true",
+    "IdentityDB": "Data Source=developmentDB;Initial Catalog=Angelo.Identity;Integrated Security=True;MultipleActiveResultSets=true",
+    "DriveDB": "Data Source=developmentDB;Initial Catalog=Angelo.Drive;Integrated Security=True"
+  },
+  "OpenIdConnect": {
+    "Authority": "https://aegisdemo.schoolinsites.com/",
+    "EndPoints": {
+      "Authorize": "https://aegisdemo.schoolinsites.com/connect/authorize",
+      "UserInfo": "https://aegisdemo.schoolinsites.com/connect/userinfo",
+      "ObtainToken": "https://aegisdemo.schoolinsites.com/connect/token",
+      "RevokeToken": "https://aegisdemo.schoolinsites.com/connect/revocation",
+      "ValidateToken": "https://aegisdemo.schoolinsites.com/connect/validation",
+      "Register": "https://aegisdemo.schoolinsites.com/ui/register",
+      "Logout": "https://aegisdemo.schoolinsites.com/auth/{0}/account/logoff",
+      "Meta": "https://aegisdemo.schoolinsites.com/.well-known/openid-configuration",
+      "TenantUsers": "https://aegisdemo.schoolinsites.com/api/tenants/{0}/users",
+      "TenantRoles": "https://aegisdemo.schoolinsites.com/api/tenants/{0}/roles",
+      "PoolUsers": "https://aegisdemo.schoolinsites.com/api/pools/{0}/users",
+      "PoolRoles": "https://aegisdemo.schoolinsites.com/api/pools/{0}/roles",
+      "Ldap": "https://aegisdemo.schoolinsites.com/api/pools/{0}/ldap",
+      "SetPassword": "https://aegisdemo.schoolinsites.com/auth/{0}/account/NewUserSetPassword/?userId={1}&code={2}&ru={3}"
+    }
+  },
+  "WebServer": {
+    "UseHttpsRoutes": true,
+    "UseHttpsRewriter": true,
+    "SessionMinutes": 720
+  },
+  "Drive": {
+    "Authority": "https://drivedemo.schoolinsites.com/api",
+    "EndPoints": {
+    }
+  },
+  "NotifyMe": {
+    "UnsubscribeDefaultDomain": "https://connect.demo.pcmac.org",
+    "UnsubscribePath": "/sys/notifyme/unsubscribe",
+    "EmailServerHost": "antispam.pcmac.org"
+  },
+  "SiteOptions": [
+    {
+      "SiteKey": "sis",
+      "Key": "GoogleSiteId",
+      "Value": "zXvqOMdNsVd1vMZjHN4NfQhtWOmtGz9I31iJfbzHv4E"
+    },
+    {
+      "SiteKey": "sis",
+      "Key": "GoogleSearchCode",
+      "Value": "015230287576461061678:qw_te68o84q"
+    }
+  ]
+}

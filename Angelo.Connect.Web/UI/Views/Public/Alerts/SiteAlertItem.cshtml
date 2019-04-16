@@ -1,0 +1,27 @@
+﻿@using Angelo.Connect.Models
+@model SiteAlert
+
+@{
+    Layout = "_ModalLayout";
+
+   
+}
+
+@section ModalTitle {
+    @Model.Title
+}
+
+
+@section ModalBody {
+    
+    <div>
+        <zone name="sitealert-body" allow-containers="false"></zone>
+    </div>
+    
+
+}
+
+@section ModalFooter {
+    @*<button type="button" class="btn btn-primary viewerCloseBtn" data-dismiss="modal" onclick="saveEvent()">Save</button>*@
+    <button type="button" name="close" class="btn btn-default modal-button viewerCloseBtn" data-dismiss="modal">Close</button>
+}

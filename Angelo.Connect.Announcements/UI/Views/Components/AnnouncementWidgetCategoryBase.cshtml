@@ -1,0 +1,77 @@
+﻿@model Angelo.Connect.Announcement.UI.ViewModels.AnnouncementWidgetCategoryFormViewModel
+@inject Angelo.Connect.Configuration.SiteContext siteContext
+
+
+@*
+    <div style="width:50%;">
+        <component id="announcementWidgetCategoryAutoComplete" type="AnnouncementWidgetCategoryAutoComplete" arg-widgetId="@Model.WidgetId" arg-shared="@false"></component>
+    </div>
+*@
+
+<div class="form-group">
+    <div id="AnnouncementWidgetCategoryRadioButtons" style="padding-bottom:1EM; padding-top:1EM">
+        <input name="categoryScope" type="radio" value="false" checked="checked"/> @Html.Localize("My Categories")
+        &nbsp;
+        &nbsp;
+        <input name="categoryScope" type="radio" value="true" /> @Html.Localize("Shared Categories")
+    </div>
+
+    <component id="announcementWidgetCategoryForm" type="AnnouncementWidgetCategoryForm" arg-widgetId="@Model.WidgetId" arg-shared ="@false"></component>
+</div>
+
+
+<script>
+    function onSelectWidgetPostCategory(e) {
+
+    }
+
+    $(document).on("change", "#AnnouncementWidgetCategoryRadioButtons input[type='radio']", function (e) {
+        var showShared = e.currentTarget.value;
+
+        //$('#announcementWidgetCategoryAutoComplete').component().invoke({ "widgetId": "@Model.WidgetId", "shared": showShared });
+        $('#announcementWidgetCategoryForm').component().invoke({ "widgetId": "@Model.WidgetId", "shared": showShared });
+    });
+
+    function announcementWidgetCategoryGrid_DataBound() {
+        // Set the check state to "checked" for all checkboxes in the grid
+        // that match the list of selected category ids
+        var idsToSetChecked = getSelectedCategoryIds();
+        if (idsToSetChecked.length > 0 && idsToSetChecked[0].toString()) {
+            for (var i = 0; i < idsToSetChecked.length; i++) {
+                $("#announcementWidgetCategoryGrid").find("[value=" + idsToSetChecked[i] + "]:checkbox").attr("checked", "checked");
+            }
+        }
+
+        // Manage the hidden form value upon checking / unchecking grid checkboxes
+        $("#announcementWidgetCategoryGrid").find(":checkbox").on("click", function (event) {
+            var selectedIds = getSelectedCategoryIds(),
+                $chk = $(this),
+                categoryId = $chk.val();
+
+            if ($chk.is(":checked") && selectedIds.indexOf(categoryId) == -1) {
+                selectedIds.push(categoryId);
+            }
+            else if (!$chk.is(":checked")) {
+                var index = selectedIds.indexOf(categoryId);
+
+                if (selectedIds.length > 1) {
+                    selectedIds.splice(index, 1);
+                }
+                else if (selectedIds.length == 1) {
+                    selectedIds.splice(index, 1);
+                    $("#announcementWidgetCategoryForm").find("input[name=Categories]").val("")
+                }
+            }
+
+            $("#announcementWidgetCategoryForm").find("input[name=Categories]").val(selectedIds.join(","));
+
+        });
+
+        function getSelectedCategoryIds() {
+            var ids = $("#announcementWidgetCategoryForm").find("input[name=Categories]").val() || "";
+            return ids.split(",");
+        }
+    }
+
+
+</script>

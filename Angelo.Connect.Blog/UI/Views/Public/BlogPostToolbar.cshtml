@@ -1,0 +1,26 @@
+﻿@using Angelo.Connect.Blog.Models
+@using Angelo.Connect.Rendering;
+
+@model BlogPost
+
+@{
+    var returnUrl = ViewData.GetReturnUrl();
+
+    var settingsUrl = $"/sys/console/blog/posts/{Model.Id}/settings";
+    var designUrl = $"/sys/console/blog/posts/{Model.Id}/edit";
+}
+
+<ul class="list-inline">
+    <li>
+        <a onclick="$.console('blog','@designUrl')">
+            <i class="fa fa-edit"></i> &nbsp;
+            @Html.Localize("Design")
+        </a>
+    </li>
+    <li>
+        <a onclick="$.console('blog','@settingsUrl')">
+            <i class="fa fa-gear"></i> &nbsp;
+            @Html.Localize("Settings")
+        </a>
+    </li>
+</ul>

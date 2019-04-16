@@ -1,0 +1,281 @@
+﻿@model IEnumerable<SiteCollectionViewModel>
+
+@{
+    var clientId = (string)ViewData["ClientId"];
+    var collectionId = (string)ViewData["CollectionId"];
+}
+
+@section Title{
+    @Html.Localize("Site Collections")
+}
+
+
+@section Panel{
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#siteCollectionsDetailsFormTab" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+        <li>
+            <a href="#siteCollectionsSitesTab" data-toggle="tab">
+                @Html.Localize("Sites")
+            </a>
+        </li>
+        <li>
+            <a href="#placeholderTwoTab" data-toggle="tab">
+                Placeholder
+            </a>
+        </li>
+    </ul>
+
+    <br />
+
+    <div class="tab-content">
+        <div id="siteCollectionsDetailsFormTab" class="tab-pane fade in active">
+            <div id="siteCollectionsEditToolbar" class="toolbar">
+                <a id="btnSave" name="save" class="fa fa-save" title="@Html.Localize("Save")">
+                    <span>@Html.Localize("Save")</span>
+                </a>
+                @*<a id="btnDelete" name="delete" class="fa fa-trash-o" title="@Html.Localize("Delete")">
+                        <span>@Html.Localize("Delete")</span>
+                    </a>*@
+            </div>
+            <div id="siteCollectionsAddToolbar" class="toolbar" style="display:none">
+                <a id="btnSave" name="save" class="fa fa-save" title="@Html.Localize("Save")"></a>
+                <a id="btnBack" name="back" class="fa fa-chevron-left" title="@Html.Localize("Back")">@Html.Localize("Back")</a>
+            </div>
+            <div id="siteCollectionsDiv">
+                <component id="siteCollectionsEditForm" type="SiteCollectionsEditForm" arg-clientId="@clientId" arg-collectionId="@collectionId"></component>
+            </div>
+        </div>
+
+
+        <div id="siteCollectionsSitesTab" class="tab-pane fade in">
+            <div id="siteCollectionsSitesToolbar" class="toolbar">
+                <a name="addSites" class="fa fa-plus-square" title="@Html.Localize("Add")">
+                    <span>@Html.Localize("Add")</span>
+                </a>
+            </div>
+            <div id="siteCollectionsAddSitesToolbar" class="toolbar" style="display:none">
+                <a id="btnBack" name="addSitesBack" class="fa fa-chevron-left" title="@Html.Localize("Back")">
+                    @Html.Localize("Back")
+                </a>
+            </div>
+            <div id="siteCollectionsSitesDiv">
+                <component id="siteCollectionsSitesForm" type="SiteCollectionsSitesForm" arg-clientId="@clientId" arg-collectionId="@collectionId"></component>
+            </div>
+        </div>
+
+
+        <div id="placeholderTwoTab" class="tab-pane fade in">
+            <div class="text-muted placeholder">
+                Not Implemented
+            </div>
+        </div>
+    </div>
+}
+
+<div id="siteCollectionsList">
+    <div id="contentToolbar" class="toolbar">
+        <a name="add" class="fa fa-plus-square">
+            <span>@Html.Localize("Create")</span>
+        </a>
+    </div>
+    <component id="siteCollectionsGrid" type="SiteCollectionsGrid" arg-clientId="@clientId"></component>
+</div>
+
+@section Scripts{
+    <script>
+        //
+        // GRID
+        //
+        $.on("siteCollectionsGrid.change", function (event, data) {
+            var row = data.sender.select();
+            var model = data.sender.dataItem(row);
+            var tempClientId = model.ClientId;
+            var tempId = model.Id;
+          
+            $('#siteCollectionsDiv').loadComponent({
+                "type": "SiteCollectionsEditForm",
+                "id": "siteCollectionsEditForm",
+                "params": {
+                    "clientId": tempClientId,
+                    "collectionId": tempId
+                }
+            }).done(function () {
+            });
+
+            $("#siteCollectionsSitesDiv").loadComponent({
+                "type": "SiteCollectionsSitesForm",
+                "id": "siteCollectionsSitesForm",
+                "params": {
+                    "clientId": tempClientId,
+                    "collectionId": tempId
+                }
+            });
+        })
+
+        $.on("contentToolbar.add", function () {
+            $('#siteCollectionsDiv').loadComponent({
+                "type": "SiteCollectionsAddForm",
+                "id": "siteCollectionsAddForm",
+                "params": {
+                    "clientId": "@clientId"
+                }
+            }).done(function () {
+
+            });
+            $("#addNewCollectionName").val('');
+            $("#siteCollectionsEditToolbar").css("display", "none");
+            $("#siteCollectionsAddToolbar").css("display", "block");
+        });
+
+        //
+        // EDIT
+        //
+        $.on("siteCollectionsEditToolbar.save", function (event, data) {
+            $("#siteCollectionsEditForm").form().put();
+        })
+        $.on("siteCollectionsEditForm.submit", function (event, data) {
+            var grid = $("#siteCollectionsGrid").getKendoGrid();
+            grid.dataSource.read();
+        });
+
+
+
+        //
+        // ADD Site Collection
+        //
+        $.on("siteCollectionsAddToolbar.save", function (event, data) {
+            $("#siteCollectionsAddForm").form().post();
+        })
+
+        $.on("siteCollectionsAddForm.submit", function (event, data) {
+            var grid = $("#siteCollectionsGrid").getKendoGrid();
+            grid.dataSource.read();
+
+            $("#addNewCollectionName").val('');
+            $("#siteCollectionsEditToolbar").css("display", "block");
+            $("#siteCollectionsAddToolbar").css("display", "none");
+
+            $('#siteCollectionsDiv').loadComponent({
+                "type": "SiteCollectionsEditForm",
+                "id": "siteCollectionsEditForm",
+                "params": {
+                    "clientId": "@clientId",
+                    "collectionId": "@collectionId"
+                }
+            }).done(function () {
+            });
+        })
+
+        $.on("siteCollectionsAddToolbar.back", function () {
+            $('#siteCollectionsDiv').loadComponent({
+                "type": "SiteCollectionsEditForm",
+                "id": "siteCollectionsEditForm",
+                "params": {
+                    "clientId": "@clientId"
+                }
+            }).done(function () {
+
+            });
+            $("#siteCollectionsEditToolbar").css("display", "block");
+            $("#siteCollectionsAddToolbar").css("display", "none");
+        })
+
+        //
+        // ADD Site to Site Collection
+        //
+        $.on("siteCollectionsSitesToolbar.addSites", function (event, data) {
+            var selectedItem = selectedGridItem("siteCollectionsGrid");
+            var localClientId = selectedItem.ClientId;
+            var localId = selectedItem.Id;
+
+            $("#siteCollectionsSitesDiv").loadComponent({
+                "type": "SiteCollectionsAddSitesForm",
+                "id": "siteCollectionsAddSitesForm",
+                "params": {
+                    "clientId": localClientId,
+                    "collectionId": localId
+                }
+            });
+            $("#siteCollectionsSitesToolbar").css("display", "none");
+            $("#siteCollectionsAddSitesToolbar").css("display", "block");
+        })
+
+        function addSite(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var localClientId = dataItem.ClientId;
+            var localSiteCollectionId = dataItem.SiteCollectionId;
+            var localTitle = dataItem.Title;
+            var localSiteId = dataItem.SiteId;
+
+            $.ajax({
+                url: ("/api/siteCollections/addSite"),
+                type: 'POST',
+                data: {
+                    'clientId': localClientId,
+                    'siteCollectionId': localSiteCollectionId,
+                    'title': localTitle,
+                    'siteId': localSiteId
+                },
+                success: function (data) {
+                    addSiteTransition();
+                },
+                error: function (data) {
+                    alert("error");
+                }
+            })
+            .fail(function (xhr) {
+                 alert("error handler");
+            })
+            .done(function (data) {
+            })
+            .always(function (response) {
+            });
+        }
+
+        function addSiteTransition() {
+            var selectedItem = selectedGridItem("siteCollectionsGrid");
+            var localClientId = selectedItem.ClientId;
+            var localId = selectedItem.Id;
+
+            $("#siteCollectionsSitesDiv").loadComponent({
+                "type": "SiteCollectionsAddSitesForm",
+                "id": "siteCollectionsAddSitesForm",
+                "params": {
+                    "clientId": localClientId,
+                    "collectionId": localId
+                }
+            });
+        }
+
+        $.on("siteCollectionsAddSitesToolbar.addSitesBack", function () {
+            var selectedItem = selectedGridItem("siteCollectionsGrid");
+            var localClientId = "";
+            if (selectedItem != null) {
+                clientId = selectedItem.ClientId;
+            }
+            var localCollectionId = selectedItem.Id;
+            $("#siteCollectionsSitesDiv").loadComponent({
+                "type": "SiteCollectionsSitesForm",
+                "id": "siteCollectionsSitesForm",
+                "params": {
+                    "clientId": localClientId,
+                    "collectionId": localCollectionId
+                }
+            });
+            //$("#addNewCollectionName").val('');
+            $("#siteCollectionsSitesToolbar").css("display", "block");
+            $("#siteCollectionsAddSitesToolbar").css("display", "none");
+        })
+
+        function selectedGridItem(gridId) {
+            var theGrid = $("#" + gridId).data("kendoGrid");
+            var selectedItem = theGrid.dataItem(theGrid.select());
+            return selectedItem;
+        }
+    </script>
+}

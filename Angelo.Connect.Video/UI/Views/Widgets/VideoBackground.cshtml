@@ -1,0 +1,167 @@
+﻿@using Angelo.Connect.Rendering;
+@model Angelo.Connect.Video.Models.VideoBackgroundWidgetViewModel
+
+@{
+    var parentId = (string)ViewData["ParentNodeId"];
+}
+
+<div class="cn-video-background-container">
+    @{
+    <div class="pattern-overlay"></div>
+    if (Model.VideoSourceType == "youtube")
+    {
+            <div class="cn-video-background" id="YouTubeBackgroundVideoPlayer"></div>
+        }
+        else if (Model.VideoSourceType == "vimeo")
+        {
+            <iframe class="cn-video-background" src="@Model.SourceUri?background=1&autoplay=1&muted=1&quality=540p" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        }
+    }
+    <div class="content-layout">
+        <div class="content-cell-group">
+            <div class="col-sm-12 cn-video-content">
+                <zone id="@parentId" name="video-content" class="cn-dock-top"></zone>
+                <zone id="@parentId" name="video-content-bottom" class="cn-dock-bottom"></zone>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    if (Model.VideoSourceType == "youtube")
+    {
+        <script async src="https://www.youtube.com/iframe_api"></script>
+        <script type="text/javascript">
+            function onYouTubeIframeAPIReady() {
+              var player;
+              player = new YT.Player('YouTubeBackgroundVideoPlayer', {
+                  videoId: '@Model.YoutubeVideoId', // YouTube Video ID
+                 // width: 1280,               // Player width (in px)
+                 // height: 720,              // Player height (in px)
+                  playerVars: {
+                      playlist: '@Model.YoutubeVideoId',
+                      autoplay: 1,        // Auto-play the video on load
+                      autohide: 1,
+                      disablekb: 1,
+                      controls: 0,        // Hide pause/play buttons in player
+                      showinfo: 0,        // Hide the video title
+                      modestbranding: 1,  // Hide the Youtube Logo
+                      iv_load_policy: 3,  // Hide annotations
+                      //loop: 1,          // Run the video in a loop (we're using the logic below to loop)
+                      fs: 0,              // Hide the full screen button
+                      autohide: 0,        // Hide video controls when playing
+                      rel: 0,
+                      enablejsapi: 1
+                  },
+                  events: {
+                    onReady: function(e) {
+                        e.target.mute();
+                        e.target.setPlaybackQuality('default');
+                    },
+                    onStateChange: function (e) {
+                        //prevents pre-load screen when looping
+                        var YTP = e.target;
+                        if (e.data === 1) {
+                            var remains = YTP.getDuration() - YTP.getCurrentTime();
+                            if (this.rewindTO)
+                                clearTimeout(this.rewindTO);
+                            this.rewindTO = setTimeout(function () {
+                                YTP.seekTo(0);
+                            }, (remains - 0.1) * 1000);
+                        }
+                    }
+                  }
+              });
+            }
+
+            onYouTubeIframeAPIReady();
+        </script>
+    }
+}
+
+<style>
+    /*
+    .video-foreground,
+    .video-background iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; }
+
+    .cn-video-background {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      padding-top: 56.25%;
+      width: 100%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+      -webkit-transition: 2s opacity ease;
+      transition: 2s opacity ease;
+      opacity: 1; }
+        */
+
+    @@media only screen and (min-width: 768px) {
+        .cn-video-background-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .cn-video-background,
+        .cn-video-content {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .cn-video-background {
+            left: 0;
+            z-index: -99;
+        }
+
+        .cn-dock-top,
+        .cn-dock-bottom {
+            position: absolute; 
+		    left: 0px; 
+		    right: 0px; 
+		    height: auto; 
+		    overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .cn-dock-top{
+            top: 0px;
+            max-height: 70%;
+        }
+
+        .cn-dock-bottom {
+            bottom: 0px;
+            max-height: 30%;
+        }
+
+        .pattern-overlay { 
+		    position: absolute;
+		    top: 0;
+		    width: 100%;
+		    opacity: 0.3;
+		    bottom: 0;
+		    background-image: url(https://cdnjs.cloudflare.com/ajax/libs/vegas/2.3.1/overlays/03.png);
+		    z-index: -98;
+	    }
+    }
+
+    @@media only screen and (max-width: 768px) {
+        .cn-video-background {
+            display: none;
+            visibility: hidden;
+        }
+    }
+
+    
+</style>

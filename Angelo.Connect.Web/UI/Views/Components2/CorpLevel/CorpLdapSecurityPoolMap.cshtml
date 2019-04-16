@@ -1,0 +1,46 @@
+﻿@model Angelo.Identity.Models.SecurityPool
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var directoryId = (string)ViewData["directoryId"];
+
+}
+
+
+<form id="@componentId" action="@routes.CorpApi("ldapsecuritypoolgroup/save")" class="form-horizontal" data-ajax-form role="form">
+    @Html.HiddenFor(x => x.TenantId)
+    @Html.HiddenFor(x => x.PoolType)
+    @Html.HiddenFor(x => x.PoolId)
+    @Html.HiddenFor(x => x.ParentPoolId)
+    @Html.HiddenFor(x => x.Name)
+    
+    <div class="form-group">
+        <label class="col-sm-4">@Html.Localize("Ldap Filter Group")</label>
+        <div class="col-sm-8">
+            <input name="LdapFilterGroup" required placeholder="Optional" type="text" asp-for="LdapFilterGroup" class="form-control" />
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+    var directoryId = '@directoryId';
+    var poolId = '';
+
+    function exploreLdap() {
+
+        $.ldapBrowser({
+            title: "Select an Ldap Group",
+            directoryId: directoryId,
+            poolId: poolId
+            
+        })
+            .done(function (ldapEntry) {
+                
+                document.getElementsByName("LdapFilterGroup")[0].value = ldapEntry.distinguishedName;
+                // if no selection is made image will be undefined
+               
+            })
+    }
+</script>

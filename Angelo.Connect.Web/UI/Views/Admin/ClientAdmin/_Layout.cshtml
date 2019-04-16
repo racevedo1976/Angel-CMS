@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Mvc.Controllers
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+@section WindowTitle {
+    @Html.Localize("Client Admin")
+}
+
+@section Styles {
+    @RenderSection("Styles", required: false)
+}
+
+@section HeadScripts {
+    @RenderSection("HeadScripts", required: false)
+}
+
+@section AdminPageHeader {
+    <div class="admin-page-title">
+        @RenderSection("Title", required: false)
+    </div>
+}    
+
+@section AdminMenu {
+    @Html.Partial("_ClientMenu")
+}    
+
+@section AdminBody {
+    @RenderBody()
+}  
+      
+@section AdminPanel {
+    @RenderSection("Panel", required: false)
+}
+            
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

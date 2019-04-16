@@ -1,0 +1,190 @@
+[
+  {
+    "zone": "footer",
+    "type": "html",
+    "view": "html-raw",
+    "style": {
+      "background": "bg-contrast",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {
+      "html": "<div style=\"text-align:center;padding:20px;\">102 Maddox Rd | P.O. Box 50 Avon, MS 38723 | Phone 662-335-7186 | Fax 662-378-2285</div>",
+      "staticToolbar": false
+    }
+  },
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "text-center"
+        },
+        "model": {
+          "html": "<a href=\"http://www.schoolinsites.com/\"><img alt=\"SCHOOLinSITES\" src=\"/templates/royal/images/SisPoweredSmall.png\" /></a>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "search",
+        "view": "search-search1",
+        "style": {
+          "classes": "text-center cs-text-white",
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "title": ""
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "html",
+    "view": "html-raw",
+    "style": {
+      "background": "bg-contrast",
+      "classes": "cs-fullwidthheaderbar",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {
+      "html": "<div class=\"cs-socialmediaback\"><div class=\"cs-socialmedia\"><a href=\"https://twitter.com\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-twitter\"></em></a></div><div class=\"cs-socialmedia\"><a href=\"https://www.instagram.com\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-instagram\"></em></a></div><div class=\"cs-socialmedia\"><a href=\"https://www.facebook.com\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-facebook\"></em></a></div></div>",
+      "staticToolbar": false
+    }
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-4-8",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "zone",
+        "view": "zone-4",
+        "style": {
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/parents\"><img src=\"/templates/royal/images/Ribbon1.png\" alt=\"Parents\" style=\"display:block; margin-left:auto; margin-right:auto; width: 100%; max-width: 185px;\"   /></a> ",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/students\"><img src=\"/templates/royal/images/Ribbon2.png\" alt=\"Students\" style=\"display:block;margin-left:auto;margin-right:auto;width: 100%; max-width: 185px;\" /></a>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-3",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/community\"><img src=\"/templates/royal/images/Ribbon3.png\" alt=\"Community\" style=\"display:block;margin-left:auto;margin-right:auto;width: 100%; max-width: 185px;\"  /></a>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-4",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/faculty\"><img src=\"/templates/royal/images/Ribbon4.png\" alt=\"Faculty\" style=\"display:block;margin-left:auto;margin-right:auto;width: 100%; max-width: 185px;\" /></a>",
+              "staticToolbar": false
+            }
+          }
+        ]
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<a href=\"\"><img src=\"/templates/royal/images/logo.png\" alt=\"Home\" style=\"display:block;margin-left:auto;margin-right:auto;width:100%;max-width:324px;\" /></a> ",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "cs-row-nopadding cs-gray-panel",
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><img src=\"/templates/royal/images/mottodefault.png\" alt=\"motto\" style=\"width:100%;max-width:1006px;\" /></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "side",
+    "type": "navauto",
+    "view": "v-nav-auto",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {}
+  }
+]

@@ -1,0 +1,43 @@
+﻿@model Angelo.Connect.Widgets.WidgetConfig
+@{
+
+    var widgetId = (string)ViewData["WidgetId"];
+    var forms = Model.Forms.ToArray();
+
+
+    Layout = "_ModalLayoutWithMenu";
+}
+
+@section ModalTitle {
+    @Html.Localize("Settings")
+}
+
+@section ModalMenu {
+    <div class="padded">
+        <ul class="nav nav-pills nav-stacked">
+            @for (var i = 0; i < forms.Length; i++)
+            {
+                <li css-active="i == 0">
+                    <a href="#widgetForm@(i)" role="tab" data-toggle="tab">@forms[i].Title</a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@section ModalBody {
+    <div class="tab-content padded">
+        @for (var i = 0; i < forms.Length; i++)
+        {
+            <div id="widgetForm@(i)" class="tab-pane" css-active="i == 0">
+                @forms[i].Render(this.ViewContext, widgetId)
+            </div>
+        }
+    </div>
+}
+
+@section ModalFooter {
+    <button name="close" class="btn btn-default modal-button">Close</button>
+    <button name="save" class="btn btn-primary modal-button">Save</button>
+}
+

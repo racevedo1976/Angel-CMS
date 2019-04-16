@@ -1,0 +1,53 @@
+﻿@model UserGroupViewModel
+@{
+    var componentId = (string)ViewData["cid"];
+    var showOpenEnrollmentCheckbox = (bool)ViewData["ShowOpenEnrollmentCheckbox"];
+    var isCreate = (bool)ViewData["isCreate"];
+}
+<div>
+    <div style="padding:10px;">
+        @if (isCreate)
+        {
+            <h3>@Html.Localize("Create Group:")</h3>
+        }
+        else
+        {
+            <h3>@Html.Localize("Edit Group:")</h3>
+        }
+    </div>
+
+    <form id="@componentId" class="form-horizontal" action="/api/usergroups" data-ajax-form>
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.OwnerLevel)
+        @Html.HiddenFor(model => model.OwnerId)
+        @Html.HiddenFor(model => model.UserGroupType)
+        <div class="form-group">
+            <div class="col-sm-5">
+                <label>@Html.Localize("Name:")</label>
+            </div>
+            <div class="col-sm-7">
+                @Html.TextBoxFor(model => model.Name,  new { @class = "form-control", style = "width:100 %; height: 35px" })
+            </div>
+        </div>
+
+        @if (showOpenEnrollmentCheckbox)
+        {
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label>@Html.Localize("Allow Open Enrollment:")</label>
+                </div>
+                <div class="col-sm-3">
+                    @Html.RadioButtonFor(model => model.AllowPublicEnrollment, true) &nbsp;@Html.Localize("Yes")
+                </div>
+                <div class="col-sm-3">
+                    @Html.RadioButtonFor(model => model.AllowPublicEnrollment, false) &nbsp;@Html.Localize("No")
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.AllowPublicEnrollment)
+        }
+
+    </form>
+</div>

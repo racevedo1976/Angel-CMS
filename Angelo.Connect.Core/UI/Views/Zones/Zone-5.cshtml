@@ -1,0 +1,23 @@
+﻿@{ 
+    var parentId = (string)ViewData["ParentNodeId"];
+}
+
+<div class="content-layout">
+    <div class="row content-cell-group">
+        <div class="col-md-5ths">
+            <zone id="@parentId" name="cell-1"></zone>
+        </div>
+        <div class="col-md-5ths">
+            <zone id="@parentId" name="cell-2"></zone>
+        </div>
+        <div class="col-md-5ths">
+            <zone id="@parentId" name="cell-3"></zone>
+        </div>
+        <div class="col-md-5ths">
+            <zone id="@parentId" name="cell-4"></zone>
+        </div>
+        <div class="col-md-5ths">
+            <zone id="@parentId" name="cell-5"></zone>
+        </div>
+    </div>
+</div>

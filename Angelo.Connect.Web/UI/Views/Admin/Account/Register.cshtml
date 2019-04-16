@@ -1,0 +1,105 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"].</h1>
+
+<h3>Create a new account.</h3>
+<hr />
+
+<form asp-controller="User" asp-action="RegisterUser" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group registration-padding">
+        <label asp-for="Username" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Username" class="form-control" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group registration-padding">
+        <label asp-for="Title" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Title" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group registration-padding">
+        <label asp-for="FirstName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group registration-padding">
+        <label asp-for="MiddleInitial" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="MiddleInitial" class="form-control" />
+            <span asp-validation-for="MiddleInitial" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group registration-padding">
+        <label asp-for="LastName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group registration-padding">
+        <label asp-for="Suffix" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Suffix" class="form-control" />
+        </div>
+    </div>
+    
+    <div class="form-group registration-padding">
+        <label asp-for="BirthDate" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="BirthDate" type="date" class="form-control" />
+        </div>
+    </div>
+    
+    <div class="form-group registration-padding">
+        <label asp-for="PrimaryPhone" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="PrimaryPhone" class="form-control" type="tel" />
+            <span asp-validation-for="PrimaryPhone" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group registration-padding">
+        <label asp-for="Email" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group registration-padding">
+        <label asp-for="Password" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group registration-padding">
+        <label asp-for="ConfirmPassword" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Register</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,225 @@
+﻿@using System.Net
+@using Microsoft.AspNetCore.Html
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Models
+@using Angelo.Connect.Calendar.Security
+@using Angelo.Common.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Razor.TagHelpers;
+
+@model CalendarEvent
+
+@inject Angelo.Identity.UserManager userManager
+@inject IEnumerable<ISecurityGroupProvider> _groupProviders
+@inject CalendarSecurityService _calendarSecurity
+@{
+    var userName = (await userManager.GetUserAsync(Model.UserId)).DisplayName;
+    var canDeleteEditEvent = _calendarSecurity.AuthorizeForCreateEvents();
+
+    List<UserGroup> userGroups = new List<UserGroup>();
+    List<string> selectedGroupsNames = new List<string>();
+    foreach (var groupProvider in _groupProviders)
+    {
+        userGroups.AddRange((IEnumerable<UserGroup>)await groupProvider.GetGroups());
+    }
+    if (Model.EventGroupEvents.Any())
+    {
+        foreach (var selGroup in Model.EventGroupEvents)
+        {
+            var groupDetail = userGroups.FirstOrDefault(x => x.Id == selGroup.EventGroupId);
+            if (groupDetail != null)
+            {
+                selectedGroupsNames.Add(groupDetail.Name);
+            }
+        }
+    }
+}
+
+<form id="calendareventform" class="form">
+
+</form>
+
+<h3>@Model.Title</h3>
+
+<div class="form-group">
+    <div class="col-sm-9">
+        &nbsp;
+    </div>
+    <div class="col-sm-3">
+        @await Html.PartialAsync("/Views/Shared/EventTools.cshtml", Model)
+
+        
+    </div>
+
+
+</div>
+<div class="form-group">
+    <div class="col-sm-2">
+        Event Starts:
+    </div>
+    <div class="col-sm-10">
+        @Model.EventStart <i class="icon-time"></i>
+        @{
+            if (Model.IsRecurrent)
+            {
+                <text>
+                <button class="repeatButton" title="@Model.Summary">
+                    <i class="fa fa-repeat" aria-hidden="true"></i> Repeat
+                </button>
+
+                </text>
+            }
+
+            if (Model.AllDayEvent)
+            {
+                <text>
+                <button class="repeatButton" title="@Model.Summary">
+                    <i class="fa fa-clock" aria-hidden="true"></i> All Day
+                </button>
+
+                </text>
+            }
+        }
+    </div>
+   
+</div>
+<div class="form-group">
+    <div class="col-sm-2">
+        Event Ends:
+    </div>
+    <div class="col-sm-10">
+        @(Model.IsRecurrent ? (Model.RecurrenceDetails.EndDate.HasValue ? Model.RecurrenceDetails.EndDate.ToString() : "No Ending Date") : Model.EventEnd.ToString() )  <i class="icon-time"></i>
+    </div>
+   
+</div>
+
+<div class="form-group">
+    <div class="col-sm-2">
+        Where:
+    </div>
+    <div class="col-sm-10">
+        @{
+            if (string.IsNullOrEmpty(Model.Location))
+            {
+                <text> <em>"No Location Specified"</em> </text>
+            }
+            else
+            {
+                <text>  @Html.Raw(Model.Location) </text>
+            }
+        }
+    </div>
+
+</div>
+<div class="form-group">
+    <div class="col-sm-2">
+        Contact:
+    </div>
+    <div class="col-sm-10">
+        <i class="glyphicon glyphicon-user"></i> @(Model.ShowOrganizerName ? userName : "Not Available")
+    </div>
+
+</div>
+<div class="form-group">
+    <div class="col-sm-2">
+
+    </div>
+    <div class="col-sm-10">
+        <i class="glyphicon glyphicon-earphone"></i> @(Model.ShowPhoneNumber ? Model.Phone : "Not Available")
+    </div>
+</div>
+
+@{
+    if (selectedGroupsNames.Any())
+    {
+        <text>
+        <div class="form-group">
+            <div class="col-sm-2" style="text-align:right;">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="col-sm-10">
+
+                @string.Join(",", selectedGroupsNames)
+            </div>
+
+        </div>
+        </text>
+
+    }
+
+}
+
+<p>&nbsp;</p>
+<div class="form-group">
+    <div class="col-sm-2">
+        Details:
+    </div>
+    <div class="col-sm-10">
+
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-sm-12">
+
+        <p>@Html.Raw(WebUtility.HtmlDecode(Model.Description))</p>
+
+    </div>
+
+</div>
+
+<p>&nbsp;</p>
+<div style="margin: 10px 0">
+    @{
+        if (!string.IsNullOrEmpty(Model.Url))
+        {
+            <a href="@Model.Url" target="@Model.LinkTarget" class="btn btn-primary"><i class="icon-calendar"></i> More info</a>
+        }
+    }
+
+</div>
+
+<div id="event-meta">
+    <span> </span><br />
+    <span> </span><br />
+</div>
+@functions {
+
+    public static HtmlString DisplayHtml(string text)
+    {
+        return new HtmlString(text);
+    }
+}
+
+<style>
+    .repeatButton {
+        background-color: transparent;
+        border-radius: 5px;
+        border-width: 1px;
+        font-size: 11px;
+        position: absolute;
+    }
+</style>
+
+<script>
+
+    function removeCalendarEvent(eventId) {
+        $.get("/api/content/calendar/deletecalendarevent?eventId=" + eventId, function () {
+
+        }).done(function () {
+            //close event view window
+            $('button.viewerCloseBtn').trigger("click");
+
+
+            // //refresh any calendar widget
+            var x = document.getElementsByClassName("fc");
+            var i;
+            for (i = 0; i < x.length; i++) {
+                $(x[i]).fullCalendar('refetchEvents');
+            }
+
+            $('#calendar').fullCalendar('refetchEvents');
+        });
+
+    }
+
+</script>

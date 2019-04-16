@@ -1,0 +1,36 @@
+﻿@model IList<Angelo.Connect.Assignments.Models.AssignmentCategory>
+
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Models;
+@using Angelo.Connect.Assignments.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+}
+
+
+@(Html.Kendo().Grid<AssignmentCategory>()
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Title).Title("Title");
+        columns.Bound(c => c.Id).Hidden(true);
+        columns.Bound(c => c.OwnerLevel).Hidden(true);
+        columns.Bound(c => c.OwnerId).Hidden(true);
+    })
+    .Pageable()
+    .Sortable(true)
+    .Scrollable(scr => scr.Height(430))
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .BindTo(Model)
+    .DataSource(datasource => datasource
+        .Ajax()
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+        })
+    )
+)
+

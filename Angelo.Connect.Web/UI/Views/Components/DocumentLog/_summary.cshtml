@@ -1,0 +1,56 @@
+﻿@*
+    @model Angelo.Drive.Models.LogSummary
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Summary (Me/Others)</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-condensed">
+                <tr>
+                    <td align="right">Last Downloaded:</td>
+                    <td><span id="lastdl">@ToDisplay(Model.LastDownload)</span> / <span id="lastdlother">@ToDisplay(Model.LastDownloadOther)</span></td>
+                </tr>
+                <tr>
+                    <td align="right">Last Written:</td>
+                    <td><span id="lastwrite">@ToDisplay(Model.LastWrite)</span> / <span id="lastwriteother">@ToDisplay(Model.LastWriteOther)</span></td>
+                </tr>
+                <tr>
+                    <td align="right">Read:</td>
+                    <td><span id="readcount" class="badge">@Model.ReadCount</span>/<span id="readcountother" class="badge">@Model.ReadCountOther</span> times</td>
+                </tr>
+                <tr>
+                    <td align="right">Downloaded:</td>
+                    <td><span id="dlcount" class="badge">@Model.DownloadCount</span>/<span id="dlcountother" class="badge">@Model.DownloadCountOther</span> times</td>
+                </tr>
+                <tr>
+                    <td align="right">Written:</td>
+                    <td><span id="writecount" class="badge">@Model.WriteCount</span>/<span id="writecountother" class="badge">@Model.WriteCountOther</span> times</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    @functions
+    {
+        static string ToDisplay(DateTime? date)
+        {
+            return date.HasValue ? date.Value.ToString("{0:g}") : "Never";
+        }
+    }
+*@
+
+<div class="alert alert-warning">
+    Removed Angelo.Drive Project Reference
+</div>
+<br />
+<br />
+<b>Note:</b>
+<p class="text-muted">
+    This was the only component in Connect.Web that was requiring dependency on Angelo.Drive.
+</p>
+<p class="text-muted">
+    Disabling this component until Document, Folder, & Log models is moved to Angelo.Connect.Core
+</p>
+   

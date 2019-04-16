@@ -1,0 +1,25 @@
+﻿{
+  "Application": {
+    "Name": "Angelo.Drive",
+    "Version": "0.1.0"
+  },
+  "OpenIdConnect": {
+    "Authority": "[SET PER ENVIRONMENT]",
+    "ApiName": "drive",
+    "ApiSecret": "secret",
+    "NameClaimType": "name",
+    "RoleClaimType": "role"
+  },
+  "CultureOptions": {
+    "CookieDaysToKeep": 30,
+    "ResourcePath": "Resources",
+    "DefaultCulture": "en-US",
+    "SupportedCultures": [
+      "en-US",
+      "es-US",
+      "ar-LB",
+      "de-DE",
+      "fr-CA"
+    ]
+  }
+}

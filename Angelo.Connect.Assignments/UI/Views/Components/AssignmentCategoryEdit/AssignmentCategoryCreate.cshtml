@@ -1,0 +1,21 @@
+﻿@model Angelo.Connect.Assignments.UI.ViewModels.AssignmentCategoryViewModel
+
+@using Angelo.Common.Mvc;
+
+@{
+    var componentId = (string)ViewData["cid"];
+}
+
+<h3>@Html.Localize("Create New Category:")</h3>
+<form id="@componentId" action="/api/assignments/category" data-ajax-form>
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.OwnerLevel)
+    @Html.HiddenFor(model => model.OwnerId)
+
+    <div class="form-group">
+        <label>@Html.Localize("Name")</label>
+        <div>
+            <input id="categoryEditTitle" name="Title" type="text" class="form-control" asp-for="Title" value="@Model.Title" required autofocus spellcheck="true" />
+        </div>
+    </div>
+</form>

@@ -1,0 +1,298 @@
+﻿@using Angelo.Identity.Models
+@using Angelo.Connect.Security
+
+@model IEnumerable<SecurityClaimConfigViewModel>
+@{ 
+    var componentId = (string)ViewData["ComponentId"];
+
+    
+}
+
+@*Style moved to common.css*@
+
+<div id="@componentId">
+
+    @foreach (var config in Model)
+    {
+        var activeTabOnLoad = " active ";
+        var activeTabPanelOnLoad = " active in ";
+        var ctype = config.Claim.Type;
+
+        <div class="permission-group">
+            <div class="permission-heading">
+                <div class="clearfix">
+                    <span class="h4 pull-left">@Html.Localize(config.Title)</span>
+                    <a class="permission-group-toggle pull-right">
+                        <i class="fa fa-2x fa-caret-up"></i>
+                    </a>
+                </div>
+                @if (!string.IsNullOrEmpty(@config.Description))
+                {
+                    <p><i>@Html.Localize(config.Description)</i></p>
+                }
+            </div>
+            
+            <div class="permission-settings">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    @if (config.AllowRoles)
+                    {
+                        <li role="presentation" class="@activeTabOnLoad"><a href="#roleTab_@ctype" aria-controls="roleTab_@ctype" role="tab" data-toggle="tab">@Html.Localize(config.RolesLabel)</a></li>
+                        activeTabOnLoad = "";
+                    }
+                    @if (config.AllowUsers)
+                    {
+                        <li role="presentation" class="@activeTabOnLoad"><a href="#userTab_@ctype" aria-controls="userTab_@ctype" role="tab" data-toggle="tab">@Html.Localize(config.UsersLabel)</a></li>
+                        activeTabOnLoad = "";
+                    }
+                    @if (config.AllowGroups)
+                    {
+                        <li role="presentation" class="@activeTabOnLoad"><a href="#groupTab_@ctype" aria-controls="groupTab_@ctype" role="tab" data-toggle="tab">@Html.Localize(config.GroupsLabel)</a></li>
+                        activeTabOnLoad = "";
+                    }
+                </ul>
+
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    @if (config.AllowRoles)
+                    {
+                        <div role="tabpanel" class="tab-pane fade @activeTabPanelOnLoad" id="roleTab_@ctype">
+                            <div class="form-control-scrollable">
+                                @foreach (var role in config.Roles)
+                                {
+                                    if (config.SelectedRoles.Any(x => x.RoleId == role.Id))
+                                    {
+                                        <input type="checkbox" checked class="chkRole" data-type="@config.Claim.Type" data-value="@config.Claim.Value" data-id="@role.Id" value="@role.Id" data-locked="@role.IsLocked" /> @role.Name
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="chkRole" data-type="@config.Claim.Type" data-value="@config.Claim.Value" data-id="@role.Id" value="@role.Id" data-locked="@role.IsLocked" /> @role.Name
+                                    }
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                        activeTabPanelOnLoad = "";
+                    }
+
+                    @if (config.AllowUsers)
+                    {
+                        <div role="tabpanel" class="tab-pane fade @activeTabPanelOnLoad" id="userTab_@ctype">
+                            <div class="form-control-scrollable">
+                                @foreach (var user in config.Users)
+                                {
+                                    if (config.SelectedUsers.Any(x => x == user.Id))
+                                    {
+                                        <input type="checkbox" checked class="chkUser" value="@user.Id" data-id="@user.Id" data-resource="@config.ResourceType" data-type="@config.Claim.Type" data-value="@config.Claim.Value" /> @(user.FirstName + " " + user.LastName)
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="chkUser" value="@user.Id" data-id="@user.Id" data-resource="@config.ResourceType" data-type="@config.Claim.Type" data-value="@config.Claim.Value" /> @(user.FirstName + " " + user.LastName)
+                                    }
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                        activeTabPanelOnLoad = "";
+                    }
+
+                    @if (config.AllowGroups)
+                    {
+                        <div role="tabpanel" class="tab-pane fade @activeTabPanelOnLoad" id="groupTab_@ctype">
+                            <div class="form-control-scrollable">
+                                @foreach (var group in config.Groups)
+                                {
+
+                                    if (config.SelectedGroups.Any(x => x == group.Id))
+                                    {
+                                        <input type="checkbox" checked class="chkGroup" data-type="@config.Claim.Type" data-value="@config.Claim.Value" data-id="@group.Id" value="@group.Id" /> @group.Name
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="chkGroup" data-type="@config.Claim.Type" data-value="@config.Claim.Value" data-id="@group.Id" value="@group.Id" /> @group.Name
+                                    }
+
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                        activeTabPanelOnLoad = "";
+                    }
+                </div>
+
+              
+
+            </div>
+
+            <br />
+        </div>
+       
+    }
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        // scoping to component to prevent multiple event handlers
+        var $component = $("#@componentId");
+
+        $component.find(".chkRole").on("click", OnRoleCheckChange);
+        $component.find(".chkUser").on("click", OnUserCheckChange);
+        $component.find(".chkGroup").on("click", OnGroupCheckChange);
+
+        $component.find(".permission-group-toggle").on("click", function () {
+            var $this = $(this);
+
+            $this.find("i").toggleClass("fa-caret-down", "fa-caret-up");
+            $this.parent().parent().next().slideToggle();
+        })
+    });
+
+    function OnUserCheckChange() {
+        //debugger;
+        var checked = this.checked;
+        var claimType = $(this).data('type');
+        var claimValue = $(this).data('value');
+        var resourceType = $(this).data('resource');
+        var userId = $(this).data('id');
+
+        var viewModel = {
+            claimType: claimType,
+            claimValue: claimValue,
+            userId: userId,
+            resourceType: resourceType
+
+        }
+
+        // if (!isLocked) {
+        if (!checked)
+            removePermissionToUser(viewModel);
+        else
+            addPermissionToUser(viewModel);
+        // }
+
+    }
+
+    function OnRoleCheckChange() {
+        //debugger;
+        var checked = this.checked;
+        var claimType = $(this).data('type');
+        var claimValue = $(this).data('value');
+        var isLocked = $(this).data('locked');
+        var roleId = $(this).data('id');
+
+        var viewModel = {
+            claimType: claimType,
+            claimValue: claimValue,
+            roleId: roleId
+
+        }
+
+        // if (!isLocked) {
+        if (!checked)
+            removePermissionToRole(viewModel);
+        else
+            addPermissionToRole(viewModel);
+        // }
+    }
+    
+    function OnGroupCheckChange() {
+        var checked = this.checked;
+        var claimType = $(this).data('type');
+        var claimValue = $(this).data('value');
+        var groupId = $(this).data('id');
+
+        var viewModel = {
+            claimType: claimType,
+            claimValue: claimValue,
+            groupId: groupId
+
+        }
+
+        if (!checked)
+            removePermissionToGroup(viewModel);
+        else
+            addPermissionToGroup(viewModel);
+    }
+
+    var removePermissionToGroup = function (viewModel) {
+        $.ajax({
+            type: "POST",
+            url: "/api/group/configuration/claim/remove",
+            data: viewModel,
+            success: function (data) {
+                //alert("save!");
+            },
+            dataType: "json",
+            traditional: true
+        });
+    }
+
+    var addPermissionToGroup = function (viewModel) {
+        $.ajax({
+            type: "POST",
+            url: "/api/group/configuration/claim/add",
+            data: viewModel,
+            success: function (data) {
+                //alert("save!");
+            },
+            dataType: "json",
+            traditional: true
+        });
+    }
+
+    var removePermissionToRole = function (viewModel) {
+        $.ajax({
+            type: "POST",
+            url: "/api/role/configuration/claim/remove",
+            data: viewModel,
+            success: function (data) {
+                //alert("save!");
+            },
+            dataType: "json",
+            traditional: true
+        });
+    }
+
+    var removePermissionToUser = function (viewModel) {
+        $.ajax({
+            type: "POST",
+            url: "/api/user/configuration/claim/remove",
+            data: viewModel,
+            success: function (data) {
+                //alert("save!");
+            },
+            dataType: "json",
+            traditional: true
+        });
+    }
+
+    var addPermissionToRole = function (viewModel) {
+        $.ajax({
+            type: "POST",
+            url: "/api/role/configuration/claim/add",
+            data: viewModel,
+            success: function (data) {
+                //alert("save!");
+            },
+            dataType: "json",
+            traditional: true
+        });
+    }
+
+    var addPermissionToUser = function (viewModel) {
+        $.ajax({
+            type: "POST",
+            url: "/api/user/configuration/claim/add",
+            data: viewModel,
+            success: function (data) {
+                //alert("save!");
+            },
+            dataType: "json",
+            traditional: true
+        });
+    }
+
+</script>

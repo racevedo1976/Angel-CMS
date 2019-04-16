@@ -1,0 +1,21 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model SlideShowWidget
+
+<form class="form" data-ajax-form="true" action="/api/widgets/slideshow/type">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="SiteId" />
+
+    <div class="form-group">
+        <label>Select a slideshow type</label>
+        <div>
+            @Html.EditorFor(x => x.SlideShow.Type, null, "SlideShow.Type")
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Select a slideshow layout</label>
+        <div>
+            @Html.EditorFor(x => x.SlideShow, "SlideShowLayout", null)
+        </div>
+    </div>
+</form>

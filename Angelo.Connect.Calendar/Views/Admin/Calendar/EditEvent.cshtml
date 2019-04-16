@@ -1,0 +1,44 @@
+﻿@{ 
+    Layout = "_ModalLayout";
+
+    var id = ViewData["id"];
+    var day = ViewData["day"];
+    var hour = ViewData["hour"];
+}
+
+@section ModalTitle {
+    Add New Calendar Event
+}
+
+
+@section ModalBody {
+    
+    @await Component.InvokeAsync("CalendarEventManager", new { eventId = id, day = day, hour = hour })
+
+}
+
+@section ModalFooter {
+        <button type="button" name="save" class="btn btn-primary viewerCloseBtn modal-button" data-dismiss="modal" >Save</button>
+        <button type="button" name="close" class="btn btn-default modal-button" data-dismiss="modal">Close</button>
+}
+
+
+<script>
+    //$(document).ready(function () {
+    //    $('button[name=save]').click(function () {
+    //        var $this = $(this);
+    //        $this.button('loading');
+    //        saveEvent(function () {
+    //            var x = document.getElementsByClassName("fc");
+    //            var i;
+    //            for (i = 0; i < x.length; i++) {
+    //                $(x[i]).fullCalendar('refetchEvents');
+    //            }
+    //        });
+    //    });
+    //    $('button[name=close]').click(function () {
+           
+
+    //    });
+    //});
+</script>

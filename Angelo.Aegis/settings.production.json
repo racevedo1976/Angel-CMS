@@ -1,0 +1,13 @@
+﻿{
+  "Data": {
+    "ConnectionString": "Data Source=db3,14333;Initial Catalog=Angelo.Identity;Integrated Security=True"
+  },
+  "OpenId": {
+    "Providers": {
+      "Google": {
+        "ClientId": "REPLACE WITH PRODUCTION ID",
+        "ClientSecret": "REPLACE WITH PRODUCTION SECRET"
+      }
+    }
+  }
+}

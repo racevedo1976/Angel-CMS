@@ -1,0 +1,38 @@
+﻿@{ 
+    var parentId = (string)ViewData["ParentNodeId"];
+}
+<div class="content-layout">
+    <div class="row content-cell-group">
+        <div class="col-sm-4">
+            <zone id="@parentId" name="cell-1.1"></zone>
+        </div>
+        <div class="col-sm-4">
+            <zone id="@parentId" name="cell-1.2"></zone>
+        </div>
+        <div class="col-sm-4">
+            <zone id="@parentId" name="cell-1.3"></zone>
+        </div>
+    </div>
+    <div class="row content-cell-group">
+        <div class="col-sm-4">
+            <zone id="@parentId" name="cell-2.1"></zone>
+        </div>
+        <div class="col-sm-4">
+            <zone id="@parentId" name="cell-2.2"></zone>
+        </div>
+        <div class="col-sm-4">
+            <zone id="@parentId" name="cell-2.3"></zone>
+        </div>
+    </div>
+    <div class="row content-cell-group">
+        <div class="col-sm-4">
+            <zone id="@parentId" name="cell-3.1"></zone>
+        </div>
+        <div class="col-sm-4">
+            <zone id="@parentId" name="cell-3.2"></zone>
+        </div>
+        <div class="col-sm-4">
+            <zone id="@parentId" name="cell-3.3"></zone>
+        </div>
+    </div>
+</div>

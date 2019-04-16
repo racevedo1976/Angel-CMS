@@ -1,0 +1,20 @@
+﻿@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Models
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var pageSecurityUsers = (List<PageSecurityUserViewModel>)ViewData["PageSecurityUsers"];
+}
+<div class="k-content">
+    @(Html.Kendo().Grid(pageSecurityUsers)
+        .Name(componentId)
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Hidden(true);
+            columns.Bound(c => c.UserName).Title("User");
+            columns.Bound(c => c.AccessLevel).Title("Access");
+        })
+        .Scrollable()
+        .Selectable()
+    )
+</div>

@@ -1,0 +1,70 @@
+﻿@using Angelo.Connect.Rendering;
+@model Angelo.Connect.Video.Models.VideoWidgetViewModel
+
+@{
+    var jwPlayerId = "jwPlayer_" + Model.Id;
+    var treeContext = ViewData.GetTreeContext();
+}
+
+@* Show placeholder in design mode or when no video source is setup *@
+@if (treeContext.Editable || string.IsNullOrEmpty(Model.VideoSourceType))
+{
+    <div>
+        <div>
+            <span class="h3" show-if="@(string.IsNullOrEmpty(Model.Title))">
+                @Html.Localize("Video Player")
+            </span>
+            <span class="h3" hide-if="@(string.IsNullOrEmpty(Model.Title))">
+                @Model.Title
+            </span>
+            <hr />
+        </div>
+        <div>
+            <div>
+                <em>@Model.SourceUri</em>
+            </div>
+            <br />
+            <div>
+                <i class="fa fa-video-camera fa-5x" title="@Html.Localize("Preview or publish to view the player")"></i>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    @* Initialize the player *@
+    <div class="video-widget" style="width:99%;">
+        <h3 hide-if="string.IsNullOrEmpty(Model.Title)">@Model.Title</h3>
+        <div id="@jwPlayerId"></div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            try {
+                jwplayer("@jwPlayerId").setup({
+                    hlshtml: true,
+                    provider: "video",
+                    primary: "html5",
+                    title: "@Model.Title",
+                    file: "@Model.SourceUri",
+                    type: "@Model.VideoFileExt",
+                    width: "100%",
+                    aspectratio: "16:9",
+                    autostart: false,
+                    repeat: false,
+                    controls: true
+                }).on('ready', function () {
+                    jwplayer("@jwPlayerId").play(false);
+                }).on('setupError', function (err) {
+                    console.log('error setting up video player: ' + err.message);
+                });
+            }
+            catch (err) {
+                console.log("video setup error: " + err.message);
+            }
+        });
+    </script>
+
+}
+

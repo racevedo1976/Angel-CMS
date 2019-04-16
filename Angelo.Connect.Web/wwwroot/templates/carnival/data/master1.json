@@ -1,0 +1,193 @@
+[
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-3",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><span style=\"color:#ffffff;\">5555 Main Street, Mobile, AL 52343</span></div><div style=\"text-align:center;\"><span style=\"color:#ffffff;\">800-555-2212</span></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "search",
+        "view": "search-search1",
+        "style": {
+          "classes": "text-center",
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "title": ""
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "text-center"
+        },
+        "model": {
+          "html": "<a href=\"http://www.schoolinsites.com/\">\r\n<img alt=\"SCHOOLinSITES\" src=\"/img/sislogo.png\">\r\n</a>\r\n",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "text-right",
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><a href=\"https://www.facebook.com/\" target=\"_blank\" aria-label=\"icon\"><em title=\"Facebook\" class=\"fa fa-facebook fa-2x\" style=\"color:#ffffff;\"></em></a>&nbsp; <a href=\"https://twitter.com/\" aria-label=\"icon\" target=\"_blank\">\n<em title=\"Twitter\" class=\"fa fa-twitter fa-2x\" style=\"color:#ffffff;\"></em></a>&nbsp;<a href=\"https://www.instagram.com/\" aria-label=\"icon\" target=\"_blank\">\n<em title=\"Instagram\" class=\"fa fa-instagram fa-2x\" style=\"color:#ffffff;\"></em></a></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-3",
+    "style": {
+      "classes": "cs-linksbackground",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "zone",
+        "view": "zone-3",
+        "style": {
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/\"><img src=\"/templates/carnival/images/ML-Home.png\" alt=\"Home\" style=\"width:100%;max-width:250px;display:block;margin-left:auto;margin-right:auto;padding-top:55px;padding-bottom:0;  \" /></a>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/Directions\"><img src=\"/templates/carnival/images/ML-Directions.png\" alt=\"Directions\" style=\"width:100%;max-width:250px;display:block;margin-left:auto;margin-right:auto;padding-top:55px;padding-bottom:0; \" /></a>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-3",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/Calendar\"><img src=\"/templates/carnival/images/ML-Calendar.png\" alt=\"Calendar\" style=\"width:100%;max-width:250px;display:block;margin-left:auto;margin-right:auto;padding-top:55px;padding-bottom:0; \" /></a>",
+              "staticToolbar": false
+            }
+          }
+        ]
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Home",
+          "src": "/templates/carnival/images/Logo.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "zone",
+        "view": "zone-3",
+        "style": {
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/Contact\"><img src=\"/templates/carnival/images/ML-Contact.png\" alt=\"Contact\" style=\"width:100%;max-width:250px;display:block;margin-left:auto;margin-right:auto;padding-top:55px;padding-bottom:0; \" /></a>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/News\"><img src=\"/templates/carnival/images/ML-News.png\" alt=\"News\" style=\"width:100%;max-width:250px;display:block;margin-left:auto;margin-right:auto;padding-top:55px;padding-bottom:0;  \" /></a>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-3",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "0",
+              "paddingBottom": "0"
+            },
+            "model": {
+              "html": "<a href=\"/About\"><img src=\"/templates/carnival/images/ML-About.png\" alt=\"About\" style=\"width:100%;max-width:250px;display:block;margin-left:auto;margin-right:auto;padding-top:55px;padding-bottom:0;  \" /></a>",
+              "staticToolbar": false
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

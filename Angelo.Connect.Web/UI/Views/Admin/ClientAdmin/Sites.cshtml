@@ -1,0 +1,102 @@
+﻿@{
+    var clientId = (string)ViewData["ClientId"];
+    var appId = (string)ViewData["AppId"];
+}
+
+@section Title {
+    @Html.Localize("Manage Sites")
+}
+
+@section Panel {
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#siteDetails" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+
+        <li>
+            <a href="#siteDomains" data-toggle="tab">
+                @Html.Localize("Domains")
+            </a>
+        </li>
+
+    </ul>
+
+    <div class="tab-content">
+        <div id="siteDetails" class="tab-pane fade in active">
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="siteDetailsEditToolbar" class="toolbar">
+                    @*<a name="save" class="fa fa-save" title="@Html.Localize("Save Site Details")"><span>@Html.Localize("Save")</span></a>*@
+                </div>
+                <component id="siteDetailsEdit" type="ClientSiteDetailsView"></component>
+            </div>
+
+        </div>
+        
+        <div id="siteDomains" class="tab-pane fade">
+
+            <div class="tab-sub-pane"  style="display:none">
+                <div id="siteDetailsEditToolbar" class="toolbar">
+                    @*<a name="save" class="fa fa-save" title="@Html.Localize("Save Site Details")"><span>@Html.Localize("Save")</span></a>*@
+                </div>
+                <component id="clientSiteDomains" type="ClientSiteDomains"></component>
+            </div>
+
+        </div>
+    </div>
+
+}
+
+<div id="SiteListSection">
+    <div id="contentToolbar" class="toolbar">
+        <a name="manage" class="fa fa-pencil-square-o pull-right" title="@Html.Localize("Manage the selected Site")" disabled><span>Manage</span></a>
+    </div>
+    <component id="siteList" type="ClientSiteList" arg-appId="@appId"></component>
+</div>
+
+@section Scripts {
+    <script>
+
+        // Site list events
+        $.on("siteList.change", function (event, data) {
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+            $("#contentToolbar").toolbar().enable("manage");
+            InvokeComponent("siteDetailsEdit", { siteId: model.Id });
+            InvokeComponent("clientSiteDomains", { siteId: model.Id });
+        });
+
+        $.on("contentToolbar.manage", function () {
+            var grid = $("#siteList").getKendoGrid();
+            var row = grid.select()
+            var model = grid.dataItem(row);
+            var tenant = model.TenantKey;
+            var url = "/sys/sites/" + tenant + "/admin";
+
+            window.location = url;
+        });
+
+        HideTabPane = function (tabPane) {
+            $("#" + tabPane + " >.tab-sub-pane").css("display", "none");
+        }
+
+        ShowParentTabSubPane = function (childName) {
+            var subPane = $("#" + childName).parents("div.tab-sub-pane")[0];
+            if (subPane) {
+                $(subPane).siblings(".tab-sub-pane").css("display", "none");
+                $(subPane).css("display", "");
+            }
+        }
+
+        InvokeComponent = function (cid, data) {
+            $("#" + cid).component().invoke(data);
+            ShowParentTabSubPane(cid);
+        }
+
+
+
+
+    </script>
+}

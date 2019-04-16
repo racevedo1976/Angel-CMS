@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.Mvc.Controllers
+@using Angelo.Connect.Rendering
+
+@{ 
+    Layout = "_MasterLayout";
+
+    var windowTitle = @CurrentSite.SiteTitle;
+
+    if(ViewData.ContainsKey("WindowTitle"))
+    {
+        windowTitle = ViewData["WindowTitle"].ToString();
+    }
+   
+}
+
+@section BodyContent { 
+    <a class="skip-main" href="#maincontent">Skip to main content</a>
+    @RenderBody()
+
+}
+
+@section WindowTitle {
+    @windowTitle
+}
+
+@section Styles {
+    <link rel="stylesheet" href="/css/jquery-ui/jquery-ui.min.css" />
+    <link rel="stylesheet" href="/css/public.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
+
+    
+    @foreach (var cssFile in CurrentSite.Theme.CoreStyles)
+    {
+        <link rel="stylesheet" href="@cssFile"/>
+    }
+
+    <link rel="stylesheet" href="@CurrentSite.Template.Stylesheet" id="templatecss" />
+    <link rel="stylesheet" href="@CurrentSite.Theme.Stylesheet" id="themecss"/>
+    <link rel="stylesheet" href="/sys/site/css" id="sitecss"/>
+}
+
+@section Scripts {
+
+    <script src="~/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/js/content.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    @if (CurrentSite.Template.Scripts != null)
+    {
+        foreach (var scriptFile in CurrentSite.Template.Scripts)
+        {
+            <link rel="stylesheet" href="@scriptFile" />
+        }
+    }
+   
+}
+
+@section HeadScripts {
+    @RenderSection("HeadScripts", required: false)
+
+    @{
+        if (@CurrentSite.SiteSettings.Any(x => x.FieldName == "GoogleTrackingId" && x.Value.Trim() != ""))
+        {
+            var trackingId = @CurrentSite.SiteSettings.FirstOrDefault(x => x.FieldName == "GoogleTrackingId" && x.Value != "")?.Value;
+           
+            <googleanalytics google-tracking-id="@trackingId"></googleanalytics>
+        }
+    }
+}
+
+@section MetaTags {
+
+    @if(CurrentSite.Options.ContainsKey("GoogleSiteId"))
+    {
+        <meta name="google-site-verification" content="@CurrentSite.Options["GoogleSiteId"]" />
+    }
+
+    @RenderSection("MetaTags", required: false)
+}

@@ -1,0 +1,30 @@
+﻿@model ICollection<CorpSiteDomainViewModel>
+
+@{
+    string siteId = (string)(ViewData["siteId"] ?? "");
+    var componentId = (string)ViewData["cid"];
+}
+
+@(Html.Kendo().Grid(Model)
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.SiteId).Hidden(true);
+        columns.Bound(p => p.DomainKey)
+            .Title(Html.ShortNameFor(x => x.First().DomainKey).ToString())
+            .Sortable(true);
+        columns.Bound(p => p.IsDefault);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable(scr => scr.Height(430))
+    .Filterable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .ServerOperation(false)
+        )
+)
+
+

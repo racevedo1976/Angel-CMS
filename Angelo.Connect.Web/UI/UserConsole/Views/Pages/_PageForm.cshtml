@@ -1,0 +1,63 @@
+﻿@model UserPageViewModel
+
+<div data-module="console/pages/form">
+    <form id="ucPageForm" action="/sys/console/pages" class="form-horizontal" data-ajax-form>
+        <input hidden="hidden" name="Id" type="text" asp-for="Id" />
+        <input hidden="hidden" name="Layout" type="text" asp-for="Layout" />
+        <input hidden="hidden" name="SiteId" type="text" asp-for="SiteId" />
+        <input hidden="hidden" name="ParentPageId" type="text" asp-for="ParentPageId" />
+
+        <div class="form-group">
+            <label class="col-sm-4">@Html.Localize("Page Status")</label>
+            <div class="col-sm-8">
+                <label class="text-success" show-if="@Model.HasBeenPublished">
+                    <i class="fa fa-check-circle"></i> &nbsp;
+                    @Html.Localize("Published")
+                </label>
+
+                <label class="text-muted" hide-if="@Model.HasBeenPublished">
+                    <i class="fa fa-exclamation-circle"></i> &nbsp;
+                    @Html.Localize("Not Published")
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="IsPrivate"></label>
+            <div class="col-sm-8">
+                <input name="IsPrivate" class="pull-left" asp-for="IsPrivate" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="Title"></label>
+            <div class="col-sm-8">
+                <input name="Title" type="text" class="form-control" asp-for="Title" required spellcheck="true" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="Path"></label>
+            <div class="col-sm-8">
+                <input name="Path" type="text" class="form-control" asp-for="Path" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="PageMasterId"></label>
+            <div class="col-sm-8">
+                <select class="form-control" asp-for="PageMasterId" asp-items="Model.MasterPages"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="Keywords"></label>
+            <div class="col-sm-8">
+                <input name="Keywords" type="text" class="form-control" asp-for="Keywords"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="Summary"></label>
+            <div class="col-sm-8">
+                <textarea name="Summary" class="form-control" asp-for="Summary" rows="3"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+

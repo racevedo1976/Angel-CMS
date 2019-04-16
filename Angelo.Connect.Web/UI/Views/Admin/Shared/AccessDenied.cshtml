@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "_LayoutAdmin";
+}
+
+@section Title {
+    @Html.Localize("Access Denied")
+}
+
+
+@section AdminMenu{
+    <div class="padded text-center">
+        <i class="fa fa-3x fa-warning"></i>
+    </div>
+}
+
+@section Panel {
+    <div class="padded">
+        <div class="text-muted">
+            @Html.Localize("Status Code: 403")
+        </div>
+    </div>
+}
+
+<div class="padded">
+    <div class="alert alert-danger">
+        <p class="text-danger">
+            @Html.Localize("You do not have access to this resource")
+        </p>
+    </div>
+</div>

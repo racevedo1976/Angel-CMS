@@ -1,0 +1,68 @@
+﻿ [
+  {
+    "zone": "header",
+    "type": "image",
+    "model": {
+      "caption": "Site Logo",
+      "src": "/templates/cityscape/images/logo.png"
+    }
+  },
+  {
+    "zone": "social",
+    "type": "zone",
+    "view": "zone-6",
+    "style": {
+      "paddingTop": "30px"
+    },
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "icon",
+        "model": {
+          "name": "facebook",
+          "size": "32px"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "icon",
+        "model": {
+          "name": "twitter",
+          "size": "32px"
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "icon",
+        "model": {
+          "name": "youtube",
+          "size": "32px"
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "icon",
+        "model": {
+          "name": "instagram",
+          "size": "32px"
+        }
+      },
+      {
+        "zone": "cell-5",
+        "type": "icon",
+        "model": {
+          "name": "yelp",
+          "size": "32px"
+        }
+      },
+      {
+        "zone": "cell-6",
+        "type": "icon",
+        "model": {
+          "name": "google-plus",
+          "size": "32px"
+        }
+      }
+    ]
+  }
+]

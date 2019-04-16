@@ -1,0 +1,70 @@
+﻿@using Angelo.Connect.Menus
+@using Angelo.Connect.Rendering
+@using Angelo.Connect.Security
+@using Angelo.Connect.Security.Services
+@using Angelo.Connect.Services
+@using Angelo.Connect.Models
+
+@inject ContentManager contentManager
+@inject PageMasterManager masterManager
+@inject PageSecurityService pageSecurity
+@inject UserContext userContext
+
+@model Page
+
+@{
+    var page = Model;
+    var renderingContext = ViewData.GetRenderingContext();
+    var versionInfo = renderingContext.ContentVersionInfo;
+
+    var master = await masterManager.GetByIdAsync(page.PageMasterId);
+
+    var pageCanBeDesigned = pageSecurity.CanDesignPage(userContext, page);
+    var masterCanBeDesigned = pageSecurity.CanDesignMaster(userContext, master);
+
+    var pageVersionsUrl = $"/sys/page/{page.Id}/versions";
+    var masterVersionsUrl = $"/sys/master/{page.PageMasterId}/versions";
+}
+
+
+<ul class="list-inline" show-if="@pageCanBeDesigned">
+    <li css-dropdown="@masterCanBeDesigned">
+        @if (versionInfo.Status == ContentStatus.Draft || versionInfo.Status == ContentStatus.Archived)
+        {
+            <a href="/sys/page/@page.Id/design?version=@versionInfo.VersionCode">
+                <i class="fa fa-edit"></i> &nbsp;
+                @Html.Localize("Edit Page")
+            </a>
+           }
+           else
+           {
+            <a onclick="$.dialog('@pageVersionsUrl')">
+                <i class="fa fa-edit"></i> &nbsp;
+                @Html.Localize("Edit Page")
+            </a>
+           }
+
+          @if(masterCanBeDesigned)
+          {
+            <span>&nbsp;</span>
+
+            <a class="dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a onclick="$.dialog('@masterVersionsUrl')">
+                        <i class="fa fa-edit"></i> &nbsp;
+                        @Html.Localize("Edit Master Page")
+                    </a>
+                </li>
+                <li>
+                    <a onclick="$.dialog('/sys/site/css/dialog')">
+                        <i class="fa fa-edit"></i> &nbsp;
+                        @Html.Localize("Edit Site Css")
+                    </a>
+                </li>
+            </ul>
+          }
+    </li>
+</ul>

@@ -1,0 +1,44 @@
+﻿
+@using Angelo.Connect.Models;
+
+@{
+    var siteId = (string)ViewData["siteId"];
+    var loginUrl = (string)ViewData["loginUrl"];
+    var registerUrl = (string)ViewData["registerUrl"];
+}
+
+<style>
+    .center-div
+    {
+         display:inline-block;
+         float:none;
+         margin: 0 auto;
+         max-width: 700px;
+    }
+
+</style>
+
+@*<div class="center-div" style="border:solid;border-width:3px;">*@
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12"><h3>Notify Me:</h3></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-10">
+                Below are a list of the available Site Notification Groups that you can signup for.<br />  
+                Login with your existing account, or register a new account to begin signing up for these notifications.
+            </div>
+            <div class="col-lg-2">
+                <a class="k-button float-right" href="@loginUrl">Login</a>
+                <a class="k-button float-right" href="@registerUrl">Register</a>
+            </div>
+        </div>
+        <div class="row">
+            <component id="notifyMeList" type="NotifyMeList" arg-siteId="@siteId"></component>
+        </div>
+    </div>
+
+
+@*</div>*@
+

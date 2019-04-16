@@ -1,0 +1,48 @@
+﻿@model Angelo.Connect.Carousel.Models.CarouselSlide
+
+
+<form id="addCarouselForm" action="/api/widgets/carousel/add">
+
+
+
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.WidgetId)
+    @Html.HiddenFor(x => x.Sort)
+
+    <div style="background: #f7f7f7">
+        <div class="row" style="margin-left: 0px;margin-right: 0px">
+            @Html.LabelFor(x => x.Title)
+            <div>
+                @Html.TextBoxFor(x => x.Title, null, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row" style="margin-left: 0px;margin-right: 0px">
+            @Html.LabelFor(x => x.Description)
+            <div>
+                @Html.TextBoxFor(x => x.Description, null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row" style="margin-left: 0px;margin-right: 0px">
+            @Html.LabelFor(x => x.LinkText)
+            <div>
+                @Html.TextBoxFor(x => x.LinkText, null, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row" style="margin-left: 0px;margin-right: 0px">
+            @Html.LabelFor(x => x.LinkUrl)
+            <div>
+                @Html.TextBoxFor(x => x.LinkUrl, null, new { placeholder = "https://wwww.ulr.com", @class = "form-control" })
+            </div>
+        </div>
+        <div class="row" style="margin-left: 0px;margin-right: 0px">
+            Open link: @Html.RadioButtonFor(x => x.LinkTarget, "_self") On Same Window &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            @Html.RadioButtonFor(x => x.LinkTarget, "_blank") On New Window
+        </div>
+        <div class="row" style="margin-left: 0px;margin-right: 0px">
+            <a name="saveSlide" id="saveSlide" class="btn btn-primary pull-right" style="margin-top:10px">Save</a> 
+            <a name="cancelSlideEdit" id="cancelSlideEdit" class="btn pull-right" style="margin-top:10px;padding-left: 10px;">Cancel</a>
+        </div>
+    </div>
+
+</form>

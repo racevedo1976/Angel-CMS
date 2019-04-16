@@ -1,0 +1,458 @@
+﻿@using Angelo.Common.Mvc;
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Models;
+@using Angelo.Connect.Menus;
+@using Angelo.Connect.Assignments.Models;
+
+@{
+    var ownerLevel = (OwnerLevel)ViewData["ownerLevel"];
+    var ownerId = (string)ViewData["ownerId"];
+
+    var siteId = string.Empty;
+}
+
+@section Styles {
+
+    <style>
+        .admin-outer-body {
+            width: calc(100% - 500px);
+        }
+
+        .admin-outer-right {
+            width: 500px;
+        }
+
+        .admin-inner-body {
+            width: calc(100% - 300px);
+        }
+
+        .admin-inner-left {
+            width: 300px;
+        }
+    </style>
+
+}
+
+@section Title {
+    @Html.Localize("Manage Assignments")
+}
+
+@section Toolbar {
+}
+
+@section AdminPageHeader{
+    @await Component.InvokeAsync("BreadCrumb", new { currentUrl = Context.Request.Path.ToString().ToLower(), currentMenuType = MenuType.CorporateTools })
+}
+
+@section AdminMenu{
+    @Html.Partial("_CorporateMenu")
+}
+
+@section Buttons {
+}
+
+@section PageMenu{
+    @*@Html.Partial("PageMenu")*@
+
+    <div class="tab-content">
+        <div id="CategoryPane" class="tab-pane fade in active">
+
+            <div id="CategoryListPane" class="tab-sub-pane">
+                <div id="CategoryListToolbar" class="toolbar inline-headers">
+                    <span>&nbsp;</span><h3>@Html.Localize("Categories")</h3>
+                    <a name="delete" class="fa fa-trash-o pull-right" title="@Html.Localize("Delete this category.")"></a>
+                    <a name="create" class="fa fa-plus-square pull-right" title="@Html.Localize("Create a new category.")"></a>
+                    <a name="edit" class="fa fa-edit pull-right" title="@Html.Localize("Rename category.")"></a>
+                </div>
+                <component id="categoryList" type="AssignmentCategoryList" arg-ownerLevel="@ownerLevel.ToString()" arg-ownerId="@ownerId"></component>
+            </div>
+
+            <div id="CategoryEditPane" class="tab-sub-pane" style="display:none">
+                <div id="CategoryEditToolbar" class="toolbar inline-headers">
+                    <a name="save" class="fa fa-save pull-right" title="@Html.Localize("Save category.")"></a>
+                    <a name="back" class="fa fa-arrow-left pull-right" title="@Html.Localize("Return to category list.")"></a>
+                </div>
+                <component id="categoryEdit" type="AssignmentCategoryEdit"></component>
+            </div>
+
+        </div>
+    </div>
+
+
+}
+
+@section Panel {
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#detailsTabPane" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+        <li>
+            &nbsp;
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="detailsTabPane" class="tab-pane fade in active">
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="detailsEditToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save pull-right" title="@Html.Localize("Save notification details.")"><span>@Html.Localize("Save")</span></a>
+                </div>
+                <component id="assignmentDetailsEdit" type="AssignmentDetailsEdit"></component>
+            </div>
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="detailsCreateToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save pull-right" title="@Html.Localize("Save notification details.")"><span>@Html.Localize("Save")</span></a>
+                    <a name="back" class="fa fa-arrow-left" title="@Html.Localize("Go back to assignment details.")"><span>Back</span></a>
+                </div>
+                <component id="assignmentDetailsCreate" type="AssignmentDetailsEdit"></component>
+            </div>
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="detailsViewToolbar" class="toolbar">
+                    <a name="unpublish" class="pull-right" title="@Html.Localize("Unpublish")">
+                        <i class="fa fa-ban" style="color:red;"></i>
+                        <span>Unpublish</span>
+                    </a>
+                </div>
+                <component id="assignmentDetailsView" type="AssignmentDetailsEdit"></component>
+            </div>
+
+        </div>
+     </div>
+
+}
+
+<div id="NotificationListSection">
+    <div id="listToolbar" class="toolbar inline-headers">
+        <span>&nbsp;</span><h3>Assignments</h3>
+        <a name="delete" class="fa fa-trash-o pull-right" title="@Html.Localize("Delete the selected notification.")" disabled><span>@Html.Localize("Delete")</span></a>
+        <a name="create" class="fa fa-plus-square pull-right" title="@Html.Localize("Create a new notification.")"><span>@Html.Localize("Create")</span></a>
+    </div>
+    <component id="assignmentList" type="AssignmentAdminList" arg-ownerLevel="@ownerLevel.ToString()" arg-ownerId="@ownerId"></component>
+</div>
+
+@section Scripts {
+    <script>
+
+        //$(document).ready(function () {
+        //    $(".admin-outer-body").css("width", "calc(100% - 500px)");
+        //    $(".admin-outer-right").css("width", "500px");
+        //    //MonitorStatusChange();
+        //});
+
+        $(document).ready(function () {
+
+
+            // Category section
+            $.on("categoryList.change", function (event, data) {
+                var row = data.sender.select()
+                var model = data.sender.dataItem(row);
+                if (model) {
+                    $("#CategoryListToolbar").toolbar().enable("delete");
+                    InvokeComponent("assignmentList", { categoryId: model.Id, ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+                    HideTabPane("detailsTabPane");
+                }
+            });
+
+            $.on("CategoryListToolbar.create", function () {
+                $("#CategoryEditToolbar").toolbar().hide("delete");
+                $("#CategoryEditToolbar").toolbar().disable("save");
+                InvokeComponent("categoryEdit", { ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+            });
+
+            $.on("CategoryListToolbar.edit", function () {
+                var model = GetSelectedCategoryModel();
+                if (model) {
+                    $("#CategoryEditToolbar").toolbar().show("delete");
+                    $("#CategoryEditToolbar").toolbar().disable("save");
+                    InvokeComponent("categoryEdit", { Id: model.Id, ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+                }
+            });
+
+            $.on("CategoryListToolbar.delete", function () {
+                var model = GetSelectedCategoryModel();
+                if (model) {
+                    $("#CategoryListToolbar").toolbar().disable("delete");
+                    if (confirm("Are you sure you want to delete the selected Category?")) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/api/assignments/category',
+                            data: { id: model.Id },
+                            success: function (result) {
+                                InvokeComponent("categoryList", { ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+                                InvokeComponent("assignmentList");
+                                HideTabPane("detailsTabPane");
+                            },
+                            error: function (xhr) {
+                                $("#CategoryListToolbar").toolbar().enable("delete");
+                            }
+                        });
+
+                    }
+                }
+            });
+
+            $.on("categoryEdit.load", function (event, data) {
+                $("#CategoryEditToolbar").toolbar().enable("save");
+            });
+
+            $.on("CategoryEditToolbar.back", function () {
+                ShowParentTabSubPane("categoryList");
+            });
+
+            $.on("CategoryEditToolbar.save", function () {
+                $("#categoryEdit").form().post();
+            });
+
+            $.on("categoryEdit.submit", function (event, data) {
+                ShowParentTabSubPane("categoryList");
+                UpdateCategoryRow(data.result);
+                SelectCategoryRow(data.result.Id);
+                HideTabPane("detailsTabPane");
+            });
+
+
+
+
+            // Assignment List Section
+            $.on("assignmentList.change", function (event, data) {
+                var row = data.sender.select()
+                var model = data.sender.dataItem(row);
+                if (model) {
+                    if (model.Status == "@AssignmentStatus.Draft") {
+                        $("#listToolbar").toolbar().enable("delete");
+                        $("#assignmentDetailsView").html("");
+                        $("#assignmentDetailsCreate").html("");
+                        $("#detailsEditToolbar").toolbar().disable("save");
+                        InvokeComponent("assignmentDetailsEdit", { id: model.Id, ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+                    } else {
+                        $("#assignmentDetailsEdit").html("");
+                        $("#assignmentDetailsCreate").html("");
+                        $("#detailsViewToolbar").toolbar().disable("unpublish");
+                        InvokeComponent("assignmentDetailsView", { id: model.Id, ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+                    }
+                }
+                else {
+                    $("#listToolbar").toolbar().enable("create");
+                    $("#listToolbar").toolbar().disable("delete");
+                    HideTabPane("DetailsTabPane");
+                }
+            });
+
+            $.on("assignmentDetailsCreate.load", function (event, data) {
+                $("#detailsCreateToolbar").toolbar().enable("save");
+            });
+
+            $.on("assignmentDetailsEdit.load", function (event, data) {
+                $("#detailsEditToolbar").toolbar().enable("save");
+            });
+
+            $.on("assignmentDetailsView.load", function (event, data) {
+                $("#detailsViewToolbar").toolbar().enable("unpublish");
+            });
+
+            $.on("listToolbar.create", function () {
+                $("#listToolbar").toolbar().disable("delete");
+                $("#assignmentDetailsEdit").html("");
+                $("#assignmentDetailsView").html("");
+                $("#detailsCreateToolbar").toolbar().disable("save");
+                InvokeComponent("assignmentDetailsCreate", { ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+            });
+
+            $.on("listToolbar.delete", function () {
+                var model = GetSelectedAssignmentModel();
+                if (model) {
+                    $("#listToolbar").toolbar().disable("delete");
+                    if (confirm("Are you sure you want to delete this assignment?")) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/api/assignments',
+                            data: { Id: model.Id },
+                            success: function (result) {
+                                HideTabPane("detailsTabPane");
+                                RefreshAssignmentGridData();
+                            },
+                            error: function (xhr) {
+                                alert("Error: Unable to delete assignment.");
+                                $("#listToolbar").toolbar().enable("delete");
+                            }
+                        });
+                    }
+                    else {
+                        $("#listToolbar").toolbar().enable("delete");
+                    }
+                }
+            });
+
+
+
+
+            // Assignment View Details Section
+            $.on("detailsViewToolbar.unpublish", function () {
+                var model = GetSelectedAssignmentModel();
+                if (model) {
+                    $("#detailsViewToolbar").toolbar().disable("unpublish");
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/assignments/unpublish',
+                        data: { Id: model.Id },
+                        success: function (result) {
+                            RefreshAssignmentGridData(model.Id);
+                        },
+                        error: function (xhr) {
+                            alert("Error: Unable to unpublish assignment.");
+                            $("#detailsViewToolbar").toolbar().enable("unpublish");
+                        }
+                    });
+                }
+            });
+
+
+
+
+            // Assignment Edit Details Section
+            $.on("detailsEditToolbar.save", function () {
+                $("#assignmentDetailsEdit").form().post();
+            });
+
+            $.on("assignmentDetailsEdit.submit", function (event, data) {
+                RefreshAssignmentGridData(data.result.Id);
+                //UpdateAssignmentRow(data.result);
+                //SelectAssignmentRow(data.result.Id);
+            });
+
+
+
+            // Assignment Create Details Section
+            $.on("detailsCreateToolbar.back", function () {
+                HideTabPane("detailsTabPane");
+            });
+
+            $.on("detailsCreateToolbar.save", function () {
+                $("#assignmentDetailsCreate").form().post();
+            });
+
+            $.on("assignmentDetailsCreate.submit", function (event, data) {
+                RefreshAssignmentGridData(data.result.Id);
+                //UpdateAssignmentRow(data.result);
+                //SelectAssignmentRow(data.result.Id);
+            });
+
+
+
+
+
+
+
+            GetSelectedCategoryModel = function () {
+                var grid = $("#categoryList").getKendoGrid();
+                var item = grid.select();
+                return grid.dataItem(item);
+            }
+
+            GetSelectedAssignmentModel = function () {
+                var grid = $("#assignmentList").getKendoGrid();
+                var item = grid.select();
+                return grid.dataItem(item);
+            }
+
+            UpdateCategoryRow = function (data) {
+                if (!data.Id) return;
+                var grid = $("#categoryList").getKendoGrid();
+                var dataItem = grid.dataSource.get(data.Id);
+                if (dataItem) {
+                    dataItem.Title = (data.Title) ? data.Title : dataItem.Title;
+                    grid.dataSource.pushUpdate(dataItem);
+                } else {
+                    grid.dataSource.pushCreate({
+                        Id: data.Id,
+                        Title: data.Title,
+                        OwnerLevel: data.OwnerLevel,
+                        OwnerId: data.OwnerId
+                    });
+                }
+            }
+
+            UpdateAssignmentRow = function (data) {
+                if (!data.Id) return;
+                var grid = $("#assignmentList").getKendoGrid();
+                var dataItem = grid.dataSource.get(data.Id);
+                if (dataItem) {
+                    dataItem.Status = (data.Status) ? data.Status : dataItem.Status;
+                    dataItem.Title = (data.Title) ? data.Title : dataItem.Title;
+                    dataItem.DueDT = new Date(data.DueDT);
+                    grid.dataSource.pushUpdate(dataItem);
+                } else {
+                    grid.dataSource.pushCreate({
+                        Id: data.Id,
+                        Status: data.Status,
+                        Title: data.Title,
+                        CreatedDT: new Date(data.CreatedUTC),
+                        DueDT: new Date(data.DueDT)
+                    });
+                }
+            }
+
+            RefreshAssignmentGridData = function (Id) {
+                var grid = $("#assignmentList").getKendoGrid();
+                grid.dataSource.read().then(function () {
+                    if (Id) {
+                        SelectAssignmentRow(Id);
+                    }
+                });
+            }
+
+
+            SelectCategoryRow = function (Id) {
+                var grid = $("#categoryList").getKendoGrid();
+                var dataItem = grid.dataSource.get(Id);
+                if (dataItem) {
+                    var row = grid.content.find("tr[data-uid=" + dataItem.uid + "]");
+                    grid.select(row);
+                }
+            }
+
+            SelectAssignmentRow = function (Id) {
+                var grid = $("#assignmentList").getKendoGrid();
+                var dataItem = grid.dataSource.get(Id);
+                if (dataItem) {
+                    var row = grid.content.find("tr[data-uid=" + dataItem.uid + "]");
+                    grid.select(row);
+                }
+            }
+
+
+
+
+
+
+
+            HideTabPane = function (tabPane) {
+                $("#" + tabPane + " >.tab-sub-pane").css("display", "none");
+            }
+
+            ShowParentTabSubPane = function (childName) {
+                var subPane = $("#" + childName).parents("div.tab-sub-pane")[0];
+                if (subPane) {
+                    $(subPane).siblings(".tab-sub-pane").css("display", "none");
+                    $(subPane).css("display", "");
+                }
+            }
+
+            InvokeComponent = function (cid, data) {
+                $("#" + cid).component().invoke(data);
+                ShowParentTabSubPane(cid);
+            }
+
+        });
+
+
+    </script>
+}
+
+
+

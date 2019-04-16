@@ -1,0 +1,11 @@
+﻿{
+  "ProductId": "addon-1",
+  "Version": "2017.11.15",
+  "Title": "Site Templates: Empty Template",
+  "Description": "Adds site template: Empty Template",
+  "Active": true,
+  "Features": [],
+  "SiteTemplates": [
+    "empty"
+  ]
+}

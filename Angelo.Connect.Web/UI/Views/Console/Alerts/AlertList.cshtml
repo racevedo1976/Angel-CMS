@@ -1,0 +1,38 @@
+﻿@using Angelo.Connect.Models
+@model IEnumerable<SiteAlert>
+
+<div data-module="console/alert/list">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Posted</th>
+                <th>Schedule</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var alert in Model)
+        {
+            <tr>
+                <td>@alert.Title</td>
+                <td>@alert.Posted.ToString("MM/dd/yy hh:mm tt")</td>
+                <td>@alert.StartDate.ToString("d") - @alert.EndDate.ToString("d")</td>
+                <td class="@(alert.Status == ContentStatus.Published ?"text-success" : "text-muted") ")">@alert.Status</td>
+                <td>
+                    <a  name="design" data-status="@((int)alert.Status)" data-version="@alert.VersionCode" data-id="@alert.Id">
+                        <i class="fa fa-fw fa-edit"></i>&nbsp;
+                        @Html.Localize("Design")
+                    </a>
+                </td>
+                <td>
+                    <a data-route="/sys/console/sitealerts/view/@alert.Id?version=@alert.VersionCode">
+                        <i class="fa fa-fw fa-share"></i> &nbsp;
+                        @Html.Localize("View")
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

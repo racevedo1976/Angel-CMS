@@ -1,0 +1,40 @@
+﻿@model IList<Angelo.Connect.Web.UI.ViewModels.Admin.SharedFolderTreeNodeViewModel>
+@using Kendo.Mvc.UI
+@*@using Kendo.Mvc.Examples.Models.TreeList*@
+@using Angelo.Connect.Kendo.Extensions
+
+@{
+//    string menuTypeSite = Angelo.Connect.Menus.MenuType.SiteTools.ToString();
+//    string clientId = ViewBag.ClientId ?? "";
+
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["siteId"];
+}
+
+
+    @(Html.Kendo().TreeList<SharedFolderTreeNodeViewModel>()
+        .Name(componentId)
+        .Columns(columns =>
+        {
+            columns.Add().Field(e => e.Title).Title("Document Type / Folder");
+        })
+        .Filterable()
+        .Sortable()
+        .Selectable()
+        .DataSource(dataSource => dataSource
+            .Read(read =>
+            {
+                read.Type(HttpVerbs.Post)
+                .Url("/api/sites/shared-folders?siteId=" + @siteId);
+            })
+            .ServerOperation(false)
+            .Model(m =>
+            {
+                m.Id(f => f.NodeId);
+                m.ParentId(f => f.ParentNodeId).DefaultValue(string.Empty);
+                //m.Expanded(true);
+            })
+        )
+        .Height(540)
+    )
+

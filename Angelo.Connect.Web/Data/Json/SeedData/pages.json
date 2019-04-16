@@ -1,0 +1,22 @@
+﻿[
+  {
+    "title": "Home",
+    "path": "/",
+    "template": "Splash.cshtml"
+  },
+  {
+    "title": "News",
+    "path": "/news",
+    "template": "Page.cshtml"
+  },
+  {
+    "title": "About",
+    "path": "/about",
+    "template": "Page.cshtml"
+  },
+  {
+    "title": "Contact",
+    "path": "/contact",
+    "template": "Page.cshtml"
+  }
+]

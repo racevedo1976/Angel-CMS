@@ -1,0 +1,92 @@
+﻿@model SiteCreateViewModel
+
+@{
+    var componentId = (string)ViewData["cid"];
+}
+
+<form id="@componentId" action="/api/sites" class="form form-horizontal"  data-ajax-form>
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.ClientId)
+    @Html.HiddenFor(x => x.ClientProductAppId)
+    <div style="padding: 0 5px 0 5px">
+
+
+        <div class="row" hide-if="ViewContext.ModelState.IsValid">
+            <div class="col-sm-11">
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary(excludePropertyErrors: false)
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="" for="Title">@Html.ShortNameFor(x => x.Title)</label>
+            <div class="">
+
+                @(Html.Kendo().TextBoxFor(model => model.Title)
+                .HtmlAttributes(new { required = "required", style = "width: 100%;max-width: 100%", @class = "form-control" })
+                )
+                @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="" for="TenantKey">@Html.ShortNameFor(x => x.TenantKey)</label>
+            <div class="">
+
+                @(Html.Kendo().TextBoxFor(model => model.TenantKey)
+                .HtmlAttributes(new { required = "required", style = "width: 100%;max-width: 100%", @class = "form-control" })
+                )
+                @Html.ValidationMessageFor(x => x.TenantKey, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="" for="TemplateId">@Html.ShortNameFor(x => x.TemplateName)</label>
+            <div class="">
+
+                @(Html.Kendo().DropDownList()
+                      .Name("TemplateId")
+                      .DataTextField("Title")
+                      .DataValueField("Id")
+                      .Template("<span class=\"k-state-default\" style=\"background-image: url(" + Url.Content("~/img/Admin/Templates/") + "#:data.PreviewImage#" + ");\" ></span> <span>#:data.Title#</span>")
+                      .BindTo(Model.Templates)
+                      .Value(Model.TemplateId)
+                      .HtmlAttributes(new { style = "width: 100%" })
+                )
+
+                
+                @Html.ValidationMessageFor(x => x.TemplateId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+</form>
+
+<style>
+
+     #TemplateId-list .k-item {
+        line-height: 1em;
+        min-width: 300px;
+    }
+
+     #TemplateId-list .k-item > span {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display: inline-block;
+        vertical-align: top;
+        margin: 20px 10px 10px 5px;
+    }
+            
+    #TemplateId-list .k-item > span:first-child {
+        -moz-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        -webkit-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        margin: 10px;
+        width: 90px;
+        height: 60px;
+        /*border-radius: 50%;*/
+        background-size: 100%;
+        background-repeat: no-repeat;
+    }
+</style>

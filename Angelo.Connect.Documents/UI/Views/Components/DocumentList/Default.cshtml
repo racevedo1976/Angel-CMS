@@ -1,0 +1,394 @@
+﻿@using Angelo.Connect.Documents.Models
+@using Angelo.Connect.Documents.Services
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Microsoft.Extensions.Options
+
+@inject IOptions<DriveOptions> _driveOptions
+@inject DocumentListService _documentListService
+
+@model DocumentListWidget
+@{
+    var documentItems = (await _documentListService.GetItems(Model.Id)).Where(x => string.IsNullOrEmpty(x.FolderId)).ToList();
+    var folders = await _documentListService.GetFolders(Model.Id);
+}
+
+<input type="hidden" id="_widgetId" value="@Model.Id" />
+
+<div id="files" data-folder="files" data-type="fileswithoutfolders" class="sortableFiles withoutFolder">
+    @foreach (var item in documentItems.OrderBy(x => x.Sort).ToList())
+    {
+        <div id="@item.Id" class="">
+
+            <i class="fa fa-file-o"></i>
+            <input type="text" style=" display: inline;" class="wysi-control documentNotInFolder" placeholder="Change document title..." onchange="updateItem('@item.Id',document.getElementById('Title_@item.Id').value);"
+                   id="Title_@item.Id" name="Title_@item.Id" spellcheck="true" value="@item.Title" />
+
+            <button type="button" class="btn btn-default btn-sm" onclick="removeItem('@item.Id');"><i class="fa fa-trash"></i></button>
+            <span  hide-if="@(item.Url == null ? false : item.Url.Contains(_driveOptions.Value.Authority))" >
+                <input  id="Url_@item.Id" type="text" class="wysi-control" spellcheck="true" value="@item.Url" title="Url for @item.Title" placeholder="Enter file url  (example: http://mysite.com/myfile.doc)"
+                       onchange="updateUrl('@item.Id', document.getElementById('Url_@item.Id').value);" />
+            </span>
+        </div>
+    }
+</div>
+
+<div id="sortableFolderList" class="sortableFolders">
+
+    @foreach (var folder in folders.OrderBy(x => x.Sort).ToList())
+    {
+        <div id="@folder.Id" class="folderContainer">
+
+            <i class="fa fa-folder"></i>
+            <input type="text" style=" display: inline;" class="wysi-control folderwysi" placeholder="Change document title..." onchange="updateFolderTitle('@folder.Id',document.getElementById('Title_@folder.Id').value);"
+                   id="Title_@folder.Id" name="Title_@folder.Id" spellcheck="true" value="@folder.Title" />
+            <button type="button" class="btn btn-default btn-sm" onclick="removeFolder('@folder.Id');"><i class="fa fa-trash"></i></button>
+
+            <div id="filesContainerFor_@folder.Id" data-folder="@folder.Id" data-type="folder" class="sortableFiles withinFolder">
+                @foreach (var doc in folder.Documents.OrderBy(x => x.Sort).ToList())
+                {
+                    <div id="@doc.Id" class="">
+
+                        <i class="fa fa-file-o"></i>
+                        <input type="text" style="display: inline;" class="wysi-control documentwysi-folder" placeholder="Change document title..." onchange="updateItem('@doc.Id', document.getElementById('Title_@doc.Id').value);"
+                               id="Title_@doc.Id" name="Title_@doc.Id" spellcheck="true" value="@doc.Title"/>
+
+                        <button type="button" class="btn btn-default btn-sm" onclick="removeItem('@doc.Id');"><i class="fa fa-trash"></i></button>
+                        <span>
+                            <input id="Url_@doc.Id" type="text" class="wysi-control" spellcheck="true" value="@doc.Url" title="Url for @doc.Title" placeholder="Enter file url  (example: http://mysite.com/myfile.doc)" 
+                                   onchange="updateUrl('@doc.Id', document.getElementById('Url_@doc.Id').value);" />
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+</div>
+<style>
+    .sortableFiles{
+        min-height: 35px;
+        
+    }
+    .withoutFolder div{
+        padding-left: 0;
+
+    }
+    .documentNotInFolder{
+        width: 90% !important;
+
+    }
+
+    .folderwysi{
+         width: 90% !important;
+    }
+    .withinFolder div{
+        padding-left: 15px;
+        padding-right: 0px !important;
+    }
+
+ 
+    .documentwysi-folder{
+        width: 90% !important;
+
+    }
+
+    .folderContainer{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 15px;
+        padding-left: 0;
+    }
+
+   
+    .sortableFiles div{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 15px;
+    }
+
+    .movable-placeholder{
+        min-height: 35px;
+        background-color:lightgray;
+    }
+
+    .sortableFiles div:hover {
+        cursor: pointer;
+    }
+
+    .sortableFolders div:hover {
+        cursor: pointer;
+    }
+
+    .sortableFiles div.ui-sortable-helper{
+        cursor: move;
+        border: .2px lightgray solid;
+        padding-left: 15px;
+        background-color: white;
+        display: block;
+    }
+
+     .sortableFolders div.ui-sortable-helper{
+        cursor: move;
+        border: .2px lightgray solid;
+        padding-left: 15px;
+        background-color: white;
+        display: block;
+    }
+
+     ::placeholder {
+        color: gray;
+        opacity: 1; /* Firefox */
+        font-style: italic;
+    }
+
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+       color: gray;
+       font-style: italic;
+    }
+
+    ::-ms-input-placeholder { /* Microsoft Edge */
+       color: gray;
+       font-style: italic;
+    }
+</style>
+
+
+
+<script>
+    $(document).ready(function() {
+        $(".sortableFolders").sortable({
+            items: "> div",
+            placeholder: "movable-placeholder",
+            update: function(event, ui) {
+                updateFolderOrder(this.id);
+            }
+        });
+
+
+        $(".sortableFiles").sortable({
+            containment: "document",
+            items: "> div",
+            connectWith: '.sortableFiles',
+            placeholder: "movable-placeholder",
+            cursor: 'move',
+            helper: "clone",
+            //receive: function (event, ui) { console.log("sort recieved"); console.log("sort recieved:" + this.id + "  || " + ui.item[0].id); },
+            //change: function (event, ui) { console.log("sort change"); console.log("sort change:" + this.id + "  || " + ui.item[0].id); },
+            //stop: function (event, ui) { console.log("sort stop"); console.log("sort stop:" + this.id + "  || " + ui.item[0].id); },
+            update: function (event, ui) {
+                var folderId = $(this).attr("data-folder");
+                var parentFolder = "";
+                console.log("sort update on list:" + folderId + "  || " + ui.item[0].id + "  || "); // ui.sender[0].id   sender is null
+                var list = folderId;
+                switch ($(this).attr("data-type")) {
+                    case "fileswithoutfolders":
+                        //not in a folder
+                        //update or clear if it was in a folder
+                        parentFolder = "";
+                        break;
+                    case "folder":
+                        parentFolder = folderId;
+                        list = "filesContainerFor_" + folderId;
+                        break;
+                    
+                }
+                
+                setTimeout(function () { updateOrder(list, parentFolder); }, 700);
+                
+            }
+        });
+               
+    
+    });
+
+    function updateFolderOrder(list) {
+        var listOrder = $("#" + list).sortable("toArray");
+        //console.log(listOrder);
+
+        var model = {
+            folderIds: listOrder
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/widgets/documentlist/folder/sortorder',
+            data: model,
+            success: function (result) {
+                
+            },
+            error: function (xhr) {
+
+            }
+        });
+    }
+
+
+    function updateOrder(list, parentId) {
+      //  console.log("Updating order :" + list + "  || "); // ui.sender[0].id   sender is null
+        $("#" + list).sortable();
+        var listOrder = $("#" + list).sortable("toArray");
+       // console.log(listOrder);
+
+        var model = {
+            fileIds: listOrder,
+            parentId: parentId
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/widgets/documentlist/sortorder',
+            data: model,
+            success: function(result) {
+                
+            },
+            error: function(xhr) {
+
+            }
+        });
+    }
+
+    function updateItem(id, title) {
+        var model = {
+            id: id,
+            title: title
+        };
+        if (title) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/widgets/documentlist/item/title',
+                data: model,
+                success: function (result) {
+                    //var widgetId = document.getElementById("_widgetId").value;
+                    //$("#documentListContainer").loadComponent({
+                    //    "type": "DocumentList",
+                    //    "id": "documentList",
+                    //    "params": {
+                    //        "widgetId": widgetId
+                    //    }
+                    //});
+                },
+                error: function (xhr) {
+
+                }
+            });
+        }
+    }
+
+
+    function updateFolderTitle(id, title) {
+        var model = {
+            id: id,
+            title: title
+        };
+        if (title) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/widgets/documentlist/folder/title',
+                data: model,
+                success: function (result) {
+                    //var widgetId = document.getElementById("_widgetId").value;
+                    //$("#documentListContainer").loadComponent({
+                    //    "type": "DocumentList",
+                    //    "id": "documentList",
+                    //    "params": {
+                    //        "widgetId": widgetId
+                    //    }
+                    //});
+                },
+                error: function (xhr) {
+
+                }
+            });
+        }
+    }
+
+    function updateUrl(id, url) {
+        var model = {
+            id: id,
+            url: url
+        };
+        if (url) {
+            $.ajax({
+                type: 'POST',
+                url: '/api/widgets/documentlist/item/url',
+                data: model,
+                success: function (result) {
+                    //var widgetId = document.getElementById("_widgetId").value;
+                    //$("#documentListContainer").loadComponent({
+                    //    "type": "DocumentList",
+                    //    "id": "documentList",
+                    //    "params": {
+                    //        "widgetId": widgetId
+                    //    }
+                    //});
+                },
+                error: function (xhr) {
+
+                }
+            });
+        }
+    }
+
+    function removeItem(id) {
+        var model = {
+            id: id
+        };
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/widgets/documentlist',
+            data: model,
+            success: function (result) {
+                var widgetId = document.getElementById("_widgetId").value;
+                $("#documentListContainer").loadComponent({
+                    "type": "DocumentList",
+                    "id": "documentList",
+                    "params": {
+                        "widgetId": widgetId
+                    }
+                });
+            },
+            error: function (xhr) {
+
+            }
+        });
+    }
+
+    function removeFolder(id) {
+        $("#filesContainerFor_" + id).sortable("toArray");
+        var filelistOrder = $("#filesContainerFor_" + id).sortable("toArray").join('').split('');
+        
+       // console.log(filelistOrder);
+
+        if (filelistOrder.length > 0) {
+            var continueWithDeletes = confirm("Deleting this folder will also remove all files in it. Continue?");
+
+            if (!continueWithDeletes) {
+                return
+            }
+        }
+
+        var model = {
+            id: id
+        };
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/widgets/documentlist/folder',
+            data: model,
+            success: function (result) {
+                var widgetId = document.getElementById("_widgetId").value;
+                $("#documentListContainer").loadComponent({
+                    "type": "DocumentList",
+                    "id": "documentList",
+                    "params": {
+                        "widgetId": widgetId
+                    }
+                });
+            },
+            error: function (xhr) {
+
+            }
+        });
+    }
+</script>

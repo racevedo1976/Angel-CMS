@@ -1,0 +1,108 @@
+﻿@using Microsoft.Extensions.Options
+@using Angelo.Connect
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Rendering
+@using Angelo.Connect.Security
+@using Angelo.Connect.Models;
+
+@inject IContextAccessor<UserContext> _userContextAccessor;
+@model Angelo.Connect.Models.SiteAlert
+@{ 
+    var versionInfo = ViewData["AlertVersionInfo"] as ContentVersion;
+    var user = _userContextAccessor.GetContext();
+}
+
+<div data-module="console/alert/design" data-user-id="@user.UserId">
+
+    <div class="csc-content-toolbar">
+        <a name="save" title="@Html.Localize("Save as a draft")">
+            <i class="fa fa-save"></i> @Html.Localize("Save")
+        </a>
+        <a name="publish" title="@Html.Localize("Publish this Alert")">
+            <i class="fa fa-share"></i> @Html.Localize("Publish")
+        </a>
+        <a name="cancel" title="@Html.Localize("Go back to listing")">
+            <i class="fa fa-undo"></i> @Html.Localize("Cancel")
+        </a>
+        <div class="csc-seperator"></div>
+        <a name="delete" title="@Html.Localize("Delete this version")">
+            <i class="fa fa-trash-o"></i> @Html.Localize("Delete")
+        </a>
+        <div class="pull-right">
+            <a name="version" title="@versionInfo.VersionLabel" >
+                @Html.Localize("Version") @versionInfo.VersionCode &nbsp;
+                <i class="fa fa-caret-down" title="@Html.Localize("Select a different version")"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="csc-content-tabs">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#alertDesignArea" data-toggle="tab">
+                    <i class="@IconType.Pencil.ToString()"></i>
+                    @Html.Localize("Design")
+                </a>
+            </li>
+            <li>
+                <a href="#alertSettings" data-toggle="tab">
+                    <i class="@IconType.Settings.ToString()"></i>
+                    @Html.Localize("Details")
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="csc-content-body">
+        <div class="tab-content" id="tabContent">
+ 
+            <div id="alertDesignArea" class="tab-pane fade in active">
+                
+                <zone name="sitealert-body" allow-containers="false"></zone>
+                
+            </div>
+            
+            <div id="alertSettings" class="tab-pane fade">
+                <form action="/sys/console/sitealerts/save" data-ajax-form>
+                    <input name="Id" value="@Model.Id" type="hidden" />
+                    @*<input name="ContentTreeId" value="@Model.ContentTreeId" type="hidden" />*@
+                    <input name="VersionCode" value="@Model.VersionCode" type="hidden" />
+                    <input name="VersionLabel" value="@versionInfo.VersionLabel" type="hidden" />
+                    <input name="ContentTreeId" value="@Model.ContentTreeId" type="hidden" />
+                    <input name="NewVersionLabel" type="hidden" />
+                    <input name="ShouldPublish" type="hidden" />
+                    <input name="SiteId" value="@Model.SiteId" type="hidden" />
+                    <input name="UserId" value="@Model.UserId" type="hidden" />
+                    <input name="Status" value="@Model.Status" type="hidden" />
+
+                    <div class="form-group">
+                        <label class="form-label">@Html.Localize("Title")</label>
+                        <div>
+                            <input id="postTitle" class="form-control" asp-for="Title" spellcheck="true" />
+                        </div>
+                    </div>
+                    
+                    <hr />
+                    <div>
+                        <label class="form-label">@Html.Localize("Alert Schedule:")</label>
+                        
+                    </div>
+                    <div>
+                        <label class="form-label">@Html.Localize("Start")</label>
+                        <div>
+                            <input id="alertStartDate" class="form-control" asp-for="StartDate" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">@Html.Localize("End")</label>
+                        <div>
+                            <input id="alertEndDate" class="form-control" asp-for="EndDate" />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

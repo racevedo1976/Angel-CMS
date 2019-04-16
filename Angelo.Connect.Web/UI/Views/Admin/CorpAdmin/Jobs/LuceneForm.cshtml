@@ -1,0 +1,70 @@
+﻿@using Angelo.Connect.Models
+
+@model IEnumerable<Client>
+@{ 
+    Layout = "_ModalLayout";
+}
+
+@section ModalTitle {
+    @Html.Localize("Queue Site Search Index")
+}
+
+@section ModalBody{
+    <form id="luceneForm">
+        <input type="hidden" name="SiteId" />
+    </form>
+
+    @(Html.Kendo().Grid(Model)
+            .Name("luceneClientGrid")
+            .Columns(columns => {
+                columns.Bound(e => e.TenantKey).Width(150);
+                columns.Bound(e => e.Name).Title(Html.Localize("Client Name").ToString());
+            })
+            .Sortable().Scrollable()
+            .ClientDetailTemplateId("clientSites")
+            .HtmlAttributes(new { style = "height:430px;" })
+    )
+
+    <script id="clientSites" type="text/kendo-tmpl">
+        @(Html.Kendo().Grid<Site>()
+                .Name("luceneSiteGrid_#=Id#")
+                .Columns(columns => {
+                    columns.Bound(o => o.TenantKey).Width(140).Title(Html.Localize("Site Key").ToString());
+                    columns.Bound(o => o.Title).Width(300).Title(Html.Localize("Site Title").ToString());
+                    columns.Bound(o => o.SiteTemplateId).Title(Html.Localize("Site Template").ToString());
+                })
+                .DataSource(dataSource => dataSource
+                    .Ajax().Read(read => read.Url("/sys/corp/api/clients/#=Id#/sites/data"))
+                )
+                .Sortable()
+                .Selectable()
+                .Events(e => e.Change("luceneSiteSelect"))
+                .ToClientTemplate()
+                
+
+        )
+    </script>
+
+    <script>
+        function luceneSiteSelect(data) {
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+
+            // unselect other grid rows
+            $(".k-detail-row .k-grid")
+                .not($(row).parents(".k-grid:first"))
+                .find("tr.k-state-selected").removeClass("k-state-selected");
+
+            $("#luceneForm input[name=SiteId]").val(model.Id);
+            $("button[name=run]").removeAttr("disabled");
+        }
+    </script>
+}
+
+@section ModalFooter
+{
+    <div class="text-right">
+        <button name="cancel" class="btn btn-default modal-button">@Html.Localize("Cancel")</button> &nbsp;
+        <button name="run" class="btn btn-primary modal-button" disabled>@Html.Localize("Run")</button>
+    </div>
+}

@@ -1,0 +1,13 @@
+﻿@using Angelo.Connect.Web.Data.Mock
+@model IEnumerable<MockMessageCategory>
+<ul class="list-unstyled">
+    @foreach (var item in Model)
+    {
+        <li class="clearfix">
+            <a data-route="/sys/uc/messages/@item.CategoryName">
+                @item.CategoryName
+            </a>
+            <span class="badge pull-right bg-danger">@item.MessageCount</span>
+        </li>
+    }
+</ul>

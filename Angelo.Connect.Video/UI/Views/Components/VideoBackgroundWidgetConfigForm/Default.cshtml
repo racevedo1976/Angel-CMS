@@ -1,0 +1,77 @@
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@model Angelo.Connect.Video.Models.VideoBackgroundWidgetViewModel
+
+<form class="form" data-ajax-form="true" action="/api/widgets/videobackground">
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="form-group">
+        <label asp-for="VideoSourceType">Video Source Type:</label>
+        <div>
+            <select asp-for="VideoSourceType" class="form-control" asp-items="ViewBag.VideoSourceTypes"></select>
+        </div>
+    </div>
+
+    <div class="form-group" id="youtube-div">
+        <label asp-for="YoutubeVideoId">YouTube URL or Video ID (example: 2ixB9c6aijw):</label>
+        <div>
+            <input class="form-control" asp-for="YoutubeVideoId" />
+        </div>
+    </div>
+
+    <div class="form-group" id="vimeo-div">
+        <label asp-for="VimeoVideoId">Vimeo URL or Video ID (example: 56282284):</label>
+        <div>
+            <input class="form-control" asp-for="VimeoVideoId" />
+        </div>
+    </div>
+
+    <!--
+    <div class="form-group">
+        <label asp-for="Positioning">Positioning:</label>
+        <div>
+            <select asp-for="Positioning" class="form-control" asp-items="ViewBag.PositioningOptions"></select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ShowPlayerControls">Player controls:</label>
+        <div>
+            <input name="ShowPlayerControls" class="pull-left form-control" asp-for="ShowPlayerControls" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Autoplay">Autoplay:</label>
+        <div>
+            <input name="Autoplay" class="pull-left form-control" asp-for="Autoplay" />
+        </div>
+    </div>
+    -->
+</form>
+
+
+<script>
+    $(function () {
+
+        VideoSourceTypeChange = function () {
+
+            var vtype = $("#VideoSourceType").val();
+
+            if (vtype == "youtube")
+                $("#youtube-div").show();
+            else
+                $("#youtube-div").hide();
+
+            if (vtype == "vimeo")
+                $("#vimeo-div").show();
+            else
+                $("#vimeo-div").hide();
+        }
+
+        $("#VideoSourceType").on("change", VideoSourceTypeChange);
+
+        VideoSourceTypeChange();
+    });
+</script>
+

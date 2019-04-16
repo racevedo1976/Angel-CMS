@@ -1,0 +1,82 @@
+﻿@{
+    Layout = "_MasterLayout";
+}
+
+@section BodyContent 
+{
+    <header class="admin-header">
+        @Html.Partial("_AdminHeader")
+    </header>
+
+    <section class="admin-page clearfix">
+        <div class="admin-page-left">
+            <div class="admin-page-head">
+                @RenderSection("AdminPageHeader", required: false)
+            </div>
+            <div class="clearfix">
+                <div class="admin-page-menu">
+                    <div class="admin-left-menu">                       
+                        @RenderSection("AdminMenu", required: false)
+                    </div>
+                </div>
+                <div class="admin-page-body">
+                    <div class="admin-page-content">
+                        @RenderSection("AdminBody", required: false)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin-page-right">
+            <a class="admin-panel-toggle" onclick="$(document.body).toggleClass('admin-page-panel-hidden'); $(this).children().toggleClass('fa-chevron-left').toggleClass('fa-chevron-right');">
+                <i class="fa fa-chevron-right"></i>
+            </a>
+            <div class="admin-page-panel">
+                @RenderSection("AdminPanel", required: false)
+            </div>
+        </div>
+    </section>
+
+    <footer class="admin-footer">
+        @Html.Partial("_AdminFooter")
+    </footer>
+
+}
+
+@section WindowTitle {
+    @RenderSection("WindowTitle", required: false)
+}
+
+@section Styles {
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2018.1.221/styles/kendo.uniform.min.css">
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/toolbar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/LdapBrowser.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
+}
+
+@section Scripts {
+
+    <script src="~/lib/angelo/angelo.ajax.js"></script>
+    <script src="~/lib/angelo/angelo.dropdown.js"></script>
+    <script src="~/lib/angelo/angelo.checkboxlist.js"></script>
+    <script src="~/js/toolbar.js" asp-append-version="true"></script>
+    <script src="~/js/ldapBrowser.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        $(function () {
+            var height = window.innerHeight;
+
+            $(".admin-page-left, .admin-page-right").css({ minHeight: (height - 90) + "px" });
+            $(".admin-page-menu, .admin-page-body").css({ minHeight: (height - 130) + "px" });
+            $(".admin-page-content").find(".k-grid").css({ height: (height - 170) + "px" });
+        });
+    </script>
+}
+
+@section HeadScripts {
+    @RenderSection("HeadScripts", required: false)
+}

@@ -1,0 +1,52 @@
+﻿@using Kendo.Mvc
+@using Kendo.Mvc.UI
+@model IEnumerable<UserPageViewModel>
+@{ 
+    var siteId = ViewData["UserPageSiteId"];
+}
+
+<div class="csc-content-body" data-module="console/pages/list" data-siteId="@siteId">
+    <div id="userPagesTreeList"></div>
+</div>
+
+<script>
+    $(function () {
+        $("#userPagesTreeList").kendoTreeList({
+            "columns": [
+                { "field": "Id", "title": "Id", "hidden": true },
+                { "field": "Title", "title": "Page Title", "width": "200px" }, 
+			    { "field": "Path","title": "Url Path" }, 
+			    { "field": "IsPrivate", "title": "Private" }, 
+			    { "template": "<a class='uc-kendo-link' data-route='/sys/console/pages/#=Id#/new' title='Add child page'><i class='fa fa-plus'></i></a>", "width": "70px" }
+            ],
+		    "editable": { "move": true },
+		    "sortable": true,
+		    "dataSource": {
+		        "type":  'aspnetmvc-ajax',
+			    "transport": {
+			        "read": {
+			            "url": "/sys/console/pages/data?site=@siteId"
+			        }
+			    },
+			    "schema": {
+			        "data": "Data",
+				    "total": "Total",
+				    "errors": "Errors",
+				    "model": {
+				        "id": "Id",
+                        "parentId": "ParentPageId",
+					    "fields": {
+					        "Id": { "nullable": false, "type": "string" },
+						    "Title": { "nullable": false, "type": "string" },
+						    "Path": { "nullable": false, "type": "string" },
+						    "IsPrivate": { "nullable": false, "type": "boolean" },
+						    "ParentPageId": {  "nullable": false, "type": "string" }					
+					    },
+					    "expanded": true
+				    }
+			    }
+		    },
+		    "selectable": true
+        });
+    });
+</script>

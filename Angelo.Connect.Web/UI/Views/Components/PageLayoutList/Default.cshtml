@@ -1,0 +1,154 @@
+﻿@{
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["siteId"];
+    var layoutId = (string)ViewData["layoutId"];
+}
+
+<div id="@componentId" data-selectable=".layout" data-selected="@layoutId">
+
+    <div id="layout1" title="Splash Page" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-5">
+            <div class="layout-area x-12" data-role="content"></div>
+        </div>
+    </div>
+
+    <div id="layout2" title="Left Bar" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-5">
+            <div class="layout-area x-4" data-role="menu"></div>
+            <div class="layout-area x-8" data-role="content"></div>
+        </div>
+    </div>
+
+    <div id="layout3" title="Right Bar" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-5">
+            <div class="layout-area x-8" data-role="content"></div>
+            <div class="layout-area x-4" data-role="aside"></div>
+        </div>
+    </div>
+
+    <div id="layout4" title="Dual Bars" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-5">
+            <div class="layout-area x-3" data-role="menu"></div>
+            <div class="layout-area x-6" data-role="content"></div>
+            <div class="layout-area x-3" data-role="aside"></div>
+        </div>
+    </div>
+
+    <div id="layout5" title="Splash Page with Footer" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-4">
+            <div class="layout-area x-12" data-role="content"></div>
+        </div>
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="footer"></div>
+        </div>
+    </div>
+
+    <div id="layout6" title="Left Bar with Footer" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-4">
+            <div class="layout-area x-4" data-role="menu"></div>
+            <div class="layout-area x-8" data-role="content"></div>
+        </div>
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="footer"></div>
+        </div>
+    </div>
+
+    <div id="layout7" title="Right Bar with Footer" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-4">
+            <div class="layout-area x-8" data-role="content"></div>
+            <div class="layout-area x-4" data-role="aside"></div>
+        </div>
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="footer"></div>
+        </div>
+    </div>
+
+    <div id="layout8" title="Dual Bars with Footer" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-4">
+            <div class="layout-area x-3" data-role="menu"></div>
+            <div class="layout-area x-6" data-role="content"></div>
+            <div class="layout-area x-3" data-role="aside"></div>
+        </div>
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="footer"></div>
+        </div>
+    </div>
+
+    <div id="layout10" title="Two Column" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-4">
+            <div class="layout-area x-6" data-role="content"></div>
+            <div class="layout-area x-6" data-role="content"></div>
+        </div>
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="footer"></div>
+        </div>
+    </div>
+
+    <div id="layout9" title="Three Column" class="layout layout-preview">
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="header"></div>
+        </div>
+        <div class="layout-group y-4">
+            <div class="layout-area x-4" data-role="menu"></div>
+            <div class="layout-area x-4" data-role="content"></div>
+            <div class="layout-area x-4" data-role="aside"></div>
+        </div>
+        <div class="layout-group y-1">
+            <div class="layout-area x-12" data-role="footer"></div>
+        </div>
+    </div>
+
+    <div id="layout13" title="Full Screen" class="layout layout-preview">
+        <div class="layout-group y-6">
+            <div class="layout-area x-12" data-role="content"></div>
+        </div>
+    </div>
+
+    <div id="layout11" title="Four Square" class="layout layout-preview">
+        <div class="layout-group y-3">
+            <div class="layout-area x-6" data-role="content"></div>
+            <div class="layout-area x-6" data-role="content"></div>
+        </div>
+        <div class="layout-group y-3">
+            <div class="layout-area x-6" data-role="content"></div>
+            <div class="layout-area x-6" data-role="content"></div>
+        </div>
+    </div>
+
+    <div id="layout12" title="Complex " class="layout layout-preview">
+        <div class="layout-group y-6">
+            <div class="layout-area x-4 y-6" data-role="content"></div>
+            <div class="layout-area x-4 y-3" data-role="content"></div>
+            <div class="layout-area x-4 y-3" data-role="content"></div>
+            <div class="layout-area x-4 y-3" data-role="content"></div>
+            <div class="layout-area x-4 y-3" data-role="content"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,236 @@
+﻿@model IEnumerable<RoleViewModel>
+
+@using Microsoft.AspNetCore.Authorization
+@using Angelo.Connect.Security
+
+@{
+    var clientId = (string)ViewData["ClientId"];
+}
+
+@section Title {
+    @Html.Localize("Manage Roles")
+}
+
+
+@section Panel {
+    <div id="rolePanel">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active">
+                <a href="#roleDetailsTab" data-toggle="tab">
+                    @Html.Localize("Role Details")
+                </a>
+            </li>
+            <li>
+                <a href="#rolePermissionsTab" data-toggle="tab">
+                    @Html.Localize("Permissions")
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div id="roleDetailsTab" class="tab-pane fade in active">
+                <div class="tab-sub-pane" style="display:none">
+                    <div id="roleCreateFormToolbar" class="toolbar">
+                        <a name="save" class="fa fa-save" title="@Html.Localize("Save the new Role")">
+                            <span>@Html.Localize("Create")</span>
+                        </a>
+                        <a name="cancel" class="fa fa-times" title="@Html.Localize("Cancel the creation of a new Role")">
+                            <span>@Html.Localize("Cancel")</span>
+                        </a>
+                    </div>
+                    <component id="roleCreateForm" type="ClientRoleCreate" lazy="true"></component>
+                </div>
+
+                <div class="tab-sub-pane" style="display:none">
+                    <div id="roleEditFormToolbar" class="toolbar">
+                        <a name="save" class="fa fa-save" title="@Html.Localize("Save Role Changes")">
+                            <span>@Html.Localize("Save")</span>
+                        </a>
+                    </div>
+                    <component id="roleEditForm" type="ClientRoleEdit" lazy="true"></component>
+                </div>
+            </div>
+
+            <div id="rolePermissionsTab" class="tab-pane fade">
+                <div class="tab-sub-pane" >
+                    <div id="rolePermissionsSaveFormToolbar" class="toolbar">
+                        <a name="save" class="fa fa-save" title="@Html.Localize("Save the permissions")">
+                            <span>@Html.Localize("Save")</span>
+                        </a>
+                        @*<a name="cancel" class="fa fa-times" title="@Html.Localize("Cancel the creation of a new Role")">
+                            <span>@Html.Localize("Cancel")</span>
+                        </a>*@
+                    </div>
+                    <component id="rolePermissionList" type="ClientRolePermissions" lazy="true"></component>
+                </div>
+               
+               
+                
+            </div>
+        </div>
+    </div>
+}
+
+<div id="siteRoleListSection">
+    <div id="roleListToolbar" class="toolbar">
+        <a name="create" asp-authorize asp-policy="@PolicyNames.ClientRolesCreate" class="fa fa-plus-square" title="@Html.Localize("Create a new Role")">
+            <span>@Html.Localize("Create")</span>
+        </a>
+        <a name="delete" asp-authorize asp-policy="@PolicyNames.ClientRolesDelete" class="fa fa-trash-o pull-right" title="@Html.Localize("Delete the selected Role")" disabled>
+            <span>@Html.Localize("Delete")</span>
+        </a>
+    </div>
+    <component id="roleList" type="ClientRoleList" arg-clientId="@clientId"></component>
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        var roleViewData = {
+            clientId: "@clientId",
+            apiUrl: "@routes.ClientApi("roles")",
+            messages: {
+                deletePrompt: "@Html.Localize("Are you sure you want to delete this Role?")",
+                deleteError: "@Html.Localize("Error. Could not delete the role.")",
+                saveSuccess: "@Html.Localize("Role Changes Saved.")",
+            }
+        };
+
+        // Role List Events
+        $.on("roleList.change", function (event, data) {
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+            $("#roleListToolbar").toolbar().enable("delete");
+            $("#roleCreateForm").html("");
+            $("#roleEditFormToolbar").toolbar().disable("save");
+            $("#rolePermissionsSaveFormToolbar").toolbar().disable("save");
+
+            InvokeComponent("roleEditForm", { clientId: roleViewData.clientId, roleId: model.Id });
+            InvokeComponent("rolePermissionList", { clientId: roleViewData.clientId, roleId: model.Id });
+        });
+
+        $.on("roleListToolbar.create", function () {
+            var grid = $("#roleList").getKendoGrid();
+            grid.dataSource.read();
+
+            $("#roleListToolbar").toolbar().disable("delete");
+            $("#roleListToolbar").toolbar().disable("manage");
+            $("#roleCreateFormToolbar").toolbar().disable("save");
+            $("#roleCreateFormToolbar").toolbar().disable("cancel");
+            $("#roleEditForm").html("");
+
+            InvokeComponent("roleCreateForm", { clientId: roleViewData.clientId });
+
+            HideTabPane("rolePermissionsTab");
+
+            $('.nav-tabs a[href="#roleDetailsTab"]').tab('show');
+        });
+
+        $.on("roleListToolbar.delete", function () {
+            var grid = $("#roleList").getKendoGrid();
+            var row = grid.select()
+            var model = grid.dataItem(row);
+            var roleId = model.Id;
+
+            if (confirm(roleViewData.messages.deletePrompt)) {
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: roleViewData.apiUrl + "/" + roleId,
+                    success: function () {
+                        $("#roleListToolbar").toolbar().disable("delete");
+                        HideTabPane("roleDetailsTab");
+                        HideTabPane("rolePermissionsTab");
+                        $("#roleList").getKendoGrid().dataSource.read();
+                    },
+                    error: function () {
+                        alert(roleViewData.messages.deleteError);
+                    }
+                });
+            }
+        });
+
+
+        // Role Details events
+        $.on("roleCreateForm.load", function (event, data) {
+            $("#roleCreateFormToolbar").toolbar().enable("save");
+            $("#roleCreateFormToolbar").toolbar().enable("cancel");
+        });
+
+        $.on("roleCreateFormToolbar.save", function () {
+            $("#roleCreateFormToolbar").toolbar().disable("save");
+            $("#roleCreateFormToolbar").toolbar().disable("cancel");
+            $("#roleCreateForm").form().post();
+        });
+
+        $.on("rolePermissionsSaveFormToolbar.save", function () {
+           
+            $("#rolePermissionList").form().post();
+        });
+
+        $.on("roleCreateFormToolbar.cancel", function () {
+            HideTabPane("roleDetailsTab");
+        });
+
+        $.on("roleCreateForm.error", function (event, data) {
+            $("#roleCreateFormToolbar").toolbar().enable("save");
+            $("#roleCreateFormToolbar").toolbar().enable("cancel");
+        });
+
+        $.on("roleCreateForm.submit", function (event, data) {
+            HideTabPane("roleDetailsTab");
+            HideTabPane("rolePermissionsTab");
+            $("#roleListToolbar").toolbar().disable("delete");
+            $("#roleList").getKendoGrid().dataSource.read();
+        });
+
+        $.on("rolePermissionList.load", function (event, data) {
+            var locked = $("#roleEditForm").find("[name=IsLocked]").val();
+
+            
+            if (locked === "False") {
+                $("#rolePermissionsSaveFormToolbar").toolbar().enable("save");
+            }
+        });
+
+        $.on("roleEditForm.load", function (event, data) {
+            var locked = $("#roleEditForm").find("[name=IsLocked]").val();
+
+            if (locked === "False") {
+                $("#roleEditFormToolbar").toolbar().enable("save");
+            }
+        });
+
+        $.on("roleEditFormToolbar.save", function () {
+            $("#roleEditForm").form().put();
+        });
+
+        $.on("roleEditForm.submit", function (event, data) {
+            $("#roleListToolbar").toolbar().disable("delete");
+            $("#roleList").getKendoGrid().dataSource.read();
+            alert(roleViewData.messages.saveSuccess);
+        });
+
+
+        HideTabPane = function (tabPane) {
+            $("#" + tabPane + " >.tab-sub-pane").hide();
+        }
+
+        ShowParentTabSubPane = function (childName) {
+            var subPane = $("#" + childName).parents("div.tab-sub-pane")[0];
+            if (subPane) {
+                $(subPane).siblings(".tab-sub-pane").hide();
+                $(subPane).show();
+            }
+        }
+
+        InvokeComponent = function (cid, data) {
+            $("#" + cid).component().invoke(data);
+            ShowParentTabSubPane(cid);
+        }
+
+    </script>
+}

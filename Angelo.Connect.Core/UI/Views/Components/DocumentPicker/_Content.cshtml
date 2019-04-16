@@ -1,0 +1,77 @@
+﻿@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Models
+@using Angelo.Connect.UI.Components
+
+@model IFolder
+
+@inject IFolderManager<FileDocument> _folderManager
+@{ 
+    var settings = (DocumentPickerSettings) this.ViewData["Settings"];
+    var fileType = settings.FileType;
+    var folder = this.Model;
+
+    var children = await _folderManager.GetFoldersAsync(folder);
+    var documents = await _folderManager.GetDocumentsAsync(folder);
+    //documents = string.IsNullOrEmpty(fileType) ? documents : documents.Where(x => string.Equals(x.FileType, fileType, StringComparison.CurrentCultureIgnoreCase));
+
+    var isCrumbTrailShown = !settings.IsContentCrumbTrailHidden;
+    var areFoldersVisible = !settings.AreContentFoldersHidden;
+    var areDocumentsVisible = !settings.AreContentDocumentsHidden;
+}
+
+<div id="header">
+    @if (isCrumbTrailShown)
+    {
+    <div id="crumbs" class="col-sm-11">
+        @Html.Partial("_Crumbs.cshtml")
+    </div>
+    }
+    <div id="actions" class="col-sm-1">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="#" title="Icons"><span class="glyphicon glyphicon-th" aria-hidden="true"></span><label class="form-label">Icon view</label></a></li>
+                <li><a href="#" title="Tiles"><span class="glyphicon glyphicon-th-large" aria-hidden="true"><label class="form-label">Large tile view</label></span></a></li>
+                <li><a href="#" title="Details"><span class="glyphicon glyphicon-th-list" aria-hidden="true"><label class="form-label">Detail view</label></span></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+@if (areFoldersVisible)
+{
+    <div class="container-fluid">
+        <div id="folders" class="row-fluid">
+            @foreach (var child in children)
+            {
+                <div class="col-sm-4">
+                    @Html.Partial("~/UI/Views/Components/DocumentPicker/Icons/_Folder.cshtml", child)
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@if (areDocumentsVisible)
+{
+    <div class="container-fluid">
+        <div id="documents" class="row-fluid">
+            @foreach (var document in documents)
+            {
+            <div class="" role="button" style="float:left;">
+                @switch (document.FileType)
+                {
+                    case FileType.Video:
+                        @Html.Partial("~/UI/Views/Components/DocumentPicker/Icons/_Video.cshtml", document)
+                        break;
+                    default:
+                        @Html.Partial("~/UI/Views/Components/DocumentPicker/Icons/_Document.cshtml", document)
+                        break;
+                }
+            </div>
+            }
+        </div>
+    </div>
+}
+

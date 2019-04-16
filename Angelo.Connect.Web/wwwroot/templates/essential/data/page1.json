@@ -1,0 +1,279 @@
+﻿[
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-8-4",
+    "style": {
+      "padding": "15px" 
+    },
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "model": {
+          "caption": "Sample Image",
+          "src": "/templates/essential/images/box1.jpg"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "hero",
+        "model": {
+          "title": "ABOUT US",
+          "body": "<p>The mission of the Essential School District is to provide a child-centered environment that cultivates character, fosters academic excellence, and embraces diversity. District families, community, and staff join as partners to develop creative, exemplary learners with the skills and enthusiasm to contribute to a constantly changing global society</p>"
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-4",
+    "style": {
+      "padding": "15px "
+    },
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "model": {
+          "caption": "Essential Primary",
+          "src": "/templates/essential/images/school1.jpg"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "model": {
+          "caption": "Essential Elementary",
+          "src": "/templates/essential/images/school2.jpg"
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "image",
+        "model": {
+          "caption": "Essential Middle",
+          "src": "/templates/essential/images/school3.jpg"
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "image",
+        "model": {
+          "caption": "Essential High",
+          "src": "/templates/essential/images/school4.jpg"
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "title",
+    "style": {
+      "background": "bg-muted",
+      "classes": "text-center",
+      "paddingTop": "15px",
+      "paddingBottom": "0"
+    },
+    "model": {
+      "text": "Upcoming Events"
+    }
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "background": "bg-muted",
+      "paddingTop": "0",
+      "paddingBottom": "15px"
+    },
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "style": {
+          "paddingTop": "15px"
+        },
+        "model": {
+          "html": "<div class=\"text-center\"><p>Keep connected with Essential Public Schools by attending our concerts, events and athletic tournaments. Parents, follow us on Facebook to see photos of your kids.</p></div>"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "style": {
+          "classes": "cns-events clearfix"
+        },
+        "model": {
+          "html": "<h5>May 24 - High School Graduation</h5> <h5>June 1 - Summer Vacation Begins</h5> <h5>June 12 - Teacher Work Day</h5> <h5>August 6 - First Day of School</h5>"
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-4",
+    "style": {
+      "background": "bg-dark",
+      "classes": "cns-quicklinks"
+    },
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "icon",
+        "style": {
+          "padding": "15px",
+          "classes": "text-center"
+        },
+        "model": {
+          "name": "coffee",
+          "size": "48px",
+          "tooltip": "Parents"
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "title",
+        "style": {
+          "padding": "15px",
+          "classes": "text-center"
+        },
+        "model": {
+          "text": "Parents",
+          "cssClass": "h4"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "icon",
+        "style": {
+          "padding": "15px",
+          "classes": "text-center"
+        },
+        "model": {
+          "name": "graduation-cap",
+          "size": "48px",
+          "tooltip": "Students"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "title",
+        "style": {
+          "padding": "15px",
+          "classes": "text-center"
+        },
+        "model": {
+          "text": "Students",
+          "cssClass": "h4"
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "icon",
+        "style": {
+          "padding": "15px",
+          "classes": "text-center"
+        },
+        "model": {
+          "name": "briefcase",
+          "size": "48px",
+          "tooltip": "Staff"
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "title",
+        "style": {
+          "padding": "15px",
+          "classes": "text-center"
+        },
+        "model": {
+          "text": "Staff",
+          "cssClass": "h4"
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "icon",
+        "style": {
+          "padding": "15px",
+          "classes": "text-center"
+        },
+        "model": {
+          "name": "coffee",
+          "size": "48px",
+          "tooltip": "Community"
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "title",
+        "style": {
+          "padding": "15px",
+          "classes": "text-center"
+        },
+        "model": {
+          "text": "Community",
+          "cssClass": "h4"
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "title",
+    "model": {
+      "text": "News"
+    },
+    "style": {
+      "classes": "text-center",
+      "padding": "15px"
+    }
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-4",
+    "style": {
+      "padding": "15px"
+    },
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "model": {
+          "caption": "Summer Reading List",
+          "src": "/templates/essential/images/news1.jpg"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "model": {
+          "caption": "End of Year Party",
+          "src": "/templates/essential/images/news2.jpg"
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "image",
+        "model": {
+          "caption": "Awards Ceremony",
+          "src": "/templates/essential/images/news3.jpg"
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "image",
+        "model": {
+          "caption": "Board Meeting",
+          "src": "/templates/essential/images/news4.jpg"
+        }
+      }
+    ]
+  }
+]

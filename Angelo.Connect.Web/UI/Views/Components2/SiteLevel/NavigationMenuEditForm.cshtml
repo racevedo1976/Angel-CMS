@@ -1,0 +1,174 @@
+﻿@model NavigationMenuViewModel
+
+@{ 
+    var componentId = (string)ViewData["cid"];
+    var formTitle = (string)ViewData["FormTitle"];
+
+    var editOkButtonId = componentId + "_edit_ok_button";
+    var editUndoButtonId = componentId + "_edit_undo_button";
+    var editChangeFunc = componentId + "_edit_change_event";
+    var editAcceptFunc = componentId + "_edit_accept_event";
+    var editUndoFunc = componentId + "_edit_undo_event";
+
+    var addItemButtonId = componentId + "_toolbar_add";
+    var deleteItemButtonId = componentId + "_toolbar_delete";
+    var editItemButtonId = componentId + "_toolbar_edit";
+    var addItemFunc = componentId + "_add_item_func";
+    var deleteItemFunc = componentId + "_delete_item_func";
+    var editItemFunc = componentId + "_edit_item_func";
+
+    var titleEditId = componentId + "_title_edit";
+    var treeviewId = componentId + "_treeview";
+    var treeviewDropEvent = treeviewId + "_drop";
+    var getSelectedNodeModelFunc = componentId + "_get_selected_node_model_func";
+}
+
+<style>
+    i.i-button {
+        cursor:pointer;
+        color:Highlight;
+    }
+    i[disabled=disabled].i-button {
+        color:gray;
+    }
+    i.i-green-button {
+        color:green;
+    }
+    i.i-red-button {
+        color:red;
+    }
+</style>
+
+<div style="margin:15px;">
+    <h4>@formTitle</h4>
+</div>
+
+<form id="@componentId" action="@routes.SiteApi("navigationMenu")" class="form-horizontal" data-ajax-form>
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.SiteId)
+
+    <div class="form-group">
+        <table style="border-collapse:separate; border-spacing:5px;">
+            <tr>
+                <td><span style="margin-left:5px; margin-right:25px; font-size:large; font-weight:700;">@Html.Localize("Title"):</span></td>
+                <td><input id="@titleEditId" type="text" class="form-control" asp-for="Title" onkeyup="@(editChangeFunc)();" onchange="@(editChangeFunc)();"  required data-original-val="@Model.Title" spellcheck="true" /></td>
+                <td><i id="@editOkButtonId" class="i-button i-green-button fa fa-check-circle fa-2x" onclick="@(editAcceptFunc)();" title="Accept" disabled="disabled"></i></td>
+                <td><i id="@editUndoButtonId" class="i-button i-red-button fa fa-arrow-circle-left fa-2x" onclick="@(editUndoFunc)();" title="Undo" disabled="disabled"></i></td>
+            </tr>
+        </table>
+    </div>
+</form>
+
+<div>
+    <table style="border-collapse:separate; border-spacing:5px;">
+        <tr>
+            <td><span style="margin-left:5px; margin-right:25px; font-size:large; font-weight:700;">@Html.Localize("Items"):</span></td>
+            <td><i id="@addItemButtonId" class="i-button fa fa-plus-square fa-3x" title="Add Menu Item" onclick="@(addItemFunc)(this);"></i></td>
+            <td><i id="@deleteItemButtonId" class="i-button fa fa-minus-square fa-3x" title="Remove Menu Item" onclick="@(deleteItemFunc)(this);"></i></td>
+            <td><i id="@editItemButtonId" class="i-button fa fa-pencil-square fa-3x" title="Edit Menu Item" onclick="@(editItemFunc)(this);"></i></td>
+        </tr>
+    </table>
+
+    <div style="margin:10px; border:solid; border-width:1px; min-height:200px;">
+         @(Html.Kendo().TreeView()
+       .Name(@treeviewId)
+       .BindTo(Model.Items)
+       .DragAndDrop(true)
+       //   .ExpandAll(true)
+       .Template(
+           "<div>" +
+           "<span style=\"font-size:large;\">#: item.text #</span>" +
+           "</div>"
+           )
+       .Events(events =>
+       {
+           events.Drop(treeviewDropEvent);
+       })
+        )
+    </div>
+</div>
+
+<script>
+
+    @editChangeFunc = function() {
+        $("#@editOkButtonId").removeAttr("disabled");
+        $("#@editUndoButtonId").removeAttr("disabled");
+    }
+
+    @editAcceptFunc = function() {
+        var $edit = $("#navigationMenuEditForm_title_edit");
+        $.trigger.call($edit[0], "@(componentId).save", { navMenuId: "@Model.Id" });
+        $("#@editOkButtonId").attr("disabled", "disabled");
+        $("#@editUndoButtonId").attr("disabled", "disabled");
+    }
+
+    @editUndoFunc = function() {
+        var $edit = $("#@(titleEditId)");
+        $edit.val($edit.data().originalVal);
+        $("#@editOkButtonId").attr("disabled", "disabled");
+        $("#@editUndoButtonId").attr("disabled", "disabled");
+    }
+
+    @treeviewDropEvent = function(event) {
+        var treeview = $("#@treeviewId").data("kendoTreeView");
+        var sourceData = treeview.dataItem(event.sourceNode);
+        var destData = treeview.dataItem(event.destinationNode);
+        if (destData) {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "@routes.SiteApi("navigationMenuItems/move")",
+                data: {
+                    sourceId: sourceData.id,
+                    destId: destData.id,
+                    dropPosition: event.dropPosition
+                },
+                error: function () {
+                    alert("Error: Unable to move menu item.");
+                }
+            });
+        }
+    }
+
+    @getSelectedNodeModelFunc = function()
+    {
+        var treeview = $("#@treeviewId").data("kendoTreeView");
+        var node = treeview.select();
+        var itemModel = treeview.dataItem(node);
+        var model = {
+            navMenuId: "@Model.Id",
+            itemId: (itemModel ? itemModel.id : ""),
+            text: (itemModel ? itemModel.text : "")
+        };
+        return model;
+    }
+
+    @addItemFunc = function (el) {
+        var model = @(getSelectedNodeModelFunc)();
+        $.trigger.call(el, "@(componentId).addItem", model);
+    }
+
+    @deleteItemFunc = function (el) {
+        var model = @(getSelectedNodeModelFunc)();
+        if (model.itemId != "") {
+            $.trigger.call(el, "@(componentId).deleteItem", model);
+        }
+    }
+
+    @editItemFunc = function (el) {
+        var model = @(getSelectedNodeModelFunc)();
+        if (model.itemId != "") {
+            $.trigger.call(el, "@(componentId).editItem", model);
+        }
+    }
+
+
+
+
+</script>
+
+
+
+
+
+

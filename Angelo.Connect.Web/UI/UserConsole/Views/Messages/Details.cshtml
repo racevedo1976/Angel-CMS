@@ -1,0 +1,25 @@
+﻿@using Angelo.Connect.Web.Data.Mock
+@model IEnumerable<MockMessage>
+@{ 
+    var subTitle = (string)ViewData["SubTitle"];
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Sent</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var message in Model)
+        {
+            <tr>
+                <td>@message.Title</td>
+                <td>@message.CategoryName</td>
+                <td>@message.TimeStamp.ToString("MM/dd/yy hh:mm tt")</td>
+            </tr>
+        }
+    </tbody>
+</table>

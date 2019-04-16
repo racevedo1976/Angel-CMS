@@ -1,0 +1,24 @@
+﻿@model Angelo.Connect.Abstractions.IContentType
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["siteId"];
+}
+
+<form id="@componentId" action="/api/pages" class="form-horizontal" data-ajax-form>
+
+    <div id="panelNonSelectedFile" class="">
+       
+
+            <div class="form-group row">
+                <div class="col-sm-12 center-block" style="float: none;text-align:center">
+                    <i class="fa fa-comment fa-3x"></i>
+                    Select a folder to view its details.
+                </div>
+            </div>
+       
+    </div>
+
+
+</form>
+    

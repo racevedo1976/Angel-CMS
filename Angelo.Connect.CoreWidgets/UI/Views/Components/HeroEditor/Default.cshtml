@@ -1,0 +1,38 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.HeroUnit
+@{
+    var apiUrl = $"/api/widgets/hero/{Model.Id}";
+
+    var editorId = "editor_" + Model.Id.Replace("-", "");
+}
+
+<div class="jumbotron">
+    <h1>
+        <input type="text" class="wysi-control" asp-for="@Model.Title" onchange="$.post('@apiUrl/title', { title: this.value })" spellcheck="true" />
+    </h1>
+    <p>
+        @(
+        Html.Kendo().Editor()
+            .Name(editorId)
+            .Tag("div")
+            .HtmlAttributes(new { contenteditable = "true" })
+            .Tools(tools => tools
+                .Clear()
+                .FontName().FontSize()
+                .Bold().Italic().Underline().Strikethrough()
+                .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+                .ForeColor()
+            )
+            .Value(Model.Body)
+            .Events(events => events
+                .Change("function(e){ $.post('" + apiUrl + "/body', { body: e.sender.value() }); }")
+            )
+        )
+    </p>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Url))
+    {
+        <p>
+            <a class="btn btn-primary btn-lg" href="@Model.Url" role="button">Learn more</a>
+        </p>
+    }
+</div>

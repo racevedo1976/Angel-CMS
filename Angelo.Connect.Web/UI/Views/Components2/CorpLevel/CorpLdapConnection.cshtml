@@ -1,0 +1,110 @@
+﻿@using Angelo.Identity.Services
+
+@model Angelo.Identity.Models.LdapDomain
+
+@inject DirectoryManager directoryManager
+@{
+    var componentId = (string)ViewData["cid"];
+    var directoryId = (string)ViewData["id"];
+
+    routes.CorpApi("");
+   
+}
+
+<form id="@componentId" action="@routes.CorpApi("ldap/save")" class="form-horizontal" data-ajax-form role="form">
+    
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.DirectoryId)
+
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.Localize("Ldap Host")</label>
+        <div class="col-sm-8">
+            <input name="Host" required placeholder="REQUIRED" type="text" asp-for="Host" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.Localize("Domain")</label>
+        <div class="col-sm-8">
+            <input name="Domain" required placeholder="REQUIRED" type="text" class="form-control" asp-for="Domain"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.Localize("Root Base Dn")</label>
+        <div class="col-sm-8">
+            <input name="LdapBaseDn" required placeholder="REQUIRED" type="text" class="form-control" asp-for="LdapBaseDn" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.Localize("User")</label>
+        <div class="col-sm-8">
+            <input name="User" required placeholder="REQUIRED" type="text" class="form-control"  asp-for="User" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.Localize("Password")</label>
+        <div class="col-sm-8">
+            <input name="Password" required placeholder="REQUIRED" type="text" class="form-control"  asp-for="Password"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.Localize("Use Ssl")</label>
+        <div class="col-sm-8">
+            <input name="UseSsl" id="UseSsl" required type="checkbox" value="true" class="" asp-for="UseSsl" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-1"></label>
+        <div class="col-sm-11">
+          <span id="testConnectionIcon"></span>  <span id="testConnectionMsg"></span>
+           
+        </div>
+    </div>
+</form>
+
+
+<script>
+    var directoryId = '@Model.DirectoryId'
+
+    function exploreLdap() {
+        var msgContainer = $("#testConnectionMsg")
+        var iconContainer = $("#testConnectionIcon")
+
+        var ldapModel = {
+            Domain: document.getElementsByName("Domain")[0].value,
+            Host: document.getElementsByName("Host")[0].value,
+            User: document.getElementsByName("User")[0].value,
+            Password: document.getElementsByName("Password")[0].value,
+            UseSsl: document.getElementById('UseSsl').checked ? true : false
+
+        }
+
+        msgContainer.html('');
+        msgContainer.html('Testing connection...');
+        iconContainer.removeClass('fa fa-check fa-times');
+
+        if (ldapModel.Domain == "" || ldapModel.Host == "" || ldapModel.User == "" || ldapModel.Password == "") {
+
+            msgContainer.html('Required Information missing.');
+        }
+
+        $.get("/sys/corp/api/ldap/test", ldapModel, function (result) {
+           // debugger;
+            if (result.connected) {
+                msgContainer.html('Connection Success!');
+                iconContainer.addClass('fa fa-check');
+            } else {
+                msgContainer.html('Connection Failed! ' + result.message);
+                iconContainer.addClass('fa fa-times');
+            }
+           
+
+        })
+    }
+</script>

@@ -1,0 +1,18 @@
+﻿@model Angelo.Connect.News.Models.NewsCategory
+
+<div>
+    <form id="newsCategoryForm" action="/sys/api/news/categories" class="form-horizontal" data-ajax-form>
+        <input type="hidden" name="Id" asp-for="Id" />
+        <input type="hidden" name="UserId" asp-for="UserId" />
+
+        <div class="form-group">
+            <label class="col-sm-3 form-label">
+                @Html.Localize("Category Name")
+            </label>
+            <div class="col-sm-6">
+                <input name="Title" type="text" class="form-control" asp-for="Title" required spellcheck="true" />
+            </div>
+        </div>
+    </form>
+</div>
+

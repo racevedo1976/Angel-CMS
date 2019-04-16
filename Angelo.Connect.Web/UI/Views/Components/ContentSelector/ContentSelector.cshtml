@@ -1,0 +1,212 @@
+﻿
+@{
+    var componentId = (string)ViewData["cid"];
+    var userId = (string)ViewData["userId"];
+}
+
+<style>
+    .content-select-dialog {
+        display: none;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 800px;
+        height: 500px;
+        background-color: #f9f9f9;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 101;
+    }
+
+    .content-select-click-catcher {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        background-color: darkgray;
+        opacity: 0.50;
+    }
+
+    /*.show {
+        display: block;
+    }*/
+
+    .content-select-dialog .dialog-container{
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .content-select-dialog .top-panel {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 35px;
+        width: 100%;
+        border: 1px solid black;
+        padding: 4px;
+    }
+
+    .content-select-dialog .left-panel {
+        position: absolute;
+        top: 35px;
+        left: 0px;
+        bottom: 0px;
+        width: 250px;
+        border-top: none;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+
+    .content-select-dialog .right-panel {
+        position: absolute;
+        top: 35px;
+        left: 250px;
+        right: 0px;
+        bottom: 0px;
+        border-top: none;
+        border-right: 1px solid black;
+        border-bottom: 1px solid black;
+        border-left: none;
+    }
+
+</style>
+
+
+<div id="contentSelectClickCatcher" class="content-select-click-catcher" onclick="privateOnContentSelectCancel();"></div>
+<div id="contentSelectDialog" class="content-select-dialog">
+
+    <div id="@componentId" class="dialog-container">
+        
+        <div class="top-panel">
+            <span id="contentSelectTitle" style="font-size: 16px; font-weight: bold;"></span>
+            <a id="contentListCancel" href="#" style="float:right;">
+                <span class="fa fa-2x fa-times"></span>
+            </a>
+        </div>
+
+        <div class="left-panel">
+            <component id="contentTreeViewBrowser" type="ContentTreeViewBrowser" lazy="true"></component>
+        </div>
+
+        <div class="right-panel">
+            <component id="contentListViewBrowser" type="ContentListViewBrowser" lazy="true"></component>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    var ShowContentSelector = function (options) {
+        if (options) {
+            if (options.title) {
+                $("#contentSelectTitle").html(options.title);
+            }
+            $("#@componentId").data({
+                idTarget: options.idTarget,
+                nameTarget: options.nameTarget,
+                fileUrlTarget: options.fileUrlTarget,
+                thumbUrlTarget: options.thumbUrlTarget,
+                onSelect: options.onSelect,
+                onCancel: options.onCancel
+            });
+        }
+        else {
+            $("#contentSelectTitle").html("Select Content:");
+            $("#@componentId").removeData();
+        }
+        privateShowContentSelect();
+    }
+
+    var privateShowContentSelect = function () {
+        $("#contentTreeViewBrowser").empty();
+        $("#contentListViewBrowser").empty();
+        document.getElementById("contentSelectClickCatcher").classList.add("show");
+        document.getElementById("contentSelectDialog").classList.add("show");
+        $("#contentTreeViewBrowser").component().invoke({ userId: "@userId" });
+        $("#contentListViewBrowser").component().invoke({ userId: "@userId" });
+    };
+
+    var privateHideContentSelect = function () {
+        document.getElementById("contentSelectClickCatcher").classList.remove("show");
+        document.getElementById("contentSelectDialog").classList.remove("show");
+    };
+
+    var privateOnContentSelectCancel = function () {
+        var model = $("#@componentId").data();
+        privateHideContentSelect();
+        if (model.onCancel) {
+            model.onCancel();
+        }
+    }
+
+    var privateSetElement = function (names, value) {
+        var names = names.split(",");
+        var nLen = names.length;
+        for (var i = 0; i < nLen; i++) {
+            $("input#" + names[i].trim()).val(value);
+            $("img#" + names[i].trim()).attr("src", value);
+        }
+    };
+
+    var privateOnContentItemSelected = function (item) {
+        var model = $("#@componentId").data();
+        if (model.idTarget) {
+            privateSetElement(model.idTarget, item.contentId);
+        }
+        if (model.nameTarget) {
+            privateSetElement(model.nameTarget, item.name);
+        }
+        if (model.fileUrlTarget) {
+            privateSetElement(model.fileUrlTarget, item.fileUrl);
+        }
+        if (model.thumbUrlTarget) {
+            privateSetElement(model.thumbUrlTarget, item.thumbUrl);
+        }
+        if (model.onSelect) {
+            var arr = [];
+            arr.push(item);
+            model.onSelect(arr);
+        }
+        privateHideContentSelect();
+    }
+
+    var onTreeViewSelect = function (e) {
+        var treeview = $("#contentTreeViewBrowser").data("kendoTreeView");
+        var data = treeview.dataItem(e.node);
+        var compositKey = data.id.split('_');
+        var providerName = compositKey[0];
+        var contentId = compositKey[1];
+
+        $("#contentListViewBrowser").component().invoke({
+            userId: "@userId",
+            providerName: providerName,
+            contentId: contentId,
+            isShared: data.isShared || false,
+            onSelect: "privateOnContentItemSelected"
+        });
+    }
+
+    $("#contentListCancel").click(function () {
+        privateOnContentSelectCancel();
+    });
+
+
+
+</script>   
+

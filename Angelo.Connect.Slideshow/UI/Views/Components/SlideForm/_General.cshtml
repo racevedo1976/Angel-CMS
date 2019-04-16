@@ -1,0 +1,45 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model Slide
+@{
+    var slideStates = Enumerable.Empty<SelectListItem>();
+}
+<div class="container-fluid">
+    <div class="row">
+        <label class="form-label col-sm-3">Slide Delay</label>
+        <div class="col-sm-4">
+            @Html.EditorFor(x => x.Delay, null, nameof(Slide.Delay))
+        </div>
+        <label class="form-label col-sm-1">ms</label>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-3">Slide State</label>
+        <div class="col-sm-4">
+            <select class="form-control" asp-for="State">
+                @foreach (var item in slideStates)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-3">Visible From</label>
+        <div class="col-sm-6">
+            @Html.EditorFor(x => x.VisibleFrom, null, nameof(Slide.VisibleFrom))
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-3">Visible Until</label>
+        <div class="col-sm-6">
+            @Html.EditorFor(x => x.VisibleTo, null, nameof(Slide.VisibleTo))
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-3">Thumbnail</label>
+        <div class="col-sm-9 form-group">
+            <button class="btn btn-primary">Select Image</button>
+            <button class="btn btn-primary">Remove Image</button>
+        </div>
+    </div>
+</div>

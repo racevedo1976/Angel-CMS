@@ -1,0 +1,12 @@
+﻿@model ConsoleTreeRoot
+@{ 
+    var partialModel = new ConsoleTreeBranch
+    {
+        TreeType = Model.TreeType,
+        Nodes = Model.RootNodes
+    };
+}
+
+<div class="csc-nav-root" data-tree-type="@Model.TreeType">
+    @Html.Partial("/UI/UserConsole/Views/TreeBranch.cshtml", partialModel)
+</div>

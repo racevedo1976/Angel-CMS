@@ -1,0 +1,133 @@
+﻿@model Angelo.Connect.Web.UI.ViewModels.Admin.ProductViewModel
+
+
+
+<h3>Product: &nbsp; @Model.Name</h3>
+<h4>@Model.Description</h4>
+<div class="row">
+    <label class="col-sm-4">@Html.ShortNameFor(x => x.Id):</label>
+    <span class="col-sm-8">@Model.Id</span>
+</div>
+<div class="row">
+    <label class="col-sm-4">@Html.ShortNameFor(x => x.CategoryName):</label>
+    <span class="col-sm-8">@Model.CategoryName</span>
+</div>
+<div class="row">
+    <label class="col-sm-4">@Html.ShortNameFor(x => x.Type):</label>
+    <span class="col-sm-8">@Model.Type.ToString()</span>
+</div>
+<div class="row">
+    <label class="col-sm-4">@Html.ShortNameFor(x => x.XmlSchemaFile):</label>
+    <span class="col-sm-8">@Model.XmlSchemaFile</span>
+</div>
+
+<div class="row">
+    <label class="col-sm-12">
+        @Html.DisplayNameFor(x => x.Settings)
+        <a data-expand="$('#product_settings_section')">
+            @string.Format("[{0}]:", Model.Settings.Count())
+        </a>
+    </label>
+    <div id="product_settings_section" style="display:none;">
+        <ul>
+            @foreach (var setting in Model.Settings)
+            {
+                <li>
+                    <span>@setting.FieldName:</span>
+                    <b>@setting.Value</b>
+                </li>
+            }
+        </ul>
+        <div class="row">&nbsp;</div>
+    </div>
+</div>
+
+<div hide-if="Model.Templates.Count() == 0">
+    <div class="row">
+        <label class="col-sm-12">
+            @Html.DisplayNameFor(x => x.Templates)
+            <a data-expand="$('#product_templates_section')">
+                @string.Format("[{0}]:", Model.Templates.Count())
+            </a>
+        </label>
+    </div>
+    <div id="product_templates_section" style="display:none;">
+        @foreach (var clientTemplate in Model.Templates)
+{
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-11">
+                    <i class="fa fa-caret-right"></i>&nbsp;<label>@clientTemplate.Name</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10">
+                    <label>
+                        @Html.ShortNameFor(x => x.Templates.First().Themes)
+                        <a data-expand="@string.Format("$('#template_themes_{0}')", clientTemplate.TemplateId)">
+                            @string.Format("[{0}]:", clientTemplate.Themes.Count())
+                        </a>
+                    </label>
+                </div>
+            </div>
+            <div class="row" id="@string.Format("template_themes_{0}", clientTemplate.TemplateId)" style="display:none;">
+                @foreach (var clientTheme in clientTemplate.Themes)
+                {
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-9">
+                            &bull;&nbsp;@(clientTheme.Name ?? clientTheme.Id)
+                        </div>
+                    </div>
+                }
+                <div class="row">&nbsp;</div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10">
+                    <label>
+                        @Html.ShortNameFor(x => x.Templates.First().Modules)
+                        <a data-expand="@string.Format("$('#template_modules_{0}')", clientTemplate.TemplateId)">
+                            @string.Format("[{0}]:", clientTemplate.Modules.Count())
+                        </a>
+                    </label>
+                </div>
+            </div>
+            <div class="row" id="@string.Format("template_modules_{0}", clientTemplate.TemplateId)" style="display:none;">
+                @foreach (var clientModule in clientTemplate.Modules)
+                {
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-9">
+                            <i class="fa fa-caret-right"></i>&nbsp;
+                            <label>
+                                @clientModule.Name
+                                <a data-expand="@string.Format("$('#module_settings_{0}{1}')", clientTemplate.TemplateId, clientModule.ModuleId)">
+                                    &nbsp;@string.Format("[{0}: {1}]:", Html.DisplayNameFor(x => x.Templates.First().Modules.First().Settings).ToString(), clientModule.Settings.Count())
+                                </a>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="@string.Format("module_settings_{0}{1}", clientTemplate.TemplateId, clientModule.ModuleId)" style="display:none;">
+                        @foreach (var moduleSetting in clientModule.Settings)
+                        {
+                            <div class="row">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-8">
+                                    &bull;&nbsp;
+                                    <span>@moduleSetting.FieldName:</span>
+                                    <b>@moduleSetting.Value</b>
+                                </div>
+                            </div>
+                        }
+                        <div class="row">&nbsp;</div>
+                    </div>
+                }
+                <div class="row">&nbsp;</div>
+            </div>
+        }
+    </div>
+</div>

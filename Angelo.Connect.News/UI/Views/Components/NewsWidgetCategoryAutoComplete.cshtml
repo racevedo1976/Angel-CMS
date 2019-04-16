@@ -1,0 +1,26 @@
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@using Angelo.Connect.Models
+@using Angelo.Connect.News.Models;
+@using Angelo.Connect.News.UI.ViewModels
+
+@inject Angelo.Connect.Configuration.SiteContext siteContext
+
+@model NewsWidgetCategoryFormViewModel
+
+
+<div class="k-content">
+    @(Html.Kendo().ComboBox()
+          .Name("NewsWidgetCategoryAutoComplete")
+          .Placeholder(Html.Localize("Search for category by name...").ToString())
+          .DataTextField(Html.Localize("Title").ToString())
+          .DataValueField(Html.Localize("Id").ToString())
+          .HtmlAttributes(new { style = "width:100%;" })
+          .Filter(FilterType.Contains)
+          .BindTo(Model.NewsCategories)
+          .Events(e =>
+          {
+              e.Select("onSelectWidgetPostCategory");
+          })
+    )
+</div>

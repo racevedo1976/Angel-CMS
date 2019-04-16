@@ -1,0 +1,89 @@
+[
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-3",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<div style=\"text-align:center;\"><span style=\"color:#ffffff;\">5555 Main Street, Mobile, AL 52343</span></div><div style=\"text-align:center;\"><span style=\"color:#ffffff;\">800-555-2212</span></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "search",
+        "view": "search-search1",
+        "style": {
+          "classes": "text-center",
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "title": ""
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "text-center"
+        },
+        "model": {
+          "html": "<a href=\"http://www.schoolinsites.com/\">\r\n<img alt=\"SCHOOLinSITES\" src=\"/img/sislogo.png\">\r\n</a>\r\n",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "background": "bg-contrast",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "html": "<div class=\"cs-socialmediaback\"><div class=\"cs-socialmedia\"><a href=\"https://twitter.com/wlsd2018\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-twitter\"></em></a></div><div class=\"cs-socialmedia\"><a href=\"https://www.instagram.com/wlsd2018/\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-instagram\"></em></a></div><div class=\"cs-socialmedia\"><a href=\"https://www.facebook.com/westernline.schooldistrict.5\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-facebook\"></em></a></div></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "html",
+    "view": "html-raw",
+    "style": {
+      "classes": "cs-mascotwatermark",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {
+      "html": "<div style=\"text-align:left;\"><img src=\"/templates/aurora/images/Header.png\" style=\"width:100%;max-width:618px;\" alt=\"Logo\" /></div>",
+      "staticToolbar": false
+    }
+  }
+]

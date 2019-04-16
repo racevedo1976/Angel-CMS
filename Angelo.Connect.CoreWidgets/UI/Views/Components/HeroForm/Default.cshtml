@@ -1,0 +1,23 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.HeroUnit
+
+<form class="form" action="/api/widgets/hero" data-ajax-form="true">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="form-group">
+        <label class="form-label">Title Text</label>
+        <div>
+            <input class="form-control" name="Title" value="@Model.Title" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Body</label>
+        <div>
+            <textarea class="form-control" name="Body" style="height: 240px">@Model.Body</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Link (Optional)</label>
+        <div>
+            <input class="form-control" name="Url" value="@Model.Url" />
+        </div>
+    </div>
+</form>

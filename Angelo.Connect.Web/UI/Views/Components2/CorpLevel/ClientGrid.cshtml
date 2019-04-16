@@ -1,0 +1,44 @@
+﻿@using Angelo.Connect.Kendo.Extensions
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var clientId = (string)ViewData["ClientId"];
+    var buttonTemplate = "<a name=\"go to client\" class=\"fa fa-sign-in\" title=\"go to client\"></a>";
+    var gridDataRoute = routes.CorpApi("clients/data");
+}
+
+<div>
+    @(Html.Kendo().Grid<ClientViewModel>()
+        .Name(componentId)
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Hidden(true);
+            columns.CustomEvent(componentId, "clientManagement",
+                data =>
+                {
+                    data.MapField(m => m.Id);
+                    data.MapField(m => m.TenantKey);
+                }, buttonTemplate).Width(50);
+            columns.Bound(c => c.Name);
+            columns.Bound(c => c.TenantKey);
+            columns.Bound(c => c.City);
+            columns.Bound(c => c.State);
+            columns.Bound(c => c.Country);
+            columns.Bound(c => c.Active);
+        })
+        .Scrollable()
+        .Sortable()
+        .Pageable()
+        .Selectable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(7)
+            .Read(read => read.Url(gridDataRoute))
+            .ServerOperation(false)
+            .Model(m =>
+            {
+                m.Id(x => x.Id);
+            })
+        )
+    )
+</div>

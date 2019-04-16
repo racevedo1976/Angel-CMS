@@ -1,0 +1,27 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.Icon
+@inject Angelo.Connect.CoreWidgets.Services.IconService iconService;
+@{
+    var hasUrl = !string.IsNullOrEmpty(Model.Url);
+    var hasText = !string.IsNullOrEmpty(Model.Text);
+
+    var icon = iconService.GetIconInfo(Model.Name);
+}
+
+<div class="icon-widget" title="@Model.Tooltip" style="font-size: @Model.Size">
+    @if (hasUrl)
+    {
+        <a href="@Model.Url" target="@(Model.UrlOpenNew ? "_blank" : "_self")">
+            <i class="@icon.Css"></i>
+            <span style="padding-left: 5px;" show-if="@hasText">
+                @Model.Text
+            </span>
+        </a>
+    }
+    else
+    {
+        <i class="@icon.Css"></i>
+        <span style="padding-left: 5px;" show-if="@hasText">
+            @Model.Text
+        </span>
+    }
+</div>

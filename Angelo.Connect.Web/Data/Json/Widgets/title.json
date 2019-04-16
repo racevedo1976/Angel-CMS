@@ -1,0 +1,14 @@
+﻿[
+  {
+    "id": "demo-site-title",
+    "text": "Demo Site"
+  },
+  {
+    "id": "demo-page-title",
+    "text": "Demo Page"
+  },
+  {
+    "id": "seed1.pagetitle",
+    "text":  "Page Title"
+  }
+]

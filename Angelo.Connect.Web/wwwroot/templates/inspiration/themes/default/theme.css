@@ -1,0 +1,67 @@
+﻿
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700");
+
+/* Header Style*/
+.site-nav
+{
+    background: #222222;
+}
+
+.site-nav .navbar
+{
+    border: none !important;
+}
+
+.navbar-vertical .navbar-header
+{
+    background-color: #1a6ecc !important; 
+    color: #fff 
+}
+
+.site-toolbar,
+.site-toolbar a 
+{
+    color: #8bb9ee;
+}
+
+/* Custom Template Classes */
+.links-lite, 
+.links-lite a:link, 
+.links-lite a:hover, 
+.links-lite a:visited,
+.links-lite a:active 
+{
+    color: #fff; 
+}
+
+.newszone 
+{
+    color: #ffffff; 
+    text-align: center; 
+}
+
+/* Angelo Classes */
+.bg-default { background: #1a6ecc; color: #fff }
+.bg-contrast { background: #c5c5c5; }
+.bg-muted {background: #f7f7f7; }
+.bg-dark {background: #444444; color: #eee; }
+.bg-clean { background: #ffffff }
+.bg-fancy {background: #FFFFFF url(images/backsquare.jpg) repeat 0 0;}
+
+
+
+/* Bootstrap Overrides */
+.jumbotron
+{ 
+    background:rgba(255, 255, 255, 0.40) !important;
+    padding: 10px !important;
+}
+.jumbotron h1 
+{
+    margin-bottom: 20px;
+}
+.maincontentbackground .jumbotron
+{
+    background: transparent !important;
+}
+

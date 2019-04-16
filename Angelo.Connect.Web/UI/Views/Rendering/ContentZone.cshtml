@@ -1,0 +1,7 @@
+﻿@model IEnumerable<Angelo.Connect.Models.ContentNode>
+
+@foreach (var node in Model)
+{
+    <vc:content-node node="@node"></vc:content-node>
+}
+

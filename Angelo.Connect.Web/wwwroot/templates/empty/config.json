@@ -1,0 +1,57 @@
+﻿{
+  "id": "empty",
+  "title": "Empty Site",
+  "pageTemplates": [
+    {
+      "title": "Home Page ",
+      "id": "Splash.cshtml"
+    },
+    {
+      "title": "Secondary Page",
+      "id": "Page.cshtml"
+    }
+  ],
+  "scripts": [],
+  "themes": [
+    {
+      "id": "default",
+      "title": "Default Bootstrap",
+      "coreStyles": [
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common-fiori.min.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.fiori.min.css"
+      ]
+    },
+    {
+      "id": "cosmo",
+      "title": "Cosmopolitian",
+      "coreStyles": [
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common-fiori.min.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.fiori.min.css"
+      ]
+    },
+    {
+      "id": "hero",
+      "title": "Heroic",
+      "coreStyles": [
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common-moonlight.min.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.moonlight.min.css"
+      ]
+    },
+    {
+      "id": "darkly",
+      "title": "Dark",
+      "coreStyles": [
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common-black.min.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.black.min.css"
+      ]
+    },
+    {
+      "id": "flatly",
+      "title": "Modern Flat",
+      "coreStyles": [
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common-metro.min.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.metro.min.css"
+      ]
+    }
+  ]
+}

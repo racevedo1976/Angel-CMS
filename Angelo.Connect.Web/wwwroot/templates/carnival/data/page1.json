@@ -1,0 +1,130 @@
+[
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "background": "bg-fancy",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "slideshow lux",
+        "view": "slideshow-carousel",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<p style=\"text-align:center;\"><span style=\"font-size:24px;\"><strong>Welcome to North Cliff High School!</strong></span></p><p style=\"text-align:center;\"><span style=\"font-size:18px;\"><strong>At North Cliff High School <br />we believe in education as a mission.&nbsp;</strong> </span><br /><br />Comprised\n of four elementary schools, one middle schools and a high school, our \ndistrict serves over 3000 students. Opening doors and opening minds, the\n mission of our district and one in which we pride ourselves in \nachieving. Our tiered support systems for gifted students to struggling \nlearners provide the opportunities for all students to explore and \nlearn.</p>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><img src=\"/templates/carnival/images/LinksHeader.png\" alt=\"Links\" /></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<p style=\"text-align:center;\"><a href=\"/parents\">Parents</a></p><p style=\"text-align:center;\"><a href=\"/students\">Students</a></p><p style=\"text-align:center;\"><a href=\"/community\">Community</a></p><p style=\"text-align:center;\"><a href=\"/employees\">Employees</a></p><p style=\"text-align:center;\"><a href=\"/athletics\">Athletics</a></p>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "title",
+    "view": "title-default",
+    "style": {
+      "background": "bg-info",
+      "classes": "text-center",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {
+      "text": "Educating a Generation of Excellence",
+      "cssClass": "h1"
+    }
+  },
+  {
+    "zone": "body",
+    "type": "html",
+    "view": "html-raw",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {
+      "html": "<div style=\"text-align:center;\"><img src=\"/templates/carnival/images/QuoteNewsEventsHeader.png\" alt=\"News\" style=\"width:100%;max-width:1137px;\" /></div>",
+      "staticToolbar": false
+    }
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-8-4",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "blog",
+        "view": "blog-posts-normal",
+        "style": {},
+        "model": {
+          "title": "Sample Blog Posts",
+          "pageSize": 5,
+          "createBlog": true,
+          "blogId": "3ce6418200ca428a890e7b5b425267ff"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "calendar",
+        "view": "calendar-month-view",
+        "style": {}
+      }
+    ]
+  }
+]

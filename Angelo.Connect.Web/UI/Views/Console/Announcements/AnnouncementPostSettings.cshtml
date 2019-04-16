@@ -1,0 +1,104 @@
+﻿@using Angelo.Connect.Rendering
+@using Angelo.Connect.Security
+@using Angelo.Connect.Announcement.Models
+
+@model Angelo.Connect.Announcement.UI.ViewModels.AnnouncementPostSettingsViewModel
+
+@{ 
+    var previewUrl = $"/sys/console/announcement/posts/{Model.AnnouncementPostId}";
+    var categoryIds = String.Join(",", Model.Categories.Select(x => x.Id).ToArray());
+}
+
+<div data-module="console/announcement/settings" data-announcement-post-id="@Model.AnnouncementPostId">
+    <div class="csc-content-toolbar">
+        <a name="save">
+            <i class="fa fa-save"></i> @Html.Localize("Save")
+        </a>
+        <div data-tab="#announcementPostCategories">
+            <div class="csc-seperator"></div>
+            <a name="categoryAdd">
+                <i class="fa fa-plus"></i> @Html.Localize("Create")
+            </a>
+            <a name="categoryMap">
+                <i class="fa fa-list"></i> @Html.Localize("Choose")
+            </a>
+        </div>
+    </div>
+
+    <div class="csc-content-tabs">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#announcementPostCategories" data-toggle="tab">
+                    <i class="@IconType.Briefcase.ToString()"></i>
+                    @Html.Localize("Categories")
+                </a>
+            </li>
+            <li>
+                <a href="#announcementPostSecurity" data-toggle="tab">
+                    <i class="@IconType.UserGroup.ToString()"></i>
+                    @Html.Localize("Security")
+                </a>
+            </li>
+            <li>
+                <a href="#announcementPostVersions" data-toggle="tab">
+                    <i class="@IconType.List2.ToString()"></i>
+                    @Html.Localize("Versions")
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="csc-content-body">
+        <div class="tab-content" id="tabContent">          
+            <div id="announcementPostSecurity" class="tab-pane fade">
+                <div class="form-group">
+                    <div class="alert alert-warning" role="alert">
+                        @Html.Localize("Security updates will be applied to all versions of this post, including the currently published version.")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label name="privacyOption" class="form-label">
+                        @Html.Localize("Private") &nbsp;
+                        <input name="IsPrivate" type="checkbox" asp-for="IsPrivate"/>
+                    </label>
+                </div>
+                <component type="SecurityUserRoleClaims" arg-configurations="@Model.PostPrivacyConfig"></component>
+            </div>
+
+            <div id="announcementPostVersions" class="tab-pane fade">
+                @(Html.Kendo().Grid(Model.Versions)
+                    .Name("announcementPostVersionGrid")
+                    .HtmlAttributes(new { @class = "uc-kendo-grid" })
+                    .Columns(columns => {
+                        columns.Template($"<a class='uc-kendo-link' data-route='{previewUrl}?version=#=VersionCode#' title='{Html.Localize("View this version")}'><i class='fa fa-share'></i></a>").Width(50);
+                        columns.Bound(p => p.VersionCode).Title(Html.Localize("Version").ToString()).Width(200);
+                        columns.Bound(p => p.Status).Title(Html.Localize("Status").ToString()).Width(140);
+                        columns.Bound(p => p.VersionLabel).Title(Html.Localize("Description").ToString());
+
+                    })
+                    .Sortable()
+                    .Filterable()
+                    .Scrollable()
+                )
+            </div>
+
+            <div id="announcementPostCategories" class="tab-pane fade in active">
+                <ul name="announcementPostCategoryList" class="list-group">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <li class="list-group-item" data-category-id="@category.Id">
+                            @category.Title
+                            <a name="categoryUnmap" class="pull-right text-danger" title="@Html.Localize("Remove category from post")">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </li>
+                    }                 
+                </ul>
+                <div name="announcementPostCategoryAlert" class="alert alert-default" css-hidden="@Model.Categories.Count() > 0">
+                    <i class="fa fa-info"></i> &nbsp;
+                    @Html.Localize("No categories have been associated with this post. This post will not show on the public site until at least one category is selected.")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

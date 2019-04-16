@@ -1,0 +1,30 @@
+﻿@using Angelo.Connect.Rendering
+@using Angelo.Connect.Models
+@model SiteAlert
+@{
+    var versionInfo = ViewData["AlertVersionInfo"] as ContentVersion;
+}
+
+<div data-module="console/alert/view" data-id="@Model.Id" data-version-code="@versionInfo.VersionCode">
+    <div class="csc-content-toolbar">
+        <a name="design" title="@Html.Localize("Design content")">
+            <i class="fa fa-edit"></i> @Html.Localize("Design")
+        </a>
+       
+        <a name="cancel" title="@Html.Localize("Go back to listing")">
+            <i class="fa fa-undo"></i> @Html.Localize("Cancel")
+        </a>
+        <div class="pull-right">
+            <a name="version" title="@versionInfo.VersionLabel">
+                @Html.Localize("Version") @versionInfo.VersionCode &nbsp;
+                <i class="fa fa-caret-down" title="@Html.Localize("Select a different version")"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="csc-content-body">
+        <h1 style="margin-top: 0; padding-top: 0">@Model.Title</h1>
+
+        <zone name="sitealert-body" allow-containers="false"></zone>
+    </div>
+</div>

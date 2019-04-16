@@ -1,0 +1,228 @@
+[
+  {
+    "zone": "body",
+    "type": "slideshow lux",
+    "view": "slideshow-carousel",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    }
+  },
+  {
+    "zone": "body",
+    "type": "html",
+    "view": "html-raw",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {
+      "html": "<div style=\"text-align:center;\"><img src=\"/templates/theatrics/images/newsribbon.png\" style=\"width:100%;max-width:531px;\" alt=\"district news\" /></div>",
+      "staticToolbar": false
+    }
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-4",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "News",
+          "src": "/demo/images/news1.jpg",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<p class=\"cns-newstitle\">Summer Reading List</p><p class=\"cns-newsdescription\">Revolutionary advances in information technology are transforming libraries and societies. </p>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "News",
+          "src": "/demo/images/news2.jpg",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<p class=\"cns-newstitle\">End of the year Party</p><p class=\"cns-newsdescription\">Revolutionary advances in information technology are transforming libraries and societies. </p>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "News",
+          "src": "/demo/images/news3.jpg",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<p class=\"cns-newstitle\">Awards Ceremony</p><p class=\"cns-newsdescription\">Revolutionary advances in information technology are transforming libraries and societies. </p>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "News",
+          "src": "/demo/images/news4.jpg",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<p class=\"cns-newstitle\">Board Meeting</p><p class=\"cns-newsdescription\">Revolutionary advances in information technology are transforming libraries and societies. </p>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "html",
+    "view": "html-raw",
+    "style": {
+      "background": "bg-default",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {
+      "html": "<h1>Welcome to Theatrics City Schools</h1><p>The mission of Theatrics City Schools is to provide a \nchild-centered environment that cultivates character, fosters academic \nexcellence, and embraces diversity. District families, community, and \nstaff join as partners to develop creative, exemplary learners with the \nskills and enthusiasm to contribute to a constantly changing global \nsociety. </p>",
+      "staticToolbar": false
+    }
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "classes": "cs-divider1",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {}
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-3",
+    "style": {
+      "background": "bg-dark",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "News",
+          "src": "/templates/theatrics/images/newsicon.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<div><div class=\"cns-events\" style=\"margin-left:30px;\"><a href=\"http://connectdemo.schoolinsites.com/websites/DemoDistrictSites/ConnectDemo/Theatrics/index.html#\"><span style=\"color:#ffffff;\">Elementary School becomes Apple Distinguished School</span></a></div><div class=\"cns-events\" style=\"margin-left:30px;\"><a href=\"http://connectdemo.schoolinsites.com/websites/DemoDistrictSites/ConnectDemo/Theatrics/index.html#\"><span style=\"color:#ffffff;\">Community Club has successful Service Day</span></a></div><div class=\"cns-events\" style=\"margin-left:30px;\"><a href=\"http://connectdemo.schoolinsites.com/websites/DemoDistrictSites/ConnectDemo/Theatrics/index.html#\"><span style=\"color:#ffffff;\">National Board Certified Teachers Announced </span></a></div><div class=\"cns-events\"><p style=\"margin-left:30px;\"><a href=\"http://connectdemo.schoolinsites.com/websites/DemoDistrictSites/ConnectDemo/Theatrics/index.html#\"><span style=\"color:#ffffff;\">Board meeting March 31, 2017 </span></a></p><p><span style=\"color:#ffffff;\">&nbsp;</span></p></div></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Events",
+          "src": "/templates/theatrics/images/eventsicon.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<div class=\"cns-events\" style=\"margin-left:30px;\">Soccer game </div><div class=\"cns-events\" style=\"margin-left:30px;\">Senior Trip Meeting </div><div class=\"cns-events\" style=\"margin-left:30px;\">Teacher Workshop</div><div class=\"cns-events\"><p style=\"margin-left:30px;\">Pep Rally</p><p>&nbsp;</p></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Twitter",
+          "src": "/templates/theatrics/images/twittericon.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<p style=\"margin-left:30px;\"><a class=\"twitter-timeline\" data-height=\"400\" href=\"https://twitter.com/SCHOOLinSITES?ref_src=twsrc%5Etfw\">Tweets by SCHOOLinSITES</a></p>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  }
+]

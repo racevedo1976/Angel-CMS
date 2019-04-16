@@ -1,0 +1,245 @@
+﻿@model Angelo.Connect.Web.UI.ViewModels.Admin.FolderViewModel
+
+@section Title{
+    My Documents
+}
+
+@section Styles{
+<link rel="stylesheet" href="~/css/document.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/lib/dropzonejs/dist/dropzone.css" />
+<link rel="stylesheet" href="~/lib/dropzonejs/dist/basic.css" />
+}
+
+
+@section AdminMenu{
+    <ul class="list-unstyled">
+        <li>
+            <div id="libraryMenu"></div>
+        </li>
+        <li id="trashBin" style="padding-left:17px;">
+            <a>
+                <i class="glyphicon glyphicon-trash"></i> Trash
+            </a>
+        </li>
+        <li id="ShareDocuments" style="padding-left:17px;">
+            <a>
+                <i class="fa fa-cubes"></i> Share
+            </a>
+        </li>
+    </ul>
+
+    <script id="treeview-template" type="text/kendo-ui-template">
+        <span class="glyphicon glyphicon-folder-close"></span>#: item.text #
+    </script>
+}
+
+@Html.Partial("~/UI/Views/Admin/User/_DocumentActions.cshtml")
+
+
+<div class="">
+    <div class="document-header row k-header">
+        <div class="cel thumb"></div>
+        <div class="cel filen">File Name</div>
+        <div class="cel filet">Type</div>
+        <div class="cel filez">Size</div>
+    </div>
+    <div id="documentExplorer">
+        <div class="k-loading">&nbsp;</div>
+    </div>
+</div>
+<script type="text/x-kendo-template" id="explorerTemplate">
+    # if (name != "Trash") { # 
+            <div class="documentItem document-list row"  data-id="#=id#"
+                    # if (type == "Folder") { # 
+                        ondblclick="raiseOpenFolderEvent('#: title #','#: id #')" @*fmVM.goToFolder('#: title #','#: id #')"*@ 
+                        onclick="itemSelected(this); raiseFolderEvent('#: id #');"
+                        data-type="folder"
+                    # }else{ #
+                        onclick="itemSelected(this); raiseDocEvent('#: id #');"
+                        ondblclick="fmVM.downloadDocument('#: id #')"
+                        data-type="document"
+                    # } #
+                    >
+                    # if ((type != "Folder")) { #
+                    
+                        <div>
+                            <img src='@ViewBag.DriveUrl/download/image?id=#:encodeURIComponent(id)#&x=110&y=110' />
+                        </div>
+                    # }else{ #
+                        <div class="thumbn">
+                            <i class="#=GetDocumentClass(type)#"></i> &nbsp;
+                        </div>
+                    # } #
+                        <div class="document-name" title="#=name#">#=name.substring(0, 50) + (name.length > 50 ? '...' : '')#</div>
+                        <div class="document-type" title="#=type#">#=type.substring(0, 25) + (type.length > 25 ? '...' : '')#</div>
+                        <div class="document-size" title="#=size#">#=size#</div>
+            </div>
+
+    # } #
+</script>
+
+<script id="folderRowTemplate" type="text/x-kendo-tmpl">
+    <tr onclick="itemSelected(this); raiseFolderEvent(this);" ondblclick="fmVM.goToFolder('#: title #','#: id #')" folderId="#: id #">
+        <td class="text-left" style="width: 60%" width="60%">
+            <i class="glyphicon glyphicon-folder-close"></i> &nbsp;
+            <a folderId="#: id #"></a>
+            <span folderId="#: id #">#: title #</span>
+        </td>
+        <td class="text-left" width="20%">Folder</td>
+        <td class="text-right">&nbsp;</td>
+    </tr>
+</script>
+<script id="docRowTemplate" type="text/x-kendo-tmpl">
+    <tr onclick="itemSelected(this); raiseDocEvent(this);" ondblclick="fmVM.downloadDocument('#: id #')" docId="#: id #">
+        <td class="text-left" style="width: 60%">
+            <i class="fmVM.getDocumentClass('#: fileType #')"></i> &nbsp;
+            <span docId="#: id #">#: fileName #</span>
+        </td>
+        <td class="text-left">#: fileType #</td>
+        <td class="text-right">#: fileSize #</td>
+    </tr>
+</script>
+
+
+<ul id="contextMenu" class="dropdown-menu" role="menu" style="display:none">
+    <li><a tabindex="-1" href="#">Action</a></li>
+    <li><a tabindex="-1" href="#">Another action</a></li>
+    <li><a tabindex="-1" href="#">Something else here</a></li>
+    <li class="divider"></li>
+    <li><a tabindex="-1" href="#">Separated link</a></li>
+</ul>
+
+@section Panel{
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#summaryTab" data-toggle="tab">
+                Details
+            </a>
+        </li>
+        <li>
+            <a href="#logTab" data-toggle="tab">
+                Activity
+            </a>
+        </li>
+    </ul>
+    <br />
+
+    <div class="tab-content">
+        <div id="summaryTab" class="tab-pane fade in active">
+            @*@await Component.InvokeAsync("DocumentDetails", new { documentId = "", folderId = "", userId =  })*@
+            <component id="documentDetails" type="DocumentDetails"   arg-userId="@User.GetUserId()"></component>
+        </div>
+        <div id="logTab" class="tab-pane fade in">
+            @await Component.InvokeAsync("DocumentLog", new { documentId = "", userId = User.GetUserId() })
+        </div>
+    </div>
+}
+
+@functions {
+    public static string GetDocumentClass(string fileType)
+    {
+        switch (fileType)
+        {
+            case "picture":
+                return "fa fa-file-image-o";
+            case "application/octet-stream":
+                return "fa fa-file-video-o";
+            case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                return "fa fa-excel-o";
+            default:
+                return "fa fa-file-o";
+        }
+    }
+}
+
+@section scripts{
+    <script src="~/app/modules/user/documents.js"></script>
+    <script src="~/lib/dropzonejs/dist/min/dropzone.min.js"></script>
+
+    <script language="javascript">
+    var userId = '@User.GetUserId()';
+    var directoryId = '@ViewBag.DirectoryId'
+
+    function GetDocumentClass(fileType)
+    {
+        switch (fileType)
+        {
+            case "Folder":
+                return "glyphicon glyphicon-folder-close";
+            case "Trash":
+                return "glyphicon glyphicon-trash";
+            case "image/jpeg":
+                return "fa fa-file-image-o";
+            case "application/octet-stream":
+                return "fa fa-file-video-o";
+            case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                return "fa fa-table";
+            default:
+                return "fa fa-file-o";
+        }
+    };
+
+    function itemSelected(source) {
+        $(source).toggleClass('documentItemSelected');
+    }
+    function raiseDocEvent(objId) {
+       // debugger;
+       // $("#documentDetails_component").component().invoke({ documentId: objId, folderId: '', userId: userId});
+        //$("#summaryTab").loadComponent({
+        //    "type": "documentDetails",
+        //    "id": "documentDetails",
+        //    "params": {
+        //        "widgetId": objId,
+        //        "userId" : userId
+        //    }
+        //});
+
+
+        $('#panelFolderDetails').trigger('documentSelected', {
+            id: objId // any argument
+        });
+    };
+
+    function raiseFolderEvent(objId) {
+        $('#panelFolderDetails').trigger('folderSelected', {
+            id: objId // any argument
+        });
+    };
+
+    function raiseOpenFolderEvent(name, objId){
+        $('#libraryMenu').trigger('openFolder', {
+            id: objId, // any argument
+            name: name
+        });
+    }
+
+
+    $(document).ready(function(){
+        @*Initialize Angelo.Drive "global" URL*@
+        apiUrl =  '/api/user/library';
+        if (apiUrl.length == 0 || apiUrl[apiUrl.length - 1] != '/') apiUrl += '/';
+        fmVM.libraryApiUrl = '@ViewBag.DriveUrl' + '/';
+
+        fmVM.CurrentFolderViewModel = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, new Newtonsoft.Json.JsonSerializerSettings { ContractResolver =  new Newtonsoft.Json.Serialization.DefaultContractResolver() }));
+        fmVM.bindItems(fmVM.CurrentFolderViewModel);
+        fmVM.getAvailableFolders();
+        fmVM.InitMenuTree();
+
+        $("#gridView").click(function(event){
+            event.preventDefault();
+            $(".documentItem").removeClass("document-list");
+            $(".documentItem").addClass("document-grid");
+            $(".thumbn i").addClass("fa-4x");
+            $(".document-header").addClass("hidden");
+        });
+        $("#listView").click(function(event){
+            event.preventDefault();
+            $(".documentItem").addClass("document-list");
+            $(".documentItem").removeClass("document-grid");
+            $(".thumbn i").removeClass("fa-4x");
+            $(".document-header").removeClass("hidden");
+        });
+    })
+    </script>
+
+}

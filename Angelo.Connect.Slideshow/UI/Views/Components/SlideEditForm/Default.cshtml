@@ -1,0 +1,213 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.SlideShow.Extensions;
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Angelo.Connect.Configuration
+@using Angelo.Connect.Extensions
+@using Angelo.Connect.Models
+@using Microsoft.Extensions.Options
+
+@inject IOptions<DriveOptions> _driveOptions
+@inject IContextAccessor<SiteContext> _siteContextAccessor
+
+@model Slide
+@{
+    var transitions = typeof(Transition).GetItemsForEnum();
+    var videoSource = new VideoSource();
+    var videoSourceList = new List<SelectListItem>
+    {
+        new SelectListItem() {Value = videoSource.YouTube, Text = videoSource.YouTube},
+        new SelectListItem() {Value = videoSource.Vimeo, Text = videoSource.Vimeo}
+    };
+
+    var product = _siteContextAccessor.GetContext()?.ProductContext;
+    var isSlideVideoFeatureEnabled = product.Features.Get(FeatureId.VideoSlidesEnabled)?.GetSettingValue<bool>("enabled") ?? false;
+    
+}
+
+<input type="hidden" asp-for="DocumentId" />
+<input type="hidden" asp-for="WidgetId" />
+<input type="hidden" asp-for="UseVideoBackground" id="UseVideoBackground" />
+
+<div class="form-group">
+    @Html.Partial("~/UI/Views/Shared/SlideShowNav.cshtml")
+</div>
+<div class="form-group">
+    <input class="form-control" asp-for="Title" placeholder="Slide Title..." spellcheck="true" />
+</div>
+<div class="form-group">
+
+    Background: 
+    @if (isSlideVideoFeatureEnabled)
+    {
+        @Html.RadioButtonFor(model => model.UseVideoBackground, false, new { video_type = "image" }) <text> Use Image </text>
+        @Html.RadioButtonFor(model => model.UseVideoBackground, true, new { video_type = "video" }) <text> Use Video </text>
+        Model.UseVideoBackground = false;
+    }
+   
+
+    <div id="backgroundArea_image" style="@(Model.UseVideoBackground ? "display: none;" : "display: inline;")">
+        <div class="input-group">
+            <input class="form-control" asp-for="ImageUrl" placeholder="Enter Image URL" readonly" />
+            <span class="input-group-btn">
+                <a class="btn btn-default" onclick="selectOne()">...</a>
+            </span>
+        </div>
+    </div>
+    <div id="backgroundArea_video" style="@(!Model.UseVideoBackground ? "display: none;" : "display: inline;")">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input class="form-control" asp-for="VideoUrl" placeholder="Enter Video URL (YouTube  or Vimeo)" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.VideoSource, videoSourceList, "", new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="col-md-2">
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.CheckBoxFor(model => model.EnableVideoSound) Enable Sound
+                </div>
+            </div>
+
+        </div> 
+
+      </div>
+
+
+    <a href="#" onclick="CropImage();" hide-if="@(!(Model.ImageUrl.Contains(_driveOptions.Value.Authority)))"><i class="fa fa-crop"></i></a>
+    <script>
+        var userId = '@User.GetUserId()';
+        var driveUrl = '@_driveOptions.Value.Authority';
+
+        function selectOne() {
+            //debugger;
+            var $input = $("#ImageUrl");
+
+            $.mediaBrowser({
+                title: "Select an Image",
+                userId: userId,
+                driveUrl: driveUrl
+            }).done(function (image) {
+                if (image) {
+
+                    if (image.isCropped) {
+                        $input.val(image.croppedUrl);
+
+                    } else {
+                        // if no selection is made image will be undefined
+                        $input.val(image ? image.imageUrl : "");
+
+                    }
+                }
+            })
+        }
+
+        function ShowSelector() {
+            ShowContentSelector({
+                title: "Select an Image File:",
+                fileUrlTarget: "ImageUrl"
+            });
+        }
+
+        function CropImage() {
+            var $input = $("#ImageUrl");
+
+            $.imageCropper({
+                editImageMode: true,           //set to true if image already cropped (previously) and we are just edting that cropped version
+                editImageUrl: $input.val(),    //if editImageMode = true, then pass the URL used for this cropped image with coordinates.
+                driveUrl: driveUrl             // *Require*  drive host, url.
+            }).done(function (image) {
+                //the return is the new url with new coordinates
+                $input.val(image ? image.croppedUrl : "");
+            });
+        }
+
+        $(document).ready(function() {
+            $("input[name='UseVideoBackground']").change(function (e) {
+
+                if ($(this).attr('video-type') === 'image') {
+                    $("#backgroundArea_image").show();
+                    $("#backgroundArea_video").hide();
+                    $("#UseVideoBackground").val("false");
+                } else {
+                    $("#backgroundArea_image").hide();
+                    $("#backgroundArea_video").show();
+                    $("#UseVideoBackground").val("true");
+                }
+
+            });
+        });
+
+
+
+        function toggleImageVideo(showArea) {
+            if (showArea === "image") {
+                $("#backgroundArea_image").show();
+                $("#backgroundArea_video").hide();
+                $("#UseVideoBackground").val("false");
+            } else {
+                $("#backgroundArea_image").hide();
+                $("#backgroundArea_video").show();
+                $("#UseVideoBackground").val("true");
+            }
+        }
+    </script>
+
+</div>
+<div class="form-group">
+    <label>Alternate Text</label>
+    <div>
+        <input class="form-control" asp-for="Description" placeholder="Describe the image..." spellcheck="true" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label>Transition</label>
+            <div>
+                <select class="form-control" asp-for="Transition">
+                    @foreach (var item in transitions)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label>Duration</label>
+            <div>
+                @Html.EditorFor(x => x.Duration, null, nameof(Slide.Duration), new { Minimum = 0, Maximum = int.MaxValue })
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label>Background Color</label>
+            <div>
+                @Html.EditorFor(x => x.Color, "Color", null, nameof(Slide.Color))
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

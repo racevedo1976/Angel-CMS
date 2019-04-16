@@ -1,0 +1,38 @@
+﻿@model PoolRoleViewModel
+
+@{
+    var componentId = (string)ViewData["cid"];
+}
+
+<form id="@componentId" action="@routes.SiteApi($"roles/{Model.Id}")" method="post" class="form form-horizontal"  data-ajax-form>
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.PoolId)
+    @Html.HiddenFor(x => x.IsLocked)
+
+    <div class="form-group">
+        <label class="col-sm-2">@Html.ShortNameFor(x => x.Name)</label>
+        <div class="col-sm-10">
+            <input class="form-control" type="text" asp-for="Name" asp-disabled="@Model.IsLocked" required/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10 checkbox">
+            <label asp-disabled="@Model.IsLocked">
+                <input type="checkbox" asp-for="IsDefault" asp-readonly="@Model.IsLocked" /> &nbsp;
+                @Html.ShortNameFor(x => x.IsDefault)
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            <div class="alert alert-warning" show-if="@Model.IsLocked">
+                @Html.Localize("This role is locked by the system and cannot be edited.")
+            </div>
+        </div>
+    </div>
+
+</form>

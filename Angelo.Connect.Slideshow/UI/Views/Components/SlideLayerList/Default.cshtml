@@ -1,0 +1,103 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.Abstractions
+
+@model IList<SlideLayer>
+
+<div class="form-group">
+    @Html.Partial("~/UI/Views/Shared/SlideShowNav.cshtml")
+</div>
+<div class="form-group" style="margin-left:10px;">
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-plus" />
+            Add New Layer
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#editlayers" class="slideshowpanel" onclick="loadEditLayerContainer('','text', this)"  level="3" caption=""><span class="glyphicon glyphicon-text-background" />Text</a></li>
+            @*<li><a href="#editlayers" class="slideshowpanel" aria-controls="pnlLayerImage" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-picture" />Image</a></li>
+            <li><a href="#editlayers" class="slideshowpanel" aria-controls="pnlLayerVideo" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-facetime-video" />Video</a></li>*@
+            <li><a href="#editlayers" class="slideshowpanel" onclick="loadEditLayerContainer('','button', this)"  level="3" caption=""><i class="fa fa-link" aria-hidden="true"></i>Button</a></li>
+            @*<li><a href="#editlayers" class="slideshowpanel" aria-controls="pnlLayerShape" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-object-align" />Shape</a></li>*@
+        </ul>
+    </div>
+</div>
+
+<div id="slideLayerBoxList">
+    @foreach (var layer in Model)
+    {
+       
+            <div class="layerBox sortable">
+                @{
+                    switch (layer.LayerType)
+                    {
+                        case "button":
+                            <i class="fa fa-link" aria-hidden="true" style="margin-right:20px"></i>
+                            break;
+                        case "text":
+                            <span class="glyphicon glyphicon-text-color" style="margin-right:20px"></span>
+                            break;
+                    }
+                }
+
+                @layer.Title
+
+                <a href="#editlayers" title="Edit this layer" style="margin-left:10px;margin-right:10px;" class="slideshowpanel pull-right" onclick="loadEditLayerContainer('@layer.Id', '@layer.LayerType', this);" level="3" caption="">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true" />
+                </a>
+                <a href="#" title="Delete this layer" style="margin-left:10px;margin-right:10px;" class=" pull-right" onclick="deleteLayerById('@layer.Id','@layer.SlideId', this)" level="3" caption="">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" />
+                </a>
+            </div>
+       
+                    }
+</div>
+<script language="javascript">
+    $(document).ready(function () {
+        $("#slideLayerBoxList").kendoSortable({
+            hint: function (element) {
+                return element.clone().addClass("hint");
+            },
+            placeholder: function (element) {
+                return element.clone().addClass("dropplaceholder").text("drop here");
+            },
+            //cursorOffset: {
+            //    top: -5,
+            //    left: -150
+            //}
+        });
+    });
+
+    function deleteLayerById(id, slideId, clickedElement) {
+        
+        currentSlideId = id;
+        $.get("/api/widgets/slideshow/deleteslidelayer?id=" + id, function (data) {
+            //debugger;
+            loadSlideLayerList(slideId, clickedElement);
+        });
+
+    }
+</script>
+
+
+        <style>
+             .hint {
+                    opacity: 0.4;
+             }
+             .dropplaceholder {
+                    border: 1px dashed #ccc;
+                    background-color: #424242;
+                    color: #333;
+             }
+            .layerBox {
+                margin: 10px;
+                padding: 10px;
+                /*background-color: #fff;*/
+                border-color: #ddd;
+                border-width: 1px;
+                border-radius: 1px 1px 1px 1px;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                border-style: solid;
+                width:350px;
+            }
+        </style>

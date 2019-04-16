@@ -1,0 +1,11 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model Slide
+
+<h4>Layers:</h4>
+<div>
+    @foreach (var layer in Model.Layers ?? Enumerable.Empty<SlideLayer>())
+    {
+        <div>LAYER</div>
+    }
+</div>

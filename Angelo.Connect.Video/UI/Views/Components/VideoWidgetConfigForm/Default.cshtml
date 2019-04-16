@@ -1,0 +1,136 @@
+﻿@model Angelo.Connect.Video.Models.VideoWidgetViewModel
+@using Microsoft.Extensions.Options
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Angelo.Connect.Extensions
+@using Kendo.Mvc.Extensions
+
+
+@inject IOptions<DriveOptions> _driveOptions
+
+@{ 
+    //string TreeListName = "tree-" + Model.Id;
+    //string clientId = (string)ViewData["clientId"];
+    //IEnumerable<TreeViewItemModel> videoSourceNodes = ViewBag.videoSourceNodes;
+}
+
+<form class="form" data-ajax-form="true" action="/api/widgets/video">
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="form-group">
+        <label asp-for="Title">Video Title</label>
+        <div>
+            <input class="form-control" asp-for="Title" spellcheck="true" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="VideoSourceType">Video Source Type:</label>
+        <div>
+            <select asp-for="VideoSourceType" class="form-control" asp-items="ViewBag.VideoSourceTypes"></select>
+        </div>
+    </div>
+
+    <div class="form-group" id="stream-div">
+        <label asp-for="StreamId">Live Video Source:</label>
+        <div>
+            <select asp-for="StreamId" class="form-control" asp-items="ViewBag.LiveVideoList"></select>
+        </div>
+    </div>
+
+    <div class="form-group" id="doc-div">
+        <label asp-for="DocumentId">On Demand Video Source:</label>
+        <div>
+            <div class="input-group">
+                <input class="form-control" asp-for="SourceUri" placeholder="Select Video" readonly" />
+                <span class="input-group-btn">
+                    <a class="btn btn-default" onclick="selectOne()">...</a>
+                </span>
+            </div>
+           <input type="hidden" id="DocumentId" name="DocumentId" value="@Model.DocumentId" />
+
+        @*<input type="text" id="DocumentName" readonly value="@Model.SourceName" class="form-control"/>
+        <select asp-for="DocumentId" class="form-control" asp-items="ViewBag.OnDemandVideoList"></select>*@
+        </div>
+    </div>
+
+    <div class="form-group" id="youtube-div">
+        <label asp-for="YouTubeVideoId">YouTube Video ID or URL (for example: 2ixB9k6aijw):</label>
+        <div>
+            <input class="form-control" asp-for="YouTubeVideoId" />
+        </div>
+    </div>
+
+</form>
+
+<component id="contentSelector" type="ContentSelector"></component>
+
+<script>
+
+
+    $(function () {
+
+        VideoSourceTypeChange = function () {
+
+            var vtype = $("#VideoSourceType").val();
+
+            if (vtype == "stream")
+                $("#stream-div").show();
+            else
+                $("#stream-div").hide();
+
+            if (vtype == "document")
+                $("#doc-div").show();
+            else
+                $("#doc-div").hide();
+
+            if (vtype == "youtube")
+                $("#youtube-div").show();
+            else
+                $("#youtube-div").hide();
+        }
+
+        $("#VideoSourceType").on("change", VideoSourceTypeChange);
+
+        VideoSourceTypeChange();
+
+        $("#DocumentName").click(function () {
+            ShowContentSelector({
+                title: "Select a Video File:",
+                idTarget: "DocumentId",
+                nameTarget: "DocumentName"
+            });
+        });
+
+
+
+    });
+
+    var userId = '@User.GetUserId()';
+    var driveUrl = '@_driveOptions.Value.Authority';
+    var allowedVideoExtensions = @Html.Raw("['" + string.Join("','", DocumentExtensions.GetVideoExtensions()) + "']");
+    
+
+    function selectOne() {
+        //debugger;
+        var $input = $("#SourceUri");
+        var $inputDocId = $("#DocumentId");
+
+        $.mediaBrowser({
+            title: "Select a Video",
+            userId: userId,
+            driveUrl: driveUrl,
+            showImages: false,
+            showVideos: true,
+            allowedExtensions: allowedVideoExtensions
+        })
+            .done(function (video) {
+                //debugger;
+                // if no selection is made image will be undefined
+                $input.val(video ? video.imageUrl : "");
+                $inputDocId.val(video ? video.documentId : "");
+            })
+    }
+
+</script>
+

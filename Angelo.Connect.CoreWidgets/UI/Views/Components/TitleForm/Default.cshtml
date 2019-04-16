@@ -1,0 +1,23 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.Title
+
+<form class="form" action="/api/widgets/title" data-ajax-form="true">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="form-group">
+        <label class="form-label">Title Text</label>
+        <div>
+            <input class="form-control" name="Text" value="@Model.Text" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Title Size</label>
+        <div>
+            <select class="form-control" name="CssClass">
+                <option value="h1" asp-selected="@(Model.CssClass == "h1")">Heading 1</option>
+                <option value="h2" asp-selected="@(Model.CssClass == "h2")">Heading 2</option>
+                <option value="h3" asp-selected="@(Model.CssClass == "h3")">Heading 3</option>
+                <option value="h4" asp-selected="@(Model.CssClass == "h4")">Heading 4</option>
+                <option value="h5" asp-selected="@(Model.CssClass == "h5")">Heading 5</option>
+            </select>
+        </div>
+    </div>
+</form>

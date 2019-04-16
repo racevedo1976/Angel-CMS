@@ -1,0 +1,118 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model Slide
+
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="col-sm-10">
+            <h4 class="modal-title">
+                <i class="fa fa-gear"></i>
+                Slide Settings
+            </h4>
+        </div>
+        <div class="col-sm-2">
+            <button name="close" class="close modal-button" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <div class="modal-body" style="padding: 0">
+        <div class="row">
+            <div class="col-sm-4 bg-muted" style="height: 400px;">
+                <div class="padded">
+
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="pnlBackgroundSource">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#mnuBackgroundSource" aria-expanded="true" aria-controls="mnuBackgroundSource">
+                                        Background Source
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="mnuBackgroundSource" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="pnlBackgroundSource">
+                                <div class="panel-body">
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <li css-active="true"><a href="#slide1" role="tab" data-toggle="tab">Title / Set Slide Image</a></li>
+                                        <li><a href="#slide2" role="tab" data-toggle="tab">Source Settings</a></li>
+                                        <li><a href="#slide3" role="tab" data-toggle="tab">Parallax</a></li>
+                                        <li><a href="#slide4" role="tab" data-toggle="tab">Ken Burns / Pan Zoom</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="#slide5" role="tab" data-toggle="tab">General Settings</a></li>
+                                <li><a href="#slide6" role="tab" data-toggle="tab">Slide Animation</a></li>
+                            </ul>
+                            <div class="panel-heading" role="tab" id="pnlSlideLayers">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#mnuSlideLayers" aria-expanded="false" aria-controls="mnuSlideLayers">
+                                        Slide Layers
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="mnuSlideLayers" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="pnlSlideLayers">
+                                <div class="panel-body">
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <li><a href="#slide7" role="tab" data-toggle="tab">Add New Layer</a></li>
+                                        <li><a href="#slide8" role="tab" data-toggle="tab">Layer List / Settings</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8" style="max-height: 400px; overflow-x: hidden; overflow-y: auto;">
+                <form data-ajax-form="true" action="/api/widgets/slideshow/slide">
+                    <input type="hidden" asp-for="DocumentId" />
+                    <div class="tab-content padded">
+                        <div id="slide1" class="tab-pane" css-active="true">
+                            @Html.Partial("_Title.cshtml")
+                        </div>
+                        <div id="slide2" class="tab-pane">
+                            @Html.Partial("_Source.cshtml")
+                        </div>
+                        <div id="slide3" class="tab-pane">
+                            @Html.Partial("_Parallax.cshtml", Model.Parallax ?? new Parallax())
+                        </div>
+                        <div id="slide4" class="tab-pane">
+                            @Html.Partial("_KenBurns.cshtml", Model.KenBurnsEffect ?? new KenBurnsEffect())
+                        </div>
+                        <div id="slide5" class="tab-pane">
+                            @Html.Partial("_General.cshtml")
+                        </div>
+                        <div id="slide6" class="tab-pane">
+                            @Html.Partial("_Animation.cshtml")
+                        </div>
+                        <div id="slide7" class="tab-pane">
+                            @Html.Partial("_AddLayer.cshtml", new SlideLayer())
+                        </div>
+                        <div id="slide8" class="tab-pane">
+                            @Html.Partial("_Layers.cshtml")
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button name="close" class="btn btn-default modal-button" onclick="closeSlide()">Close</button>
+        <button name="save" class="btn btn-primary modal-button" onclick="saveSlide()">Save</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function saveSlide() {
+        $('.modal').find("form").each(function () {
+            $(this).form().post();
+        });
+
+        closeSlide();
+    }
+    function closeSlide() {
+        $('.modal-content').html($('#modalBuffer').html());
+        $('#modalBuffer').empty();
+    }
+</script>

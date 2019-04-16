@@ -1,0 +1,82 @@
+﻿@model SiteSettingsViewModel
+
+@{
+    /*
+     View Component
+     Name:  SiteSettingsEditForm
+    */
+    var pages = (IEnumerable<SelectListItem>)ViewData["Pages"];
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["SiteId"];
+    var useGoogleTracking = !string.IsNullOrEmpty(Model.GoogleTrackingId);
+    var htmlAttributes = new Dictionary<string, object>
+    {
+        { "class" , "form-control"},
+        {"placeholder", "UA-########-#" }
+    };
+    if (!useGoogleTracking)
+    {
+        htmlAttributes.Add("disabled", "disabled");
+    }
+}
+
+<form id="@componentId" action="@routes.SiteApi("settings")" class="form-horizontal" data-ajax-form>
+    <input hidden="hidden" name="siteId" type="text" value="@siteId" />
+    @*<div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.LandingPage)</label>
+        @(Html.Kendo().DropDownList()
+                    .HtmlAttributes(new { @class = "form-control" })
+                    .Name("LandingPage")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .BindTo(pages)
+                    .Value(Model.LandingPage)
+        )
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.Custom401)</label>
+        @(Html.Kendo().DropDownList()
+                    .HtmlAttributes(new { @class = "form-control" })
+                    .Name("Custom401")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .BindTo(pages)
+                    .Value(Model.Custom401)
+        )
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.Custom404)</label>
+        @(Html.Kendo().DropDownList()
+                    .HtmlAttributes(new { @class = "form-control" })
+                    .Name("Custom404")
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .BindTo(pages)
+                    .Value(Model.Custom404)
+        )
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.Custom500)</label>
+        @(Html.Kendo().DropDownList()
+              .HtmlAttributes(new { @class = "form-control" })
+              .Name("Custom500")
+              .DataTextField("Text")
+              .DataValueField("Value")
+              .BindTo(pages)
+              .Value(Model.Custom500)
+              )
+    </div>*@
+    <hr />
+    <div class="form-group">
+        <label class="col-sm-4">Enable @Html.NameFor(x => x.GoogleTrackingId)</label>
+       
+        @Html.CheckBox("enableGoogleTracking", useGoogleTracking, new { @checked = "checked" })
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.GoogleTrackingId)</label> 
+       
+        @Html.TextBoxFor(m => m.GoogleTrackingId, null,  htmlAttributes)
+    </div>
+    
+   
+</form>

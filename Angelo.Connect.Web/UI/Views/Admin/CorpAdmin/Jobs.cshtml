@@ -1,0 +1,106 @@
+﻿@model JobsAdminViewModel
+@using Angelo.Connect.Web.Jobs
+
+@section Title{
+    @Html.Localize("Job Console")
+}
+
+@section Panel{
+    <div class="panel panel-default" style="position: relative">
+        <div class="panel-heading">
+            <span class="panel-title">Jobs List</span>
+        </div>
+        <ul id="jobs" class="list-group">
+            <li class="list-group-item" data-route="/sys/jobs/export" data-has-form="true">
+                <span>
+                    @Html.Localize("Export Site Template")
+                </span>
+                <a class="badge">
+                    @Html.Localize("run")
+                </a>
+            </li>
+            <li class="list-group-item" data-route="/sys/jobs/lucene" data-has-form="true">
+                <span>
+                    @Html.Localize("Lucene Search Index")
+                </span>
+                <a class="badge">
+                    @Html.Localize("run")
+                </a>
+            </li>
+            <li class="list-group-item" data-route="/sys/jobs/test">
+                <span>
+                    @Html.Localize("Test Job")
+                </span>
+                <a class="badge">
+                    @Html.Localize("run")
+                </a>
+            </li>
+        </ul>
+        <div id="alert" class="alert alert-info" style="display: none; position: absolute; top: 5px; right: 10px; width: auto; padding: 5px; ">
+            @Html.Localize("Job was queued for processing")
+        </div>
+    </div>
+}
+
+<div>
+
+    <div id="runtimeLog" style="display: none;">
+        <div class="well text-muted" style="font-size: 18pt; border-radius: 0; margin: 0; padding: 5px 20px;">
+            <b>@Html.Localize("Console Log")</b>
+        </div>
+        <iframe frameborder="0" style="font-family: 'Courier New'; height: 500px; width: 100%;" scrolling="auto"></iframe>
+    </div>
+
+    <div id="historyLog">
+        @(Html.Kendo().Grid<Angelo.Connect.Logging.DbLogEvent>()
+            .Name("gridJobHistory")
+            .Columns(columns => {
+                columns.Bound(c => c.Category).Width(100).HtmlAttributes(new { style = "vertical-align: top " });
+                columns.Bound(c => c.LogLevel).Title("Level").Width(100).HtmlAttributes(new { style = "vertical-align: top " });
+                columns.Bound(c => c.Message);
+            })
+            .Scrollable().Sortable()
+            .Pageable(pageable => pageable.Info(false).ButtonCount(5))
+            .DataSource(dataSource => dataSource.Ajax().Read(read => read.Url("/sys/jobs/log")))
+        )
+    </div>
+
+</div>
+
+@section Scripts {
+<script type="text/javascript">
+    
+    $(function () {
+        var $historyLog = $("#historyLog"), $runtimeLog = $("#runtimeLog");
+
+        function onJobClick(event) {
+            var $li = $(event.currentTarget).parent(), job = $li.data();
+
+            if (!job.hasForm) {
+                return $.post(job.route).done(onJobQueued);
+            }
+                
+            $.dialog(job.route).done(function (button) {
+                if (button === "run") {
+                    $(this).find("form").form().post(job.route).done(onJobQueued);
+                }
+            });
+        }
+
+        function onJobQueued(id) {
+            $("#alert").fadeIn();
+            window.setTimeout(function () { $("#alert").fadeOut(); }, 1200);
+
+            $historyLog.hide();
+            $runtimeLog.fadeIn();
+
+            $runtimeLog.find("iframe").attr("src", "/sys/jobs/log/" + id);
+        }
+
+        
+        $("#jobs").find("a").on("click", onJobClick);
+    });
+
+
+</script>
+}

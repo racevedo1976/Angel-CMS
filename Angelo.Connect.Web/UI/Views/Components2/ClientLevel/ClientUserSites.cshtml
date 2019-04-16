@@ -1,0 +1,41 @@
+﻿@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@inject Angelo.Connect.UI.Routes Routes
+
+@{ 
+    var appId = ViewData["appId"].ToString();
+
+    var formRoute = Routes.ClientApi(string.Format("/sites/data?appId={0}", appId));
+
+    var componentId = (string)ViewData["cid"];
+}
+
+
+<div class="form-group">
+    <div class="col-lg-12">
+        <div class="input-group">
+            <label class="control-label">Sites</label>
+
+            @(Html.Kendo().DropDownList()
+              .Name(componentId)
+              .DataTextField("Title")
+              .DataValueField("Id")
+              .Events(e => e.Select("onUserSiteSelect"))
+              .OptionLabel(" ---Select a site---")
+              .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(100)
+                    .Read(read =>
+                    {
+                        read.Type(HttpVerbs.Post)
+                        .Url(formRoute);
+                    })
+                )
+              .HtmlAttributes(new { style = "width: 250px" })
+            )
+
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Angelo.Connect.Blog.Models.BlogCategory>
+
+<div name="blog-explorer" data-module="console/blog/explorer">
+    <ul class="list-unstyled">
+        <li>
+            <div class="clearfix">
+                <a data-route="/sys/console/blog/posts" class="pull-left">
+                    <i class="fa fa-list"></i> &nbsp;
+                    @Html.Localize("My Posts")
+                </a>
+                <a name="post-create" class="pull-right text-success" data-route="/sys/console/blog/posts/create">
+                    <i class="fa fa-plus"></i> &nbsp;
+                    @Html.Localize("Create")
+                </a>
+            </div>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>
+            <div class="clearfix">
+                <a name="category-toggle" class="pull-left">
+                    <i class="fa fa-minus-square"></i> &nbsp;
+                    @Html.Localize("Categories")
+                </a>     
+                <a name="category-create" class="pull-right text-success" data-route="/sys/console/blog/categories/create">
+                    <i class="fa fa-plus"></i> &nbsp;
+                    @Html.Localize("Create")
+                </a>
+            </div>
+           
+
+            <div name="category-list" style="padding-left: 20px">
+                <ul class="list-unstyled">
+                    @foreach (var cat in Model)
+                    {
+                        <li>
+                            <a data-route="/sys/console/blog/categories/@cat.Id">
+                                <i class="fa fa-bookmark"></i> &nbsp;
+                                @cat.Title
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

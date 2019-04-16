@@ -1,0 +1,111 @@
+﻿
+    #documentExplorer {
+        padding: 0px;
+    }
+    .document-grid{
+        float:left;
+        position: relative;
+        box-shadow: 0 0 1px #666;
+        width:111px;
+        height:150px;
+        margin: 0 5px;
+        margin-bottom: 5px;
+        margin-top: 5px;
+        padding:0;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+    .document-grid img{
+        width: 110px;
+        height: 100px;
+    }
+    .document-grid .thumbn{
+        height: 110px;
+    }
+    .document-grid i{
+        margin-left:30%;
+        margin-top:20%;
+    }
+    .document-grid .document-type,.document-grid .document-size {
+        display:none;
+    }
+    .document-grid .document-name{
+        text-align: center;
+        padding-top:10px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+
+    .document-list, .document-header{
+        float:none;
+        width: 100%;
+        background-color: #fff;
+        margin-bottom: 0px;
+        margin-left:0px !important;
+        padding-bottom: 6px;
+        padding-top: 5px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+        position: relative;
+        width:100%;
+        display: block;
+
+    }
+    .document-list:nth-last-of-type(odd){
+        background: #f9f9f9;
+    }
+    .document-list img,.document-list .thumbn, .document-header .cel.thumb{
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+        margin-left: 10px;
+        float:left;
+    }
+    .document-grid i{
+        margin-left:30%;
+        margin-top:20%;
+    }
+    .document-list div{
+        display:block;
+    }
+    .document-list .document-name, .document-header .cel.filen{
+        float:left;
+        padding-left: 50px;
+        padding-right: 200px;
+    }
+    .document-list .document-type, .document-header .cel.filet{
+        position:absolute;
+        padding-left: 0px;
+        padding-right: 10px;
+        right: 200px;
+        text-align:left;
+    }
+    .document-list .document-size, .document-header .cel.filez{
+        position:absolute;
+        padding-left: 0px;
+        padding-right: 10px;
+        right:70px;
+        text-align: left;
+    }
+    .document-header{
+        /*background-color: #DDD;*/
+        border-bottom: 1px solid #999;
+        font-size: 13px;
+        margin: 0;
+        width: 100%;
+         background-image: none,linear-gradient(to bottom,rgba(0,0,0,.01) 0,rgba(0,0,0,.08) 100%);
+    }
+    .document-header .cel{
+        display: block;
+    }
+    .documentItem:hover{
+        
+        background-image: none,linear-gradient(to bottom,rgba(0,0,0,.01) 0,rgba(0,0,0,.08) 100%);
+    }
+    .documentItemSelected{
+        background-color:  #d8dcf7 !important;
+    }
+
+
+.k-treeview .k-item {
+   width: auto !important;
+}

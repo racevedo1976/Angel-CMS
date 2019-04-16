@@ -1,0 +1,155 @@
+﻿@model SiteCreateViewModel
+
+@inject Angelo.Connect.UI.Routes Routes
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var clientDataFunc = componentId + "clientDataFunc";
+    var templateDataFunc = componentId + "clientDataFunc";
+    var clientSelectList = ViewData["ClientSelectList"] as IList<SelectListItem>;
+    var formUrl = Routes.CorpApi("sites");
+}
+
+<form id="@componentId" action="@formUrl" class="form form-horizontal"  data-ajax-form>
+    @Html.HiddenFor(x => x.Id)
+    <div style="padding: 0 5px 0 5px">
+
+
+        <div class="row" hide-if="ViewContext.ModelState.IsValid">
+            <div class="col-sm-11">
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary(excludePropertyErrors: false)
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="" for="Title">@Html.ShortNameFor(x => x.Title)</label>
+            <div class="">
+                @(Html.Kendo().TextBoxFor(x => x.Title)
+                    .HtmlAttributes(new { required = "required", style = "width: 95%;", @class = "form-control" })
+                )
+                @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="" for="TenantKey">@Html.ShortNameFor(x => x.TenantKey)</label>
+            <div class="">
+
+                @(Html.Kendo().TextBoxFor(model => model.TenantKey)
+                    .HtmlAttributes(new { required = "required", style = "width: 95%;", @class = "form-control" })
+                )
+                @Html.ValidationMessageFor(x => x.TenantKey, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="" for="ClientId">Client:</label>
+            <div>
+                @(Html.Kendo().DropDownList()
+                .Name("ClientId")
+                //.OptionLabel("Select Client...")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .BindTo(clientSelectList)
+                .HtmlAttributes(new { style = "width: 95%;" })
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="" for="ClientProductAppId">Application:</label>
+            <div class="">
+                @(Html.Kendo().DropDownList()
+                .Name("ClientProductAppId")
+                //.OptionLabel("Select Application...")
+                .DataTextField("Text")
+                .DataValueField("Value")
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(30)
+                    .Read(read =>
+                    {
+                        read.Type(HttpVerbs.Post)
+                        .Url(routes.CorpApi("client/app/datasource"))
+                        .Data(@clientDataFunc);
+                    })
+                )
+                .CascadeFrom("ClientId")
+                .HtmlAttributes(new { style = "width: 95%;" })
+                )
+            </div>
+        </div>
+        <script>
+            var @clientDataFunc = function () {
+                return { clientId: $("#ClientId").val() }
+            }
+        </script>
+
+        <div class="form-group">
+            <label class="" for="TemplateId">@Html.ShortNameFor(x => x.TemplateName):</label>
+            <div class="">
+                @(Html.Kendo().DropDownList()
+                .Name("TemplateId")
+                //.OptionLabel("Select Site Template...")
+                .DataTextField("Title")
+                .DataValueField("Id")
+                .Template("<span class=\"k-state-default\" style=\"background-image: url(#:data.PreviewImage#);\" ></span> <span>#:data.Title#</span>")
+                .Value(Model.TemplateId)
+                .HtmlAttributes(new { style = "width: 95%;" })
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(30)
+                    .Read(read =>
+                    {
+                        read.Type(HttpVerbs.Post)
+                        .Url("/api/client/template/datasource")
+                        .Data(@templateDataFunc);
+                    })
+                )
+                .CascadeFrom("ClientId")
+                .HtmlAttributes(new { style = "width: 95%;" })
+                )
+            </div>
+        </div>
+        <script>
+            var @templateDataFunc = function () {
+                return { clientId: $("#ClientId").val() }
+            }
+        </script>
+        @Html.ValidationMessageFor(x => x.TemplateId, "", new { @class = "text-danger" })
+
+
+
+
+    </div>
+</form>
+
+<style>
+     #TemplateId-list .k-item {
+        line-height: 1em;
+        min-width: 300px;
+    }
+
+     #TemplateId-list .k-item > span {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display: inline-block;
+        vertical-align: top;
+        margin: 20px 10px 10px 5px;
+    }
+            
+    #TemplateId-list .k-item > span:first-child {
+        -moz-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        -webkit-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        margin: 10px;
+        width: 90px;
+        height: 60px;
+        /*border-radius: 50%;*/
+        background-size: 100%;
+        background-repeat: no-repeat;
+    }
+</style>

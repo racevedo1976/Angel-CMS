@@ -1,0 +1,193 @@
+﻿@model Angelo.Connect.Carousel.Models.CarouselWidget
+
+
+
+<div class="container-fluid">
+    <h3>@Html.Localize("Carousel Slide List")</h3>
+    <div class="pull-right">
+
+        <button class="btn btn-primary btn-sm padded addSlideButton" onclick="addNewSlide()">@Html.Localize("Add New Slide")</button>
+       
+    </div>
+</div>
+
+
+    <div id="carouselAddContainer" style="display: none;background: #f7f7f7">
+        
+    </div>
+
+
+
+<div id="carouselContainer">
+    <component id="carouselList" type="CarouselSlideList" arg-widgetId="@Model.Id"></component>
+</div>
+
+<script>
+    var widgetId = '@Model.Id';
+
+    function addNewSlide() {
+        $(".addSlideButton").hide();
+        $("#carouselAddContainer").loadComponent({
+            "type": "EditCarouselSlide",
+            "id": "editCarousel",
+            "params": {
+                "slideId": "",
+                "widgetId": widgetId
+            }
+        }).done(function() {
+            $("#carouselAddContainer").show('slow');
+            bindEditSlidePage();
+        });
+    }
+
+    function editCarouselSlide(id) {
+        $(".addSlideButton").hide();
+        $("#carouselAddContainer").loadComponent({
+            "type": "EditCarouselSlide",
+            "id": "editCarousel",
+            "params": {
+                "slideId": id,
+                "widgetId": widgetId
+            }
+        }).done(function () {
+            $("#carouselAddContainer").show('slow');
+            bindEditSlidePage();
+        });;
+    }
+
+    function bindEditSlidePage() {
+        $("#saveSlide").on("click",function (e) {
+            e.preventDefault();
+            $("#addCarouselForm").form().post().done(function (result) {
+                $("#carouselContainer").loadComponent({
+                    "type": "CarouselSlideList",
+                    "id": "carouselList",
+                    "params": {
+                        "widgetId": widgetId
+                    }
+                }).done(function() {
+                    initSorting();
+                });
+
+                $("#carouselAddContainer").hide('slow');
+                window.setTimeout(function () { $("#carouselAddContainer").html(''); }, 1000);
+                $(".addSlideButton").show();
+            });
+        });
+
+        $("#cancelSlideEdit").on("click",
+            function(e) {
+                e.preventDefault();
+                $("#carouselAddContainer").hide('slow');
+                window.setTimeout(function () { $("#carouselAddContainer").html(''); }, 1000);
+                $(".addSlideButton").show();
+
+            });
+
+    }
+
+    function deleteCarouselSlide(id) {
+        
+        var model = {
+            id: id
+        };
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/widgets/carousel/delete',
+            data: model,
+            success: function (result) {
+                
+                $("#carouselContainer").loadComponent({
+                    "type": "CarouselSlideList",
+                    "id": "carouselList",
+                    "params": {
+                        "widgetId": widgetId
+                    }
+                }).done(function() {
+                    initSorting();
+                });
+            },
+            error: function (xhr) {
+                
+            }
+        });
+
+    }
+
+    function initSorting() {
+        $(".sortableSlides").sortable({
+            containment: "document",
+            items: "> tr",
+            connectWith: '.sortableSlides',
+            placeholder: "movable-placeholder",
+            cursor: 'move',
+            helper: "clone",
+
+            update: function (event, ui) {
+                var listOrder = $(".sortableSlides").sortable("toArray");
+
+
+                var model = {
+                    slideIds: listOrder
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/widgets/carousel/sortorder',
+                    data: model,
+                    success: function (result) {
+
+                    },
+                    error: function (xhr) {
+
+                    }
+                });
+            }
+        });
+    }
+    $(document).ready(function () {
+
+        initSorting();
+
+    });
+</script>
+
+<style>
+
+    .movable-placeholder {
+        min-height: 35px;
+        background-color: lightgray;
+    }
+
+    .sortableSlides tr:hover {
+        cursor: pointer;
+    }
+
+
+    .sortableSlides tr.ui-sortable-helper {
+        cursor: move;
+        /*border: .2px lightgray solid;
+        padding-left: 15px;
+        background-color: white;
+        display: block;*/
+    }
+
+
+
+    ::placeholder {
+        color: gray;
+        opacity: 1; /* Firefox */
+        font-style: italic;
+    }
+
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: gray;
+        font-style: italic;
+    }
+
+    ::-ms-input-placeholder { /* Microsoft Edge */
+        color: gray;
+        font-style: italic;
+    }
+</style>
+

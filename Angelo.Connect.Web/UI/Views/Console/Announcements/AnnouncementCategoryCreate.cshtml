@@ -1,0 +1,26 @@
+﻿@model Angelo.Connect.Announcement.Models.AnnouncementCategory
+
+<div class="csc-content-toolbar" data-module="console/announcement/category">
+    <a name="create" title="@Html.Localize("Create a new category")">
+        <i class="fa fa-save"></i> @Html.Localize("Create")
+    </a>
+</div>
+
+
+<div class="csc-content-tabs">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#categoryDetails" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="csc-content-body">
+    <div class="tab-content">
+        <div id="categoryDetails" class="tab-pane fade in active" style="padding: 20px;">
+            @Html.Partial("/UI/Views/Console/Announcements/_AnnouncementCategoryForm.cshtml", Model)
+        </div>
+    </div>
+</div>

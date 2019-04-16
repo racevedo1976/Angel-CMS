@@ -1,0 +1,110 @@
+﻿@model List<UserGroupMembershipViewModel>
+
+@using Angelo.Connect.Models;
+@using Newtonsoft.Json
+
+@{
+    string userId = (string)ViewData["userId"];
+    string siteId = (string)ViewData["siteId"];
+}
+
+@section Title{
+    My Subscriptions
+}
+
+@section Panel {
+    <div>&nbsp;</div>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active">
+                <a href="#noteGroups" data-toggle="tab">
+                    Notification Groups
+                </a>
+            </li>
+
+            <li>
+                <a href="#connectGroups" data-toggle="tab">
+                    Connection Groups
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="tab-content">
+    <div id="noteGroups" class="tab-pane fade in active">
+        <p>&nbsp;</p>
+        <div class="inline-headers" style="padding:10px">
+            <h4>Select the Notification Groups that you wish to belong to:</h4>
+            <button id="noteSaveButton" class="btn btn-primary pull-right">
+                <i class="fa fa-save"></i>
+                <span>Save</span>
+            </button>
+        </div>
+        <div class="panel-body text-muted">
+            <component id="noteMemberships" type="UserMemberships" arg-userId="@userId" arg-siteId="@siteId" arg-userGroupType="@UserGroupType.NotificationGroup.ToString()"></component>
+        </div>
+    </div>
+
+
+    <div id="connectGroups" class="tab-pane fade in">
+        <p>&nbsp;</p>
+        <div class="inline-headers" style="padding:10px">
+            <h4>Select the Connection Groups that you wish to belong to:</h4>
+            <button id="connectSaveButton" class="btn btn-primary pull-right">
+                <i class="fa fa-save"></i>
+                <span>Save</span>
+            </button>
+        </div>
+        <div class="panel-body text-muted">
+            <component id="connectMemberships" type="UserMemberships" arg-userId="@userId" arg-siteId="@siteId" arg-userGroupType="@UserGroupType.ConnectionGroup.ToString()"></component>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+<script>
+
+    $(function() {
+
+        // Notification Group Memberships
+        $("#noteSaveButton").click(function () {
+            $("#noteSaveButton").prop('disabled', true);
+            $("#noteMemberships").form().post();
+        });
+
+        $.on("noteMemberships.error", function (event, data) {
+            $("#noteSaveButton").prop('disabled', false);
+            alert("Unable to save Notification Group Memberships.");
+        });
+
+        $.on("noteMemberships.submit", function (event, data) {
+            $("#noteSaveButton").prop('disabled', false);
+            alert("Notification Group Memberships successfully saved.");
+        });
+
+        // Connection Group Memberships
+        $("#connectSaveButton").click(function () {
+            $("#connectSaveButton").prop('disabled', true);
+            $("#connectMemberships").form().post();
+        });
+
+        $.on("connectMemberships.error", function (event, data) {
+            $("#connectSaveButton").prop('disabled', false);
+            alert("Unable to save Connection Group Memberships.");
+        });
+
+        $.on("connectMemberships.submit", function (event, data) {
+            $("#connectSaveButton").prop('disabled', false);
+            alert("Connection Group Memberships successfully saved.");
+        });
+
+    })
+
+</script>
+}
+

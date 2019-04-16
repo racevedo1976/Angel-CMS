@@ -1,0 +1,36 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.RawHtml
+@{
+    var apiUrl = $"/sys/widgets/html/{Model.Id}";
+
+    var editorId = "editor_" + Model.Id.Replace("-", "");
+}
+
+@(
+    Html.Kendo().Editor()
+        .Name(editorId)
+        .Tag("div")
+        .HtmlAttributes(new { contenteditable = "true" })
+        .Tools(tools => tools
+            .Clear()
+            .Bold().Italic().Underline().Strikethrough()
+            .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+            .InsertUnorderedList().InsertOrderedList()
+            .Outdent().Indent()
+            .CreateLink().Unlink()
+            //.InsertImage()
+            //.InsertFile()
+            .SubScript()
+            .SuperScript()
+            .TableEditing()
+            .ViewHtml()
+            .Formatting()
+            .CleanFormatting()
+            .FontName()
+            .FontSize()
+            .ForeColor().BackColor()
+        )
+        .Value(Model.Html)
+        .Events(events => events
+            .Change("function(e){ $.post('" + apiUrl + "', { html: e.sender.value() }); }")
+        )
+)

@@ -1,0 +1,25 @@
+﻿@{
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["SiteId"];
+}
+
+<div class="k-content">
+    @(Html.Kendo().DropDownList()
+          .Name("masterPagesDropdown")
+          .DataTextField("Title")
+          .DataValueField("Id")
+          .DataSource(source =>
+          {
+              source.Read(read =>
+              {
+                  read.Url("/api/masterpages/dropdown/?siteId=" + siteId);
+              });
+          })
+          .Events(e =>
+          {
+              e.Change("onDropdownChange");
+          })
+          .HtmlAttributes(new { style = "width: 100%" })
+    )
+</div>
+

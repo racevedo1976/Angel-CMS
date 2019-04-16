@@ -1,0 +1,23 @@
+﻿@using Angelo.Connect.Documents.Models
+@using Angelo.Connect.Documents.Services
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Angelo.Common.Mvc
+@using Microsoft.Extensions.Options
+
+@inject DocumentListService _documentListService
+
+@model DocumentListWidget
+
+<div class="container-fluid">
+    <h3>@Html.Localize("Document List Title")</h3>
+    <form class="form" action="/api/widgets/documentlist/title" data-ajax-form="true">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="form-group">
+            <div>
+                <input class="form-control" name="Title" value="@Model.Title" spellcheck="true" />
+            </div>
+        </div>
+    </form>
+</div>

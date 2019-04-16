@@ -1,0 +1,76 @@
+﻿
+.admin-page-panel .panel {
+    margin-bottom: 0 !important;
+}
+
+.admin-page-panel .panel-body
+{
+    border-bottom: none !important;
+    box-shadow: none !important;
+}
+
+.admin-page-panel  .panel > .panel-heading
+{
+    font-size: 18px;
+    line-height: 18px;
+    border-top: 1px #ddd solid;
+    border-bottom: 1px #ddd solid;
+    padding: 8px 15px !important;
+    height: 40px;
+}
+
+    .admin-page-panel .panel:first-child > .panel-heading 
+    {
+        border-top: none !important;
+    }
+
+.dashboard-menu{
+    position: fixed
+}
+
+.dashboard-menu > a {
+    display: block;
+    font-size: 26px;
+    padding: 10px;
+}
+
+.dashboard-thumbnail {
+    text-align: center;
+    border-color: #fff;
+    color: #bbb;
+}
+
+.dashboard-icons {
+    padding: 20px;
+}
+
+.dashboard-icons > .row:not(:first-child) {
+    margin-top: 15px;
+}
+
+.col-xs-6> .dashboard-thumbnail {
+    height: 150px;
+    overflow: hidden;
+}
+
+.col-md-4 > .dashboard-thumbnail {
+    height: 165px;
+    overflow: hidden;
+}
+
+.dashboard-thumbnail:hover {
+    text-decoration: none !important;
+}
+
+.dashboard-thumbnail .glyphicon,
+.dashboard-thumbnail .fa
+{
+    font-size: 96px;
+}
+
+.dashboard-thumbnail h3 
+{
+    font-size: 20px;
+}
+
+

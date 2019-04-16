@@ -1,0 +1,87 @@
+﻿@using Kendo.Mvc.UI
+@model UserPageViewModel
+
+@{
+    string previewUrl = routes.PublicUrl(Model.Path);
+}
+
+
+<div class="csc-content-toolbar">
+   
+    <a name="save" title="@Html.Localize("Save")">
+        <i class="fa fa-save pull-right"></i> @Html.Localize("Save")
+    </a>
+    <a name="save" title="@Html.Localize("New Child Page")" data-route="/sys/console/pages/@Model.Id/new">
+        <i class="fa fa-plus pull-right"></i> @Html.Localize("Child Page")
+    </a>
+    <div class="csc-seperator"></div>
+
+    <a name="delete" title="@Html.Localize("Delete this page")">
+        <i class="fa fa-trash-o pull-left"></i> @Html.Localize("Delete")
+    </a>
+</div>
+
+
+<div class="csc-content-tabs">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#pageDetails" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+        <li>
+            <a href="#pageSecurity" data-toggle="tab">
+                @Html.Localize("Security")
+            </a>
+        </li>
+        <li>
+            <a href="#pageVersions" data-toggle="tab">
+                @Html.Localize("Versions")
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="csc-content-body">
+    <div class="tab-content">
+        <div id="pageDetails" class="tab-pane fade in active" style="padding: 20px;">
+            @Html.Partial("/UI/UserConsole/Views/Pages/_PageForm.cshtml", Model)
+        </div>
+
+        <div id="pageSecurity" class="tab-pane fade" style="padding: 20px;">
+            @*
+            Private security should only be shown if page is marked as private.
+            See: modules/uc/userpages.js for client-side toggling logic
+            *@
+            <div id="pagePrivateSecurity" style="display: @(Model.IsPrivate ? "block" : "none")">
+                <component type="SecurityUserRoleClaims" arg-configurations="@Model.PagePrivacyConfig"></component>
+            </div>
+
+            <div id="pageContibutorSecurity">
+                <component type="SecurityUserRoleClaims" arg-configurations="@Model.PageSecurityConfig"></component>
+            </div>
+        </div>
+
+        <div id="pageVersions" class="tab-pane fade" style="padding: 20px;">
+
+            @(Html.Kendo().Grid(Model.Versions)
+                .Name("ucPageVersions")
+                .HtmlAttributes(new { @class = "uc-kendo-grid" })
+                .Columns(columns => {
+                    columns.Bound(p => p.VersionCode).Title(Html.Localize("Version").ToString());
+                    columns.Bound(p => p.Status).Title(Html.Localize("Status").ToString()).Width(140);
+                    columns.Bound(p => p.VersionLabel).Title(Html.Localize("Description").ToString());
+                    columns.Template($"<a class='uc-kendo-link' href='{previewUrl}?version=#=VersionCode#' target='_blank'><i class='fa fa-eye'></i>" + Html.Localize("View") + "</a>").Width(100);
+                })
+                .Sortable()
+                .Filterable()
+                .Scrollable()
+            )
+        </div>
+    </div>
+</div>
+
+  
+        
+
+

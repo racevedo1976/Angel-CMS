@@ -1,0 +1,25 @@
+﻿@model Angelo.Aegis.Messaging.Models.WelcomeEmail
+
+<h2>User Account Created</h2>
+
+<h3>
+    Your username: @Model.Username
+</h3>
+<br />
+<p>
+    <b>Notice:</b>
+</p>
+<p>
+    In order to protect your account from unauthorized access and to use automated password recovery options, you will need to confirm this email address using the link provided below.
+</p>
+<p>
+    <a href="@Model.ConfirmEmailLink">
+        Confirm My Email Address
+    </a>
+</p>
+<br />
+<p>
+    <i>If you are unable to click on the provided link then copy and paste the following url into your browser.</i>
+    <br />
+    @Model.ConfirmEmailLink
+</p>

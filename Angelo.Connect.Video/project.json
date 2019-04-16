@@ -1,0 +1,23 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.1",
+    "Microsoft.AspNetCore.Mvc": "1.1.8",
+    "Microsoft.EntityFrameworkCore": "1.1.6",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.6",
+    "Microsoft.Extensions.Configuration": "1.1.2",
+    "Microsoft.Extensions.DependencyInjection": "1.1.1",
+    "Angelo.Common.Mvc": { "target": "project" },
+    "Angelo.Connect.Core": { "target": "project" },
+    "Angelo.Plugins": { "target": "project" }
+  },
+
+  "frameworks": {
+    "netstandard1.6": {}
+  },
+
+  "buildOptions": {
+    "embed": [ "UI/Views/**", "Assets/**"]
+  }
+}

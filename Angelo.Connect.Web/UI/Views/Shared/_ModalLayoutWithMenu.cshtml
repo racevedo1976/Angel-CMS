@@ -1,0 +1,34 @@
+﻿@{ 
+    var modalCss = "modal-layout modal-layout-with-menu";
+
+    if (ViewData["ModalCssClass"] != null)
+    {
+        modalCss += " " + ViewData["ModalCssClass"].ToString().Trim();
+        ViewData["ModalCssClass"] = null;
+    }
+}
+
+<div class="modal-dialog @modalCss">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">
+                <i class="fa fa-gear"></i>
+                @RenderSection("ModalTitle", required: true)
+            </div>
+        </div>
+        <button name="close" class="close modal-button modal-close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-menu">
+            @RenderSection("ModalMenu", required: true)
+        </div>
+        <div class="modal-body">
+            @RenderSection("ModalBody", required: true)
+            @RenderBody()
+        </div>
+        <div class="modal-footer">
+            @RenderSection("ModalFooter", required: false)
+        </div>
+    </div>
+    <div id="modalBuffer" class="hidden"></div>
+</div>

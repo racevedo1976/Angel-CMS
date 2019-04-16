@@ -1,0 +1,27 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@model SlideShowType
+
+@{ 
+    var id = "sshowtype-" + GetHashCode();
+}
+
+<div>
+    <label>
+        <div>
+            <img src="/assets/slideshow/images/standardtype.png">
+        </div>
+        <div>
+            <input type="radio" id="standard-@id" name="@ViewData.TemplateInfo.HtmlFieldPrefix" value="@((int) SlideShowType.Standard)" checked="@(Model == SlideShowType.Standard)" />
+            <label for="standard-@id">Standard</label>
+        </div>
+    </label>
+    <label>
+        <div>
+            <img src="/assets/slideshow/images/herotype.png">
+        </div>
+        <div>
+            <input type="radio" id="hero-@id" name="@ViewData.TemplateInfo.HtmlFieldPrefix" value="@((int) SlideShowType.Hero)"  checked="@(Model == SlideShowType.Hero)"/>
+            <label for="hero-@id">Hero Scene (single)</label>
+        </div>
+    </label>
+</div>

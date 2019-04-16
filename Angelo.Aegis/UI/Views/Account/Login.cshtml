@@ -1,0 +1,78 @@
+﻿@model LoginViewModel
+@{
+    var origin = ViewData["Origin"];
+}
+
+<div class="login-page">
+    <div class="page-header">
+        <h1>@Html.Localize("Page.Login.Title")</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading hidden">
+                    <h3 class="panel-title">@Html.Localize("Label.Login.AngeloLogin")</h3>
+                </div>
+                <div class="panel-body">
+                    <form asp-action="Login" asp-route-origin="@origin">
+                        <fieldset>
+                            <div class="form-group">
+                                <label asp-for="Username"></label>
+                                <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Password"></label>
+                                <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                            </div>
+                            <div class="form-group login-remember">
+                                <label asp-for="RememberMe">
+                                    <input asp-for="RememberMe">
+                                    <strong>@Html.DisplayNameFor(x => x.RememberMe)</strong>
+                                </label>
+                            </div>
+                            <div class="form-group text-right">
+                                <button class="btn btn-primary">@Html.Localize("Page.Login.Title")</button>
+                            </div>
+                        </fieldset>
+                        @Html.Partial("_ValidationSummary")
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <i class="glyphicon glyphicon-wrench"></i>
+                        @Html.Localize("Label.Login.Tools")
+                    </div>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <i class="glyphicon glyphicon-erase text-muted"></i> &nbsp;
+                        <a asp-action="ForgotPassword" asp-route-origin="@origin">
+                            @Html.Localize("Label.Login.LostForgotten")
+                        </a>
+                    </li>
+                    <li class="list-group-item hidden">
+                        <i class="glyphicon  glyphicon-eye-open text-muted"></i> &nbsp;
+                        <a asp-action="VerifyCode" asp-route-origin="@origin">
+                            @Html.Localize("Label.Login.VerifySecurity")
+                        </a>
+                    </li>
+                    <li class="list-group-item hidden">
+                        <i class="glyphicon glyphicon-info-sign text-muted"></i> &nbsp;
+                        <a href="~/">
+                            @Html.Localize("Label.Login.PrivacyPolicy")
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Html.Partial("_ValidationScriptsPartial")
+}

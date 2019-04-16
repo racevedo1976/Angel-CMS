@@ -1,0 +1,28 @@
+﻿
+@{
+
+    var gridDataRoute = routes.CorpApi("clients/data");
+    var componentId = (string)ViewData["cid"];
+}
+
+@(Html.Kendo().DropDownList()
+          .Name(componentId)
+          .DataTextField("Name")
+          .DataValueField("ID")
+          .DataSource(dataSource => dataSource
+            .Ajax()
+            .Read(read => read.Url(gridDataRoute))
+            .ServerOperation(false)
+
+        )
+          .HtmlAttributes(new { style = "width: 100%" })
+          .Events(e =>
+          {
+             
+              e.Select("onClientSelect");
+              
+              e.DataBound("onClientDataBound");
+              
+          })
+)
+

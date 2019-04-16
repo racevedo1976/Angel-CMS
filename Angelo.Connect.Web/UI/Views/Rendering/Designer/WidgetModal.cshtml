@@ -1,0 +1,86 @@
+﻿@using Angelo.Connect.Abstractions;
+@using Angelo.Connect.Rendering;
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Widgets;
+@using Angelo.Connect.Extensions
+@using Angelo.Connect.Models
+
+@inject Angelo.Connect.Widgets.WidgetProvider widgetProvider;
+@inject Angelo.Connect.Services.ProductManager productManager;
+@inject IContextAccessor<UserContext> userContextAccessor;
+@inject IContextAccessor<SiteContext> siteContextAccessor
+@{
+    var renderingContext = ViewData.GetRenderingContext() as ShellContext;
+    var userContext = userContextAccessor.GetContext();
+    var productContext = siteContextAccessor.GetContext()?.ProductContext;
+
+    // Get all widgets views from product definition
+    var productWidgetViews = productManager.GetProductWidgets(productContext);
+
+    // Get all widgets in the system and filter
+    var widgets = widgetProvider.Widgets.Where(x => x.Views.Any(y => productWidgetViews.Contains(y.Id)));
+    var widgetCategories = widgetProvider.GetCategories().Where(cat => widgets.Any(x => x.Category == cat));
+    var activeCategory = widgetCategories?.First();
+
+    Func<WidgetConfig, IEnumerable<WidgetViewEntry>> allowedViews = widget => {
+        return widget.Views.Where(y => productWidgetViews.Contains(y.Id));
+    };
+
+    if (true)
+    {
+        // These are the additional widgets that should be hidden per Dave
+        // unless designing master pages. (Partial designer does not handle master pages)
+        widgetCategories = widgetCategories.Where(x => x != "Menus");
+        widgets = widgets.Where(x => x.Category != "Menus" && x.WidgetName != "Search");
+    }
+
+}
+
+<div class="cs-designer-modal-template" style="display: none">
+    <div class="modal-dialog cs-designer-modal">
+        <div class="modal-content">
+            <button name="close" class="close modal-button modal-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>     
+            <div class="modal-body">
+                <ul class="cs-designer-tabs nav nav-tabs">
+                    @foreach (var category in widgetCategories)
+                    {
+                        var cssTabState = (category == activeCategory) ? "active" : "";
+
+                        <li class="cs-designer-category @cssTabState" data-toggle="tab">
+                            <a data-category="@category">@category</a>
+                        </li>
+                    }
+                </ul>
+
+                <div class="cs-designer-grid clearfix">
+                    @foreach (var widget in widgets)
+                    {
+                        var cssWidgetState = (widget.Category == activeCategory) ? "" : "cs-hide";
+
+                        @foreach (var view in allowedViews(widget))
+                        {
+                            <div class="cs-designer-widget @cssWidgetState" data-category="@widget.Category" data-widget-type="@widget.WidgetType" data-widget-view="@view.Id">
+                                <a id="@view.Id" title="@view.Title">
+                                    @{
+                                        if (String.IsNullOrEmpty(view.IconImage))
+                                        {
+                                            @:<i class="@view.IconClass fa-fw"></i>
+                                        }
+                                        else
+                                        {
+                                            @:<img src="/img/icons/@view.IconImage" />
+                                        }   
+                                    }
+                                    <span>@view.Title</span>
+                                </a>
+                            </div>
+                        }
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

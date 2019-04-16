@@ -1,0 +1,51 @@
+﻿@using Angelo.Connect.Web.UI.Search.ViewModels;
+@model LuceneSearchResult
+
+<div class="cs-search-container container">
+    <h3 class="cs-search-header">@Html.Localize("Search Results")</h3>
+
+
+    @if (Model.IndexExists)
+    {
+        if (Model.ResultCount > 0)
+        {
+            <div class="cs-search-info">
+                @Html.Localize("Showing {0} results for \"{1}\"", Model.ResultCount, Model.SearchPhrase)
+            </div>
+
+            @foreach (var result in Model.Entries)
+            {
+                <div class="cs-search-result">
+                    <h5><a href="@result.Uri">@result.Title</a></h5>
+                    <i>@result.Uri</i>
+                    <p>@result.Snippet</p>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="cs-search-info cs-search-info-no-results">
+                <i class="fa fa-info-circle"></i> &nbsp;
+                @Html.Localize("No results matched \"{0}\"", Model.SearchPhrase)
+            </p>
+        }
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <i class="fa fa-warning"></i> &nbsp;
+            @Html.Localize("Search indexes have not been built for this site.")
+        </div>
+    }
+
+</div>
+
+<script>
+    $(function () {
+        var $container = $(".cs-search-container").parents(".container");
+
+        if ($container.length > 0) {
+            $(".cs-search-container").removeClass("container");
+        }
+    });
+</script>

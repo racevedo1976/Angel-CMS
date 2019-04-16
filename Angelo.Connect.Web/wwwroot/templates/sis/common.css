@@ -1,0 +1,95 @@
+/*-------- Begin Exported Site Css, Site: SCHOOLinSITES Demo SIte --------*/
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Condensed'); 
+
+body { 
+    margin: 0px;
+    font-family:  "Open Sans", Arial, "Helvetica Neue", Helvetica, "sans-serif";}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+    letter-spacing: 0.4px;
+    font-family: "Roboto Condensed", Arial, "Helvetica Neue", Helvetica, "sans-serif"; color: #575757; }
+.h1 {
+    font-family: "Roboto Condensed", Arial, "Helvetica Neue", Helvetica, "sans-serif"; }
+
+.cs-fullwidthheaderbar {width: 100%; height: 56px; padding:10px;}
+
+
+/* template structure */
+.cs-toolbar{ 
+    padding: 5px 15px 0 15px;
+    background: #000; 
+    color: #fff; }
+
+.cs-socialmediaback { padding: 10px;} 
+.cs-socialmedia a { 
+    padding: 5px;
+    color: #000000;
+    font-size: 20px;
+    background: #cccccc;
+    text-align: center;
+    float: right;
+    width: 36px;
+    height: 36px; 
+    border-radius: 100%; 
+    margin-right: 7px; /*space between*/} 
+.cs-socialmedia a i {
+    font-size: 20px;
+    line-height: 38px;
+    color: #000000;}
+
+.cs-header-content{}
+
+.cs-page{}
+.cs-page-content{}
+.cs-page-side{}
+
+.cs-nopadding {padding: 0}
+.cs-row-nopadding > .content-widget > .content-layout > .row > div:not(:first-child){ padding-left: 0 !important }
+.cs-row-nopadding > .content-widget > .content-layout > .row > div:not(:last-child){ padding-right: 0 !important }
+
+.cs-row-66-33 > .content-widget > .content-layout > .row >  div:first-child { width: 65.5% }
+.cs-row-66-33 > .content-widget > .content-layout > .row > div:last-child { width: 33.33% }
+
+.cs-motto { padding: 10px; } 
+.cs-graybar {background: #eaeaea; height: 10px; padding: 0px ; margin: 0px; } 
+
+.cs-darkbackground {background: #eaeaea ; }
+.cs-lightbackground {background: #eaeaea ; }
+
+.cs-footer{
+    margin-top: 0px;
+ background: #ffffff;}
+.copyright {color: #575757;}
+.cs-footer-content {}
+.cs-footer-info {
+    text-align: center}
+.cs-address {font-size: 17px;text-align: center;font-family: "Open Sans", Arial, "Helvetica Neue", Helvetica, "sans-serif"; color: #575757;} 
+ 
+/* navigation ribbon */
+.cs-header { }
+.cs-header-navbar{
+    background: #ffffff; 
+    font-family: Open Sans", Arial, "Helvetica Neue", Helvetica, "sans-serif";
+    font-size: 16px;
+    font-weight: 400;
+    color: #575757; }
+ 
+.navbar-default .navbar-collapse, .navbar-default .navbar-form { 
+    border-color: #ffffff;
+    background: #ffffff;  color: #575757;}
+.navbar-default {
+    background-color: #ffffff;
+    border-color: #ffffff;}
+.navbar-default .navbar-nav > li > a {
+    color: #575757;}
+.navbar {margin-bottom: 0px;}
+
+/* color schemes */
+.bg-default { background: #ffffff;}
+.bg-muted {background: #eaeaea; }
+.bg-dark {background: #737373; color: #fff; }
+.bg-contrast { background: #AC1F2D; color: #eee; }
+.bg-clean { background: #ffffff }
+.bg-fancy {background: #eaeaea ;  }

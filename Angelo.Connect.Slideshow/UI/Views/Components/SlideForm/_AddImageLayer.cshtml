@@ -1,0 +1,18 @@
+﻿@using Angelo.Connect.Models
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect.SlideShow.Models
+
+@model SlideLayer
+@{ 
+    var settings = new DocumentPickerSettings() { FileType = FileType.Image, IsMultiSelect = false, AreContentDocumentsHidden = false, AreContentFoldersHidden = true };
+}
+<div id="addImage">
+    @await Component.InvokeAsync("DocumentPicker", new { rootFolderId = default(string), settings = settings })
+</div>
+
+<script type="text/javascript">
+    $('#addImage > *').on('highlighted', function (event, data) {
+    });
+    $('#addImage > *').on('selected', function (event, data) {
+    });
+</script>

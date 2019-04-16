@@ -1,0 +1,47 @@
+﻿{
+  "ApplicationName": "Aegis Identity Server",
+  "Data": { 
+    "ConnectionString": "[SET_PER_ENVIRONMENT]"
+  },
+  "OpenId": {
+    "RequireSsl": true,
+    "CertificateName": "X509Cert.pfx",
+    "CookieSchemeInternal": "Aegis.Identity",
+    "CookieSchemeExternal": "Aegis.External",
+    "Password": {
+      "MinLength": 6,
+      "RequireDigit": true,
+      "RequireUpper": true,
+      "RequireLower": true,
+      "RequireSpecial": true
+    },
+    "Providers": {
+      "Google": {
+        "ClientId": "[SET_PER_ENVIRONMENT]",
+        "ClientSecret": "[SET_PER_ENVIRONMENT]"
+      }
+    }
+  },
+  "Smtp": {
+    "Server": "antispam.pcmac.org",
+    "Port": 25,
+    "RequireSsl": true,
+    "RequireAuthentication": false,
+    "DefaultReplyToAddress": "donotreply@schoolinsites.com",
+    "DefaultFromAddress": "support@schoolinsites.com",
+    "Credentials": {
+      "Username": "",
+      "Password": ""
+    }
+  },
+  "CultureOptions": {
+    "CookieDaysToKeep": 30,
+    "ResourcePath": "Resources",
+    "DefaultCulture": "en-US",
+    "SupportedCultures": [
+      "en-US",
+      "es-US",
+      "ar-LB"
+    ]
+  }
+}

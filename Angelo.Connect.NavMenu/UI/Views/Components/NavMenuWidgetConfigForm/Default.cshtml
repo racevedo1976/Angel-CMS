@@ -1,0 +1,196 @@
+﻿@model Angelo.Connect.NavMenu.ViewModels.NavMenuWidgetViewModel
+
+@using Kendo.Mvc.UI
+
+@{ 
+    string TreeListName = "tree-" + Model.Id;
+    string clientId = (string)ViewData["clientId"];
+    string siteId = (string)ViewData["siteId"];
+    var navMenuSelectList = ViewData["navMenuSelectList"] as IEnumerable<SelectListItem>;
+}
+
+<style>
+    i.i-button {
+        cursor: pointer;
+        color: Highlight;
+    }
+
+    i[disabled=disabled].i-button {
+        color: gray;
+    }
+
+    i.i-green-button {
+        color: green;
+    }
+
+    i.i-red-button {
+        color: red;
+    }
+</style>
+
+<div id="mainPane" class="angelo-pane">
+
+    <form class="form" data-ajax-form="true" action="/api/widgets/navmenu">
+        @Html.HiddenFor(x => x.Id)
+
+        <div class="form-group">
+            <table style="border-collapse:separate; border-spacing:5px;">
+                <tr>
+                    <td><span style="font-size:large; font-weight:700;">Navigation Menu Source:</span></td>
+                </tr>
+                <tr>
+                    <td style="min-width:300px;">
+                        @Html.DropDownListFor(model => model.NavMenuId, navMenuSelectList, new { @id = "navMenuDropDownList", @class = "form-control" })
+                    </td>
+                    <td>
+                        <a id="editMenuButton" class="btn btn-primary" href="#" onclick="EditNavMenuFunc();"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                    </td>
+                    <td>
+                        <a id="addMenuButton" class="btn btn-primary" href="#" onclick="AddNavMenuFunc();"><i class="fa fa-plus"></i>&nbsp;Create</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<div id="editMenuPane" class="angelo-pane" style="display:none;">
+    <div class="row" style="padding:5px;">
+        <a class="btn btn-primary pull-right" href="#" onclick="ReturnToMainPane();"><i class="fa fa-arrow-left"></i>&nbsp;Back</a>
+    </div>
+    <component id="navigationMenuEditForm" type="NavigationMenuEditForm"></component>
+</div>
+
+<div id="addMenuPane" class="angelo-pane" style="display:none;">
+    <div class="row" style="padding:5px;">
+        <a id="AddMenuSaveButton" class="btn btn-primary pull-right" href="#" onclick="CreateNavMenuFunc();"><i class="fa fa-save"></i>&nbsp;Create Menu</a>
+        <a class="btn btn-primary pull-right" style="margin-right:5px;" href="#" onclick="ReturnToMainPane();"><i class="fa fa-arrow-left"></i>&nbsp;Back</a>
+    </div>
+    <component id="navigationMenuAddForm" type="NavigationMenuAddForm"></component>
+</div>
+
+<div id="editMenuItemPane" class="angelo-pane" style="display:none;">
+    <div class="row" style="padding:5px;">
+        <a class="btn btn-primary pull-right" href="#" onclick="SaveNavMenuItemFunc();"><i class="fa fa-save"></i>&nbsp;Save</a>
+        <a class="btn btn-primary pull-right" style="margin-right:5px;" href="#" onclick="SetActivePane('editMenuPane');"><i class="fa fa-arrow-left"></i>&nbsp;Back</a>
+    </div>
+    <component id="navigationMenuItemEditForm" type="NavigationMenuItemEditForm"></component>
+</div>
+
+<script>
+
+    ReturnToMainPane = function () {
+        SetActivePane("mainPane");
+        $("#navigationMenuEditForm").component().invoke({});
+        $("#navigationMenuAddForm").component().invoke({});
+        $("#navigationMenuItemEditForm").component().invoke({});
+        $(".modal-footer [name=save]").removeAttr("disabled");
+    }
+
+    // Create Menu --------------------------------
+
+    AddNavMenuFunc = function () {
+        $(".modal-footer [name=save]").attr("disabled", "disabled");
+        $("#navigationMenuEditForm").component().invoke({});
+        $("#navigationMenuAddForm").component().invoke({ siteId: "@siteId" });
+        $("#AddMenuSaveButton").removeAttr("disabled");
+        SetActivePane("addMenuPane");
+    }
+
+    CreateNavMenuFunc = function () {
+        $("#AddMenuSaveButton").attr("disabled", "disabled");
+        $("#navigationMenuAddForm").form().post();
+    }
+
+
+    $.off().on("navigationMenuAddForm.submit", function (event, data) {
+        var $dropdown = $("#navMenuDropDownList");
+        $dropdown.append($('<option>',
+        {
+            value: data.result.Id,
+            text: data.result.Title
+        }));
+        $dropdown.val(data.result.Id);
+        EditNavMenuFunc();
+    });
+
+    // Edit Menu ------------------------------------
+
+    EditNavMenuFunc = function () {
+        var navMenuId = $("#navMenuDropDownList").val();
+        if (navMenuId) {
+            $(".modal-footer [name=save]").attr("disabled", "disabled");
+            $("#navigationMenuEditForm").component().invoke({ navMenuId: navMenuId });
+            SetActivePane("editMenuPane");
+            $("#navigationMenuAddForm").component().invoke({});
+        }
+    }
+
+    $.off().on("navigationMenuEditForm.save", function (event, data) {
+        $("#navigationMenuEditForm").form().post();
+    });
+
+    $.off().on("navigationMenuEditForm.submit", function (event, data) {
+        $("#navMenuDropDownList option[value=" + data.result.Id + "]").html(data.result.Title);
+    });
+
+    $.off().on("navigationMenuEditForm.addItem", function (event, data) {
+        $("#navigationMenuItemEditForm").component().invoke({ navMenuId: data.navMenuId, parentId: data.itemId });
+        SetActivePane("editMenuItemPane");
+    });
+
+    $.off().on("navigationMenuEditForm.deleteItem", function (event, data) {
+        if (data && confirm("Are you sure you want to delete the \"" + data.text + "\" navigation menu item?")) {
+            $.ajax({
+                type: "DELETE",
+                dataType: "json",
+                url: "/api/navigationMenuItems",
+                data: { id: data.itemId },
+                success: function () {
+                    $("#navigationMenuEditForm").component().invoke({ navMenuId: data.navMenuId });
+                }
+            });
+        }
+    });
+
+    $.off().on("navigationMenuEditForm.editItem", function (event, data) {
+        $("#navigationMenuItemEditForm").component().invoke({ id: data.itemId });
+        SetActivePane("editMenuItemPane");
+    });
+
+    // Edit Menu Item ------------------------------------
+
+    SaveNavMenuItemFunc = function () {
+        $("#navigationMenuItemEditForm").form().post();
+    }
+
+    $.off().on("navigationMenuItemEditForm.submit", function (event, data) {
+        $("#navigationMenuEditForm").component().invoke({ navMenuId: data.result.NavMenuId, itemId: data.result.Id });
+        SetActivePane("editMenuPane");
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Utility Functions ---------------------------------------
+
+    SetActivePane = function (pane) {
+        $("#" + pane).siblings(".angelo-pane").css("display", "none");
+        $("#" + pane).css("display", "");
+    }
+
+
+
+
+</script>
+

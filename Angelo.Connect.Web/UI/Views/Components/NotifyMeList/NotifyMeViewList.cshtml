@@ -1,0 +1,43 @@
+﻿@model List<UserMembershipViewModel>
+
+@using Angelo.Connect.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+
+    var userId = (string)ViewData["userId"];
+    var siteId = (string)ViewData["siteId"];
+}
+
+    <form id="@componentId" action="/api/usergroups/updatememberships" data-ajax-form>
+        @Html.Hidden("UserId", userId)
+        @Html.Hidden("SiteId", siteId)
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-sm-12">Notification Groups</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var index = 0; index < Model.Count; index++)
+                {
+                    <tr>
+                        <td>
+                            <span style="font-size:18px;">@Model[index].UserGroupName</span>
+                            @Html.HiddenFor(model => model[index].UserGroupId)
+                            @Html.HiddenFor(model => model[index].UserGroupName)
+                            @Html.HiddenFor(model => model[index].AllowPublicEnrollment)
+                            @Html.HiddenFor(model => model[index].IsMember)
+                            @Html.HiddenFor(model => model[index].AllowEmailMessaging)
+                            @Html.HiddenFor(model => model[index].AllowSmsMessaging)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+
+
+

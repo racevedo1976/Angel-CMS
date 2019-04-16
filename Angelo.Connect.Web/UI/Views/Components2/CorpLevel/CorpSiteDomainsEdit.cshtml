@@ -1,0 +1,34 @@
+﻿@model CorpSiteDomainViewModel
+
+@inject Angelo.Connect.UI.Routes Routes
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var formRoute = Routes.CorpApi(string.Format("sites/{0}/domains/0", Model.SiteId));
+}
+
+<form id="@componentId" action="@formRoute" class="form form-horizontal" onsubmit="return false" data-ajax-form>
+    @Html.HiddenFor(x => x.SiteId)
+    @Html.HiddenFor(x => x.OriginalDomainKey)
+
+    <h3>@Html.Localize("Edit Site Domain")</h3>
+
+    <div class="form-group">
+        <label class="col-sm-3">@Html.ShortNameFor(x => x.DomainKey)</label>
+        <div class="col-sm-9">
+            @(Html.Kendo().TextBoxFor(model => model.DomainKey)
+                .HtmlAttributes(new { required = "required", style = "width: 100%" })
+            )
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3">@Html.ShortNameFor(x => x.IsDefault)</label>
+        <div class="col-sm-9">
+            @(Html.Kendo().CheckBoxFor(model => model.IsDefault)
+
+            )
+        </div>
+    </div>
+
+</form>

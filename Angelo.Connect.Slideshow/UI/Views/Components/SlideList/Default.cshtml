@@ -1,0 +1,157 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.Abstractions
+
+@model ICollection<Slide>
+
+
+@*<div>
+    @Html.Partial("~/UI/Views/Shared/SlideShowNav.cshtml")
+</div>*@
+
+<div id="slideListThumbs">
+
+
+    @foreach (var slide in Model)
+    {
+        var caption = "";
+        if (slide.Title.Length > 7)
+        {
+            caption = slide.Title?.Substring(0, 7) + "...";
+        }
+        else
+        {
+            caption = slide.Title;
+        }
+
+
+        <div class="thumbnail sortableSlides" data-slideId="@slide.DocumentId" style="width:150pt;float:left;margin-right:5px">
+            <div class="slide-pic" style="text-align:center;height:80pt;">
+                @*NOTE: Thumbnail is just a document icon*@
+                @if (slide.UseVideoBackground)
+                {
+                   
+                    <span class="fa fa-video-camera" aria-hidden="true" style="margin: 15pt;  padding-left: 30pt; font-size: 80px;"></span>
+                }
+                else
+                {
+                    <img src="@slide.ImageUrl" width="190" height="100" />
+                }
+                
+                <div class="editslide" title="Edit this Slide">
+                    <a href="#editslide" class="slideshowpanel" onclick="editSlideComponent('@slide.DocumentId', this)" level="1" caption="@caption">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" />
+                    </a>
+                </div>
+                <div class="gotolayers" title="Manage Layers for this Slide">
+                    <a href="#managelayers" class="slideshowpanel" onclick="loadSlideLayerList('@slide.DocumentId', this)" level="2" caption="@caption">
+                        <span class="glyphicon glyphicon-tasks"></span>
+                    </a>
+                </div>
+                <div class="deleteslide" title="Remove this Slide">
+                    <a href="#" onclick="deleteSlide('@slide.DocumentId')">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" />
+                    </a>
+                </div>
+            </div>
+            <div class="caption panel-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12" style="text-overflow:ellipsis;">
+                            @slide.Title
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+<script>
+    function deleteSlide(id) {
+        if (!confirm('Are you sure you want to delete the slide? (Note: Layers on this slide will be removed as well)')) {
+            return;
+        }
+
+        $.get("/api/widgets/slideshow/deleteslide?id=" + id, function (data) {
+            //debugger;
+            loadSlideList();
+        });
+
+    }
+
+    $(document).ready(function () {
+        $("#slideListThumbs").kendoSortable({
+            hint: function (element) {
+                return element.clone().addClass("hint");
+            },
+            placeholder: function (element) {
+                return element.clone().addClass("placeholder").text("drop here");
+            },
+            change: function (e) {
+                var list = '';
+                var index = 0;
+                $(".sortableSlides").each(function () {
+                    if (!$(this).hasClass("hint")) {
+                        var id = $(this).attr("data-slideId");
+                        $.get("/api/widgets/slideshow/updateslideposition?id=" + id + "&index=" + index, function (data) {
+                            
+                        });
+                        index++;
+                    }
+                    
+                });
+                //alert(list);
+            }
+            //cursorOffset: {
+            //    top: -10,
+            //    left: -230
+            //}
+        });
+    });
+</script>
+<style>
+    .slide-pic {
+	    position: relative;
+	    display: inline-block;
+    }
+    .slide-pic:hover .editslide {
+        display: block;
+    }
+    .slide-pic:hover .gotolayers {
+        display: block;
+    }
+    .slide-pic:hover .deleteslide {
+        display: block;
+    }
+
+    .editslide {
+        padding-top: 7px;
+        padding-right: 7px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        display: none;
+    }
+
+    .gotolayers {
+        padding-top: 7px;
+        padding-right: 7px;
+        position: absolute;
+        right: 0;
+        top: 30px;
+        display: none;
+    }
+
+     .deleteslide {
+        padding-top: 7px;
+        padding-right: 7px;
+        position: absolute;
+        right: 0;
+        top: 60px;
+        display: none;
+    }
+
+    
+</style>

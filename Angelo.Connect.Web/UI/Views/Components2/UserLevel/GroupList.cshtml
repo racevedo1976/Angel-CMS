@@ -1,0 +1,33 @@
+﻿@model IList<GroupViewModel>
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+
+
+@{
+    var componentId = (string)ViewData["cid"];
+}
+
+@(Html.Kendo().Grid(Model)
+    .Name(componentId)
+    .Columns(columns =>
+    {
+
+        columns.Bound(n => n.Name).Title(Html.Localize("Name").ToString());
+        columns.Bound(n => n.Id).Hidden(true);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable(scr => scr.Height(430))
+    .Filterable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+        })
+    )
+)
+

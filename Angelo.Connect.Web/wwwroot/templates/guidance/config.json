@@ -1,0 +1,34 @@
+﻿{
+  "id": "guidance",
+  "title": "Guidance",
+  "pageTemplates": [
+    {
+      "title": "Home Page ",
+      "id": "Splash.cshtml",
+      "seedData": [
+        "header.json",
+        "footer.json"
+      ]
+    },
+    {
+      "title": "Secondary Page",
+      "id": "Page.cshtml",
+      "seedData": [
+        "header.json",
+        "footer.json"
+      ]
+    }
+  ],
+  "scripts": [],
+  "themes": [
+    {
+      "id": "default",
+      "title": "Default",
+      "coreStyles": [
+        "/css/themes/cerulean.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common-material.min.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.material.min.css"
+      ]
+    }
+  ]
+}

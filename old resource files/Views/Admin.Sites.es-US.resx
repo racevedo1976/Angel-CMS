@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Action.Search" xml:space="preserve">
+    <value>Búsqueda de</value>
+  </data>
+  <data name="Button.Add.Culture" xml:space="preserve">
+    <value>Añadir cultura</value>
+  </data>
+  <data name="Button.Add.Domain" xml:space="preserve">
+    <value>Agregar dominio</value>
+  </data>
+  <data name="Button.Add.SiteCollection" xml:space="preserve">
+    <value>Añadir a colección de sitios</value>
+  </data>
+  <data name="Button.No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Button.OK" xml:space="preserve">
+    <value>Vale</value>
+  </data>
+  <data name="Button.Yes" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="Create.Site.Title" xml:space="preserve">
+    <value>Crear sitio</value>
+  </data>
+  <data name="Edit.Site.Title" xml:space="preserve">
+    <value>Editar sitio</value>
+  </data>
+  <data name="Page.Sites.Title" xml:space="preserve">
+    <value>Administrar sitios</value>
+  </data>
+  <data name="Success.Create.Message" xml:space="preserve">
+    <value>El nuevo sitio se ha creado correctamente.  Por favor haz clic en el botón "OK" para continuar.</value>
+  </data>
+  <data name="Success.Edit.Message" xml:space="preserve">
+    <value>El sitio se ha modificado con éxito.   Por favor haz clic en el botón "OK" para continuar.</value>
+  </data>
+  <data name="Tab.Site.Collections.Remove.Confirm" xml:space="preserve">
+    <value>¿Está seguro que desea eliminar esta colección de sitios de este sitio?</value>
+  </data>
+  <data name="Tab.Site.Collections.Remove.Title" xml:space="preserve">
+    <value>Quitar de la colección de sitios</value>
+  </data>
+  <data name="Tab.Site.Collections.Select.Title" xml:space="preserve">
+    <value>Seleccione la colección de sitio que añadir a este sitio</value>
+  </data>
+  <data name="Tab.Site.Collections.Title" xml:space="preserve">
+    <value>Asignada actualmente colecciones de sitios</value>
+  </data>
+  <data name="Tab.Site.Cultures" xml:space="preserve">
+    <value>Culturas</value>
+  </data>
+  <data name="Tab.Site.Cultures.IsEmpty" xml:space="preserve">
+    <value>No hay culturas han sido asignadas a este sitio.</value>
+  </data>
+  <data name="Tab.Site.Cultures.Title" xml:space="preserve">
+    <value>Seleccionar los cultivos para este sitio</value>
+  </data>
+  <data name="Tab.Site.Details" xml:space="preserve">
+    <value>Datos de</value>
+  </data>
+  <data name="Tab.Site.Details.Label.AvailableCultures" xml:space="preserve">
+    <value>Culturas disponibles</value>
+  </data>
+  <data name="Tab.Site.Details.Select.DropDownList.DefaultCulture" xml:space="preserve">
+    <value>Seleccione una sitio de cultura</value>
+  </data>
+  <data name="Tab.Site.Details.Select.DropDownList.UserPool" xml:space="preserve">
+    <value>Seleccione un grupo de usuario</value>
+  </data>
+  <data name="Tab.Site.Domains" xml:space="preserve">
+    <value>Dominios</value>
+  </data>
+  <data name="Tab.Site.Domains.Add.Title" xml:space="preserve">
+    <value>Agregar sitio dominio</value>
+  </data>
+  <data name="Tab.Site.Domains.Edit.Title" xml:space="preserve">
+    <value>Editar sitio dominio</value>
+  </data>
+  <data name="Tab.Site.Domains.IsEmpty" xml:space="preserve">
+    <value>Los dominios no han sido asignados a este sitio.</value>
+  </data>
+  <data name="Tab.Site.Domains.Remove.Confirm" xml:space="preserve">
+    <value>¿Está seguro que desea eliminar este dominio desde el sitio?</value>
+  </data>
+  <data name="Tab.Site.Domains.Remove.Title" xml:space="preserve">
+    <value>Quitar dominio del sitio</value>
+  </data>
+  <data name="Tab.Site.SiteCollections" xml:space="preserve">
+    <value>Colecciones</value>
+  </data>
+  <data name="Title.Error.Duplicate" xml:space="preserve">
+    <value>El título de sitio seleccionado ya existe.  Por favor seleccione un título de sitio único para este sitio.</value>
+  </data>
+  <data name="Tab.Site.SiteAdmins" xml:space="preserve">
+    <value>Adminitrators</value>
+  </data>
+  <data name="Tab.Site.Admins.Remove.Confirm" xml:space="preserve">
+    <value>¿Está seguro que desea eliminar este usuario de la lista de administrador?</value>
+  </data>
+  <data name="Tab.Site.Admins.Remove.Title" xml:space="preserve">
+    <value>Quitar el administrador del sitio</value>
+  </data>
+  <data name="Tab.Site.Admins.Select.Title" xml:space="preserve">
+    <value>Seleccione el usuario para agregar a la lista de los administradores del sitio.</value>
+  </data>
+  <data name="Tab.Site.Admins.Title" xml:space="preserve">
+    <value>Asignada actualmente los administradores del sitio</value>
+  </data>
+  <data name="Button.Add.SiteAdmin" xml:space="preserve">
+    <value>Agregar el administrador del sitio</value>
+  </data>
+  <data name="Tab.Site.Admins.IsEmpty" xml:space="preserve">
+    <value>Los administradores del sitio no han sido asignados a este sitio.</value>
+  </data>
+  <data name="Tab.Site.Collections.IsEmpty" xml:space="preserve">
+    <value>No colecciones de sitios han sido asignados a este sitio.</value>
+  </data>
+  <data name="Title.Error.PoolRequired" xml:space="preserve">
+    <value>Por favor seleccione un grupo de seguridad para su uso con este sitio.</value>
+  </data>
+  <data name="Button.Add.Site" xml:space="preserve">
+    <value>Agregar sitio</value>
+  </data>
+  <data name="Tab.Site.Details.Select.DropDownList.Template" xml:space="preserve">
+    <value>Seleccione una plantilla de sitio</value>
+  </data>
+  <data name="Tab.Site.Details.Select.DropDownList.Theme" xml:space="preserve">
+    <value>Seleccione un tema de sitio</value>
+  </data>
+</root>

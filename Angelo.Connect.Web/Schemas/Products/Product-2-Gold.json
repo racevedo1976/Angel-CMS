@@ -1,0 +1,124 @@
+﻿{
+  "ProductId": "product-2",
+  "Version": "2019.2.1",
+  "Title": "Connect Gold Plan",
+  "Description": "Our modern Connect product with some extra stuff",
+  "Active": true,
+  "BaseSiteMB": "200000",
+  "Features": [
+    {
+      "Id": "Connect-Core",
+      "Type": "",
+      "Title": "Connect Core Functionality",
+      "Settings": {
+
+      }
+    },
+    {
+      "Name": "NotifyMe",
+      "Type": "",
+      "Title": "Notify Me",
+      "Settings": {
+        "enabled": "true"
+      }
+    },
+    {
+      "Name": "notifications",
+      "Type": "",
+      "Title": "Notifications",
+      "Settings": {
+        "enabled": "true"
+      }
+    },
+    {
+      "Name": "Widgets",
+      "Type": "",
+      "Title": "Allowed Widgets",
+      "Settings": {
+        "PageWidgets": [
+          "html-raw",
+          "icon-1",
+          "image-inline",
+          "title-default",
+          "alert-alert1",
+          "hero-hero1",
+          "search-search1",
+          "blog-posts-normal",
+          "news-posts-normal",
+          "announcement-posts-normal",
+          "calendar-month-view",
+          //"calendar-upcoming-events",
+          "document-list",
+          "h-nav-menu",
+          "v-nav-menu",
+          "v-nav-auto",
+          "slideshow-carousel",
+          "media-gallery",
+          "video-player",
+          "carousel",
+          "video-background",
+          "zone-1",
+          "zone-2",
+          "zone-3",
+          "zone-4",
+          "zone-5",
+          "zone-6",
+          "zone-2-10",
+          "zone-3-9",
+          "zone-9-3",
+          "zone-4-8",
+          "zone-8-4",
+          "lightbox-1"
+        ]
+      }
+    },
+    {
+      "Name": "slideshowvideos",
+      "Type": "",
+      "Title": "Slideshow Videos",
+      "Settings": {
+        "enabled": "false"
+      }
+    },
+    {
+      "Name": "alerts",
+      "Type": "",
+      "Title": "Site Alerts",
+      "Settings": {
+        "enabled": "true"
+      }
+    },
+    {
+      "Name": "documentsharing",
+      "Type": "",
+      "Title": "Document Sharing",
+      "Settings": {
+        "enabled": "true"
+      }
+    },
+    {
+      "Name": "livevideo",
+      "Type": "",
+      "Title": "Live Video",
+      "Settings": {
+        "enabled": "true"
+      }
+    }
+  ],
+  "SiteTemplates": [
+    "inspiration",
+    "guidance",
+    "cityscape",
+    "essential",
+    "royal",
+    "royal2",
+    "theatrics",
+    "nebula",
+    "tidal",
+    "aurora",
+    "matrix",
+    "pinnacle",
+    "carnival",
+    "sis"
+  ]
+}

@@ -1,0 +1,110 @@
+﻿[
+  {
+    "zone": "body",
+    "type": "image",
+    "model": {
+      "caption": "Main Image",
+      "src": "/templates/cityscape/images/main.jpg"
+    }
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-2",
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "model": {
+          "caption": "Sample Image",
+          "src": "/templates/cityscape/images/poster.jpg"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "model": {
+          "html": "<p>Graduating students who are college and career ready starts with us in the Division of Academic Affairs. We set high expectations for our students and give them the tools and knowledge to reach those expectations.</p><p>We are partnering with business and industry and two-year colleges like never before. Together, we provide multiple pathways to graduation, including our Signature Academies in all 12 high schools, Advanced Placement and International Baccalaureate programs, career-technical education, special-education programs and intervention for struggling students.</p><p>We teach our students to solve real-world problems, to work on teams, to communicate effectively and to use technology with ease. We know they will take what they are learning in our classrooms and do great things in the world.</p><p><strong>It Starts With Us.</strong></p>"
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-2",
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "icon",
+        "model": {
+          "name": "info-circle",
+          "size": "20px",
+          "text": "ABOUT US"
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "model": {
+          "html": "<ul><li>Contact Us</li><li>Organizational Chart</li><li>Strategic Plan</li></ul>"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "icon",
+        "model": {
+          "name": "graduation-cap",
+          "size": "20px",
+          "text": "ACADEMICS"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "model": {
+          "html": "<ul><li>English as a Second Language</li><li>Entrada Program</li><li>Gifted Education</li><li>Gifted Referrals & Eligibility</li><li>Homebound/Hospital Education</li><li>Magnet School Program</li></ul>"
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-2",
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "icon",
+        "model": {
+          "name": "cloud",
+          "size": "20px",
+          "text": "SERVICES"
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "model": {
+          "html": "<ul><li>Migrant Education</li><li>Special Olympics</li><li>Special Services</li><li>Health Services Department</li><li>Guidance and Counseling</li></ul>"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "icon",
+        "model": {
+          "name": "globe",
+          "size": "20px",
+          "text": "RESOURCES"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "model": {
+          "html": "<ul><li>Athletics</li><li>Common Core Standards</li><li>Drivers Education</li><li>Inclusion</li><li>Safe & Drug Free Schools</li><li>Counseling</li></ul>"
+        }
+      }
+    ]
+  }
+]

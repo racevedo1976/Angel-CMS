@@ -1,0 +1,10 @@
+﻿@model DateTime
+@{
+    var name = ViewData.TemplateInfo.HtmlFieldPrefix;
+    var id = name?.Replace('.', '_');
+}
+
+<input class="form-control" value="@Model" type='date' id="@id" name="@name"/>
+<script type="text/javascript">
+    $("#@id").kendoDatePicker();
+</script>

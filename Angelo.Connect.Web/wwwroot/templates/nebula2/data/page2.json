@@ -1,0 +1,48 @@
+[
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "background": "bg-default",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "title",
+        "view": "title-default",
+        "style": {
+          "background": "bg-default"
+        },
+        "model": {
+          "text": "About",
+          "cssClass": "h1"
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "background": "bg-default"
+        },
+        "model": {
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "side",
+    "type": "html",
+    "view": "html-raw",
+    "style": {},
+    "model": {
+      "html": "<div class=\"well\" style=\"height: 400px\"></div>",
+      "staticToolbar": false
+    }
+  }
+]

@@ -1,0 +1,31 @@
+﻿[
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-3",
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "model": {
+          "html": "<a href=\"http://www.schoolinsites.com/\">\r\n<img alt=\"SCHOOLinSITES\" src=\"/img/sislogo.png\">\r\n</a>\r\n"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "model": {
+          "html": "<div style=\"width: 200px; margin: 0 auto;\">123 Main St.<BR>\r\nHouston, TX 55555<BR>\r\nPH: 555-555-5555<BR>\r\nFX: 555-555-5555</div>"
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "css": "text-center links-lite",
+        "model": {
+          "html": "<a href=\"#\">\r\n<i title=\"Facebook\" class=\"fa fa-facebook\"></i>\r\n</a>\r\n<a href=\"#\">\r\n<i title=\"Twitter\" class=\"fa fa-twitter\"></i>\r\n</a>\r\n<a href=\"http://designdemo.schoolinsites.com/RSS/Default.asp\">\r\n<i title=\"RSS\" class=\"fa fa-rss\"></i>\r\n</a>"
+        }
+      }
+    ]
+  }
+]

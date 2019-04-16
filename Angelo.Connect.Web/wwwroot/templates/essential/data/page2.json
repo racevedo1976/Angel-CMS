@@ -1,0 +1,16 @@
+﻿[
+  {
+    "zone": "body",
+    "type": "title",
+    "model": {
+      "text": "Sample Page Title"
+    }
+  },
+  {
+    "zone": "body",
+    "type": "html",
+    "model": {
+      "html": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><p>Nobis virtute elaboraret qui et. Iuvaret intellegam vituperatoribus at pro, ei malorum placerat appellantur nam. No mel epicuri senserit, ex labitur perpetua laboramus mel. Sensibus aliquando intellegam cu vis, ei pro amet accusata concludaturque, eam purto insolens no. Sed elit feugiat signiferumque ut.</p><p>Dissentiet appellantur ad vis. Eros summo per et, per ne summo dolore definitiones. Et hinc corpora principes ius, id vis omnesque tractatos efficiendi. Cu epicuri fierent vis. Ex esse albucius vim, sale dolore ullamcorper pro et. Quis utamur aliquip mel in, mundi noster putant usu ea, an mea wisi voluptatibus.</p>"
+    }
+  }
+]

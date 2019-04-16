@@ -1,0 +1,85 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Extensions;
+
+@model Slide
+@{ 
+    var transitions = typeof(Transition).GetItemsForEnum();
+    var directions = typeof(Direction).GetItemsForEnum();
+    var targets = typeof(LinkTarget).GetItemsForEnum();
+}
+<div class="container-fluid">
+    <section title="Slide Animation">
+        <div class="row">
+            <label class="form-label col-sm-2">Transition</label>
+            <div class="col-sm-4">
+                <select class="form-control" asp-for="Transition">
+                    @foreach (var item in transitions)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <label class="form-label col-sm-2">Slot Box Amount</label>
+            <div class="col-sm-4">
+                @Html.EditorFor(x => x.SlotBoxAmount, null, nameof(Slide.SlotBoxAmount))
+            </div>
+            <label class="form-label col-sm-6">The number of "pieces" the image is divided into for animations.</label>
+        </div>
+        <div class="row">
+            <label class="form-label col-sm-2">Slot Rotation</label>
+            <div class="col-sm-4">  
+                @Html.EditorFor(x => x.SlotRotation, null, nameof(Slide.SlotRotation), new { Minimum = 0, Maximum = 360 })
+            </div>
+            <label class="form-label col-sm-6">Applies a starting rotation to the slot-based animation.</label>
+        </div>
+        <div class="row">
+            <label class="form-label col-sm-2">Animation Direction</label>
+            <div class="col-sm-4">
+                <select class="form-control" asp-for="Direction">
+                    @foreach (var item in directions)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </div>
+            <label class="form-label col-sm-6">Direction of animation</label>
+        </div>
+        <div class="row">
+            <label class="form-label col-sm-2">Animation Duration</label>
+            <div class="col-sm-4">
+                @Html.EditorFor(x => x.Duration, null, nameof(Slide.Duration), new { Minimum = 0, Maximum = int.MaxValue })
+            </div>
+            <label class="form-label col-sm-6">How long the animation will last from start to finish in milliseconds (1000 = 1 second).</label>
+        </div>
+    </section>
+
+    <div class="row">
+        <section title="Slide Link">
+            <div class="row">
+                <label class="form-label col-sm-2">Enable Link</label>
+                <div class="col-sm-4">
+                    @Html.EditorFor(x => x.IsLinkEnabled, null, nameof(Slide.IsLinkEnabled))
+                </div>
+            </div>
+            <div class="row">
+                <label class="form-label col-sm-2">Slide Link</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="url" asp-for="SlideLinkUrl" />
+                </div>
+            </div>
+            <div class="row">
+                <label class="form-label col-sm-2">Link Target</label>
+                <div class="col-sm-4">
+                    <select class="form-control" asp-for="LinkTarget">
+                        @foreach (var item in targets)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

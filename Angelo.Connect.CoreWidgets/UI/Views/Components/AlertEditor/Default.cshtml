@@ -1,0 +1,8 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.Alert
+@{ 
+    var apiUrl = $"/api/widgets/alert/{Model.Id}";
+}
+
+<div class="alert @Model.Style">
+    <input type="text" class="wysi-control" asp-for="@Model.Text" onchange="$.post('@apiUrl', { text: this.value })" spellcheck="true"/>
+</div>

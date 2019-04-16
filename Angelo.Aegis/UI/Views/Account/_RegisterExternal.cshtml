@@ -1,0 +1,14 @@
+﻿@model RegisterViewModel
+
+@*<h4>Association Form</h4>
+<div asp-validation-summary="All" class="text-danger"></div>*@
+
+<h3>Associate your @ViewData["LoginProvider"] account.</h3>
+<p class="text-info">
+    You've successfully authenticated with <strong>@ViewData["LoginProvider"]</strong>.
+    Please enter an email address for this site below and click the Register button to finish
+    logging in.
+</p>
+
+@Html.HiddenFor(x => x.Password)
+@Html.HiddenFor(x => x.ConfirmPassword)

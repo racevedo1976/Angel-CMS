@@ -1,0 +1,49 @@
+﻿@model Angelo.Connect.News.Models.NewsCategory
+
+<div data-module="console/news/category">
+    <div class="csc-content-toolbar">
+        <a name="save" title="@Html.Localize("Save changes to this category")">
+            <i class="fa fa-save"></i> @Html.Localize("Save")
+        </a>
+        <div class="csc-seperator"></div>
+        <a name="delete" title="@Html.Localize("Delete this category")">
+            <i class="fa fa-trash-o"></i> @Html.Localize("Delete")
+        </a>
+    </div>
+
+
+    <div class="csc-content-tabs">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#categoryDetails" data-toggle="tab">
+                    @Html.Localize("Details")
+                </a>
+            </li>
+            <li>
+                <a href="#categorySecurity" data-toggle="tab">
+                    @Html.Localize("Security")
+                </a>
+            </li>
+            <li>
+                <a href="#categoryPosts" data-toggle="tab">
+                    @Html.Localize("Posts")
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="csc-content-body">
+        <div class="tab-content">
+            <div id="categoryDetails" class="tab-pane fade in active" style="padding: 20px;">
+                @Html.Partial("/UI/Views/Console/News/_NewsCategoryForm.cshtml", Model)
+            </div>
+
+            <div id="categorySecurity" class="tab-pane fade" style="padding: 20px;">
+                <component type="NewsWidgetCategorySecurity" arg-categoryId="@Model.Id"></component>
+            </div>
+            <div id="categoryPosts" class="tab-pane fade" style="padding: 20px;">
+                @* will be loaded async in javascript *@
+            </div>
+        </div>
+    </div>
+</div>

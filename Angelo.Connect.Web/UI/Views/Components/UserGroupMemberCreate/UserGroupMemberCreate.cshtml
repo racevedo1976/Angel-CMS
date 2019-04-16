@@ -1,0 +1,103 @@
+﻿@model UserGroupMembershipViewModel
+
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var showAllowMessagingCheckbox = (bool)ViewData["ShowAllowMessagingCheckbox"];
+    var accessLevelSelectList = (List<SelectListItem>)ViewData["AccessLevelSelectList"];
+    var poolId = (string)ViewData["PoolId"];
+
+    var onSelectName = "onselect" + componentId;
+}
+<div>
+
+    @*@(string.IsNullOrEmpty(Model.Id) ? Html.Localize("Label.Claim.Create") : Html.Localize("Label.Claim.Edit"))*@
+
+    <div style="padding:10px;">
+        <h3>@Html.Localize("Add Member to Group:")</h3>
+    </div>
+
+    <form id="@componentId" class="form-horizontal" action="/api/usergroups/memberships" data-ajax-form>
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.UserGroupId)
+        @Html.HiddenFor(model => model.UserName)
+
+        <div class="form-group">
+            <div class="col-sm-5">
+                <label>@Html.Localize("User:")</label>
+            </div>
+            <div class="col-sm-7">
+               
+                @(Html.Kendo().DropDownListFor(model => model.UserId)
+                    .DataTextField("FirstName")
+                    .DataValueField("Id")
+                    .Template("#=FirstName # #=LastName #")
+                    .ValueTemplate("#:data.FirstName # #:data.LastName #")
+                    .OptionLabel("Select a user")
+                    .HtmlAttributes(new { style = "width:100%" })
+                    .Filter(FilterType.Contains)
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .PageSize(35)
+                        .Read(read =>
+                        {
+                            read.Type(HttpVerbs.Post)
+                            .Url("/api/pools/users/selectlist?poolid=" + poolId);
+                        })
+                    )
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-5">
+                <label>@Html.Localize("Access Level:")</label>
+            </div>
+            <div class="col-sm-7">
+                @(Html.Kendo().DropDownListFor(model => model.AccessLevel)
+                    .Value(Model.AccessLevel.ToString())
+                    .DataTextField("Text")
+                    .DataValueField("Value")
+                    .BindTo(accessLevelSelectList)
+                    .HtmlAttributes(new { style = "width:100%" })
+                )
+            </div>
+        </div>
+
+        @if (showAllowMessagingCheckbox)
+        {
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label>@Html.Localize("Allow Email Messaging:")</label>
+                </div>
+                <div class="col-sm-3">
+                    @Html.RadioButtonFor(model => model.AllowEmailMessaging, true) &nbsp;@Html.Localize("Yes")
+                </div>
+                <div class="col-sm-3">
+                    @Html.RadioButtonFor(model => model.AllowEmailMessaging, false) &nbsp;@Html.Localize("No")
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label>@Html.Localize("Allow SMS Messaging:")</label>
+                </div>
+                <div class="col-sm-3">
+                    @Html.RadioButtonFor(model => model.AllowSmsMessaging, true) &nbsp;@Html.Localize("Yes")
+                </div>
+                <div class="col-sm-3">
+                    @Html.RadioButtonFor(model => model.AllowSmsMessaging, false) &nbsp;@Html.Localize("No")
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.AllowEmailMessaging)
+            @Html.HiddenFor(model => model.AllowSmsMessaging)
+        }
+    </form>
+</div>
+

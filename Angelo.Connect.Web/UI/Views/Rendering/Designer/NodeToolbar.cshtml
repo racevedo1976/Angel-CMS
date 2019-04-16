@@ -1,0 +1,181 @@
+﻿@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Security
+@inject IContextAccessor<UserContext> userContextAccessor
+@{
+    var userContext = userContextAccessor.GetContext();
+}
+
+<div class="content-menu-template">
+    <div class="content-menu clearfix">
+        <ul class="content-menu-group pull-left ght list-inline">
+            <li class="content-menu-item">
+                <a name="settings" title="@Html.Localize("Settings")">
+                    <i class="fa fa-gear fa-fw"></i>
+                </a>
+            </li>
+            <li class="content-menu-divider">&nbsp;</li>
+            <li class="content-menu-item">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" title="@Html.Localize("Backgrounds")">
+                        <i class="fa fa-window-maximize fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a name="background" data-background-class="bg-default">
+                                <span class="content-menu-bg-preview bg-default"></span>
+                                @Html.Localize("Default")
+                            </a>
+                            <a name="background" data-background-class="bg-contrast">
+                                <span class="content-menu-bg-preview bg-contrast"></span>
+                                @Html.Localize("Contrast")
+                            </a>
+                            <a name="background" data-background-class="bg-muted">
+                                <span class="content-menu-bg-preview bg-muted"></span>
+                                @Html.Localize("Muted")
+                            </a>
+                            <a name="background" data-background-class="bg-clean">
+                                <span class="content-menu-bg-preview bg-clean"></span>
+                                @Html.Localize("Clean")
+                            </a>
+                            <a name="background" data-background-class="bg-dark">
+                                <span class="content-menu-bg-preview bg-dark"></span>
+                                @Html.Localize("Dark")
+                            </a>
+                            <a name="background" data-background-class="bg-fancy">
+                                <span class="content-menu-bg-preview bg-fancy"></span>
+                                @Html.Localize("Fancy")
+                            </a>
+                            <a name="background" data-background-class="bg-success">
+                                <span class="content-menu-bg-preview bg-success"></span>
+                                @Html.Localize("Success")
+                            </a>
+                            <a name="background" data-background-class="bg-info">
+                                <span class="content-menu-bg-preview bg-info"></span>
+                                @Html.Localize("Info")
+                            </a>
+                            <a name="background" data-background-class="bg-warning">
+                                <span class="content-menu-bg-preview bg-warning"></span>
+                                @Html.Localize("Warning")
+                            </a>
+                            <a name="background" data-background-class="bg-danger">
+                                <span class="content-menu-bg-preview bg-danger"></span>
+                                @Html.Localize("Danger")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="content-menu-item" name="stretch" style="display: none">
+                <a name="stretch" title="@Html.Localize("Toggle Full Width")">
+                    <i class="fa fa-expand fa-rotate-45 fa-fw"></i>
+                </a>
+            </li>
+            <li class="content-menu-item" name="padding" style="display: none">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" title="@Html.Localize("Top & Bottom Padding")">
+                        <i class="fa fa-expand fa-rotate-135 fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a name="padding" data-value="0">@Html.Localize("None")</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="dropdown-item">
+                            <a name="padding" data-value="15px">15px</a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a name="padding" data-value="30px">30px</a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a name="padding" data-value="60px">60px</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+
+            <li class="content-menu-item">
+                <div class="dropdown maxHeightDropDown">
+                    <a name="maxheightLink" class="dropdown-toggle" data-toggle="dropdown" title="@Html.Localize("Edit Max Height")">
+                        <i class="fa fa-arrows-v fa-fw"></i>
+                    </a>
+                    <div class="dropdown-menu" style="width: 250px; padding: 5px;">
+                        <div class="input-group">
+                            <input name="maxheight" class="form-control" placeholder="Ex: 300px" />
+                            <span class="input-group-btn">
+                                <a class="btn btn-default">Apply</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="content-menu-item" name="alignment">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" title="@Html.Localize("Alignment")">
+                        <i class="fa fa-align-center fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a name="alignment" data-value="none">
+                                 None
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a name="alignment" data-value="left">
+                                <i class="fa fa-align-left fa-fw"></i> Left
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a name="alignment" data-value="center">
+                                <i class="fa fa-align-center fa-fw"></i> Center
+                            </a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a name="alignment" data-value="right">
+                                <i class="fa fa-align-right fa-fw"></i> Right
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+
+
+            @if (userContext.IsCorpUser)
+            {
+                <li class="content-menu-item">
+                    <div class="dropdown">
+                        <a name="classes" class="dropdown-toggle" data-toggle="dropdown" title="@Html.Localize("Edit Css Classes")">
+                            <i class="fa fa-css3 fa-fw"></i>
+                        </a>
+                        <div class="dropdown-menu" style="width: 250px; padding: 5px;">
+                            <input name="classes" class="form-control" />
+                        </div>
+                    </div>
+                </li>
+            }
+            <li class="content-menu-item">
+                <a name="reload" title="@Html.Localize("Reload")">
+                    <i class="fa fa-refresh fa-fw"></i>
+                </a>
+            </li>
+            <li class="content-menu-divider content-menu-end"></li>
+            <li class="content-menu-item">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" title="@Html.Localize("Remove")">
+                        <i class="fa fa-trash fa-fw text-danger"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a name="remove">@Html.Localize("Confirm Delete")</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+

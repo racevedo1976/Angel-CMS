@@ -1,0 +1,26 @@
+﻿@using Angelo.Connect.Announcement.Models
+@using Angelo.Connect.Rendering;
+
+@model AnnouncementPost
+
+@{
+    var returnUrl = ViewData.GetReturnUrl();
+
+    var settingsUrl = $"/sys/console/announcement/posts/{Model.Id}/settings";
+    var designUrl = $"/sys/console/announcement/posts/{Model.Id}/edit";
+}
+
+<ul class="list-inline">
+    <li>
+        <a onclick="$.console('announcement','@designUrl')">
+            <i class="fa fa-edit"></i> &nbsp;
+            @Html.Localize("Design")
+        </a>
+    </li>
+    <li>
+        <a onclick="$.console('announcement','@settingsUrl')">
+            <i class="fa fa-gear"></i> &nbsp;
+            @Html.Localize("Settings")
+        </a>
+    </li>
+</ul>

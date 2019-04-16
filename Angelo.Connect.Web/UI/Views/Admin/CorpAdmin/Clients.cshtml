@@ -1,0 +1,238 @@
+﻿@{ 
+    var clientId = (string)ViewData["ClientId"];
+    var productId = (string)ViewData["ProductId"];
+    var menuTypeClient = Angelo.Connect.Menus.MenuType.ClientTools.ToString();
+}
+
+@section Title {
+    @Html.Localize("Manage Clients")
+}
+
+@section Panel {
+
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#detailsTabPane" data-toggle="tab">
+                @Html.Localize("Client Details")
+            </a>
+        </li>
+        <li>
+            <a href="#appTabPane" data-toggle="tab">
+                @Html.Localize("Client Applications")
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="tabContent">
+        <div id="detailsTabPane" class="tab-pane fade in active">
+            <div id="clientEditToolbar" class="toolbar">
+                <a name="save" asp-authorize asp-policy="@("CanEditClients")" class="fa fa-save" title="@Html.Localize("Save")" disabled></a>
+            </div>
+            <component id="clientEditForm" type="ClientEditForm"></component>
+        </div>
+        <div id="appTabPane" class="tab-pane fade">
+            <div id="appListToolbar" asp-authorize asp-policy="@("CanAssignProducts")" class="toolbar" style="display: none">
+                <a name="add" class="fa fa-plus-square" title="@Html.Localize("Add")"></a>
+                <a name="edit" class="fa fa-edit" title="@Html.Localize("Edit")" disabled></a>
+                <a name="delete" class="fa fa-trash-o" title="@Html.Localize("Delete")" disabled></a>
+            </div>
+            <div id="appEditToolbar" class="toolbar" style="display: none">
+                <a name="save" asp-authorize asp-policy="@("CanAssignProducts")" class="fa fa-save" title="@Html.Localize("Save")" disabled></a>
+                <a name="back" class="fa fa-chevron-left" title="@Html.Localize("Back")">@Html.Localize("Back")</a>
+            </div>
+            <div id="appTabContent">
+                @*<component id="clientProductAppList" type="ClientProductAppList" arg-clientId="@clientId"></component>*@
+            </div>
+        </div>
+    </div>
+}
+
+<div id="clientList">
+    <div id="contentToolbar" class="toolbar">
+        <a name="create" asp-authorize asp-policy="@("CanCreateClients")" class="fa fa-plus-square pull-right">
+            <span>@Html.Localize("Create")</span>
+        </a>
+        @*<a name="delete" class="fa fa-trash-o pull-right" style="display: none">
+                <span>@Html.Localize("Delete")</span>
+          </a>*@
+    </div>
+    <component id="clientGrid" type="ClientGrid"></component>
+</div>
+
+
+
+@section Scripts {
+    <script>
+
+        $(function () {
+
+            var clientAdminRoute = "/sys/clients/{tenant}/admin";
+
+
+            //--------------------------------------------------------------------------
+            //  Client Grid
+
+            $.on("clientGrid.change", function (event, data) {
+                var row = data.sender.select()
+                var model = data.sender.dataItem(row);
+
+                $("#clientEditForm").component().invoke({ clientId: model.Id });
+                $("#clientEditToolbar").toolbar().enable("save");
+
+                $("#appTabContent").loadComponent({
+                    "type": "ClientProductAppList",
+                    "id": "clientProductAppList",
+                    "params": { "clientId": model.Id }
+                });
+                $("#appListToolbar").toolbar().enable("add");
+                $("#appListToolbar").toolbar().disable("edit");
+                $("#appListToolbar").toolbar().disable("delete");
+                $("#appEditToolbar").toolbar().disable("save");
+
+                showToolbar(["clientEditToolbar", "appListToolbar"]);
+                //activateTab('detailsTabPane');
+            })
+
+            $.on("contentToolbar.create", function () {
+
+                $("#appListToolbar").toolbar().disable("add");
+                $("#appListToolbar").toolbar().disable("edit");
+                $("#appListToolbar").toolbar().disable("delete");
+                $("#appTabContent").empty();
+
+                $("#clientEditForm").component().invoke({ clientId: "", create: true });
+                $("#clientEditToolbar").toolbar().enable("save");
+                activateTab('detailsTabPane');
+            });
+
+            $.on("clientGrid.clientManagement", function (event, data) {
+                var tenant = data.TenantKey;
+                location.href = clientAdminRoute.replace("{tenant}", tenant);
+            });
+
+            //--------------------------------------------------------------------------
+            //  Client Edit Form
+
+            $.on("clientEditToolbar.save", function () {
+                $("#clientEditForm").form().post();
+            });
+
+            $.on("clientEditForm.submit", function (event, data) {
+                $("#clientGrid").component().invoke();
+            });
+
+
+            //--------------------------------------------------------------------------
+            //  Client Product Apps List
+
+            $.on("clientProductAppList.change", function (event, data) {
+                //var row = data.sender.select()
+                //var model = data.sender.dataItem(row);
+
+                $("#appListToolbar").toolbar().enable("edit");
+                $("#appListToolbar").toolbar().enable("delete");
+            })
+
+            $.on("appListToolbar.add", function () {
+                var selectedClient = selectedGridItem("clientGrid");
+                var clientId = selectedClient.Id;
+                $("#appTabContent").loadComponent({
+                    "type": "ClientProductAppEdit",
+                    "id": "clientProductAppEdit",
+                    "params": { "clientId": clientId }
+                });
+                $("#appEditToolbar").toolbar().disable("save");
+                showToolbar(["clientEditToolbar", "appEditToolbar"]);
+            });
+
+            $.on("appListToolbar.edit", function () {
+                var selectedApp = selectedGridItem("clientProductAppList");
+                var appId = selectedApp.ClientProductAppId;
+                $("#appTabContent").loadComponent({
+                    "type": "ClientProductAppEdit",
+                    "id": "clientProductAppEdit",
+                    "params": { "appId": appId }
+                });
+                $("#appEditToolbar").toolbar().disable("save");
+                showToolbar(["clientEditToolbar", "appEditToolbar"]);
+            });
+
+            $.on("clientProductAppEdit.load", function () {
+                $("#appEditToolbar").toolbar().enable("save");
+            })
+
+            $.on("appListToolbar.delete", function (event, data) {
+                var selectedProduct = selectedGridItem("clientProductAppList");
+                if (confirm("@Html.Localize("Are you sure you would like to remove this addon?")")) {
+                  
+                    $("#form_clientProductAppList").form().delete("@routes.CorpApi("client/app/")" + selectedProduct.ClientProductAppId)
+                        .done(function() {
+                            $("#appListToolbar").toolbar().disable("edit");
+                            $("#appListToolbar").toolbar().disable("delete");
+                            $("#clientProductAppList").component().invoke({ clientId: selectedProduct.ClientId });
+                        });
+
+                }
+            });
+
+
+            //--------------------------------------------------------------------------
+            //  Client Product Apps Edit
+
+            $.on("appEditToolbar.save", function () {
+                $("#clientProductAppEdit").form().post();
+            })
+
+            $.on("clientProductAppEdit.submit", function (event, data) {
+                var selectedClient = selectedGridItem("clientGrid");
+                var clientId = selectedClient.Id;
+                $("#appTabContent").loadComponent({
+                    "type": "ClientProductAppList",
+                    "id": "clientProductAppList",
+                    "params": { "clientId": clientId }
+                });
+                $("#appListToolbar").toolbar().disable("edit");
+                $("#appListToolbar").toolbar().disable("delete");
+                showToolbar(["clientEditToolbar", "appListToolbar"]);
+            });
+
+            $.on("appEditToolbar.back", function () {
+                var selectedClient = selectedGridItem("clientGrid");
+                var clientId = selectedClient.Id;
+                $("#appTabContent").loadComponent({
+                    "type": "ClientProductAppList",
+                    "id": "clientProductAppList",
+                    "params": { "clientId": clientId }
+                });
+                $("#appListToolbar").toolbar().disable("edit");
+                $("#appListToolbar").toolbar().disable("delete");
+                showToolbar(["clientEditToolbar", "appListToolbar"]);
+            })
+
+
+            //--------------------------------------------------------------------------
+            //  Helper Functions
+
+            function activateTab(tab) {
+                $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+            };
+
+            function showToolbar(toolbarIds) {
+                var allToolbars = $("#tabContent").find("[id*='Toolbar']");
+
+                allToolbars.hide();
+
+                for (i = 0; i < toolbarIds.length; i++) {
+                    $("#" + toolbarIds[i]).show();
+                }
+            }
+
+            function selectedGridItem(gridId) {
+                var theGrid = $("#" + gridId).data("kendoGrid");
+                var selectedItem = theGrid.dataItem(theGrid.select());
+                return selectedItem;
+            }
+
+        });
+    </script>
+}

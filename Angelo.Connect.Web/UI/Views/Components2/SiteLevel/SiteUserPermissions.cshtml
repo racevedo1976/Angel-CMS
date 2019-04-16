@@ -1,0 +1,75 @@
+﻿
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Security
+@using Kendo.Mvc.UI.Fluent
+
+@{
+    var poolId = (string)ViewData["PoolId"];
+    var userId = (string)ViewData["UserId"];
+    var componentId = (string)ViewData["cid"];
+
+    var claims = (IList<SecurityClaim>)ViewData["ClaimList"];
+    var selectedClaims = (IList<Angelo.Identity.Models.UserClaim>)ViewData["SelectedClaims"];
+    var permissions = (IEnumerable<SecurityPermissionViewModel>)ViewData["PermissionGroups"];
+}
+
+<form class="form form-horizontal" action="@routes.SiteApi($"users/{userId}/permissions")" id="@componentId">
+    <input type="hidden" value="@poolId" name="PoolId" />
+    <input type="hidden" value="@userId" name="UserId" />
+    
+
+    <div>
+        @(
+        Html.Kendo().TreeView()
+        .Name(componentId + "TreeView")
+        .Checkboxes(checkboxes => checkboxes.CheckChildren(true))
+        .ExpandAll(true)
+        .CheckboxTemplate("<input type='checkbox' name='SelectedPermissionGroups' value='#= item.text #' data-title='#= item.text #' class='claimChk' #if(item.checked) { # checked # } # />")
+        .Events(events =>
+                events
+                //.Check("onGroupChecked")
+                .DataBound("onDataBound")
+                )
+        .BindTo(permissions, (NavigationBindingFactory<TreeViewItem> mappings) =>
+        {
+            mappings.For<SecurityPermissionViewModel>(bindings => bindings.ItemDataBound((item, category) =>
+            {
+                item.Text = category.Title;
+                item.Checked = category.Selected;
+                //item.Expanded = true;
+            })
+           .Children(category => category.Permissions));
+        })
+        //.LoadOnDemand(false)
+        .AutoBind(true)
+        )
+
+
+    </div>
+</form>
+
+<script>
+
+    var permissionViewData = {
+        poolId: '@poolId'
+    };
+
+    function onDataBound(e) {
+        e.sender.expand(".k-item");
+    }
+
+
+    $(document).ready(function () {
+        
+        $(".chkSelected").each(function (i, chk) {
+
+            $(chk).prop("checked", true);
+        });
+    });
+
+</script>
+
+
+
+

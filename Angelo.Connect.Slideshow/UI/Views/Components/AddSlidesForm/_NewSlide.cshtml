@@ -1,0 +1,49 @@
+﻿<form id="newSlideForm" class="form" data-ajax-form="true" action="/sys/content/slide/edit">
+<a onclick="loadNewSlide()">
+    @*TODO Move these styles to class overrides*@
+    <div class="thumbnail" style="width:150pt;">
+        <div style="text-align:center;height:80pt;">
+            <span class="glyphicon glyphicon-plus" style="background-color:#333333;font-size:2em;padding:15pt;margin:15pt;" aria-hidden="true"></span>
+        </div>
+        <div class="caption panel-footer">
+            New Slide
+        </div>
+    </div>
+</a>
+</form>
+
+
+<script type="text/javascript">
+    function loadNewSlide() {
+       // $('#modalBuffer').html($('.modal-content').html());
+
+        // Load content into modal-content
+        // empties modal ontent and then adds a <component>
+        $('#addEditSlideWorkspace').loadComponent({
+            "type": "SlideForm",
+            "id": "slideForm",
+            "params": {
+                @*"clientId": "@clientId",
+                "collectionId": "@collectionId"*@
+                }
+        }).done(function () {
+        });
+    }
+
+    //$.on("newSlideForm.submit", function (event, data) {
+    function loadNewSlide_bak() {
+        $('#modalBuffer').html($('.modal-content').html());
+
+        // Load content into modal-content
+            // empties modal ontent and then adds a <component>
+        $('.modal-content').loadComponent({
+            "type": "SlideForm",
+            "id": "slideForm",
+            "params": {
+                @*"clientId": "@clientId",
+                "collectionId": "@collectionId"*@
+            }
+        }).done(function () {
+        });
+    }
+</script>

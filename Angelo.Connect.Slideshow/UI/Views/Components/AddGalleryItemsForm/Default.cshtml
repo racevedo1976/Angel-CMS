@@ -1,0 +1,223 @@
+﻿@using Angelo.Common.Mvc
+@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Services
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Microsoft.Extensions.Options
+
+@inject IOptions<DriveOptions> _driveOptions
+
+@model GalleryWidget
+
+
+<component id="contentSelector" type="ContentSelector"></component>
+
+<div class="container-fluid">
+    <h3>@Html.Localize("Gallery Items")</h3>
+    <button class="btn btn-primary btn-sm padded" style="float:right;" onclick="selectMultipleImages();">@Html.Localize("Add")</button>
+</div>
+
+<div id="galleryItem" style="display:none;">
+    <component id="galleryItemSave" type="GalleryItemSave" lazy="true"></component>
+</div>
+
+<div id="galleryList">
+    <component id="galleryItemList" type="GalleryItemList" arg-widgetId="@Model.Id"></component>
+</div>
+
+<script>
+    var userId = '@User.GetUserId()';
+    var driveUrl = '@_driveOptions.Value.Authority';
+    var widgetId = '@Model.Id';
+
+    function selectMultipleImages() {
+        $.mediaBrowser({
+            title: "Select an Image",
+
+                userId: userId,
+                driveUrl: driveUrl,
+                multi: true
+            })
+            .done(function (images) {
+                
+                var queue = [];
+                $.each(images, function (i, img) {
+
+                    queue.push(img.name);
+
+                    var model = {
+                        WidgetId: widgetId,
+                        Url: img.imageUrl,
+                        Title: "  "
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/widgets/gallery/add',
+                        data: model,
+                        success: function (result) {
+                            var i = queue.pop();
+
+                            if (queue.length == 0) {
+
+                                $("#galleryItem").hide();
+                                $("#galleryList").loadComponent({
+                                    "type": "GalleryItemList",
+                                    "id": "galleryItemList",
+                                    "params": {
+                                        "widgetId": model.WidgetId
+                                    }
+                                });
+                            };
+                        },
+                        error: function(xhr) {
+
+                        }
+                    });
+
+                });
+
+            })
+    }
+
+
+    function selectOne() {
+        //debugger;
+        var $input = $("#ImageUrl");
+
+        $.mediaBrowser({
+            title: "Select an Image",
+            userId: userId,
+            driveUrl: driveUrl
+        })
+        .done(function (image) {
+            var imagelink = '';
+
+            if (image) {
+                if (image.isCropped) {
+                    imagelink = image.croppedUrl;
+
+                } else {
+                    // if no selection is made image will be undefined
+                    imagelink = image.imageUrl;
+                }
+            }
+
+
+            $("#galleryItem").show();
+            $("#galleryItem").loadComponent({
+                "type": "GalleryItemSave",
+                "id": "galleryItemSave",
+                "params": {
+                    "widgetId": widgetId,
+                    "url": imagelink
+                }
+            });
+            // if no selection is made image will be undefined
+            //$input.val(image ? image.url : "");
+        })
+    }
+
+    function CropImage(input, thumbImage) {
+        var $input = $("#" + input);
+        var $thumb = $("#" + thumbImage);
+
+        $.imageCropper({
+            editImageMode: true,           //set to true if image already cropped (previously) and we are just edting that cropped version
+            editImageUrl: $input.val(),    //if editImageMode = true, then pass the URL used for this cropped image with coordinates.
+            driveUrl: driveUrl             // *Require*  drive host, url.
+        }).done(function (image) {
+            //the return is the new url with new coordinates
+            $input.val(image ? image.croppedUrl : "");
+            $thumb.attr("src", image.croppedUrl);
+        });
+    }
+
+    function addItem() {
+        var widgetId = document.getElementById('newItemWidgetId').value,
+            url = document.getElementById('newItemUrl').value,
+            caption = document.getElementById('newItemCaption').value;
+        var model = {
+            WidgetId: widgetId,
+            Url: url,
+            Title: caption
+        };
+        if (caption.length == 0) {
+            alert("Image must have a caption.")
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/api/widgets/gallery/add',
+                data: model,
+                success: function (result) {
+                    $("#galleryItem").hide();
+                    $("#galleryList").loadComponent({
+                        "type": "GalleryItemList",
+                        "id": "galleryItemList",
+                        "params": {
+                            "widgetId": model.WidgetId
+                        }
+                    });
+                },
+                error: function (xhr) {
+
+                }
+            });
+        }
+    }
+
+
+    function updateItem(id, caption) {
+        var model = {
+            id: id,
+            caption: caption
+        };
+        if (caption.length == 0) {
+            alert("Image must have a caption.")
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/api/widgets/gallery/item/caption',
+                data: model,
+                success: function (result) {
+                    //var widgetId = document.getElementById("_widgetId").value;
+                    //$("#galleryList").loadComponent({
+                    //    "type": "GalleryItemList",
+                    //    "id": "galleryItemList",
+                    //    "params": {
+                    //        "widgetId": widgetId
+                    //    }
+                    //});
+                },
+                error: function (xhr) {
+
+                }
+            });
+        }
+    }
+
+    function removeItem(id) {
+        var model = {
+            id: id
+        };
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/widgets/gallery',
+            data: model,
+            success: function (result) {
+                var widgetId = document.getElementById("_widgetId").value;
+                $("#galleryList").loadComponent({
+                    "type": "GalleryItemList",
+                    "id": "galleryItemList",
+                    "params": {
+                        "widgetId": widgetId
+                    }
+                });
+            },
+            error: function (xhr) {
+
+            }
+        });
+    }
+</script>

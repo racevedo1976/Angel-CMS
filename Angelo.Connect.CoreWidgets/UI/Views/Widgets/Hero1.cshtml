@@ -1,0 +1,17 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.HeroUnit
+
+
+<div class="jumbotron">
+    <h1>
+        @Model.Title
+    </h1>
+    <p>
+        @Html.Raw(Model.Body)
+    </p>
+    @if (!string.IsNullOrWhiteSpace(Model.Url))
+    {
+        <p>
+            <a class="btn btn-primary btn-lg" href="@Model.Url" role="button">Learn more</a>
+        </p>
+    }
+</div>

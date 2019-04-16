@@ -1,0 +1,64 @@
+﻿@model Angelo.Connect.Calendar.Models.CalendarWidgetSetting
+
+<form class="form" data-ajax-form="true" action="/api/widgets/calendar">
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.SiteId)
+    @Html.HiddenFor(x => x.CalendarId)
+    
+    <div class="form-group">
+        <h3>Select calendar viewing options</h3>
+    </div>
+
+    <div class="form-group">
+        <label >Week starts on:</label>
+        <div>
+            <select class="form-control" asp-for="StartDayOfWeek">
+                <option>Sunday</option>
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Default View:</label>
+        <div>
+            <select class="form-control" asp-for="DefaultView">
+                <option value="month">Month</option>
+                <option value="agendaWeek">Week</option>
+                <option value="agendaDay">Day</option>
+                <option value="listMonth">List</option>
+            </select>  
+        </div>
+    </div>
+    @*<div class="form-group">
+        <label>12 hr Format</label>
+        <div>
+            <input type="radio" asp-for="Format12" value="true" /> Yes
+            <input type="radio" asp-for="Format12" value="false" /> No
+        </div>
+    </div>*@
+    <div class="form-group">
+        <label>Available Views</label>
+        <div>
+            @Html.CheckBoxFor(x => x.MonthView, true) Month
+            @Html.CheckBoxFor(x => x.WeekView, true) Week
+            @Html.CheckBoxFor(x => x.DayView, true) Day
+            @Html.CheckBoxFor(x => x.ListView, true) List
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Hide Weekends? (Saturday & Sunday)</label>
+        <div>
+            <input type="radio" asp-for="HideWeekends" value="true" /> Yes
+            <input type="radio" asp-for="HideWeekends" value="false" /> No
+        </div>
+    </div>
+</form>
+
+
+

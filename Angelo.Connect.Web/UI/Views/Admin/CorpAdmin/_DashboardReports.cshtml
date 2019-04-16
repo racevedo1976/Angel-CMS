@@ -1,0 +1,142 @@
+﻿<div class="panel dashboard-panel">
+    <div class="panel-heading">
+        <span class="panel-title">@Html.Localize("Server Health")</span>
+    </div>
+    <div class="panel-body">
+
+        <strong class="text-muted">
+            @Html.Localize("Processor Utilization")
+        </strong>
+        @(Html.Kendo().Chart()
+            .Name("rptProcessor")
+            .HtmlAttributes(new { style = "height: 50px; margin-right: 20px" })
+            .Legend(legend => legend
+                .Visible(false)
+            )
+            .Series(series => {
+                series.Bullet(new double[][] { new double[] { 32.3, 76.7 } }).Color("rgba(0,40,240, 0.6)");
+            })
+            .ChartArea(chartArea => chartArea.Margin(0))
+            .CategoryAxis(axis => axis
+                .MajorGridLines(lines => lines.Visible(false))
+                .MajorTicks(lines => lines.Visible(false))
+            )
+            .ValueAxis(axis => axis
+                .Numeric()
+                .Min(0)
+                .Max(100)
+                .MinorTicks(lines => lines.Visible(true))
+                .MajorGridLines(lines => lines.Visible(false))
+                .PlotBands(bands => {
+                    bands.Add().From(0).To(80).Color("#ccc").Opacity(0.15);
+                    bands.Add().From(80).To(100).Color("#ccc").Opacity(0.4);
+                })
+            )
+            .Tooltip(tooltip => tooltip
+                .Visible(true)
+                .Shared(true)
+                .Template($"{Html.Localize("Label.Maximum")} : #= value.target # <br /> {Html.Localize("Label.Average")}: #= value.current #")
+            )
+        )
+
+
+        <strong class="text-muted">
+            @Html.Localize("Label.ServerHealth.Memory")
+        </strong>
+        @(Html.Kendo().Chart()
+            .Name("rptMemory")
+            .HtmlAttributes(new { style = "height: 50px; margin-right: 20px" })
+            .Legend(legend => legend
+                .Visible(false)
+            )
+            .Series(series => {
+                series.Bullet(new double[][] { new double[] { 48.21, 58.35 } }).Color("rgba(0,40,240, 0.6)");
+            })
+            .ChartArea(chartArea => chartArea.Margin(0))
+            .CategoryAxis(axis => axis
+                .MajorGridLines(lines => lines.Visible(false))
+                .MajorTicks(lines => lines.Visible(false))
+            )
+            .ValueAxis(axis => axis
+                .Numeric()
+                .Min(0)
+                .Max(100)
+                .MinorTicks(lines => lines.Visible(true))
+                .MajorGridLines(lines => lines.Visible(false))
+                .PlotBands(bands => {
+                    bands.Add().From(0).To(80).Color("#ccc").Opacity(0.15);
+                    bands.Add().From(80).To(100).Color("#ccc").Opacity(0.4);
+                })
+            )
+            .Tooltip(tooltip => tooltip
+                .Visible(true)
+                .Shared(true)
+                .Template($"{Html.Localize("Maximum")} : #= value.target # <br /> {Html.Localize("Average")}: #= value.current #")
+            )
+        )
+
+        <strong class="text-muted">
+            @Html.Localize("Disk Space")
+        </strong>
+        @(Html.Kendo().Chart()
+            .Name("rptDisk")
+            .HtmlAttributes(new { style = "height: 50px; margin-right: 20px" })
+            .Legend(legend => legend
+                .Visible(false)
+            )
+            .Series(series => {
+                series.Bullet(new double[][] { new double[] { 872 } }).Color("rgba(0,40,240, 0.6)");
+            })
+            .ChartArea(chartArea => chartArea.Margin(0))
+            .CategoryAxis(axis => axis
+                .MajorGridLines(lines => lines.Visible(false))
+                .MajorTicks(lines => lines.Visible(false))
+            )
+            .ValueAxis(axis => axis
+                .Numeric()
+                .Min(0)
+                .Max(1024)
+                .MinorTicks(lines => lines.Visible(true))
+                .MajorGridLines(lines => lines.Visible(false))
+                .PlotBands(bands => {
+                    bands.Add().From(0).To(820).Color("#ccc").Opacity(0.15);
+                    bands.Add().From(820).To(1024).Color("#ccc").Opacity(0.4);
+                })
+            )
+            .Tooltip(tooltip => tooltip
+                .Visible(true)
+                .Shared(true)
+                .Template($"{Html.Localize("Current")}: #= value.current #")
+            )
+        )
+    </div>
+</div>
+
+
+<div class="panel dashboard-panel">
+    <div class="panel-heading">
+        <span class="panel-title">@Html.Localize("Recent Jobs")</span>
+    </div>
+    <div class="panel-body">
+        @(Html.Kendo().Grid<Angelo.Connect.Logging.DbLogEvent>()
+            .Name("gridJobs")
+            .Columns(columns => {
+                columns.Bound(c => c.Id).Width(50).HtmlAttributes(new { style = "vertical-align: top " });
+                columns.Bound(c => c.LogLevel).Title("Level").Width(65).HtmlAttributes(new { style = "vertical-align: top " });
+                columns.Bound(c => c.Message);
+            })
+            .HtmlAttributes(new { style = "max-height: 300px; margin-right: 20px;" })
+            .Scrollable()
+            .Sortable()
+            .Pageable(pageable => pageable
+                .Info(false)
+                .ButtonCount(5))
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Read(read => read.Url("/sys/jobs/log"))
+            )
+        )
+
+    </div>
+</div>
+

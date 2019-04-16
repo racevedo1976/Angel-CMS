@@ -1,0 +1,190 @@
+[
+  {
+    "zone": "footer",
+    "type": "html",
+    "view": "html-raw",
+    "style": {
+      "background": "bg-contrast",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {
+      "html": "<div style=\"text-align:center;padding:20px;\">102 Maddox Rd | P.O. Box 50 Avon, MS 38723 | Phone 662-335-7186 | Fax 662-378-2285</div>",
+      "staticToolbar": false
+    }
+  },
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "text-center"
+        },
+        "model": {
+          "html": "<a href=\"http://www.schoolinsites.com/\"><img alt=\"SCHOOLinSITES\" src=\"/demo/images/SisPoweredSmall.png\" /></a>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "search",
+        "view": "search-search1",
+        "style": {
+          "classes": "text-center cs-text-white",
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "title": ""
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "html",
+    "view": "html-raw",
+    "style": {
+      "background": "bg-contrast",
+      "classes": "cs-fullwidthheaderbar",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {
+      "html": "<div class=\"cs-socialmediaback\"><div class=\"cs-socialmedia\"><a href=\"https://twitter.com\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-twitter\"></em></a></div><div class=\"cs-socialmedia\"><a href=\"https://www.instagram.com\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-instagram\"></em></a></div><div class=\"cs-socialmedia\"><a href=\"https://www.facebook.com\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-facebook\"></em></a></div></div>",
+      "staticToolbar": false
+    }
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "classes": "cs-row-33-66",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Logo",
+          "src": "/templates/royal/images/logo.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "zone",
+        "view": "zone-4",
+        "style": {},
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "image",
+            "view": "image-inline",
+            "style": {},
+            "model": {
+              "caption": "Parents",
+              "src": "/templates/royal/images/Ribbon1.png",
+              "radius": "0px",
+              "link": "https://royaltemplateqa.schoolinsites.com/Parents",
+              "linkNewWindow": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "image",
+            "view": "image-inline",
+            "style": {},
+            "model": {
+              "caption": "Students",
+              "src": "/templates/royal/images/Ribbon2.png",
+              "radius": "0px",
+              "link": "https://royaltemplateqa.schoolinsites.com/Students",
+              "linkNewWindow": false
+            }
+          },
+          {
+            "zone": "cell-3",
+            "type": "image",
+            "view": "image-inline",
+            "style": {},
+            "model": {
+              "caption": "Community",
+              "src": "/templates/royal/images/Ribbon3.png",
+              "radius": "0px",
+              "link": "https://royaltemplateqa.schoolinsites.com/Community",
+              "linkNewWindow": false
+            }
+          },
+          {
+            "zone": "cell-4",
+            "type": "image",
+            "view": "image-inline",
+            "style": {},
+            "model": {
+              "caption": "Faculty",
+              "src": "/templates/royal/images/Ribbon4.png",
+              "radius": "0px",
+              "link": "https://royaltemplateqa.schoolinsites.com/Faculty",
+              "linkNewWindow": false
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "cs-row-nopadding cs-gray-panel",
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><img src=\"/templates/royal/images/mottodefault.png\" alt=\"motto\" style=\"width:100%;max-width:1006px;\" /></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "side",
+    "type": "navauto",
+    "view": "v-nav-auto",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {}
+  }
+]

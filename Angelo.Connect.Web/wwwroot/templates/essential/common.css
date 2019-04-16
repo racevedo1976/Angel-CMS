@@ -1,0 +1,207 @@
+﻿/*----------------------------------------------
+Import Google Fonts
+----------------------------------------------*/
+@import url(http://fonts.googleapis.com/css?family=Roboto:400|Raleway:200,300,400,500,700,900);
+
+
+/* General Text */
+
+body {
+    margin: 0px;
+    font-family: "Raleway", Sans-serif;
+    font-weight: 400;
+    background-color: #fff !important;
+    color: #232323;
+}
+
+h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6
+{
+    font-weight: 200;
+    letter-spacing: 0.4px;
+    font-family: "Raleway", Sans-serif;
+    text-transform: uppercase;
+    color: inherit;
+}
+
+h3,h4,h5,h6,.h3,.h4,.h5,.h6
+{
+    font-weight: 400;
+}
+
+p 
+{
+    font-family: 'Raleway', sans-serif;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 28px;
+    letter-spacing: 0.2px;
+}
+
+.cns-search .search-field{
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+/* Links and Menus */
+a, a:hover, a:focus, a:active, a.active {
+    outline: 0;
+}
+
+
+/* Top Navigation */
+.cns-topnavigation .navbar{
+    background-color: transparent;
+    border-color: transparent;
+    background-image: none;
+}
+
+.cns-topnavigation .navbar-collapse {
+    border-color: rgba(255,255,255,.02);
+}
+
+.cns-topnavigation .navbar-toggle {
+    background-color: #fed136;
+    border-color: #fed136;
+}
+
+    .cns-topnavigation .navbar-toggle .icon-bar {
+        background-color: #fff;
+    }
+
+    .cns-topnavigation .navbar-toggle:hover, .cns-topnavigation .navbar-toggle:focus {
+        background-color: #fed136;
+    }
+
+.cns-topnavigation .nav li a {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 400;
+    color: #000;
+    border-bottom: 1px solid;
+    border-color: #000;
+    border-radius: 0;
+}
+
+
+.cns-topnavigation .navbar-nav > .active > a,
+.cns-topnavigation .navbar-nav > .active > a:hover, 
+.cns-topnavigation .navbar-nav > .active > a:focus {
+
+    color: #fff;
+    background-color: #fed136;
+    border-radius: 5px;
+    border-color: transparent;
+}
+
+@media (max-width:767px){
+    .cns-topnavigation .navbar
+    {
+        background-color: #f1f1f1;
+    }
+
+    .cns-topnavigation .nav li a
+    {
+        border-radius: 0;
+    }
+}
+
+
+/*----------------------------------------------
+Side Navigation
+/*----------------------------------------------*/
+
+.cns-sidenavigation, .cns-sidenavigation a {
+    font-family: "Roboto",sans-serif;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: #000;
+    margin: 10px 15px;
+    padding: 0 0 2px 0;
+}
+
+    .cns-sidenavigation a:hover, .cns-sidenavigation a:focus, .cns-sidenavigation a:active {
+        color: #7D1616;
+    }
+
+
+
+
+/*-----------------------------------------
+Footer
+-----------------------------------------*/
+.cns-footer {
+    padding: 30px;
+}
+
+
+/*-----------------------------------------
+Custom Classes
+-----------------------------------------*/
+.cns-quicklinks .row,
+.cns-quicklinks .row > div
+{
+    margin: 0 !important;
+}
+
+.cns-quicklinks .row > div:nth-child(2n+1)
+{
+    background-color: #2b2b2b; 
+
+}
+
+/*-----------------------------------------
+Back To Top Button
+-----------------------------------------*/
+.cns-backtotop {
+    position: fixed;
+    z-index: 1000;
+    bottom: 40px;
+    right: 50px;
+}
+
+    .cns-backtotop a 
+    {
+        width: 60px;
+        height: 60px;
+        display: block;
+        text-align: center;
+        font: 11px/100% Arial, Helvetica, sans-serif;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #FFFFFF;
+        background: #A9A9B1;
+        /* background color transition */
+        -webkit-transition: 1s;
+        -moz-transition: 1s;
+        transition: 1s;
+    }
+
+        .cns-backtotop a:hover {
+            background: #fed136;
+        }
+    /* arrow icon (span tag) */
+    .cns-backtotop i {
+        margin-top: 15px;
+        font-size: 28px;
+    }
+
+@media only screen and (min-width : 320px) and (max-width : 480px) {
+    .cns-backtotop {
+        position: fixed;
+        bottom: 10px;
+        right: 30px;
+    }
+
+        .cns-backtotop a {
+            width: 40px;
+            height: 40px;
+        }
+
+        .cns-backtotop i {
+            margin-top: 7px;
+            font-size: 20px;
+        }
+}

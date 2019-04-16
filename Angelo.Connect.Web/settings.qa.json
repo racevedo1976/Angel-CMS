@@ -1,0 +1,55 @@
+﻿{
+  "ConnectionStrings": {
+    "ConnectDB": "Data Source=QaDB;Initial Catalog=Angelo.Connect;Integrated Security=True;MultipleActiveResultSets=true",
+    "JobsDB": "Data Source=QaDB;Initial Catalog=Angelo.Connect;Integrated Security=True;MultipleActiveResultSets=true",
+    "IdentityDB": "Data Source=QaDB;Initial Catalog=Angelo.Identity;Integrated Security=True;MultipleActiveResultSets=true",
+    "DriveDB": "Data Source=QaDB;Initial Catalog=Angelo.Drive;Integrated Security=True",
+    "LdapProxyServer": "http://localhost:54020/"
+  },
+  "OpenIdConnect": {
+    "Authority": "https://aegisqa.schoolinsites.com/",
+    "EndPoints": {
+      "Authorize": "https://aegisqa.schoolinsites.com/connect/authorize",
+      "UserInfo": "https://aegisqa.schoolinsites.com/connect/userinfo",
+      "ObtainToken": "https://aegisqa.schoolinsites.com/connect/token",
+      "RevokeToken": "https://aegisqa.schoolinsites.com/connect/revocation",
+      "ValidateToken": "https://aegisqa.schoolinsites.com/connect/validation",
+      "Register": "https://aegisqa.schoolinsites.com/ui/register",
+      "Logout": "https://aegisqa.schoolinsites.com/auth/{0}/account/logoff",
+      "Meta": "https://aegisqa.schoolinsites.com/.well-known/openid-configuration",
+      "TenantUsers": "https://aegisqa.schoolinsites.com/api/tenants/{0}/users",
+      "TenantRoles": "https://aegisqa.schoolinsites.com/api/tenants/{0}/roles",
+      "PoolUsers": "https://aegisqa.schoolinsites.com/api/pools/{0}/users",
+      "PoolRoles": "https://aegisqa.schoolinsites.com/api/pools/{0}/roles",
+      "Ldap": "https://aegisqa.schoolinsites.com/api/pools/{0}/ldap",
+      "SetPassword": "https://aegisqa.schoolinsites.com/auth/{0}/account/NewUserSetPassword/?userId={1}&code={2}&ru={3}"
+    }
+  },
+  "WebServer": {
+    "UseHttpsRoutes": true,
+    "UseHttpsRewriter": true,
+    "SessionMinutes": 720
+  },
+  "Drive": {
+    "Authority": "https://driveqa.schoolinsites.com/api",
+    "EndPoints": {
+    }
+  },
+  "NotifyMe": {
+    "UnsubscribeDefaultDomain": "http://connect.qa.pcmac.org",
+    "UnsubscribePath": "/sys/notifyme/unsubscribe",
+    "EmailServerHost": "antispam.pcmac.org"
+  },
+  "SiteOptions": [
+    {
+      "SiteKey": "sis",
+      "Key": "GoogleSiteId",
+      "Value": "zXvqOMdNsVd1vMZjHN4NfQhtWOmtGz9I31iJfbzHv4E"
+    },
+    {
+      "SiteKey": "sis",
+      "Key": "GoogleSearchCode",
+      "Value": "015230287576461061678:qw_te68o84q"
+    }
+  ]
+}

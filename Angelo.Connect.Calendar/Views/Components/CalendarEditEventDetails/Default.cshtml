@@ -1,0 +1,779 @@
+﻿@model CalendarEvent
+@using Kendo.Mvc
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+@using Angelo.Connect.Rendering
+@using System.Reflection
+
+@{
+    var sunday = "";
+    var monday = "";
+    var tuesday = "";
+    var wednesday = "";
+    var thursday = "";
+    var friday = "";
+    var saturday = "";
+    var isRecurrent = "";
+    if (Model.RecurrenceDetails != null)
+    {
+        if (!string.IsNullOrEmpty(Model.RecurrenceDetails.DaysOfWeek))
+        {
+            var selectedDaysOfTheWeek = Model.RecurrenceDetails.DaysOfWeek.Split(',');
+            sunday = (selectedDaysOfTheWeek.Any(x => x == "0") ? "checked" : "");
+            monday = (selectedDaysOfTheWeek.Any(x => x == "1") ? "checked" : "");
+            tuesday = (selectedDaysOfTheWeek.Any(x => x == "2") ? "checked" : "");
+            wednesday = (selectedDaysOfTheWeek.Any(x => x == "3") ? "checked" : "");
+            thursday = (selectedDaysOfTheWeek.Any(x => x == "4") ? "checked" : "");
+            friday = (selectedDaysOfTheWeek.Any(x => x == "5") ? "checked" : "");
+            saturday = (selectedDaysOfTheWeek.Any(x => x == "6") ? "checked" : "");
+        }
+
+    }
+
+
+}
+
+
+<div class="form-group">
+    <h3>Enter the event details</h3>
+</div>
+
+<input type="hidden" name="EventId" value="@Model.EventId" />
+<input type="hidden" name="DocumentId" value="@Model.DocumentId" />
+<input type="hidden" name="SiteId" value="@Model.SiteId" />
+<input type="hidden" name="UserId" value="@Model.UserId" />
+@Html.HiddenFor(x => x.IsRecurrent)
+@Html.HiddenFor(x => x.EventEnd)
+@Html.HiddenFor(x => x.EventStart)
+@Html.HiddenFor(x => x.ShowOrganizerName)
+@Html.HiddenFor(x => x.ShowPhoneNumber)
+@Html.HiddenFor(x => x.AllDayEvent)
+@Html.HiddenFor(x => x.RecurrenceDetails.Id)
+@Html.HiddenFor(x => x.RecurrenceDetails.EventId)
+@Html.HiddenFor(x => x.RecurrenceDetails.Frequency)
+@Html.HiddenFor(x => x.RecurrenceDetails.Interval)
+@Html.HiddenFor(x => x.RecurrenceDetails.Months)
+@Html.HiddenFor(x => x.RecurrenceDetails.Count)
+@Html.HiddenFor(x => x.RecurrenceDetails.DayOfMonth)
+@Html.HiddenFor(x => x.RecurrenceDetails.DaysOfWeek)
+@Html.HiddenFor(x => x.RecurrenceDetails.EndDate)
+@Html.HiddenFor(x => x.Posted)
+
+
+
+
+<div class="form-group">
+    <label class="form-label">Event Title</label>
+    <div>
+        <input id="eventTitle" class="form-control" asp-for="Title" spellcheck="true" />
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-5">
+        <div class="form-group">
+            <label class="form-label">Start Date</label>
+            <div>
+                <div class="">
+
+                    @(Html.Kendo().DatePicker()
+                            .Name("datePickerEventStart")
+                            .Value(Model.EventStart)
+                            .HtmlAttributes(new { style = "width: 130px", title = "datetimepicker" })
+                            .Events(e =>
+                            {
+                                e.Change("StartDateChange");
+                            })
+                            .Format("MM/dd/yyyy")  // hh:mm tt
+                                                   // .ParseFormats(new string[] { "MM/dd/yyyy", "hh:mm tt", "yyyy-MM-ddThh:mm:ss" })
+                    )
+
+
+                    @(Html.Kendo().TimePicker()
+                             .Name("datePickerEventHourStart")
+                             .Value(Model.EventStart)
+                             .HtmlAttributes(new { style = "width: 110px", title = "timepicker" })
+                             .Events(e =>
+                             {
+                                 e.Change("StartDateChange");
+                             })
+                    )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-7">
+        <div class="form-group">
+            <label class="form-label">End Date</label>
+            <div class="">
+                @(Html.Kendo().DatePicker()
+                        .Name("datePickerEventEnd")
+                        .Value(Model.EventEnd)
+                        .HtmlAttributes(new { style = "width: 130px", title = "datetimepicker" })
+                         .Events(e =>
+                         {
+                             e.Change("EndDateFromRangeChanged");
+                         })
+                )
+
+                @(Html.Kendo().TimePicker()
+                        .Name("datePickerEventHourEnd")
+                        .Value(Model.EventEnd)
+                        .HtmlAttributes(new { style = "width: 110px", title = "timepicker" })
+                         .Events(e =>
+                         {
+                             e.Change("EndDateFromRangeChanged");
+                         })
+                )
+                <span>
+
+                    <input type="checkbox" id="allDay" @(Model.AllDayEvent ? "checked" : "" ) /> All Day
+                </span>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-sm-3">
+            Repeat event?
+        </div>
+        <div class="col-sm-6">
+            <ul class="ulHorizontal">
+                <li><input name="repeat" value="True" @(Model.IsRecurrent ? "checked" : "") type="radio" />Yes</li>
+                <li><input name="repeat" @(!Model.IsRecurrent ? "checked" : "") value="False" type="radio" />No</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div id="recurrenceDetails" class="@(Model.IsRecurrent ? "" : "hidden")  recurrenceBox">
+        <div class="row">
+            <div class="col-sm-12">
+                <p>Recurrence Pattern</p>
+                <div class="col-sm-3" style="border-right: 1px solid gray;height: 100px;">
+
+                    <ul>
+                        <li><input name="frequecyType" value="Daily" @(Model.RecurrenceDetails?.Frequency == "Daily" ? "checked" : "") checked type="radio" />Daily</li>
+                        <li><input name="frequecyType" value="Weekly" @(Model.RecurrenceDetails?.Frequency == "Weekly" ? "checked" : "") type="radio" />Weekly</li>
+                        <li><input name="frequecyType" value="Monthly" @(Model.RecurrenceDetails?.Frequency == "Monthly" ? "checked" : "") type="radio" />Monthly</li>
+                        <li><input name="frequecyType" value="Yearly" @(Model.RecurrenceDetails?.Frequency == "Yearly" ? "checked" : "") type="radio" />Yearly</li>
+
+                    </ul>
+                </div>
+                <div class="col-sm-9">
+                    <div class="dailyOpt @(Model.RecurrenceDetails?.Frequency == "Daily" ? "": "hidden")">
+                        Every <input type="text" name="dailyInterval" id="dailyInterval" maxlength="2" size="2" value="@Model.RecurrenceDetails.Interval" /> day(s)
+                    </div>
+                    <div class="weeklyOpt @(Model.RecurrenceDetails?.Frequency == "Weekly" ? "": "hidden")">
+                        Recur every <input type="text" name="weeklyInterval" id="weeklyInterval" maxlength="2" size="2" value="@Model.RecurrenceDetails.Interval" /> week(s) on:
+                        <ul id="weeklyDayOfWeekList" class="ulHorizontal">
+                            <li><input name="weeklyDayOfWeek" value="0" type="checkbox" @sunday /> Sunday</li>
+                            <li><input name="weeklyDayOfWeek" value="1" type="checkbox" @monday /> Monday	</li>
+                            <li><input name="weeklyDayOfWeek" value="2" type="checkbox" @tuesday /> Tuesday</li>
+                            <li><input name="weeklyDayOfWeek" value="3" type="checkbox" @wednesday /> Wednesday</li>
+                            <li><input name="weeklyDayOfWeek" value="4" type="checkbox" @thursday /> Thursday</li>
+                            <br />
+                            <li><input name="weeklyDayOfWeek" value="5" type="checkbox" @friday /> Friday</li>
+                            <li><input name="weeklyDayOfWeek" value="6" type="checkbox" @saturday /> Saturday</li>
+                        </ul>
+                        <span style="color:red" class="hidden" id="DayOfTheWeekWarning">** Select at least one day of the week **</span>
+                    </div>
+                    <div class="monthlyOpt @(Model.RecurrenceDetails.Frequency == "Monthly" ? "": "hidden")">
+                        Day <input type="text" name="monthlyDayOfTheMonth" id="monthlyDayOfTheMonth" maxlength="2" size="2" value="@(Model.RecurrenceDetails.Frequency != "Monthly" ? DateTime.Now.Day.ToString() : Model.RecurrenceDetails.DayOfMonth.ToString())" /> of every
+                        <input type="text" name="monthlyInterval" id="monthlyInterval" maxlength="2" size="2" value="@Model.RecurrenceDetails.Interval" /> month(s)
+                    </div>
+                    <div class="yearlyOpt @(Model.RecurrenceDetails.Frequency == "Yearly" ? "": "hidden")">
+                        Recur every <input type="text" name="yearlyInterval" id="yearlyInterval" maxlength="2" size="2" value="@Model.RecurrenceDetails.Interval" /> year(s) <br>
+                        On <select name="yearMonths" id="yearMonths" style="color:black;">
+                            <option value=1>January</option>
+                            <option value=2>February</option>
+                            <option value=3>March</option>
+                            <option value=4>April</option>
+                            <option value=5>May</option>
+                            <option value=6>June</option>
+                            <option value=7>July</option>
+                            <option value=8>August</option>
+                            <option value=9>September</option>
+                            <option value=10>October</option>
+                            <option value=11>November</option>
+                            <option value=12>December</option>
+
+                        </select>
+                        <input type="text" name="yearlyDayOfTheMonth" id="yearlyDayOfTheMonth" maxlength="2" size="2" value="@(Model.RecurrenceDetails.Frequency != "Yearly" ? DateTime.Now.Day.ToString() : Model.RecurrenceDetails.DayOfMonth.ToString())" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                Recurrence End Setting
+                <ul>
+                    <li>
+                        <input name="recurrenceEnd" @(string.IsNullOrEmpty(Model.RecurrenceDetails?.EndDate.ToString()) && (string.IsNullOrEmpty(Model.RecurrenceDetails?.Count.ToString())) ? "checked" : "") value="noEndDate" type="radio" />No End Date
+                    </li>
+                    <li>
+                        <input name="recurrenceEnd" @(Model.RecurrenceDetails?.Count != null ? "checked" : "") value="endCount" type="radio" />End after: <input type="text" name="endAtCount" id="endAtCount" maxlength="2" size="2" value="@Model.RecurrenceDetails.Count" /> occurrences
+                    </li>
+                    <li>
+                        <input name="recurrenceEnd" @(Model.RecurrenceDetails?.EndDate != null ? "checked" : "") value="endDate" type="radio" />End by:
+                        @(Html.Kendo().DatePicker()
+                                     .Name("endAtDate")
+                                     .Value(Model.RecurrenceDetails.EndDate)
+                                     .HtmlAttributes(new { style = "width: 130px", title = "datetimepicker" })
+                                     .Events(e =>
+                                     {
+                                         e.Change("EndDateChanged");
+                                     })
+                                     .Format("MM/dd/yyyy")  // hh:mm tt
+                                                            // .ParseFormats(new string[] { "MM/dd/yyyy", "hh:mm tt", "yyyy-MM-ddThh:mm:ss" })
+                        )
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<div class="form-group">
+    <label class="form-label">Color Style</label>
+    <div>
+        @{
+            var backGroundColors = new List<SelectListItem>();
+            backGroundColors.Add(new SelectListItem() { Text = "Clean", Value = SiteTemplateConstants.Backgrounds.Clean });
+            backGroundColors.Add(new SelectListItem() { Text = "Contrast", Value = SiteTemplateConstants.Backgrounds.Contrast });
+            backGroundColors.Add(new SelectListItem() { Text = "Dark", Value = SiteTemplateConstants.Backgrounds.Dark });
+            backGroundColors.Add(new SelectListItem() { Text = "Default", Value = SiteTemplateConstants.Backgrounds.Default });
+            backGroundColors.Add(new SelectListItem() { Text = "Fancy", Value = SiteTemplateConstants.Backgrounds.Fancy });
+            backGroundColors.Add(new SelectListItem() { Text = "Muted", Value = SiteTemplateConstants.Backgrounds.Muted });
+
+            backGroundColors.Add(new SelectListItem() { Text = "Success", Value = SiteTemplateConstants.Backgrounds.Success });
+            backGroundColors.Add(new SelectListItem() { Text = "Info", Value = SiteTemplateConstants.Backgrounds.Info });
+            backGroundColors.Add(new SelectListItem() { Text = "Warning", Value = SiteTemplateConstants.Backgrounds.Warning });
+            backGroundColors.Add(new SelectListItem() { Text = "Danger", Value = SiteTemplateConstants.Backgrounds.Danger });
+
+
+
+        
+        }
+        @(Html.Kendo().DropDownList()
+                               .Name("Style")
+                               .HtmlAttributes(new { style = "width: 250px" })
+                               .DataTextField("Text")
+                               .DataValueField("Value")
+                               .Value(Model.Style)
+                              
+                               .BindTo(backGroundColors)
+                               .Height(400)
+                               .HeaderTemplate("<div class=\"dropdown-header k-widget k-header\">" +
+                                             "<span>Select a Color</span><span></span>" +
+                                         "</div>")
+                               .FooterTemplate("<em>Total <strong>#: instance.dataSource.total() #</strong> items found</em>")
+                               .Template("<span  class=\"k-state-default colorBox content-menu-bg-preview #:data.Value#\"></span>" + "<span class=\"k-state-default\">#: data.Text #</span>")
+                               .ValueTemplate("<span class=\"k-state-default colorBox content-menu-bg-preview #:data.Value#\"></span>" + "<span>#:data.Text#</span>")
+        )
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Location:</label>
+    <div>
+        <input id="eventLocation" class="form-control" asp-for="Location" onchange="recurrentDetailsUpdated()" spellcheck="true" />
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Organizer Contact Info:</label>
+    <div>
+        <input type="checkbox" id="showOrganizerName" @(Model.ShowOrganizerName ? "checked" : "" ) /> Show Organizer Name <br />
+        <input type="checkbox" id="showPhoneNumber" @(Model.ShowPhoneNumber ? "checked" : "" ) /> Show Phone Number
+        <input id="phone" class="form-control" placeholder="###-###-####" asp-for="Phone" />
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Event Url: (More info)</label>
+    <div>
+        <input asp-for="Url" class="form-control" placeholder="http://wwww.myevent.com" />
+    </div>
+</div>
+<div class="row" style="margin-left: 0px;margin-right: 0px">
+    Open link: @Html.RadioButtonFor(x => x.LinkTarget, "_self") On Same Window &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    @Html.RadioButtonFor(x => x.LinkTarget, "_blank") On New Window
+</div>
+<hr />
+
+
+
+<style>
+    .colorBox {
+        width: 25px;
+        height: 25px;
+        border-radius: 4px;
+        float: left;
+        padding-left: 10px;
+    }
+
+    ul {
+        list-style-type: none;
+    }
+
+        ul.ulHorizontal {
+            min-width: 696px;
+            list-style: none;
+        }
+
+            ul.ulHorizontal li {
+                display: inline;
+            }
+
+    .recurrenceBox {
+        border-radius: 5px;
+        border: 1px solid #ccc !important;
+    }
+</style>
+
+
+<script>
+
+    function recurrentDetailsUpdated() {
+        ResolveEndDateByCount();
+
+        //freq value
+        var freq = $('input[type=radio][name=frequecyType]:checked').val();
+        $("#RecurrenceDetails_Frequency").val(freq)
+
+        if ($("#showOrganizerName").prop('checked')) {
+            $("#ShowOrganizerName").val("true");
+        } else {
+            $("#ShowOrganizerName").val("false");
+        }
+
+        if ($("#showPhoneNumber").prop('checked')) {
+            $("#ShowPhoneNumber").val("true");
+        } else {
+            $("#ShowPhoneNumber").val("false");
+        }
+
+        if ($("#allDay").prop('checked')) {
+            $("#AllDayEvent").val("true");
+        } else {
+            $("#AllDayEvent").val("false");
+        }
+
+        if (freq == "Daily") {
+            var dailyInterv = $("#dailyInterval").val();
+            $("#RecurrenceDetails_Interval").val(dailyInterv);
+
+            //alert(dailyInterv);
+        } else if (freq == "Weekly") {
+            var weekInterval = $("#weeklyInterval").val();
+            $("#RecurrenceDetails_Interval").val(weekInterval);
+
+            var chkArray = [];
+            $('input[type=checkbox][name=weeklyDayOfWeek]:checked').each(function () {
+                chkArray.push($(this).val());
+            });
+            var selected;
+            selected = chkArray.join(',');
+            $("#RecurrenceDetails_DaysOfWeek").val(selected);
+
+            if (selected.length <= 0) {
+                $("#DayOfTheWeekWarning").removeClass("hidden");
+            } else {
+                $("#DayOfTheWeekWarning").addClass("hidden");
+            }
+
+
+        } else if (freq == "Monthly") {
+            var monthInterval = $("#monthlyInterval").val();
+            $("#RecurrenceDetails_Interval").val(monthInterval);
+            var monthDayNum = $("#monthlyDayOfTheMonth").val();
+            $("#RecurrenceDetails_DayOfMonth").val(monthDayNum);
+
+            // alert(monthInterval);
+            // alert(monthDayNum);
+
+        } else if (freq == "Yearly") {
+            var yearInterval = $("#yearlyInterval").val();
+            $("#RecurrenceDetails_Interval").val(yearInterval);
+            var monthOfYear = $("#yearMonths").val();
+            $("#RecurrenceDetails_Months").val(yearInterval);
+            var dayOfMonthYear = $("#yearlyDayOfTheMonth").val();
+            $("#RecurrenceDetails_DayOfMonth").val(dayOfMonthYear);
+
+            //alert(yearInterval);
+            //alert(monthOfYear);
+            //alert(dayOfMonthYear);
+        }
+
+        //set end at count model
+        var endCount = $("#endAtCount").val();
+        $("#RecurrenceDetails_Count").val(endCount)
+
+        // saveEvent();
+    }
+
+    function EndDateChanged() {
+        //get the end time
+        var endTime = $("#datePickerEventHourEnd").data("kendoTimePicker");
+        var timeValue = endTime.value();
+
+        //get new date from input
+        var endDateRecur = $("#endAtDate").data("kendoDatePicker");
+        var endDateRecurValue = endDateRecur.value();
+
+        //check the end at date radio
+        var $radios = $('input:radio[name=recurrenceEnd]');
+        $radios.filter('[value=endDate]').prop('checked', true);
+
+        // reset end date at the event level (range of dates)
+        var endDateEvent = $("#datePickerEventEnd").data("kendoDatePicker");
+        endDateEvent.value(endDateRecurValue);
+
+        //reset previous settings if any were set for other end date options
+        $("#endAtCount").val('');
+        $("#RecurrenceDetails_Count").val('');
+
+        //set the model end date
+        $("#EventEnd").val(kendo.toString(endDateRecurValue, 'd') + " " + kendo.toString(timeValue, 't'));
+
+        //in recurrency then set the recurrency enddate as well
+        $("#RecurrenceDetails_EndDate").val(kendo.toString(endDateRecurValue, 'd') + " " + kendo.toString(timeValue, 't'));
+
+
+        recurrentDetailsUpdated()
+    }
+
+    function EndDateFromRangeChanged() {
+        //get time selected for end date
+        var endTime = $("#datePickerEventHourEnd").data("kendoTimePicker");
+        var timeValue = endTime.value();
+
+        //get the date selected
+        var endDateEvent = $("#datePickerEventEnd").data("kendoDatePicker");
+        var value = endDateEvent.value();
+
+        var startDate = $("#datePickerEventStart").data("kendoDatePicker");
+        var startTime = $("#datePickerEventHourStart").data("kendoTimePicker");
+
+        //check if end date is less than this new start date, if it is then update the end date as well.
+        if (new Date(kendo.toString(startDate.value(), 'd') + " " + kendo.toString(startTime.value(), 't')) >
+              new Date(kendo.toString(endDateEvent.value(), 'd') + " " + kendo.toString(endTime.value(), 't'))) {
+            startDate.value(endDateEvent.value());
+            startTime.value(endTime.value());
+
+            EndDateFromRangeChanged()
+            return;
+        }
+
+        //if recurring and an end date is selected from the ending options then update
+        var endSelection = $('input[type=radio][name=recurrenceEnd]:checked').val();
+        if (endSelection == "endDate") {
+
+            var endDateRecur = $("#endAtDate").data("kendoDatePicker");
+            endDateRecur.value(value);
+
+            //in recurrency then set the recurrency enddate as well
+            $("#RecurrenceDetails_EndDate").val(kendo.toString(value, 'd') + " " + kendo.toString(timeValue, 't'));
+
+            //set the end at counts to emtpy and model
+            $("#endAtCount").val('');
+            $("#RecurrenceDetails_Count").val('')
+
+        }
+
+        //update model with new end date
+        $("#EventEnd").val(kendo.toString(value, 'd') + " " + kendo.toString(timeValue, 't'));
+
+        recurrentDetailsUpdated()
+    }
+
+    function StartDateChange() {
+        var startDate = $("#datePickerEventStart").data("kendoDatePicker");
+        var startTime = $("#datePickerEventHourStart").data("kendoTimePicker");
+
+        //get time selected for end date
+        var endTime = $("#datePickerEventHourEnd").data("kendoTimePicker");
+
+        //get the date selected
+        var endDateEvent = $("#datePickerEventEnd").data("kendoDatePicker");
+
+        //update model hidden value
+        $("#EventStart").val(kendo.toString(startDate.value(), 'd') + " " + kendo.toString(startTime.value(), 't'));
+
+        //check if end date is less than this new start date, if it is then update the end date as well.
+        if (new Date(kendo.toString(startDate.value(), 'd') + " " + kendo.toString(startTime.value(), 't')) >
+              new Date(kendo.toString(endDateEvent.value(), 'd') + " " + kendo.toString(endTime.value(), 't'))) {
+            endDateEvent.value(startDate.value());
+            endTime.value(startTime.value());
+
+            EndDateFromRangeChanged()
+            return;
+        }
+        // alert(kendo.toString(startDate.value(), 'd'));
+        // alert(kendo.toString(startTime.value(), 't'));
+
+
+        recurrentDetailsUpdated()
+    }
+
+    function ResolveEndDateByCount() {
+        //var daysOfWeekSelected = EventDetail.RecurrenceDetails.DaysOfWeek.Split(',');
+        //get current start date
+        var datePickerEventStart = $("#datePickerEventStart").data("kendoDatePicker").value();
+        var startDate = new Date(datePickerEventStart);
+
+        //get the end time
+        var endTime = $("#datePickerEventHourEnd").data("kendoTimePicker");
+        var timeValue = endTime.value();
+
+        var endDateEvent = $("#datePickerEventEnd").data("kendoDatePicker");
+
+        //if recurring and an end date is selected from the ending options then update
+        var endSelection = $('input[type=radio][name=recurrenceEnd]:checked').val();
+        var freq = $('input[type=radio][name=frequecyType]:checked').val();
+        if (freq == "Daily" && endSelection == "endCount") {
+
+            endDate = startDate.addDays($("#endAtCount").val() * $("#dailyInterval").val());
+            //reset the time to match endevent time
+            // reset end date at the event level (range of dates)
+
+            endDateEvent.value(endDate);
+
+            //set the model end date
+            $("#EventEnd").val(kendo.toString(endDate, 'd') + " " + kendo.toString(timeValue, 't'));
+        } else if (freq == "Weekly" && endSelection == "endCount") {
+
+            var chkArray = [];
+            $('input[type=checkbox][name=weeklyDayOfWeek]:checked').each(function () {
+                chkArray.push($(this).val());
+            });
+
+            //figure out amount of weeks we need to add. Round up.
+            var numOfWeeks = Math.ceil($("#endAtCount").val() / chkArray.length);
+
+            //days to add
+            var daysToAdd = (numOfWeeks * 7) * $("#weeklyInterval").val();
+
+
+            //add days to start date to come up with the end date
+            var newEndDate = startDate.addDays(daysToAdd);
+
+            // reset end date at the event level (range of dates)
+
+            endDateEvent.value(newEndDate);
+
+
+            //set the model end date
+            $("#EventEnd").val(kendo.toString(newEndDate, 'd') + " " + kendo.toString(timeValue, 't'));
+
+        } else if (freq == "Monthly" && endSelection == "endCount") {
+
+            //temp end date, adjustement needed
+            var endDateforMonth = startDate.addMonths($("#endAtCount").val() * $("#monthlyInterval").val());
+
+            endDateEvent.value(endDateforMonth);
+
+            //set the model end date
+            $("#EventEnd").val(kendo.toString(endDateforMonth, 'd') + " " + kendo.toString(timeValue, 't'));
+
+
+        } else if (freq == "Yearly" && endSelection == "endCount") {
+            //temp end date, adjustement needed
+            var endDateforYear = startDate.addMonths(($("#endAtCount").val() * $("#yearlyInterval").val()) * 12);
+
+            endDateEvent.value(endDateforYear);
+
+            //set the model end date
+            $("#EventEnd").val(kendo.toString(endDateforYear, 'd') + " " + kendo.toString(timeValue, 't'));
+        }
+    }
+
+    Date.prototype.addDays = function (days) {
+        var dat = new Date(this.valueOf());
+        dat.setDate(dat.getDate() + days);
+        return dat;
+    }
+
+    Date.prototype.addMonths = function (value) {
+        var n = this.getDate();
+        this.setDate(1);
+        this.setMonth(this.getMonth() + value);
+        this.setDate(Math.min(n, this.getDaysInMonth()));
+        return this;
+    };
+
+    Date.isLeapYear = function (year) {
+        return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0));
+    };
+
+    Date.getDaysInMonth = function (year, month) {
+        return [31, (Date.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+    };
+
+    Date.prototype.isLeapYear = function () {
+        return Date.isLeapYear(this.getFullYear());
+    };
+
+    Date.prototype.getDaysInMonth = function () {
+        return Date.getDaysInMonth(this.getFullYear(), this.getMonth());
+    };
+
+    $(document).ready(function () {
+        $('input[type=radio][name=frequecyType]').change(function () {
+            $(".dailyOpt").addClass("hidden");
+            $(".weeklyOpt").addClass("hidden");
+            $(".monthlyOpt").addClass("hidden");
+            $(".yearlyOpt").addClass("hidden");
+            if (this.value == 'Daily') {
+                $(".dailyOpt").removeClass("hidden");
+            }
+            else if (this.value == 'Weekly') {
+                $(".weeklyOpt").removeClass("hidden");
+            }
+            else if (this.value == 'Monthly') {
+                $(".monthlyOpt").removeClass("hidden");
+            }
+            else if (this.value == 'Yearly') {
+                $(".yearlyOpt").removeClass("hidden");
+            }
+
+            recurrentDetailsUpdated();
+        });
+
+        $('input[type=checkbox][name=weeklyDayOfWeek]').change(function () {
+            //debugger;
+            recurrentDetailsUpdated();
+        });
+
+        $('input[type=radio][name=repeat]').change(function () {
+            $("#recurrenceDetails").addClass("hidden");
+            var endDateEvent = $("#datePickerEventEnd").data("kendoDatePicker");
+            var endDateTimeEvent = $("#datePickerEventHourEnd").data("kendoTimePicker");
+
+            //debugger;
+            if (this.value == 'True') {
+                $("#recurrenceDetails").removeClass("hidden");
+                $("#IsRecurrent").val("True");
+
+                //disable the end date (on the range section)
+                //endDateEvent.enable(false);
+                //endDateTimeEvent.enable(false);
+            }
+            else {
+                $("#IsRecurrent").val("False");
+
+                //enable the end date (on the range section)
+                //endDateEvent.enable(true);
+               // endDateTimeEvent.enable(true);
+            }
+
+            recurrentDetailsUpdated();
+
+        });
+
+        //recurrence end settings
+        $('input[type=radio][name=recurrenceEnd]').change(function () {
+            //if no end date selected
+            if (this.value == 'noEndDate') {
+                //set end date to emtpy
+                var endDateRecur = $("#endAtDate").data("kendoDatePicker");
+                endDateRecur.value('');
+
+                //set model end date in recurrency to emtpy
+                $("#RecurrenceDetails_EndDate").val('');
+
+                //set the end at counts to emtpy and model
+                $("#endAtCount").val('');
+                $("#RecurrenceDetails_Count").val('')
+
+                //since no end date, reset end date in range to start date. for not confusing users.
+
+                var startEvent = $("#datePickerEventStart").data("kendoDatePicker");
+                var endDateEvent = $("#datePickerEventEnd").data("kendoDatePicker");
+                endDateEvent.value(startEvent.value());
+
+            } else if (this.value == 'endDate') {
+                //update end date with endDate from range if any as a default
+                EndDateFromRangeChanged();
+
+            } else if (this.value == 'endCount') {
+                //set end date to emtpy
+                var endDateRecur = $("#endAtDate").data("kendoDatePicker");
+                endDateRecur.value('');
+
+                //set model end date in recurrency to emtpy
+                $("#RecurrenceDetails_EndDate").val('');
+
+                //set the end at counts to emtpy and model
+                $("#endAtCount").val('1');
+                $("#RecurrenceDetails_Count").val('1')
+                ResolveEndDateByCount();
+            }
+
+            recurrentDetailsUpdated();
+        });
+
+        $("#endAtCount").on("change", function () {
+            ResolveEndDateByCount();
+            recurrentDetailsUpdated();
+        });
+
+        $("#yearlyDayOfTheMonth").on("change", function () {
+            recurrentDetailsUpdated();
+        });
+
+        $("#monthlyDayOfTheMonth").on("change", function () {
+            recurrentDetailsUpdated();
+        });
+
+        $("#monthlyInterval").on("change", function () {
+            recurrentDetailsUpdated();
+        });
+
+        $("#yearlyInterval").on("change", function () {
+            recurrentDetailsUpdated();
+        });
+
+        $("#yearMonths").on("change", function () {
+            recurrentDetailsUpdated();
+        });
+
+        $("#weeklyInterval").on("change", function () {
+            recurrentDetailsUpdated();
+        });
+
+        $("#dailyInterval").on("change", function () {
+            recurrentDetailsUpdated();
+        });
+
+        $("#showOrganizerName").on("change", function () {
+            recurrentDetailsUpdated();
+        });
+
+        $("#showPhoneNumber").on("change", function () {
+            recurrentDetailsUpdated();
+        });
+
+        $('#allDay').on('change', function () {
+            var timePEnd = $("#datePickerEventHourEnd").data("kendoTimePicker");
+            var timePStart = $("#datePickerEventHourStart").data("kendoTimePicker");
+            if (this.checked) {
+                timePEnd.enable(false);
+                timePStart.enable(false);
+            } else {
+                timePEnd.enable(true);
+                timePStart.enable(true);
+            }
+
+            recurrentDetailsUpdated();
+        });
+
+    });
+</script>

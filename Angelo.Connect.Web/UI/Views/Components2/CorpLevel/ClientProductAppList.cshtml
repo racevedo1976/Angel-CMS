@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Angelo.Connect.Web.UI.ViewModels.Admin.ClientProductAppListItemViewModel>
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Models
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var clientId = (string)ViewData["ClientId"];
+}
+
+<form id="form_@componentId" class="form form-horizontal" data-ajax-form>
+    <div>
+        @(Html.Kendo().Grid(Model)
+              .Name(componentId)
+              .Columns(columns =>
+              {
+                  columns.Bound(c => c.ClientProductAppId).Hidden(true);
+                  columns.Bound(c => c.ProductId).Hidden(true);
+                  columns.Bound(c => c.ClientId).Hidden(true);
+                  columns.Bound(c => c.AddOnId).Hidden(true);
+                  columns.Bound(c => c.Title);
+                  columns.Bound(c => c.SiteCount).Title("Sites").Width(65);
+                  columns.Bound(c => c.TotalSpace).Title("Space").Width(100);
+              })
+              .Scrollable()
+              .Sortable()
+              .Pageable()
+              .Selectable()
+              )
+    </div>
+
+</form>
+    

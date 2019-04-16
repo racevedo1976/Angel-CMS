@@ -1,0 +1,107 @@
+/*-------- Begin Exported Site Css, Site: Aurora Demo Site --------*/
+
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
+
+body { 
+    margin: 0px;
+    font-family:  "Nunito Sans", Arial, "Helvetica Neue", Helvetica, "sans-serif";}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+    letter-spacing: 0.4px;
+    font-family: "Nunito Sans", Arial, "Helvetica Neue", Helvetica, "sans-serif";
+    text-transform: uppercase; 
+    color: #100E4D; }
+.h1 {
+    font-family: "Nunito Sans", Arial, "Helvetica Neue", Helvetica, "sans-serif"; }
+
+.cs-fullwidthheaderbar {width: 100%; height: 56px; padding:10px;}
+
+/* template structure */
+.cs-toolbar{ 
+    padding: 5px 15px 0 15px;
+    background: #000; 
+    color: #fff; }
+
+.cs-socialmediaback { padding: 10px;} 
+.cs-socialmedia a { 
+    padding: 5px;
+    color: #000000;
+    font-size: 20px;
+    background: #cccccc;
+    text-align: center;
+    float: right;
+    width: 36px;
+    height: 36px; 
+    border-radius: 100%; 
+    margin-right: 7px; /*space between*/} 
+.cs-socialmedia a i {
+    font-size: 20px;
+    line-height: 38px;
+    color: #000000;}
+
+.cs-header-content{}
+
+.cs-page{}
+.cs-page-content{}
+.cs-page-side{}
+
+.cs-nopadding {padding: 0}
+.cs-row-nopadding > .content-widget > .content-layout > .row > div:not(:first-child){ padding-left: 0 !important }
+.cs-row-nopadding > .content-widget > .content-layout > .row > div:not(:last-child){ padding-right: 0 !important }
+
+.cs-row-33-66 > .content-widget > .content-layout > .row >  div:first-child { width: 33.33% }
+.cs-row-33-66 > .content-widget > .content-layout > .row > div:last-child { width: 65.5% }
+
+.cs-motto { padding: 10px; }
+.cs-mascotwatermark {background: #eaeaea url(/templates/aurora/images/mascotwatermark.png) top right no-repeat; }
+.cs-graybar {background: #eaeaea; height: 10px; padding: 0px ; margin: 0px; } 
+
+.cs-footer{
+    margin-top: 0px;
+    background: #575757;}
+.copyright {color: #ffffff;}
+.cs-footer-content {}
+.cs-footer-info {
+    text-align: center}
+.cs-address {
+    font-size: 17px;text-align: center;font-family: "Nunito Sans", Arial, "Helvetica Neue", Helvetica, "sans-serif"; color: #ffffff;} 
+ 
+/* navigation ribbon */
+.navbar-default .navbar-brand {
+    color: #fff;}
+
+.cs-header {background: #100E4D;}
+.cs-header-navbar{
+    background: #100E4D; 
+    font-family: "Nunito Sans", Arial, "Helvetica Neue", Helvetica, "sans-serif";
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff; } 
+
+.search-field .fa-search { color: #fff;}
+
+/* color schemes */
+.bg-default { background: #ffffff;}
+.bg-muted {background: #eaeaea; }
+.bg-dark {background: #252525; color: #eee; }
+.bg-contrast { background: #171717; color: #eee; }
+.bg-clean { background: #ffffff }
+.bg-fancy { }
+
+.navbar {
+    border-radius: 0; margin: 0;}
+.navbar .navbar-default {margin-bottom: 0 }
+.navbar-default { border: none;background-color: transparent;}  
+.nav > li > a {
+    font-family: color: #333;}
+.navbar-default .navbar-nav > li > a {
+    color: #fff;}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #ccc;}
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    color: #999; background-color: #100E4D;}
+.dropdown-menu {background-color: #100E4D; color:#fff;}
+.dropdown-menu > li > a {color:#ffffff;}
+.navbar-default .navbar-brand {
+    color: #666;}

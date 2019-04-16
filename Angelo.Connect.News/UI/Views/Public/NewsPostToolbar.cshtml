@@ -1,0 +1,26 @@
+﻿@using Angelo.Connect.News.Models
+@using Angelo.Connect.Rendering;
+
+@model NewsPost
+
+@{
+    var returnUrl = ViewData.GetReturnUrl();
+
+    var settingsUrl = $"/sys/console/News/posts/{Model.Id}/settings";
+    var designUrl = $"/sys/console/News/posts/{Model.Id}/edit";
+}
+
+<ul class="list-inline">
+    <li>
+        <a onclick="$.console('news','@designUrl')">
+            <i class="fa fa-edit"></i> &nbsp;
+            @Html.Localize("Design")
+        </a>
+    </li>
+    <li>
+        <a onclick="$.console('news','@settingsUrl')">
+            <i class="fa fa-gear"></i> &nbsp;
+            @Html.Localize("Settings")
+        </a>
+    </li>
+</ul>

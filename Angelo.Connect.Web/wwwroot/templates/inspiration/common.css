@@ -1,0 +1,78 @@
+﻿body 
+{
+	padding-top: 91px;
+}
+.site-header 
+{
+    position: fixed; 
+    top: 0; 
+    z-index: 99;
+     width: 100%
+}
+
+
+.site-header > .site-nav {
+    height: 50px;
+}
+.site-header > .site-nav .navbar {
+    margin-bottom: 0;
+}
+.site-header > .site-toolbar
+{
+    background: #111;
+    color: #fff !important;
+    padding-top: 10px;
+}
+.site-header > .site-toolbar .list-inline
+{
+    margin-left: 0;
+}
+
+.site-footer{
+    padding: 15px 0;
+}
+
+.search-field
+{
+    padding: 5px 10px !important;
+    margin: 5px 0 !important;
+    height: 40px !important;
+}
+
+.search-field .fa-search
+{
+    font-size: 20px;
+    color: #fff;
+}
+
+.page-body{
+    min-height: 450px;
+}
+
+.page-body .navbar-vertical
+{
+    margin-top: 20px;
+    background-color: #ddd;
+    border: none !important;
+    min-height: 400px;
+}
+
+.page-body .navbar-vertical .navbar-header
+{
+    display: block;
+    width: 100%;
+}
+
+.page-body .navbar-vertical .navbar-brand
+{
+    font-size: 20px;
+}
+
+.navbar-vertical a
+{
+    font-size: 18px;
+}
+
+.padding60 {padding: 60px 5px;}
+.padding30 {padding: 30px 30px;}
+.space10 { margin-bottom: 10px; }

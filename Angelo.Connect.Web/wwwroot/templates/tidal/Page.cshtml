@@ -1,0 +1,40 @@
+﻿<div class="cs-toolbar clearfix">
+    <div class="pull-left">
+        <pagetools></pagetools>
+    </div>
+    <div class="pull-right text-right">
+        <usertools></usertools>
+    </div>
+</div>
+
+<header class="cs-header">
+    <div class="cs-header-navbar">
+        <content name="site-nav" type="navmenu" model="main-menu"></content>
+    </div>
+
+    <div class="cs-header-content">
+        <zone name="header" allow-containers="true"></zone>
+    </div>
+</header>
+
+
+<div class="container">
+    <div class="cs-page cs-page-layout-2 row">
+        <div class="cs-page-side col-sm-4">
+            <zone name="side" allow-containers="false"></zone>
+        </div>
+        <div class="cs-page-content col-sm-8">
+            <page allow-containers="false"></page>
+        </div>
+    </div>
+</div>
+
+
+<footer class="cs-footer">
+    <div class="cs-footer-content">
+        <zone name="footer" allow-containers="true"></zone>
+    </div>
+    <div class="cs-footer-info">
+        <copyright></copyright>
+    </div>
+</footer>

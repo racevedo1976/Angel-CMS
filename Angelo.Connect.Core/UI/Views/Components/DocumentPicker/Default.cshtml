@@ -1,0 +1,155 @@
+﻿@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Models
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Microsoft.Extensions.Options
+
+@model IFolder
+@inject IFolderManager<FileDocument> _folderManager
+
+@{
+    var selectedFolderId = (string)this.ViewData["SelectedFolderId"];
+    var settings = (DocumentPickerSettings)this.ViewData["Settings"];
+    var fileType = settings.FileType;
+    var folder = string.IsNullOrEmpty(selectedFolderId) ? Model : await _folderManager.GetFolderAsync(selectedFolderId);
+
+    var isContentShown = !settings.IsContentHidden;
+    var isTreeShown = !settings.IsTreeHidden;
+    var isRootShown = !settings.IsTreeRootHidden;
+
+    var obj = $"pick_{GetHashCode()}";
+}
+
+<div id="docpicker-@GetHashCode()" class="container-fluid">
+    <div class="row">
+        @if (isTreeShown)
+        {
+        <div id="folder" class="col-sm-4">
+            <div id="whatIsDigiDrive"></div>
+            <div id="tree">
+                @Html.Partial("_Tree.cshtml")
+            </div>
+        </div>
+        }
+        @if (isContentShown)
+        {
+        <div id="docContent" class="col-sm-8">
+            @Html.Partial("_Content.cshtml", folder)
+        </div>
+        }
+    </div>
+</div>
+<script>
+    function MyObj_@(GetHashCode())() {
+        // Data
+        var self = this;
+
+        self.selection = null;
+        self.highlightNode = function(node) {
+            if (self.selection != null) self.selection.style.backgroundColor = "";
+
+            if (node.length == 0) return;
+
+            node[0].style.backgroundColor = "#dddddd";
+            self.selection = node[0];
+        };
+        self.selectFolder = function(folderId){
+            //        setCrumbs(folderId);
+            self.setContents(folderId);
+            self.setSelection(folderId);
+        };
+        self.setSelection = function(folderId){
+            self.highlightNode($("a.treenode[data-id='" + encodeURIComponent(folderId) + "']"));
+        };
+        self.setContents = function(folderId){
+            var url = '/docpicker/content';//?folderId=' + encodeURIComponent(folderId);
+            $.ajax({
+                dataType: "html",
+                method: "POST",
+                url: url,
+                data: {folderId: encodeURIComponent(folderId), settings: @Json.Serialize(this.ViewData["Settings"])},
+                success: function(data) {
+                    $('#docpicker-@GetHashCode() #docContent').empty().html(data);
+                    self.loadContentHandlers();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    $('#docpicker-@GetHashCode() #docContent').empty();
+                    alert(errorThrown);
+                }
+            });
+        };
+        self.setFolders = function(folderId){
+            var url = '/api/docpicker/folders?userId=&id=' + encodeURIComponent(folderId);
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: url,
+                data: null,
+                success: function(data) {
+                    self.setFolderContents(data);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+        };
+        self.refreshWithNode = function(node) {
+            @*var settings = @Json.Serialize(settings);*@
+            var folderId = $(node).attr('data-id');
+
+            self.selectFolder(folderId);
+        };
+        self.loadContentHandlers = function() {
+            $('#docpicker-@GetHashCode() #docContent div#folders > div').on('click', function (event) {
+                $('#docpicker-@GetHashCode()').trigger('highlighted', {
+                    "folderId": $(event.currentTarget).children('div.thumbnail').attr('data-id')
+                });
+            });
+            $('#docpicker-@GetHashCode() #docContent div#documents > div').on('click', function (event) {
+                $('#docpicker-@GetHashCode()').trigger('highlighted', {
+                    "documentId": $(event.currentTarget).children('div.thumbnail').attr('data-id')
+                });
+            });
+            $('#docpicker-@GetHashCode() #docContent div#folders > div').on('dblclick', function (event) {
+                $('#docpicker-@GetHashCode()').trigger('selected', {
+                    "folderId": $(event.currentTarget).children('div.thumbnail').attr('data-id')
+                });
+            });
+            $('#docpicker-@GetHashCode() #docContent div#documents > div').on('dblclick', function (event) {
+                //debugger;
+                $('#slideImagePicker').trigger('selected', {
+                @*$('#docpicker-@GetHashCode()').trigger('selected', {*@
+                    "documentId": $(event.currentTarget).children('div.thumbnail').attr('data-id')
+                });
+
+                $.trigger("documents.selected", {
+               @*$('#docpicker-@GetHashCode()').trigger('selected', {*@
+                    "documentId": $(event.currentTarget).children('div.thumbnail').attr('data-id'),
+                    "documentUrl": $(event.currentTarget).find('img').attr('src')
+                });
+
+                $('#documents').trigger('selected', {
+               @*$('#docpicker-@GetHashCode()').trigger('selected', {*@
+                   "documentId": $(event.currentTarget).children('div.thumbnail').attr('data-id')
+               });
+            });
+
+            $('#docpicker-@GetHashCode() ol#parentTrail li').on('click', function(event) {
+                var folderId = '';
+                folderId = $(event.currentTarget).attr('data-id');
+                self.selectFolder(folderId);
+            });
+            @*highlightNode($('@(string.IsNullOrEmpty(selectedName) ? string.Empty : $"div#docpicker-" + GetHashCode() + " div#tree a:contains(" +selectedName+")")'));*@
+        };
+    }
+
+    var @obj = new MyObj_@(GetHashCode())();
+
+    $(document).ready(function () {
+        $('#docpicker-@GetHashCode() div#tree a.treenode').on('click', function () {
+            @(obj).highlightNode($(this));
+            @(obj).refreshWithNode($(this)[0]);
+        });
+        @(obj).loadContentHandlers();
+    });
+</script>

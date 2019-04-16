@@ -1,0 +1,54 @@
+﻿@using Angelo.Connect.Models
+@model IEnumerable<Site>
+@{ 
+    ViewData["ModalCssClass"] = "modal-dialog-xs";
+    Layout = "_ModalLayout";
+}
+
+@section ModalTitle {
+    @Html.Localize("Export Site as Template")
+}
+
+@section ModalBody{
+<form id="templateExportForm" class="form">
+    <div class="form-group">
+        <label>
+            @Html.Localize("Site to Export")
+        </label>
+        <div>
+            <select name="SiteId" class="form-control" style="max-width: 100%" >
+                @foreach(var site in Model)
+                {
+                    <option value="@site.Id">@site.Title</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>
+            @Html.Localize("Template Id")
+        </label>
+        <i class="text-muted">ex. mytemplate </i>
+        <div>
+            <input name="TemplateId" type="text" class="form-control" style="max-width: 100%" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>
+            @Html.Localize("Template Title")
+        </label>
+        <i class="text-muted">ex. My Template </i>
+        <div>
+            <input name="TemplateTitle" type="text" class="form-control" style="max-width: 100%" />
+        </div>
+    </div>
+</form>
+}
+
+@section ModalFooter
+{
+    <div class="text-right">
+        <button name="cancel" class="btn btn-default modal-button">@Html.Localize("Cancel")</button> &nbsp;
+        <button name="run" class="btn btn-primary modal-button">@Html.Localize("Run")</button>
+    </div>
+}

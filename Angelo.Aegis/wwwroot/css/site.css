@@ -1,0 +1,60 @@
+﻿body {
+  margin-top: 65px;
+}
+.navbar-header {
+  position: relative;
+  top: -4px;
+}
+.navbar-brand > .icon-banner {
+  height: 40px;
+  width: auto;
+  position: relative;
+  top: -5px;
+  display: inline;
+}
+.icon {
+  position: relative;
+  top: -10px;
+}
+.footer{
+    padding: 10px 10px 0 10px;
+    border-top: 1px #ddd solid;
+}
+.page-consent .client-logo {
+  float: left;
+}
+.page-consent .client-logo img {
+  width: 80px;
+  height: 80px;
+}
+.page-consent .consent-buttons {
+  margin-top: 25px;
+}
+.page-consent .consent-form .consent-scopecheck {
+  display: inline-block;
+  margin-right: 5px;
+}
+.page-consent .consent-form .consent-description {
+  margin-left: 25px;
+}
+.page-consent .consent-form .consent-description label {
+  font-weight: normal;
+}
+.page-consent .consent-form .consent-remember {
+  padding-left: 16px;
+}
+
+/* Registration Form */
+
+.registration-error
+{
+    border:none; 
+    text-align:center; 
+    font-weight:bold;
+    padding-bottom:2em;
+}
+
+.modal-body
+{
+    min-height: 150px
+}

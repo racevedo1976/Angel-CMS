@@ -1,0 +1,35 @@
+﻿@{
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["siteId"];
+}
+
+@(Html.Kendo().Grid<NavigationMenuViewModel>()
+                    .Name(componentId)
+                    .Columns(columns =>
+                    {
+                        columns.Bound(c => c.Id).Hidden(true);
+                        columns.Bound(c => c.SiteId).Hidden(true);
+                        columns.Bound(c => c.Title);
+                    })
+                    .Scrollable()
+                    .Selectable(selectable => selectable
+                        .Enabled(true)
+                        .Type(GridSelectionType.Row)
+                    )
+                    .Sortable()
+                    .Pageable(pageable => pageable
+                        .Refresh(true)
+                        .PageSizes(true)
+                        .ButtonCount(5))
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .PageSize(10)
+                        .Read(read => read.Url(routes.SiteApi("navigationmenuitems/data")))
+                        .ServerOperation(false)
+                        .Model(model =>
+                        {
+                            model.Id(x => x.Id);
+                        })
+        )
+)
+

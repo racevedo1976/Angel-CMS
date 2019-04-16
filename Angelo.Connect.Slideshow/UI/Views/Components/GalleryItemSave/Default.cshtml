@@ -1,0 +1,28 @@
+﻿@using Angelo.Common.Mvc
+@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Services
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Microsoft.Extensions.Options
+
+@model GalleryItem
+
+<h4>@Html.Localize("Add Caption")</h4>
+<div class="list-group">
+    <div class="list-group-item">
+        <img style="width:300px;" id="galleryImg" class="thumbnail" src="@Model.Url" alt="@Model.Title">
+        <a href="#" onclick="CropImage('newItemUrl', 'galleryImg');"><i class="fa fa-crop"></i></a>
+        <div class="row">
+            <div class="container-fluid">
+                <input type="text" class="form-control input-sm paddi" placeholder="Add caption text here..." id="newItemCaption" asp-for="Title" required spellcheck="true" />
+                <input type="hidden" id="newItemUrl" asp-for="Url" value="@Model.Url" />
+                <input type="hidden" id="newItemWidgetId" asp-for="WidgetId" value="@Model.WidgetId" />
+            </div>
+        </div>
+        <div class="row padded">
+            <button type="button" class="btn btn-success btn-sm" style="float:right;" onclick="addItem();">Save</button>
+            <button type="button" class="btn btn-default btn-sm" onclick="cancelItem();">Cancel</button>
+        </div>
+    </div>
+</div>

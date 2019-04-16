@@ -1,0 +1,18 @@
+﻿@using Newtonsoft.Json
+
+@section Title {
+    @Html.Localize("Aegis Configuration")
+}
+
+
+<div class="row">
+    <div class="col-sm-5">
+        <h4>UserInfo</h4>
+        <pre>@Json.Serialize(ViewBag.UserInfo, new JsonSerializerSettings() {  Formatting = Formatting.Indented })</pre>
+    </div>
+
+    <div class="col-sm-7">
+        <h4>OpenId</h4>
+        <pre>@Json.Serialize(ViewBag.OpenIdConfig, new JsonSerializerSettings() { Formatting = Formatting.Indented })</pre>
+    </div>
+</div>

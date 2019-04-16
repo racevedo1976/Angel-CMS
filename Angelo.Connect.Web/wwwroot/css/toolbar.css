@@ -1,0 +1,52 @@
+﻿/* custom css components */
+.admin-page-panel .toolbar {
+
+}
+
+.toolbar {
+    border-bottom: 1px #ddd solid;
+    background: #fff;
+    height: 32px;
+}
+
+.toolbar,
+.toolbar::after { 
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.toolbar > a, .toolbar > div.dropdown > a {
+    float: left;
+    padding: 6px;
+    font-size: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    color: #555;
+}
+
+.toolbar > a > span, .toolbar > div.dropdown > a span {
+    font-size: 15px;
+    padding-left: 2px;
+    vertical-align: top;
+    font-family: sans-serif;
+}
+.toolbar > div.dropdown > a {
+    line-height: 0px;
+    margin-left: 6px;
+    margin-top: 6px;
+}
+.toolbar > div.dropdown > a span{
+    padding-left: 0px;
+    vertical-align: middle;
+}
+
+.toolbar > a[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.toolbar > a:hover {
+    text-decoration: none;
+    color: #337ab7;
+}

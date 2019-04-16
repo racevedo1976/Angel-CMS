@@ -1,0 +1,29 @@
+﻿@{ 
+    var parentId = (string)ViewData["ParentNodeId"];
+    var tabId1 = Guid.NewGuid().ToString("N");
+    var tabId2 = Guid.NewGuid().ToString("N");
+}
+
+<div class="content-layout">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#@tabId1" data-toggle="tab">
+                Tab 1
+            </a>
+        </li>
+        <li>
+            <a href="#@tabId2" data-toggle="tab">
+                Tab 2
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="tabContent">
+        <div id="@tabId1" class="tab-pane fade in active">
+            <zone id="@parentId" name="tab-1"></zone>
+        </div>
+        <div id="@tabId2" class="tab-pane fade">
+            <zone id="@parentId" name="tab-2"></zone>
+        </div>
+    </div>
+</div>

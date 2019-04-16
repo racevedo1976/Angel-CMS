@@ -1,0 +1,12 @@
+﻿@{
+    var origin = ViewData["Origin"];
+}
+
+<h1 class="text-danger">@Html.Localize("Page.Login.LockedOut")</h1>
+<p class="text-danger">@Html.Localize("Label.Login.Lockout.Notification")</p>
+
+<div class="pull-right">
+    <a asp-action="Login" asp-route-origin="@origin">
+        @Html.Localize("Label.Login.Return")
+    </a>
+</div>

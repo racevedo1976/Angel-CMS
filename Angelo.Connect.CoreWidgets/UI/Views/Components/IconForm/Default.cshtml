@@ -1,0 +1,138 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.Icon
+@inject Angelo.Connect.CoreWidgets.Services.IconService iconService
+
+@{
+    var iconSizes = iconService.GetSupportedSizes();
+    var iconTypes = iconService.GetSupportedIcons();
+
+    var selectedIcon = iconTypes.FirstOrDefault(x => x.Name == Model.Name);
+}
+
+<style>
+    .icon-grid {
+        margin-top: 15px;
+    }
+
+        .icon-grid > .thumbnail {
+            float: left;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            height: auto;
+            width: auto;
+        }
+
+            .icon-grid > .thumbnail:not(.active) {
+                color: inherit !important;
+            }
+
+        .icon-grid > .filter-out {
+            display: none;
+        }
+
+    .icon-preview > span {
+        padding-left: 10px;
+    }
+
+    .no-results {
+        padding: 15px;
+        font-size: 20px;
+        display: none;
+    }
+</style>
+
+<form action="/sys/widgets/icon" data-ajax-form="true" data-module="widgets/iconform">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="Name" value="@Model.Name" />
+
+    <div class="tab-content">
+        @*
+            // Tab1: Icon Selector
+        *@
+        <div class="tab-pane">
+            <div class="form-group">
+                <label class="form-label">@Html.Localize("Choose an Icon")</label>
+                <div>
+                    <input name="Search" type="text" class="form-control" placeholder="@Html.Localize("Search by name")" />
+                </div>
+                <div class="icon-grid clearfix">
+                    @foreach (var icon in iconTypes)
+                    {
+                        <a class="thumbnail" data-icon-name="@icon.Name" data-icon-css="@icon.Css" title="@icon.Title.ToLower()" css-active="@(Model.Name == icon.Name)">
+                            <i class="@icon.Css fa-3x fa-fw"></i>
+                        </a>
+                    }
+                </div>
+                <div class="no-results text-muted">
+                    @Html.Localize("No results matched your search")
+                </div>
+            </div>
+
+        </div>
+
+        @*
+            // Tab2: Advanced Settings (Text & Hyperlink)
+        *@
+        <div class="tab-pane">
+            <div class="form-group">
+                <label class="form-label">@Html.Localize("Tooltip Caption")</label>
+                <div>
+                    <input class="form-control" placeholder="@Html.Localize("optional")" name="Tooltip" value="@Model.Tooltip" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">@Html.Localize("Text Label")</label>
+                <div>
+                    <input class="form-control" placeholder="@Html.Localize("optional")" name="Text" value="@Model.Text" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">
+                    @Html.Localize("Hyperlink Url")
+                </label>
+                <div>
+                    <input class="form-control" placeholder="@Html.Localize("optional")" name="Url" value="@Model.Url" />
+                </div>
+                <div class="text-muted">
+                    @Html.Localize("Examples: https://www.site.com, /page (this site only)")
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="[name=UrlOpenNew]">
+                    @Html.Localize("Open link in new window")
+                </label>
+                <div>
+                    <input type="checkbox" class="form-checkbox" name="UrlOpenNew" asp-for="UrlOpenNew" /> &nbsp;
+                </div>
+            </div>
+        </div>
+
+        @*
+            // Tab3: Preview
+        *@
+        <div class="tab-pane">
+            <div class="form-group">
+                <label class="form-label">@Html.Localize("Size")</label>
+                <div>
+                    <select class="form-control" name="Size">
+                        @foreach (var size in iconSizes)
+                        {
+                            <option value="@size" asp-selected="@(Model.Size == size)">@size</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="form-label">@Html.Localize("Preview")</label>
+                <br />
+                <br />
+                <div class="icon-preview" style="font-size: @Model.Size">
+                    <i class="@selectedIcon.Css" title="@Model.Tooltip"></i>
+                    <span>@Model.Text</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</form>

@@ -1,0 +1,68 @@
+{
+  "schema": "1.0",
+  "id": "tidal",
+  "title": "Tidal",
+  "pageTemplates": [
+    {
+      "id": "Splash.cshtml",
+      "title": "Home Page "
+    },
+    {
+      "id": "Page.cshtml",
+      "title": "Secondary Page"
+    }
+  ],
+  "themes": [
+    {
+      "id": "default",
+      "title": "Default Theme",
+      "description": "The default theme for this template",
+      "coreStyles": [
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common-material.min.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.material.min.css"
+      ],
+      "isDefault": true,
+      "previewImage": "/templates//themes/default/preview.png",
+      "stylesheet": "/templates//themes/default/theme.css"
+    }
+  ],
+  "scripts": [],
+  "masterPages": [
+    {
+      "id": "master1",
+      "title": "Home Page  Master Page",
+      "template": "Splash.cshtml",
+      "seedData": [
+        "master1.json"
+      ]
+    },
+    {
+      "id": "master2",
+      "title": "Secondary Page Master Page",
+      "template": "Page.cshtml",
+      "seedData": [
+        "master2.json"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "id": "page1",
+      "title": "Home",
+      "path": "/",
+      "master": "master1",
+      "seedData": [
+        "page1.json"
+      ]
+    },
+    {
+      "id": "page2",
+      "title": "About",
+      "path": "/about",
+      "master": "master2",
+      "seedData": [
+        "page2.json"
+      ]
+    }
+  ]
+}

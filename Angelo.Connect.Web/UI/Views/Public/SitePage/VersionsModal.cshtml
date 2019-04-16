@@ -1,0 +1,175 @@
+﻿@model IEnumerable<Angelo.Connect.Abstractions.IContentVersion>
+@{
+    Layout = "_ModalLayout";
+
+    var dialogTitle = ViewData["VersionDialogTitle"].ToString();
+
+    var routeCreate = ViewData["VersionCreateRoute"].ToString();
+    var routeDesign = ViewData["VersionDesignRoute"].ToString();
+    var routePreview = ViewData["VersionPreviewRoute"].ToString();
+    
+    var draftVersions = Model.Where(x => x.Status == Angelo.Connect.Models.ContentStatus.Draft).OrderByDescending(x => x.Created);
+    var archiveVersions = Model.Where(x => x.Status == Angelo.Connect.Models.ContentStatus.Archived).OrderByDescending(x => x.Created);
+
+    Func<string, string> buildPreviewUrl = version => $"{routePreview}?version={version}";
+    Func<string, string> buildDesignUrl = version => $"{routeDesign}?version={version}";
+}
+
+@section ModalTitle {
+    @Html.Localize(dialogTitle)
+}
+
+
+@section ModalBody {
+
+    <div class="version-manager-dialog">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#versionForm" data-toggle="tab">
+                    @Html.Localize("Create New Draft")
+                </a>
+            </li>
+            <li>
+                <a href="#draftList" data-toggle="tab">
+                    @Html.Localize("Existing Drafts")
+                </a>
+            </li>
+            <li>
+                <a href="#archiveList" data-toggle="tab">
+                    @Html.Localize("Create from Archives")
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="versionForm" class="tab-pane fade in active">
+
+                <form action="@routeCreate" method="post">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <h5>@Html.Localize("Version Label")</h5>
+                        </div>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" name="label" spellcheck="true" />
+                        </div>
+                        <div class="col-sm-5">
+                            <button type="submit" class="btn btn-primary">@Html.Localize("Create")</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <br />
+                <br />
+
+                <div>
+                    <i class="fa fa-info-circle"></i> &nbsp;&nbsp;
+                    @Html.Localize("Creates an editable copy of the current published version.")
+                </div>
+            </div>
+
+            <div id="draftList" class="tab-pane fade in">
+
+                <div show-if="@draftVersions.Count() == 0" class="alert alert-default">
+                    <i class="fa fa-info-circle"></i>
+                    @Html.Localize("No draft versions exist.")
+                </div>
+
+                <div hide-if="@draftVersions.Count() == 0">
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>@Html.Localize("Version")</th>
+                                <th>@Html.Localize("Label")</th>
+                                <th>@Html.Localize("Status")</th>
+                                <th>@Html.Localize("Author")</th>
+                                <th>@Html.Localize("Created")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in draftVersions)
+                            {
+                            <tr>
+                                <td class="text-primary">
+                                    <a href="@buildDesignUrl(item.VersionCode)">
+                                        <i class="fa fa-pencil-square-o"></i> &nbsp; @Html.Localize("Edit")
+                                    </a>
+                                </td>
+                                <td>@item.VersionCode</td>
+                                <td>@item.VersionLabel</td>
+                                <td>@item.Status</td>
+                                <td>@item.UserId</td>
+                                <td>@item.Created.ToString("MM/dd/yy hh:mm tt")</td>
+                                
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <br />
+                    <br />
+                    <div>
+                        <i class="fa fa-info-circle"></i> &nbsp;&nbsp;
+                        @Html.Localize("Click Edit to continue designing an existing draft version.")
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div id="archiveList" class="tab-pane fade in">
+
+                <div show-if="@archiveVersions.Count() == 0" class="alert alert-default">
+                    <i class="fa fa-info-circle"></i>
+                    @Html.Localize("No archived versions exist.")
+                </div>
+
+                <div hide-if="@archiveVersions.Count() == 0">
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>@Html.Localize("Version")</th>
+                                <th>@Html.Localize("Label")</th>
+                                <th>@Html.Localize("Status")</th>
+                                <th>@Html.Localize("Author")</th>
+                                <th>@Html.Localize("Created")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in archiveVersions)
+                            {
+                                <tr>
+                                    <td class="text-primary">
+                                        <a href="@buildPreviewUrl(item.VersionCode)">
+                                            <i class="fa fa-eye"></i> &nbsp; @Html.Localize("View")
+                                        </a>
+                                    </td>
+                                    <td>@item.VersionCode</td>
+                                    <td>@item.VersionLabel</td>
+                                    <td>@item.Status</td>
+                                    <td>@item.UserId</td>
+                                    <td>@item.Created.ToString("MM/dd/yy hh:mm tt")</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <br />
+                    <br />
+                    <div>
+                        <i class="fa fa-info-circle"></i> &nbsp;&nbsp;
+                        @Html.Localize("Create a new draft version from an archive version.")
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+}
+

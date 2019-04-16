@@ -1,0 +1,138 @@
+﻿.bg-default { background: #00457c; color: #fff }
+.bg-contrast { background-color: #2fa4e7; }
+.bg-muted { background-color: #f2f2f2;  }
+.bg-dark { background: #222; color: #eee; }
+.bg-clean { background: #fff }
+.bg-fancy {background: #FFFFFF url(images/yellow-panels.jpg) repeat 0 0;}
+
+
+
+.site-toolbar
+{
+    background-color:  rgb(251, 231, 170);
+}
+
+.site-toolbar a 
+{
+    color: #156cb2;
+}
+
+.site-toolbar a:hover
+{
+    color: #00457c;
+}
+
+.site-nav
+{
+    background-color: #2fa4e7;
+    border-bottom: 8px solid rgb(251, 231, 170);
+    background-image: linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5);
+}
+
+
+.site-nav .navbar .nav a:hover
+{
+    background-color: rgb(251, 231, 150) !important;
+    color: #444  !important;
+}
+
+    .site-nav .navbar .nav a:hover:before,
+    .site-nav .navbar .nav a:hover:after{
+        content: "";
+        position: absolute;
+        left: 0px;
+        height: 8px;
+        width: 100%;
+        background-color: rgb(251, 231, 150);
+    }
+
+    .site-nav .navbar .nav a:hover:before{
+        top: -8px;
+    }
+
+    .site-nav .navbar .nav a:hover:after{
+        bottom: -8px;
+    }
+
+.site-header-login .list-inline > li > a
+{
+    border: 1px #2483c5 solid;
+}
+
+.site-header-icons i
+{
+    color: #2483c5;
+}
+
+
+
+.left-nav
+{
+    padding-top: 15px;
+    min-height: 600px !important;
+    position: relative;
+}
+
+.left-nav::before {
+    content: "";
+    position: absolute;
+    top: -0px;
+    left: -1000px;
+    right: 0px;
+    height: 600px;
+    background-color: #f0f0f0 !important;
+}
+
+.left-nav .navbar,
+.left-nav .navbar-collapse
+{
+    margin: 0; 
+    padding: 0;
+}
+
+.left-nav .navbar-vertical,
+.left-nav .navbar-vertical *
+{
+    background-color: #fff;
+    border-color: none;
+    background-image: none;
+}
+
+
+.left-nav .navbar-vertical .navbar-header,
+.left-nav .navbar-vertical .navbar-brand
+{
+    background-color: #00457c !important;
+    color: #fff;
+}
+
+.left-nav .nav-pills > li
+{
+    margin: 0 !important;
+}
+
+.left-nav .nav-pills > li > a
+{
+    border-radius: 0;
+    color: #2483c5;
+    border-left: 1px #ddd solid;
+    border-right: 1px #ddd solid;
+    border-bottom: 1px #ddd solid;
+    border-top: none !important;
+}
+
+.left-nav .nav-pills > li > a:hover
+{
+    border-radius: 0;
+}
+
+.left-nav .nav-pills > li:last-child > a
+{
+    border-bottom-width: 5px;
+}
+
+.jumbotron
+{
+    background: rgba(244, 244, 244, 0.4) !important;
+    border-radius: 0;
+}

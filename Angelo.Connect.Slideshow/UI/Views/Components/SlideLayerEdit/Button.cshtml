@@ -1,0 +1,308 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.SlideShow.Extensions;
+
+@model SlideLayer
+@{ 
+    var transitions = typeof(Transition).GetItemsForEnum();
+    
+    //TODO based on layer type choose different partial views.
+}
+
+<input type="hidden" asp-for="Id" />
+<input type="hidden" asp-for="SlideId" />
+<input type="hidden" asp-for="LayerType" />
+<input type="hidden" asp-for="FontFamily" />
+<input type="hidden" asp-for="FontSize" />
+<input type="hidden" asp-for="HorizontalAlignment" />
+<input type="hidden" asp-for="Color" />
+<input type="hidden" asp-for="BgColor" />
+<input type="hidden" asp-for="FontWeight" />
+<input type="hidden" asp-for="FontStyle" />
+<input type="hidden" asp-for="TextDecoration" />
+
+<div class="form-group">
+    @Html.Partial("~/UI/Views/Shared/SlideShowNav.cshtml")
+</div>
+<div class="form-group">
+    <input class="form-control" asp-for="Title" placeholder="Caption Text..." spellcheck="true"  onkeyup="$('#btnPreview').html(this.value);" />
+</div>
+<div class="form-group">
+    <input class="form-control" asp-for="SourceUrl" placeholder="External Url Link (href)" />
+</div>
+
+<div class="form-group">
+    Open link: @Html.RadioButtonFor(x => x.Target, "_self") On Same Window &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    @Html.RadioButtonFor(x => x.Target, "_blank") On New Window
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div id="mytextlayertoolbar"></div>
+
+        @(Html.Kendo().ToolBar()
+              .Name("ButtonLayerToolbar")
+              .Items(items =>
+              {
+
+                  items.Add().Template("<input id='btnfontFamily' style='width: 150px;' />").Overflow(ShowInOverflowPopup.Never);
+                  items.Add().Type(CommandType.Separator);
+                  items.Add().Template("<input id='btnfontSizes' style='width: 90px;' />").Overflow(ShowInOverflowPopup.Never);
+                  items.Add().Type(CommandType.Separator);
+                  items.Add().Template("<input id='btncolorFontPicker' style='width: 90px;' />").Overflow(ShowInOverflowPopup.Never);
+                  items.Add().Type(CommandType.Separator);
+                  items.Add().Template("<input id='btncolorBgPicker' style='width: 90px;' />").Overflow(ShowInOverflowPopup.Never);
+                  items.Add().Type(CommandType.Separator);
+                  items.Add().Template("<input id='btndropdownAlign' style='width: 90px;' />").Overflow(ShowInOverflowPopup.Never);
+                  items.Add().Type(CommandType.Separator);
+                  items.Add().Type(CommandType.ButtonGroup).Overflow(ShowInOverflowPopup.Always).Buttons(buttons =>
+                  {
+                      buttons.Add().Togglable(true).Icon("bold").Id("btnlayertoolbarbold").Selected((Model.FontWeight=="bold"? true: false));
+                      buttons.Add().Togglable(true).Icon("italic").Id("btnlayertoolbaritalic").Selected((Model.FontStyle == "italic" ? true : false));
+                      buttons.Add().Togglable(true).Icon("underline").Id("btnlayertoolbarunderline").Selected((Model.TextDecoration == "underline" ? true : false));
+                  });
+
+              })
+              .Events(e => e.Toggle("onToggle"))
+        )
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="Position">Position</label>
+            @Html.EditorFor(x => x.Position, "SlideShowPosition", nameof(SlideLayer.Position))
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="Transition">Transition</label>
+            @Html.EditorFor(x => x.Transition, "SlideShowTransition", nameof(SlideLayer.Transition))
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="Transition">Delay (sec)</label>
+            @Html.EditorFor(x => x.Delay, "SlideShowDelay", nameof(SlideLayer.Delay))
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+<div class="col-sm-12">
+    <div class="form-group">
+        <label>&nbsp;</label>
+        
+        @{
+            var layerStyle = "";
+            if (!string.IsNullOrEmpty(Model.Color))
+            {
+                layerStyle += $"color:{Model.Color};";
+            }
+            if (!string.IsNullOrEmpty(Model.FontFamily))
+            {
+                layerStyle += $"font-family:{Model.FontFamily};";
+            }
+            if (Model.FontSize > 0)
+            {
+                layerStyle += $"font-size:{Model.FontSize.ToString()}px;";
+            }
+            if (!string.IsNullOrEmpty(Model.FontWeight))
+            {
+                layerStyle += $"font-weight:{Model.FontWeight.ToString()};";
+            }
+            if (!string.IsNullOrEmpty(Model.FontStyle))
+            {
+                layerStyle += $"font-style:{Model.FontStyle.ToString()};";
+            }
+            if (!string.IsNullOrEmpty(Model.TextDecoration))
+            {
+                layerStyle += $"text-decoration:{Model.TextDecoration.ToString()};";
+            }
+            if (!string.IsNullOrEmpty(Model.BgColor))
+            {
+                layerStyle += $"background-color:{Model.BgColor.ToString()};";
+            }
+
+        }
+        
+        <span id="animationSandbox" style="display:block; font-size:2rem;text-align:center;">
+            <button style='@layerStyle' id="btnPreview" class='btn btn-primary ' data-animation='animated '>@(!string.IsNullOrEmpty(Model.Title) ? Model.Title : "Preview Button")</button>
+
+        </span>
+    </div>
+
+</div>
+</div>
+
+<div class="form-group">
+    <label>&nbsp;</label>
+    <a href="#managelayers" onclick="saveLayer(this)" class="slideshowpanel form-control btn btn-primary" level="2" caption="edit slide">Save Layer</a>
+</div>
+
+
+<script>
+   
+
+    $(document).ready(function () {
+        var fontSizes = [];
+        for (i = 5; i < 65; i++) {
+            fontSizes.push({ text: i + " px", value: i + "px" })
+        }
+
+        $("#btnfontSizes").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: fontSizes,
+            value:  $("#FontSize").val() + "px",
+            select: function (e) {
+
+                if (e.dataItem) {
+                    var dataItem = e.dataItem;
+                    // kendoConsole.log("event :: select (" + dataItem.text + " : " + dataItem.value + ")");
+                    $("#btnPreview").css({ "font-size": dataItem.value });
+                    $("#FontSize").val(dataItem.value.replace("px", ""));
+                } else {
+                    // kendoConsole.log("event :: select");
+                }
+
+            }
+        });
+
+        var fontColorPicker = $("#btncolorFontPicker").kendoColorPicker({
+            toolIcon: "k-i-foreground-color",
+            value: $("#Color").val()
+        }).data("kendoColorPicker");
+
+        fontColorPicker.bind({
+            change: function (e) {
+                $("#btnPreview").css({ "color": e.value });
+                $("#Color").val(e.value);
+            }
+        });
+
+
+        var fontBgColorPicker = $("#btncolorBgPicker").kendoColorPicker({
+            //toolIcon: "k-i-foreground-color"
+            value: $("#BgColor").val()
+        }).data("kendoColorPicker");
+
+        fontBgColorPicker.bind({
+            change: function (e) {
+                $("#btnPreview").css({ "background-color": e.value });
+                $("#BgColor").val(e.value);
+            }
+        });
+
+        $("#btnfontFamily").kendoDropDownList({
+            optionLabel: "Fonts",
+            dataTextField: "text",
+            dataValueField: "value",
+            value: $("#FontFamily").val(),
+            dataSource: [
+                { text: "Arial", value: "Arial" },
+                { text: "Courier New", value: "Courier New" },
+                { text: "Georgia", value: "Georgia" },
+                { text: "Impact", value: "Impact" },
+                { text: "Lucida Console", value: "Lucida Console" },
+                { text: "Tahoma", value: "Tahoma" },
+                { text: "Times New Roman", value: "Times New Roman" },
+                { text: "Trebuchet MS", value: "Trebuchet MS" },
+                { text: "Verdana", value: "Verdana" }
+            ],
+            select: function (e) {
+
+                if (e.dataItem) {
+                    var dataItem = e.dataItem;
+                    // kendoConsole.log("event :: select (" + dataItem.text + " : " + dataItem.value + ")");
+                    $("#btnPreview").css({ "font-family": dataItem.value });
+                    $("#FontFamily").val(dataItem.value);
+                } else {
+                    // kendoConsole.log("event :: select");
+                }
+
+            }
+        });
+
+        var alignment = "";
+        if ($("#HorizontalAlignment").val() === 1) {
+            alignment = "left";
+        }
+        if ($("#HorizontalAlignment").val() === 2) {
+            alignment = "center";
+        }
+        if ($("#HorizontalAlignment").val() === 3) {
+            alignment = "right";
+        }
+
+        $("#btndropdownAlign").kendoDropDownList({
+            optionLabel: "Align",
+            dataTextField: "text",
+            dataValueField: "value",
+            value: alignment,
+            template: '<span class="k-icon k-i-align-#: data.value #"></span>' +
+                '<span class="k-state-default">#: data.text #</span>',
+            valueTemplate: '<span class="k-icon k-i-align-#: data.value #"></span>',
+            dataSource: [
+                { text: "Left", value: "left" },
+                { text: "Center", value: "center" },
+                { text: "Right", value: "right" }
+
+            ],
+            select: function (e) {
+
+                if (e.dataItem) {
+                    var dataItem = e.dataItem;
+                    var alignmentVal = 0;
+                    if (dataItem.value === "left") {
+                        alignmentVal = 1;
+                    } else if (dataItem.value === "center") {
+                        alignmentVal = 2;
+                    } else if (dataItem.value === "right") {
+                        alignmentVal = 3;
+                    }
+                    // kendoConsole.log("event :: select (" + dataItem.text + " : " + dataItem.value + ")");
+                    $("#btnPreview").css({ "text-align": dataItem.value });
+                    $("#HorizontalAlignment").val(alignmentVal);
+
+                } else {
+                    // kendoConsole.log("event :: select");
+                }
+
+            }
+        });
+
+
+    });
+
+    function onToggle(e) {
+
+        switch (e.id) {
+        case "btnlayertoolbarbold":
+            $("#btnPreview").css({ "font-weight": (e.checked ? "bold" : "normal") });
+            $("#FontWeight").val((e.checked ? "bold" : "normal"));
+            break;
+        case "btnlayertoolbaritalic":
+            $("#btnPreview").css({ "font-style": (e.checked ? "italic" : "normal") });
+            $("#FontStyle").val((e.checked ? "italic" : "normal"));
+            break;
+        case "btnlayertoolbarunderline":
+            $("#btnPreview").css({ "text-decoration": (e.checked ? "underline" : "inherit") });
+            $("#TextDecoration").val((e.checked ? "underline" : "inherit"));
+            break;
+
+        }
+    }
+
+
+    $.on("transition.change", function (event, data) {
+        var animation = data.animation;
+
+        $("#animationSandbox").removeClass().addClass(animation + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+            $(this).removeClass();
+        });
+    });
+</script>

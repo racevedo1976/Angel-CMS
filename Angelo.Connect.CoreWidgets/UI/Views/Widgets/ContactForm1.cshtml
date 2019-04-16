@@ -1,0 +1,74 @@
+﻿@using Angelo.Connect.Rendering;
+@using Angelo.Connect.Security;
+@model Angelo.Connect.CoreWidgets.Models.ContactForm
+@{ 
+    bool isAuthenticated = User.Identity.IsAuthenticated;
+    bool inDesignMode = ViewData.GetTreeContext().Editable;
+
+    string emailAddress = "";
+    string fullName = "";
+
+    if (!inDesignMode && User.Identity.IsAuthenticated)
+    {
+        fullName = User.GetFullName();
+        emailAddress = User.GetEmailAddress();
+    }
+}
+
+<style>
+    .cs-contact-form .btn { opacity: 1; }
+    .cs-contact-form .btn.disabled { opacity: 0.15; }
+</style>
+
+<form class="cs-contact-form" data-module="widgets/contactform" action="/sys/widgets/contactform/send" data-design-mode="@(inDesignMode ? "true" : "false")" data-ajax-form="true" data-success-message="@Html.Localize("Success, your message was sent.")">
+    <input type="hidden" name="ContactFormId" value="@Model.Id" />
+    <div class="form-group" show-if="@(!Model.AllowAnonymous && (!isAuthenticated || inDesignMode))">
+        <div class="alert alert-info">
+            <i class="fa fa-info"></i> &nbsp;
+            @Html.Localize("You must be logged in to use this form.")
+        </div>
+    </div>
+    <div class="form-group" css-hidden="@(!Model.AllowAnonymous || (!inDesignMode && isAuthenticated))">
+        <label class="form-label">
+            @Html.Localize("Your Name")
+        </label>
+        <div>
+            <input class="form-control" name="SenderName" value="@fullName"/>
+        </div>
+    </div>
+    <div class="form-group" css-hidden="@(!Model.AllowAnonymous || (!inDesignMode && isAuthenticated))">
+        <label class="form-label">
+            @Html.Localize("Your Email Address")
+        </label>
+        <div>
+            <input class="form-control" name="SenderEmail" value="@emailAddress"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">
+            @Html.Localize("Subject")
+        </label>
+        <div>
+            <input class="form-control" name="MessageSubject" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">
+            @Html.Localize("Message")
+        </label>
+        <div>
+            <textarea class="form-control" name="MessageBody" rows="10" style="resize: none;"></textarea>
+        </div>
+    </div>
+    <div class="form-group text-right" show-if="@(Model.AllowAnonymous || isAuthenticated)">
+        <span name="Success" class="text-success" style="display: none;">
+            <i class="fa fa-check"></i> &nbsp;
+            @Html.Localize("Sent")  &nbsp;
+        </span>
+        <a name="Send" class="btn btn-default disabled" disabled="disabled">
+            <i class="fa fa-envelope-o"></i> &nbsp;
+            @Html.Localize("Send")
+        </a>
+    </div>
+   
+</form>

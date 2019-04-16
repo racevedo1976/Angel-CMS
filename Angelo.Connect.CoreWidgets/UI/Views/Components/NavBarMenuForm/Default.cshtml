@@ -1,0 +1,54 @@
+﻿@model Angelo.Connect.CoreWidgets.UI.ViewModels.NavBarMenuViewModel
+
+<script src="/js/widgets/navbarform.js"></script>
+
+@(Html.Kendo().Grid(Model.NavMenus)
+        .Name("navMenuSelectionGrid")
+        .Columns(columns => {
+            columns.Bound(x => x.Id)
+                .ClientTemplate("<input type='checkbox' class='chkbx' value='#= Id #'/>")
+                .Width(50)
+                .Title("");
+            columns.Bound(x => x.Title);
+        })
+        .Sortable()
+        .Scrollable()
+        .Selectable(selectable => selectable
+            .Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Cell)
+        )
+        .Events(events => {
+            events.DataBound("navMenuSelectionGrid_DataBound");
+        })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(false)
+        )
+        .HtmlAttributes(new { height = "300px" })
+)
+
+<div class="row">
+    <div class="col-sm-8">
+        Choose an existing menu to display from the list above or create a new menu.
+    </div>
+    <div class="col-sm-4 text-right">
+        <a class="btn btn-success btn-sm" href="#new" onclick="navMenuSelectionGrid_Create()">
+            <i class="fa fa-plus"></i>
+            Create New Menu
+        </a>
+    </div>
+</div>
+
+
+<form id="navMenuForm" class="form" action="/api/widgets/html/navbarmenu" data-ajax-form="true">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="NavMenuId" value="@Model.NavMenuId" />
+</form>
+
+<script>
+
+    function navMenuSelectionGrid_Create() {
+        alert("Create new Menu");
+    }
+
+</script>

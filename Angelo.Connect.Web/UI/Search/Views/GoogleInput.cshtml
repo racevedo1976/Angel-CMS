@@ -1,0 +1,13 @@
+﻿@{ 
+    var googleSearchCode = ViewData["GoogleSearchCode"].ToString();
+
+    var siteUrl = ViewData["SiteUrl"].ToString();
+    var resultsUrl = siteUrl + "/sys/search";
+}
+
+<div class="search-field search-field-google">
+    <gcse:searchbox-only resultsUrl="@resultsUrl" newWindow="false" queryParameterName="q">
+</div>
+
+
+<script src="https://cse.google.com/cse.js?cx=@googleSearchCode"></script>

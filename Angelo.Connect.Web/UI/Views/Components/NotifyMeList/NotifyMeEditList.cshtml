@@ -1,0 +1,68 @@
+﻿@model List<UserMembershipViewModel>
+
+@using Angelo.Connect.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+
+    var userId = (string)ViewData["userId"];
+    var siteId = (string)ViewData["siteId"];
+}
+
+<style>
+    
+    .angelo-form input[type=checkbox] { 
+     -ms-transform: scale(2); /* IE */
+     -moz-transform: scale(2); /* FF */
+     -webkit-transform: scale(2); /* Safari and Chrome */
+     -o-transform: scale(2); /* Opera */
+      margin: 10px;
+    } 
+
+</style>
+
+
+
+    <form id="@componentId" action="/api/usergroups/updatememberships" class="angelo-form" data-ajax-form>
+        @Html.Hidden("UserId", userId)
+        @Html.Hidden("SiteId", siteId)
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="col-sm-6">Group Name</th>
+                    <th class="col-sm-4 text-center">Communication Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var index = 0; index < Model.Count; index++)
+                {
+                    <tr>
+                        <td>
+                            <span style="font-size:18px;">@Model[index].UserGroupName</span>
+                            @Html.HiddenFor(model => model[index].UserGroupId)
+                            @Html.HiddenFor(model => model[index].UserGroupName)
+                            @Html.HiddenFor(model => model[index].AllowPublicEnrollment)
+                            @Html.HiddenFor(model => model[index].IsMember)
+                        </td>
+                        <td>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    @Html.CheckBoxFor(model => model[index].AllowEmailMessaging)
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    @Html.CheckBoxFor(model => model[index].AllowSmsMessaging)
+                                    <label>SMS</label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+
+
+

@@ -1,0 +1,38 @@
+﻿@{
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["siteId"];
+}
+
+@(Html.Kendo().TreeList<PageViewModel>()
+    .Name(componentId)
+    .Columns(columns => {
+        columns.Add().Field(e => e.Id).Hidden(true);
+        columns.Add().Field(e => e.Title).Width(200);
+        columns.Add().Field(e => e.Path);
+        columns.Add().Field(e => e.PageMasterTitle);
+        columns.Add().Field(e => e.IsPrivate);
+    })
+    .Sortable()
+    .Selectable()
+    .Editable(x => x.Move(true))
+    .DataSource(dataSource => dataSource
+        .Read(read => read.Url(@routes.SiteApi("pages/data")))
+        .ServerOperation(false)
+        .Model(m => {
+            m.Id(x => x.Id);
+            m.ParentId(x => x.ParentPageId);
+            m.Expanded(true);
+        })
+    )
+    .Height(960)
+)
+
+<script>
+    function designPage(data) {
+        var tree = $("#@componentId").getKendoTreeList();
+        var row = $(data.currentTarget).parents("tr:first");
+        var model = tree.dataItem(row);
+
+        $.trigger("@(componentId).design", model);
+    }
+</script>

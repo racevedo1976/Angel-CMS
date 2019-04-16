@@ -1,0 +1,227 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Services
+@using Angelo.Connect.Abstractions
+
+@inject GalleryService _galleryService
+
+@model GalleryWidget
+
+<style>
+
+    /* Extra small devices (phones, 600px and down) */
+    @@media only screen and (max-width: 600px) {
+        .gallery-image {
+            max-height: 200px;
+        }
+    } 
+
+    /* Medium devices (landscape tablets, 768px and up) */
+    @@media only screen and (min-width: 768px) {
+        .gallery-image {
+            max-height: 300px;
+        }
+    } 
+
+    /* Large devices (laptops/desktops, 992px and up) */
+    @@media only screen and (min-width: 992px) {
+        .gallery-image {
+            max-height: 500px;
+        }
+    } 
+
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @@media only screen and (min-width: 1200px) {
+        .gallery-image {
+            max-height: 700px;
+        }
+    }
+
+    .gallery-body {
+        padding: 5px;
+    }
+
+    .gallery-footer {
+        padding: 10px;
+    }
+
+    .modal-dialog.modal-center{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) !important;
+        height: auto;
+        width: auto;
+    }
+    
+    .gallery-thumbnail > img {
+        height: 110px;
+        /*width: 100%;*/
+    }
+    
+    .gallery-caption {
+        text-align: center;
+    }
+    
+
+    li.photo_album{
+	    margin:10px;
+	    padding:5px;
+	    float: left;
+	    list-style: none; 
+	    height: 100px;
+	    text-align: center;
+    }
+
+    ul.photo_album{
+	    padding-left: 0;
+    }
+
+    .photo_album_thumb{
+	    height:100px;
+	    overflow:hidden; 
+	    text-align:center;
+    }
+    
+</style>
+
+<div class="container-fluid">
+    <h3>@Model.Title</h3> 
+    <ul class="photo_album">
+        @foreach (var item in Model.GalleryItems)
+        {
+            <li class="photo_album">
+                <div class="photo_album_thumb">
+                    <a href="#" class="gallery-thumbnail" data-image-id="" data-toggle="modal" data-title="@item.Title" data-caption="@item.Title" data-image="@item.Url" data-target="#image-gallery" data-gallery="gallery_@item.WidgetId" onclick="ShowGallery(this);">
+                        <img class="img-responsive" src="@item.Url" alt="@item.Title">
+                    </a>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+
+
+
+<script>
+
+    function ShowGallery(item) {
+        new BstrapModal(item.dataset.title).Show();
+
+    }
+
+
+    var BstrapModal = function (title, body, buttons) {
+        var title = title || "";
+        var body = body || "";
+        var GetModalStructure = function () {
+            var that = this;
+            that.Id = BstrapModal.Id = "myModalLabel";  //Math.random();
+            return "<div class='modal fade' name='dynamiccustommodal' id='" + that.Id + "' tabindex='-1' role='dialog'  data-backdrop='static' data-keyboard='false' aria-labelledby='" + that.Id + "Label'>" +
+                    "<div class='modal-center modal-dialog' style='z-index:1300;'>" +
+                        "<div class='modal-content'>" +
+                            "<div class='modal-body gallery-body'>" +
+                                    "<button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'><span aria-hidden='true'>&times;  </span></button>" +
+                                    "<img id='image-gallery-image' class='img-responsive gallery-image' src=''>" + //body +
+                            "</div>" +
+                            "<div class='modal-footer gallery-footer'>" +
+                                "<div class='col-md-2 text-left'>" +
+                                    "<i class='fa fa-chevron-left fa-2x'' id='show-previous-image'></i>" +
+                                "</div>" +
+                                "<div class='col-md-8 text-justify gallery-caption' id='image-gallery-caption'>" +
+                                    "." +
+                                "</div>" +
+                                "<div class='col-md-2 text-right'>" +
+                                    "<i id='show-next-image' class='fa fa-chevron-right fa-2x'></i>" +
+                                "</div>" +
+                            "</div>" +
+                        "</div>" +
+
+                    "</div>" +
+                "</div>"
+        }();
+        BstrapModal.Delete = function () {
+            var modals = document.getElementsByName("dynamiccustommodal");
+            if (modals.length > 0) document.body.removeChild(modals[0]);
+        };
+        BstrapModal.Close = function () {
+            $(document.getElementById(BstrapModal.Id)).modal('hide');
+            BstrapModal.Delete();
+        };
+        this.Show = function () {
+            //var btns = document.querySelectorAll("button[name='btn" + BstrapModal.Id + "']");
+            //for (var i = 0; i < btns.length; i++) {
+            //    btns[i].addEventListener("click", buttons[i].Callback || BstrapModal.Close);
+            //}
+            $(document.getElementById(BstrapModal.Id)).modal('show');
+        };
+        this.Load = function () {
+            BstrapModal.Delete();
+            document.body.appendChild($(GetModalStructure)[0]);
+        };
+    };
+
+
+
+
+    $(document).ready(function () {
+        new BstrapModal().Load();
+
+
+        loadGallery(true, 'a.gallery-thumbnail');
+
+        //This function disables buttons when needed
+        function disableButtons(counter_max, counter_current) {
+            //debugger;
+            $('#show-previous-image, #show-next-image').show();
+            if (counter_max == counter_current) {
+                $('#show-next-image').hide();
+            } else if (counter_current == 1) {
+                $('#show-previous-image').hide();
+            }
+        }
+
+        function loadGallery(setIDs, setClickAttr) {
+            var current_image,
+                selector,
+                counter = 0;
+
+            $('#show-next-image, #show-previous-image').click(function () {
+                if ($(this).attr('id') == 'show-previous-image') {
+                    current_image--;
+                } else {
+                    current_image++;
+                }
+
+                selector = $('[data-image-id="' + current_image + '"]');
+                updateGallery(selector);
+            });
+
+            function updateGallery(selector) {
+                var $sel = selector;
+                current_image = $sel.data('image-id');
+                $('#image-gallery-caption').text($sel.data('caption'));
+                $('#image-gallery-title').text($sel.data('title'));
+                $('#image-gallery-image').attr('src', $sel.data('image'));
+
+                disableButtons(counter, $sel.data('image-id'));
+            }
+
+            if (setIDs == true) {
+                $('[data-image-id]').each(function () {
+                    counter++;
+                    $(this).attr('data-image-id', counter);
+                });
+            }
+            $(setClickAttr).on('click', function () {
+                updateGallery($(this));
+            });
+        }
+    });
+
+
+
+</script>
+
+@functions{
+
+}

@@ -1,0 +1,114 @@
+﻿@using Angelo.Connect
+@using Microsoft.Extensions.Options
+
+@inject IOptions<DriveOptions> _driveOptions
+
+@model Angelo.Connect.CoreWidgets.Models.Image
+
+<component id="contentSelector" type="ContentSelector"></component>
+
+<form class="form" action="/api/widgets/html/image" data-ajax-form="true">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="form-group">
+        <label class="form-label">Url</label>
+        <div class="input-group">
+            <input id="fileUrlTarget" class="form-control" name="Src" asp-for="Src" value="@Model.Src" />
+            <span class="input-group-btn">
+                <a class="btn btn-default" onclick="selectOne()">...</a>
+            </span>
+            <script>
+                var userId = '@User.GetUserId()';
+                var driveUrl = '@_driveOptions.Value.Authority';
+
+                function selectOne() {
+                    //debugger;
+                    var $input = $("#fileUrlTarget");
+
+                    $.mediaBrowser({
+                        title: "@Html.Localize("Select an Image")",
+                        userId: userId,
+                        driveUrl: driveUrl
+                    })
+                        .done(function (image) {
+                            if (image) {
+
+                                if (image.isCropped) {
+                                    $input.val(image.croppedUrl);
+
+                                } else {
+                                    // if no selection is made image will be undefined
+                                    $input.val(image ? image.imageUrl : "");
+
+                                }
+                            }
+                        })
+                }
+
+                function SelectImage() {
+                    ShowContentSelector({
+                        title: "Select an Image File:",
+                        fileUrlTarget: "fileUrlTarget"
+                    });
+                }
+
+                function CropImage() {
+                    var $input = $("#fileUrlTarget");
+
+                    $.imageCropper({
+                        editImageMode: true,           //set to true if image already cropped (previously) and we are just edting that cropped version
+                        editImageUrl: $input.val(),    //if editImageMode = true, then pass the URL used for this cropped image with coordinates.
+                        driveUrl: driveUrl             // *Require*  drive host, url.
+                    }).done(function (image) {
+                        //the return is the new url with new coordinates 
+                        $input.val(image ? image.croppedUrl : "");
+                    });
+                }
+            </script>
+        </div>
+        <a href="#" onclick="CropImage();" hide-if="@(!Model.Src.Contains(_driveOptions.Value.Authority))"><i class="fa fa-crop"></i></a>
+    </div>
+    <div class="form-group">
+        <label class="form-label">@Html.Localize("Caption")</label>
+        <div>
+            <input class="form-control" name="Caption" asp-for="Caption" value="@Model.Caption" required spellcheck="true"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">@Html.Localize("Link")</label>
+        <div>
+            <input class="form-control" name="Link" asp-for="Link" value="@Model.Link" placeholder="Example: https://www.google.com"/>
+            <span asp-validation-for="Link" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <input class="pull-left" name="LinkNewWindow" asp-for="LinkNewWindow" /> <label for="LinkNewWindow">@Html.Localize("Open in New Window")</label>
+    </div>
+    <div class="form-group">
+        <label class="form-label">@Html.Localize("Height")</label>
+        <div>
+            <input class="form-control" name="Height" asp-for="Height" value="@Model.Height" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">@Html.Localize("Width")</label>
+        <div>
+            <input class="form-control" name="Width" asp-for="Width" value="@Model.Width" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">@Html.Localize("Rounded")</label>
+        <div>
+            <select class="form-control" name="Radius" asp-for="Radius" value="@Model.Radius">
+                <option value="0px" @(Model.Radius == "0px" || Model.Radius == null ? "selected" : "")>None</option>
+                <option value="5px" @(Model.Radius == "5px" ? "selected" : "")>5px</option>
+                <option value="10px" @(Model.Radius == "10px" ? "selected" : "")>10px</option>
+                <option value="15px" @(Model.Radius == "15px" ? "selected" : "")>15px</option>
+                <option value="20px" @(Model.Radius == "20px" ? "selected" : "")>20px</option>
+                <option value="10%" @(Model.Radius == "10%" ? "selected" : "")>10% </option>
+                <option value="25%" @(Model.Radius == "25%" ? "selected" : "")>25% </option>
+                <option value="50%" @(Model.Radius == "50%" ? "selected" : "")>50% </option>
+                <option value="100%" @(Model.Radius == "100%" ? "selected" : "")>100% (circle)</option>
+            </select>
+        </div>
+    </div>
+</form>

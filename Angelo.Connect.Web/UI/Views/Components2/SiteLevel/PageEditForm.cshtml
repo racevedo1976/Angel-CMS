@@ -1,0 +1,132 @@
+﻿@model PageViewModel
+
+@using Angelo.Connect.Abstractions;
+@using Angelo.Connect.Configuration;
+
+@{
+    var componentId = (string)ViewData["cid"];
+
+    Func<string, string> buildDesignUrl = version => Model.DefaultDomain + $"/sys/page/{Model.Id}/design?version={version}";
+    Func<string, string> buildPreviewUrl = version => Model.DefaultDomain + $"{Model.Path}?version={version}";
+}
+
+<form id="@componentId" action="@routes.SiteApi("pages")" class="form-horizontal" data-ajax-form>
+    <input hidden="hidden" type="text" asp-for="Id" />
+    <input hidden="hidden" type="text" asp-for="Layout" />
+    <input hidden="hidden" type="text" asp-for="SiteId" />
+    <input hidden="hidden" type="text" asp-for="ParentPageId" />
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.Localize("Page Status")</label>
+        <div class="col-sm-8">
+            <label class="text-success" show-if="@Model.HasBeenPublished">
+                <i class="fa fa-check-circle"></i> &nbsp;
+                @Html.Localize("Published")
+            </label>
+
+            <label class="text-muted" hide-if="@Model.HasBeenPublished">
+                <i class="fa fa-exclamation-circle"></i> &nbsp;
+                @Html.Localize("Not Published")
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group" show-if="@(!String.IsNullOrEmpty(Model.ParentPageId))">
+        <label class="col-sm-4" asp-for="ParentPageTitle"></label>
+        <div class="col-sm-8">
+            <span>@Model.ParentPageTitle</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4" asp-for="IsPrivate"></label>
+        <div class="col-sm-8">
+            <input name="IsPrivate" id="privateOption" class="pull-left" asp-for="IsPrivate" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4" asp-for="Title"></label>
+        <div class="col-sm-8">
+            <input name="Title" type="text" class="form-control" asp-for="Title" required spellcheck="true" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4" asp-for="Path"></label>
+        <div class="col-sm-8">
+            <input name="Path" type="text" class="form-control" asp-for="Path" required spellcheck="true" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4" asp-for="PageMasterId"></label>
+        <div class="col-sm-8">
+            <select class="form-control" asp-for="PageMasterId" asp-items="Model.MasterPages"></select>
+        </div>
+    </div>
+
+    @* // Master page preview image is taking up a lot of space and useless right now - so hiding *@
+    <div style="display: none">
+        <img id="PageMasterPreview" src="#" style="display:none; margin-top:10px;" class="thumbnail" />
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4" asp-for="Keywords"></label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" asp-for="Keywords"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4" asp-for="Summary"></label>
+        <div class="col-sm-8">
+            <textarea class="form-control" asp-for="Summary" spellcheck="true" rows="5"></textarea>
+        </div>
+    </div>
+</form>
+
+<div show-if="@Model.HasVersions" style="padding: 15px;">
+   <h4>@Html.Localize("Versions")</h4>
+   <hr style="padding: 0; margin: 5px 0" />
+   <ul class="list-unstyled">
+       @foreach (var version in Model.Versions)
+       {
+        <li>
+            <a href="@buildPreviewUrl(version.VersionCode)" style="display: inline-block; width: 140px;">
+                <i class="fa fa-eye"></i> &nbsp;
+                @version.VersionCode
+            </a>
+            <span class="text-muted">@version.VersionLabel</span>
+        </li>
+       }
+   </ul>
+
+</div>
+<script>
+    $(document).ready(function () {
+        showPreview();
+    });
+    $("#PageMasterId").on("change", function () {
+        showPreview();
+    });
+    function showPreview() {
+        var id = $("#PageMasterId option:selected").val();
+        $.get("@routes.SiteApi("masterpages/data")/" + id, function (data) {
+            $("#PageMasterPreview").show();
+            $("#PageMasterPreview").attr('src', data.PreviewPath);
+        });
+    }
+
+    //$("#privateOption").change(function () {
+    //    $("#privateSecurity").toggle();
+    //});
+
+    if (document.getElementById('privateOption').checked)
+        $("#privateSecurity").toggle();
+
+    var thisId = document.getElementById("Id");
+    if (thisId && thisId.value) {
+        $('#privateOption').click(function () {
+            $("#privateSecurity").toggle(this.checked);
+        });
+    }
+</script>

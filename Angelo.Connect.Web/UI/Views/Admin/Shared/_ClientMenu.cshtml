@@ -1,0 +1,52 @@
+﻿@using Angelo.Connect.Web
+@using Angelo.Connect.Menus
+
+@inject IContextAccessor<AdminContext> adminContextAccessor
+@inject MenuProvider menuProvider
+@inject Angelo.Connect.Services.SiteManager siteManager
+
+@{
+    var adminContext = adminContextAccessor.GetContext();
+    var menuItems = await menuProvider.GetMenuItemsAsync(MenuType.ClientTools);
+    var client = adminContext.ClientContext.Client;
+    var dashboardUrl = $"/sys/clients/{client.TenantKey}/admin";
+}
+
+<component id="applicationSelector" type="ApplicationSelector" lazy="true"></component>
+
+<ul class="menu-list list-unstyled" style="margin-left: 10px">
+    <li>
+        <a class="menu-link menu-root" href="@dashboardUrl">
+            @IconType.HomeAdmin.Render()
+            @Html.Localize("Client Admin")
+        </a>
+        <a class="menu-toggle fa fa-caret-up" data-expand="$(this).next()" data-toggle-css="['fa fa-caret-down', 'fa fa-caret-up']"></a>
+        <ul class="list-unstyled" style="margin-left: 10px">
+            @foreach (var item in menuItems)
+            {
+                <li>
+                    <a href="@item.Url" css-active="item.Active">
+                        @item.Icon.Render()
+                        @Html.Localize(item.Title)
+                    </a>
+                    @if (item.MenuItems.Count() > 0)
+                    {
+                        <a class="menu-toggle @(item.Active ? "fa fa-caret-up" : "fa fa-caret-down")" data-expand="$(this).next()" data-toggle-css="['fa fa-caret-down', 'fa fa-caret-up']"></a>
+                    }
+                    <ul class="list-unstyled menu-section" css-open="@item.Active">
+                        @foreach (var link in item.MenuItems)
+                        {
+                            <li>
+                                <a href="@link.Url" css-active="link.Active">
+                                    @link.Icon.Render()
+                                    @Html.Localize(link.Title)
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </li>
+</ul>
+

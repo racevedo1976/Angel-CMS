@@ -1,0 +1,59 @@
+﻿@using Angelo.Connect.Models
+
+@inject Angelo.Connect.Services.SiteAlertsManager alertManager
+@inject SiteContextAccessor SiteContextAccessor
+
+@{
+    var siteId = SiteContextAccessor.GetContext().SiteId;
+    var today = DateTime.Now;
+    var alerts = alertManager.GetSiteAlerts(siteId).Where(x => x.Status == ContentStatus.Published && today >= x.StartDate.Date && today < x.EndDate.Date.AddDays(1));
+    
+}
+
+
+<script>
+    $(document).ready(function () {
+        @foreach (var alert in alerts)
+        {
+            var cookieName = $"AngeloSiteAlertCookie-{alert.SiteId}-{alert.Id}-{alert.VersionCode}";
+
+            <text>
+               
+                if (getCookie('@cookieName') == "") {
+                    $.dialog('/sys/public/sitealerts/display', { alertId: '@alert.Id' })
+                        .done(function () {
+                    
+                            setCookie('@cookieName', "sitealert", 365)
+                        });
+                }
+
+            </text>
+        }
+
+    });
+
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+        //debugger;
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+</script>

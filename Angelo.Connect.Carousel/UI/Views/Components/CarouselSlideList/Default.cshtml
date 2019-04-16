@@ -1,0 +1,39 @@
+﻿@model Angelo.Connect.Carousel.Models.CarouselWidget
+
+
+
+
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Title</th>
+      
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody class="sortableSlides">
+    @foreach (var slide in Model.Slides.OrderBy(x => x.Sort))
+    {
+        <tr id="@slide.Id">
+            <td>
+                <b> @slide.Title </b>
+                <br />
+                @slide.Description
+            </td>
+           
+            <td>
+                <a name="design" title="@Html.Localize("Edit")" onclick="editCarouselSlide('@slide.Id');">
+                    <i class="fa fa-fw fa-edit"></i>
+                    
+                </a>
+                <br />
+                <a title="@Html.Localize("Delete")" onclick="deleteCarouselSlide('@slide.Id');">                                 
+                    <i class="fa fa-trash" ></i> 
+                    
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

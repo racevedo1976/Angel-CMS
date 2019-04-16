@@ -1,0 +1,55 @@
+﻿@model Angelo.Connect.Widgets.WidgetConfig
+@{
+    Layout = "_ModalLayoutWithMenu";
+
+    var widgetId = (string)ViewData["WidgetId"];
+    var widgetForm = Model.Forms.First();
+    var widgetTabs = widgetForm.Tabs?.ToArray();
+
+
+    // If no tabs have been configured, then just show a single corresponding 
+    // to the form's title (eg, just like it has been doing)
+    if(widgetTabs == null || widgetTabs.Length == 0)
+    {
+        widgetTabs = new string[] { widgetForm.Title };
+    }
+}
+
+@section ModalTitle {
+    @Html.Localize("Settings")
+}
+
+@*
+    // Using widgetform.js (a requirejs module) to handle tabbing
+    // based on index. The widget's form view must use bootstrap 
+    // .tab-content and have child .tab-panes in same order.
+
+    // Note: Only the top-most .tab-content container will be used
+    //       so that widget forms can safely use child tabstrips
+
+*@
+
+@section ModalMenu {
+    <div class="padded">
+        <ul class="nav nav-pills nav-stacked" data-module="widgets/internal/widgetform">
+            @for (var i = 0; i < widgetTabs.Length; i++)
+            {
+                <li css-active="i == 0">
+                    <a role="tab">@Html.Localize(widgetTabs[i])</a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@section ModalBody {
+    <div class="padded">
+        @widgetForm.Render(this.ViewContext, widgetId)
+    </div>
+}
+
+@section ModalFooter {
+    <button name="close" class="btn btn-default modal-button">Close</button>
+    <button name="save" class="btn btn-primary modal-button">Save</button>
+}
+

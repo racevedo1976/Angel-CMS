@@ -1,0 +1,36 @@
+﻿@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Models
+
+@model IFolder
+
+@inject IFolderManager<FileDocument> _folderManager
+@{ 
+    var id = "tree-" + GetHashCode();
+    var isRootShown = false;
+}
+
+<div id="@id">
+    @if (isRootShown)
+    {
+        @Html.Partial("_Node.cshtml", Model)
+    }
+    else
+    {
+        @foreach (var child in GetFolders(Model))
+        {
+            @Html.Partial("_Node.cshtml", child)
+        }
+    }
+    @Html.Partial("_Node.cshtml", new Folder() { Title = "Trash" })
+    <div>
+        <span class="glyphicon glyphicon-plus invisible" />
+        <a href="#"><span class="glyphicon glyphicon-share" /><label class="form-label">Share</label></a>
+    </div>
+</div>
+
+@functions {
+    public IEnumerable<IFolder> GetFolders(IFolder parent)
+    {
+        return parent == null ? Enumerable.Empty<IFolder>() : _folderManager.GetFoldersAsync(parent).Result;
+    }
+}

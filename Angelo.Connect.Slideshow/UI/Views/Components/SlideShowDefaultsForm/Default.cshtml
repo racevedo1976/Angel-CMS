@@ -1,0 +1,29 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model SlideShowWidget
+
+<form class="form-horizontal" data-ajax-form="true" action="/api/widgets/slideshow/defaults">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="SiteId" />
+
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#slideshowTab" data-toggle="tab">
+                Slideshow Defaults
+            </a>
+        </li>
+        <li>
+            <a href="#progressTab" data-toggle="tab">
+                Progress Bar Defaults
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="slideshowTab" class="tab-pane fade in active">
+            @await Html.PartialAsync("_SlideShow.cshtml", Model)
+        </div>
+        <div id="progressTab" class="tab-pane fade in">
+            @await Html.PartialAsync("_ProgressBar.cshtml", Model)
+        </div>
+    </div>
+</form>

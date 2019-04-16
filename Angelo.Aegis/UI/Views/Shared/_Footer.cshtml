@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+
+@inject IOptions<RequestLocalizationOptions> LocalizationOptions
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>().RequestCulture;
+    var supportedCultures = LocalizationOptions.Value.SupportedCultures
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
+        .ToList();
+}
+
+<br />
+<br />
+<footer class="footer navbar navbar-fixed-bottom clearfix">
+    <p class="pull-left">
+        @Html.Localize("Site.Language.Short")
+        <a bs-toggle-modal="cultureOptions">
+            @requestCulture.Culture.DisplayName
+        </a>
+    </p>
+</footer>
+
+<modal id="cultureOptions" title="@Html.Localize("Site.Language.Prompt")">
+    <modal-body>
+        <form class="form" id="cultureOptionForm" action="/culture" method="post">
+            <div class="form-group">
+                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString.ToUriComponent()" />
+                <select class="form-control" name="culture" asp-for="@requestCulture.UICulture.Name" asp-items="supportedCultures" onchange="cultureOptionForm.submit()"></select>
+            </div>
+        </form>
+    </modal-body>
+</modal>

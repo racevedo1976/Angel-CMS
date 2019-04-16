@@ -1,0 +1,31 @@
+﻿@model ConsoleTreeBranch
+
+
+<ul class="csc-nav-tree list-unstyled" data-module="console/treebranch">
+    @foreach (var node in Model.Nodes)
+    {
+        <li id="@node.Id" data-node-type="@node.NodeType" data-has-children="@node.HasChildren">
+            <div>               
+                @if (node.HasChildren)
+                {
+                    <a class="csc-nav-expander">
+                        <i class="fa fa-plus-square"></i>
+                    </a>
+                }
+                else
+                {
+                    <span class="csc-nav-expander"></span>
+                }
+
+                <a class="csc-nav-link" data-route="@node.LinkUrl">
+                    <i class="@node.IconCss"></i> &nbsp;
+                    @node.Title
+                </a>              
+            </div>
+            @if (node.HasChildren)
+            {
+                <div class="csc-nav-branch"></div>
+            }
+        </li>
+    }
+</ul>

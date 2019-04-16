@@ -1,0 +1,29 @@
+﻿@model GroupViewModel
+@using Angelo.Identity.Models
+@{
+    var componentId = (string)ViewData["cid"];
+    
+}
+<div>
+    <div style="padding:10px;">
+        
+        <h3>@(string.IsNullOrEmpty(Model.Id) ? Html.Localize("Add New Group:") : Html.Localize("Edit Group:"))</h3>
+        
+    </div>
+
+    <form id="@componentId" class="form-horizontal" action="/api/group/save" data-ajax-form>
+        @Html.HiddenFor(Model => Model.Id)
+        @Html.HiddenFor(Model => Model.OwnerId)
+        
+        <div class="form-group">
+            <div class="col-sm-5">
+                <label>@Html.Localize("Name:")</label>
+            </div>
+            <div class="col-sm-7">
+                @Html.TextBoxFor(Model => Model.Name,  new { @class = "form-control", style = "width:100 %; height: 35px" })
+            </div>
+        </div>
+
+       
+    </form>
+</div>

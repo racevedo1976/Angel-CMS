@@ -1,0 +1,12 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using Microsoft.Extensions.Configuration;
+
+@using Angelo.Connect.Configuration;
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Angelo.Common.Mvc
+@addTagHelper *, Angelo.Connect.Core
+@addTagHelper *, Angelo.Connect.Web
+
+@inject SiteContext CurrentSite;
+@inject IConfigurationRoot Configuration;

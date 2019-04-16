@@ -1,0 +1,19 @@
+﻿{
+  "projects": [ 
+    "Angelo.Aegis", 
+	"Angelo.Aegis.Client", 
+    "Angelo.Common", 
+	"Angelo.Common.Mvc", 
+    "Angelo.Connect.Core", 
+    "Angelo.Connect.Web", 
+    "Angelo.Drive",
+	"Angelo.Identity",
+	"Angelo.Jobs",
+	"Angelo.Jobs.SqlServer",
+	"Angelo.Ldap",
+	"Angelo.Mockdata"
+  ],
+  "sdk": {
+	"version": "1.0.0-preview2-1-003177"
+  }
+}

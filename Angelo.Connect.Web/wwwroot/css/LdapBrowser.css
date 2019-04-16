@@ -1,0 +1,65 @@
+﻿/* ldap Browswer Styles*/
+.ldap-browser
+{
+    border: 1px #ddd solid;
+    background: #fff;
+    width: 80%;
+    margin: 30px auto 0 auto;
+}
+
+.ldap-browser-heading
+{
+    background-color: #ddd;
+    padding: 10px 15px;
+}
+
+.ldap-browser-title
+{
+    font-size: 14pt;
+}
+
+.ldap-browser-body
+{
+    padding: 15px;
+}
+
+.ldap-browser-directories
+{
+    height:500px;
+}
+
+.ldap-browser-results
+{
+}
+
+/* single select style */
+.ldap-browser-selection img
+{
+    width: 100%; height: auto;
+}
+
+/* multi select style */
+.ldap-browser-multi .ldap-browser-selection img
+{
+    height: 50px; width: auto; margin: 0 5px 5px 0;
+}
+
+.ldap-browser-files
+{
+    min-height: 400px;
+}
+
+.ldap-browser-footer
+{
+    padding: 0 15px 15px 15px;
+}
+
+.ldap-browser-commands > button:not(:last-child)
+{
+    margin-right: 15px;
+}
+
+/* Kendo cleanup */
+.ldap-browser .k-filebrowser .k-tiles-arrange .k-dropdown {
+    width: 7em;
+}

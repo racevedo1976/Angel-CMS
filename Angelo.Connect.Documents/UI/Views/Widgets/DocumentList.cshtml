@@ -1,0 +1,87 @@
+﻿@using Angelo.Connect.Documents.Models
+@using Angelo.Connect.Documents.Services
+@using Angelo.Connect.Abstractions
+
+@inject DocumentListService _documentListService
+
+@model DocumentListWidget
+
+@{
+    var documentItems = (await _documentListService.GetItems(Model.Id)).Where(x => string.IsNullOrEmpty(x.FolderId)).ToList();
+    var folders = await _documentListService.GetFolders(Model.Id);
+}
+
+<div class="">
+    <div class="container-fluid">
+        <h3>@Model.Title</h3>
+    </div>
+    <ul class="list-group bg">
+        @foreach (var item in documentItems.OrderBy(x => x.Sort).ToList())
+        {
+            <li class="list-group-item back">
+                <a href="@item.Url">
+                    <i class="fa fa-download"></i>
+
+                    @item.Title
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    
+    @foreach (var folder in folders.OrderBy(x => x.Sort).ToList())
+    {
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    
+                    <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse@(folder.Id)" aria-expanded="true" aria-controls="collapseOne">
+                        <i class="fa fa-chevron-right"></i>
+                        @folder.Title
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse@(folder.Id)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+
+                    <ul class="list-group bg">
+                        @foreach (var item in folder.Documents.OrderBy(x => x.Sort).ToList())
+                        {
+                            <li class="list-group-item back">
+                                <a target="_blank" href="@item.Url">
+                                    <i class="fa fa-download"></i>
+
+                                    @item.Title
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+
+<style>
+
+    h4.panel-title a {
+    display: block;
+
+}
+h4.panel-title a.collapsed .fa-chevron-right{
+        color: #ada9a9 !important;
+        transform: rotate(0deg);
+}
+h4.panel-title a .fa-chevron-right {
+        color: #515e64 !important;
+        transform: rotate(90deg);
+}
+
+</style>

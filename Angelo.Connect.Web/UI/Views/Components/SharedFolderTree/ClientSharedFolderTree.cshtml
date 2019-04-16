@@ -1,0 +1,38 @@
+﻿@model IList<Angelo.Connect.Web.UI.ViewModels.Admin.SharedFolderTreeNodeViewModel>
+@using Kendo.Mvc.UI
+@*@using Kendo.Mvc.Examples.Models.TreeList*@
+@using Angelo.Connect.Kendo.Extensions
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var clientId = (string)ViewData["clientId"];
+}
+
+
+
+    @(Html.Kendo().TreeList<SharedFolderTreeNodeViewModel>()
+        .Name(componentId)
+        .Columns(columns =>
+        {
+            columns.Add().Field(e => e.Title).Title("Document Type /  Folder");
+        })
+        .Filterable()
+        .Sortable()
+        .Selectable()
+        .DataSource(dataSource => dataSource
+            .Read(read =>
+            {
+                read.Type(HttpVerbs.Post)
+                .Url("/api/clients/shared-folders?clientId=" + @clientId);
+            })
+            .ServerOperation(false)
+            .Model(m =>
+            {
+                m.Id(f => f.NodeId);
+                m.ParentId(f => f.ParentNodeId).DefaultValue(string.Empty);
+                //m.Expanded(true);
+            })
+        )
+        .Height(540)
+    )
+

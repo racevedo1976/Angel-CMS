@@ -1,0 +1,236 @@
+﻿
+@{
+
+    var siteId = (string)ViewData["SiteId"];
+    var pageId = (string)ViewData["PageId"];
+    var masterPageId = (string)ViewData["MasterPageId"];
+}
+
+@section Title{
+    @Html.Localize("Pages")
+}
+
+@section Panel{
+    <ul id="pageAdminTabs" class="nav nav-tabs nav-justified">
+        <li class="disabled">
+            <a href="#pageDetailsEditTab" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+        <li class="disabled">
+            <a href="#pageSecurityTab" data-toggle="tab">
+                @Html.Localize("Contributors")
+            </a>
+        </li>
+    </ul>
+   
+    <div class="tab-content">
+        <div id="pageDetailsEditTab" class="tab-pane fade in active">
+
+            <div id="pageDetailsEditSubPane" class="tab-sub-pane" style="display:none;">
+                <div id="pageDetailsEditToolbar" class="toolbar">
+                    <a name="save" asp-authorize asp-policy="@PolicyNames.SitePagesEdit" class="fa fa-save" title="@Html.Localize("Save")">@Html.Localize("Save")</a>
+                    <a name="privateSecurity" asp-authorize asp-policy="@PolicyNames.SitePagesEdit" class="fa fa-group hidden" title="@Html.Localize("Private Security")">@Html.Localize("Private Security")</a>
+                </div>
+                <component id="pageDetailsEditForm" type="PageEditForm"></component>
+            </div>
+
+            <div id="pagePrivateSecuritySubPane" class="tab-sub-pane" style="display:none">
+                <div asp-authorize asp-policy="@PolicyNames.SitePagesEdit">
+                    <div id="pagePrivateSecurityToolbar" class="toolbar">
+                        <a name="back" class="fa fa-arrow-left" title="@Html.Localize("Back")">@Html.Localize("Back")</a>
+                    </div>
+                    <div class="padded">
+                        <component id="pagePrivateSecurity" type="PagePrivateSecurity" lazy="true"></component>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pageSecurityTab" class="tab-pane fade in">
+            <div id="pageSecuritySubPane" class="tab-sub-pane padded" style="display:none">
+                <div asp-authorize asp-policy="@PolicyNames.SitePagesEdit">
+                    <component id="pageSecurityForm" type="PageSecurityForm" lazy="true"></component>
+                </div>
+            </div>
+        </div>  
+    </div>
+}
+
+<div id="pageList">
+    <div id="pageListToolbar" class="toolbar">
+        <a name="add" asp-authorize asp-policy="@PolicyNames.SitePagesCreate" class="fa fa-plus-square"><span>@Html.Localize("Create")</span></a>
+        <a name="delete" asp-authorize asp-policy="@PolicyNames.SitePagesDelete" class="fa fa-trash-o pull-right" disabled><span>@Html.Localize("Delete")</span></a>
+        <a name="child" asp-authorize asp-policy="@PolicyNames.SitePagesRead" class="fa fa-plus-square-o pull-right" disabled><span>@Html.Localize("Add Child")</span></a>
+    </div>
+    <component id="pagesTreeList" type="PagesTreeList" arg-siteId="@siteId"></component>
+    <input type="hidden" name="_SiteId" value="@siteId" />
+</div>
+
+@section Scripts {
+    <script>
+
+        var pagesViewData = {
+            siteId: "@siteId",
+            apiBaseUrl: "@routes.SiteApi("pages")",
+            messages: {
+                deleteConfirm: "@Html.Localize("Are you sure you want to delete this page?")",
+                deleteError: "@Html.Localize("Error: Unable to delete Page.")",
+            }
+        };
+
+        // Treelist Events
+        $.on("pagesTreeList.change", function (event, data) {
+            var row = data.sender.select();
+            var model = data.sender.dataItem(row);
+            
+            if (model.IsHomePage)
+                $("#pageListToolbar").toolbar().disable("delete");
+            else
+                $("#pageListToolbar").toolbar().enable("delete");
+
+            $("#pageListToolbar").toolbar().enable("child");
+            $("#pageDetailsEditToolbar").toolbar().show("privateSecurity");
+            $("#pageDetailsEditForm").component().invoke({ pageId: model.Id });
+            $('#pagePrivateSecurity').component().invoke({ pageId: model.Id });
+            $("#pageSecurityForm").component().invoke({ pageId: model.Id });
+            
+            ShowSubPane("pageDetailsEditSubPane");
+            ShowSubPane("pageSecuritySubPane");
+
+            $("#pageAdminTabs").tabs().enable("pageDetailsEditTab");
+            $("#pageAdminTabs").tabs().enable("pageSecurityTab");
+        });
+
+        $.on("pagesTreeList.drop", function (event, data) {
+            if (data.valid) {
+
+                var pageId = data.source.Id, parentId = undefined;
+
+                if (data.destination && data.destination.Id != pageId)
+                    parentId = data.destination.Id;
+
+                $.ajax({
+                    type: 'POST',
+                    url: pagesViewData.apiBaseUrl + "/" + pageId + "/move",
+                    data: {
+                        parentId: parentId
+                    }
+                }).done(function () {
+                    $("#pagesTreeList").getKendoTreeList().dataSource.read();
+                });
+            }
+        });
+
+        // Content Toolbar Events
+        $.on("pageListToolbar.add", function () {
+            $("#pageListToolbar").toolbar().disable("delete");
+            $("#pageListToolbar").toolbar().disable("child");
+            $("#pageDetailsEditToolbar").toolbar().hide("privateSecurity");
+
+            $("#pageDetailsEditForm").component().invoke({ siteId: pagesViewData.siteId });
+
+            // reset visible tab back to details tab on create & disable securityu
+            $("#pageAdminTabs").tabs().show("pageDetailsEditTab");
+            $("#pageAdminTabs").tabs().disable("pageSecurityTab");
+
+            ShowSubPane("pageDetailsEditSubPane");
+            HideTabPane("pageSecurityTab");
+        });
+
+        $.on("pageListToolbar.delete", function () {
+            var treeList = $("#pagesTreeList").getKendoTreeList();
+            var row = treeList.select();
+            var data = treeList.dataItem(row);
+
+            if (data) {
+                if (confirm(pagesViewData.messages.deleteConfirm))
+                {
+                    $("#pageListToolbar").toolbar().disable("delete");
+                    $("#pageListToolbar").toolbar().disable("child");
+
+                    $.ajax({
+                        type: 'DELETE',
+                        url: pagesViewData.apiBaseUrl + "/" + data.Id,
+                        success: function (result) {
+                            $("#pageAdminTabs").tabs().disable("pageSecurityTab");
+
+                            HideTabPane("pageDetailsEditTab");
+                            HideTabPane("pageSecurityTab");
+
+                            treeList.dataSource.read();
+                        },
+                        error: function (xhr) {
+                            alert(pagesViewData.messages.deleteError);
+                            $("#pageListToolbar").toolbar().enable("delete");
+                            $("#pageListToolbar").toolbar().enable("child");
+                        }
+                    });
+                }
+            }
+        });
+
+        $.on("pageListToolbar.child", function () {
+            var treeList = $("#pagesTreeList").getKendoTreeList();
+            var row = treeList.select();
+            var data = treeList.dataItem(row);
+
+            if (data) {
+                $("#pageListToolbar").toolbar().disable("delete");
+                $("#pageListToolbar").toolbar().disable("child");
+                $("#pageDetailsEditToolbar").toolbar().hide("privateSecurity");
+
+                $("#pageDetailsEditForm").component().invoke({ siteId: pagesViewData.siteId, pageId: "", parentId: data.Id });
+
+                // reset visible tab back to details tab on create & disable security
+                $("#pageAdminTabs").tabs().show("pageDetailsEditTab");
+                $("#pageAdminTabs").tabs().disable("pageSecurityTab");
+
+                ShowSubPane("pageDetailsEditSubPane");
+                HideTabPane("pageSecurityTab");
+            }
+
+        });
+
+        // Page Edit Form Toolbar events
+        $.on("pageDetailsEditToolbar.save", function () {
+            var $form = $("#pageDetailsEditForm");
+            var created= !$form.find("[name=Id]").val();
+
+            $form.form().post().done(function (model) {
+                if (created) {
+
+                    $form.component().invoke({ pageId: model.Id });
+                    $("#pagePrivateSecurity").component().invoke({ pageId: model.Id });
+                    $("#pageSecurityForm").component().invoke({ pageId: model.Id });
+                }
+
+                $("#pagesTreeList").getKendoTreeList().dataSource.read();
+                $("#pageDetailsEditToolbar").toolbar().show("privateSecurity");
+
+                ShowSubPane("pageSecuritySubPane");
+                $("#pageAdminTabs").tabs().enable("pageSecurityTab");
+            });
+        });
+
+        // Private Security
+        $.on("pagePrivateSecurityToolbar.back", function () {
+            ShowSubPane("pageDetailsEditSubPane");
+        });
+
+        $.on("pageDetailsEditToolbar.privateSecurity", function () {
+            ShowSubPane("pagePrivateSecuritySubPane");
+        });
+
+            
+
+        HideTabPane = function (tabPane) {
+            $("#" + tabPane + " >.tab-sub-pane").css("display", "none");
+        }
+
+        ShowSubPane = function (subPane) {
+            $("#" + subPane).siblings(".tab-sub-pane").css("display", "none");
+            $("#" + subPane).css("display", "");
+        }
+    </script>
+}

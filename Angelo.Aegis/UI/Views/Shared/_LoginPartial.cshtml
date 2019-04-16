@@ -1,0 +1,39 @@
+﻿@using Angelo.Identity
+@using Angelo.Aegis.Internal
+
+@inject SignInManager SignInManager
+@inject UserManager UserManager
+@inject ICypher Cypher
+
+@{ 
+    string origin = Context.Request.Query.ContainsKey("returnUrl")
+        ? Cypher.Cypher(Context.Request.Query["returnUrl"])
+        : Context.Request.Query["origin"].ToString();
+}
+
+<ul class="nav navbar-nav navbar-right">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                @UserManager.GetUserName(User) <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="hidden">
+                    <a asp-controller="Manage" asp-action="Index" asp-route-origin="@origin">@Html.Localize("Site.Login.Manage")</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a asp-controller="Account" asp-action="Logout" asp-route-origin="@origin">@Html.Localize("Site.Login.Logout")</a>
+                </li>
+            </ul>
+        </li>
+
+    }
+    else
+    {
+        <li>
+            <a asp-controller="Account" asp-action="Register" asp-route-origin="@origin">@Html.Localize("Site.Login.Register")</a>
+        </li>
+    }
+</ul>

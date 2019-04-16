@@ -1,0 +1,102 @@
+﻿body 
+{
+    font-size: 18px;
+    padding-bottom: 0 !important;
+}
+
+.container { max-width: 1200px; }
+
+
+.site-banner img 
+{
+    padding: 10px 0;
+    height: 120px;
+}
+
+.navbar 
+{
+    border-radius: 0 !important;
+    margin-bottom: 0 !important;
+    border: none !important;
+}
+
+.site-nav .navbar {
+    box-shadow: none;
+}
+
+
+.site-nav .navbar .nav
+{
+    position: relative;
+}
+
+.site-nav .navbar .nav a
+{
+    font-size: 18px;
+    transition: none !important;
+}
+
+.site-nav .navbar a.active 
+{
+    -moz-transform: skew(-7deg);
+    -ms-transform: skew(-7deg);
+  
+}
+
+.site-banner-side
+{
+    padding-top: 70px;
+}
+
+.site-header
+{
+    border-bottom: 2px solid rgba(0,0,0,0.2);
+}
+
+
+.site-header-login
+{
+    text-align: right;
+}
+
+.site-header-login .list-inline > li:not(:last-child)
+{
+    margin-right: 5px;
+}
+
+.site-header-login a
+{
+    font-size: 18px;
+    padding: 10px;
+}
+
+.site-header-icons i
+{
+    font-size: 32px;
+    color: #fff;
+}
+
+
+.site-footer
+{
+    padding: 20px 0;
+}
+
+
+.left-nav .navbar-vertical
+{
+    margin-top: 20px;
+    border: none !important;
+    min-height: 400px;
+}
+
+.left-nav .navbar-vertical .navbar-header
+{
+    display: block;
+    width: 100%;
+}
+
+.left-nav .navbar-vertical .navbar-brand
+{
+    font-size: 20px;
+}

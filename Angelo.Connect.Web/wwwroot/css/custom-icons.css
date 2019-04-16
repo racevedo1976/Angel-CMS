@@ -1,0 +1,103 @@
+@font-face {
+  font-family: 'schoolinsites';
+  src:
+    url('fonts/schoolinsites.ttf?mfbynk') format('truetype'),
+    url('fonts/schoolinsites.woff?mfbynk') format('woff'),
+    url('fonts/schoolinsites.svg?mfbynk#schoolinsites') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'schoolinsites' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-column:before {
+  content: "\e900";
+}
+.icon-column1:before {
+  content: "\e901";
+}
+.icon-column2:before {
+  content: "\e902";
+}
+.icon-column3:before {
+  content: "\e903";
+}
+.icon-column4:before {
+  content: "\e904";
+}
+.icon-column5:before {
+  content: "\e905";
+}
+.icon-80column:before {
+  content: "\e906";
+}
+.icon-75column:before {
+  content: "\e907";
+}
+.icon-66column:before {
+  content: "\e908";
+}
+.icon-33column:before {
+  content: "\e909";
+}
+.icon-25column:before {
+  content: "\e90a";
+}
+.icon-Announcements:before {
+  content: "\e90b";
+}
+.icon-Assignments:before {
+  content: "\e90c";
+}
+.icon-calendar:before {
+  content: "\e90d";
+}
+.icon-Collapse-Down:before {
+  content: "\e90e";
+}
+.icon-Expand-up:before {
+  content: "\e90f";
+}
+.icon-file:before {
+  content: "\e910";
+}
+.icon-file-audio:before {
+  content: "\e911";
+}
+.icon-file-image:before {
+  content: "\e912";
+}
+.icon-file-pdf:before {
+  content: "\e913";
+}
+.icon-file-video:before {
+  content: "\e914";
+}
+.icon-folder:before {
+  content: "\e915";
+}
+.icon-folder-open:before {
+  content: "\e916";
+}
+.icon-Navigation:before {
+  content: "\e917";
+}
+.icon-News:before {
+  content: "\e918";
+}
+.icon-Slideshow:before {
+  content: "\e919";
+}

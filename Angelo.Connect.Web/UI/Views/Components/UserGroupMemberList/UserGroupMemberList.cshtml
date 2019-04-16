@@ -1,0 +1,44 @@
+﻿@model IList<Angelo.Connect.Models.UserGroup>
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var hideLevelColumn = (bool)ViewData["hideLevelColumn"];
+    var hideMessageColumn = (bool)ViewData["hideMessageColumn"];
+    var userGroupId = (string)ViewData["userGroupId"];
+}
+
+
+@(Html.Kendo().Grid<UserGroupMembershipViewModel>()
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        columns.Bound(n => n.UserName).Title(Html.Localize("Name").ToString());
+        columns.Bound(n => n.AccessLevelName).Title(Html.Localize("Access Level").ToString()).Hidden(hideLevelColumn);
+        columns.Bound(n => n.AllowEmailMessaging).Title(Html.Localize("Email").ToString()).Hidden(hideMessageColumn);
+        columns.Bound(n => n.AllowSmsMessaging).Title(Html.Localize("SMS").ToString()).Hidden(hideMessageColumn);
+        columns.Bound(n => n.Id).Hidden(true);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable(scr => scr.Height(430))
+    .Filterable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .Read(read =>
+        {
+            read.Type(HttpVerbs.Post)
+            .Url("/api/usergroups/memberships/data?id=" + userGroupId);
+        })
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+        })
+    )
+)
+

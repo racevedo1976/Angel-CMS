@@ -1,0 +1,48 @@
+﻿
+.site-toolbar,
+.site-toolbar a 
+{
+    color: #a71b0c;
+}
+
+/* Navigation and Links*/
+a:hover, a:focus, a:active, a.active {
+    color: #fec503;
+}
+
+::selection {
+    text-shadow: none;
+    background: #fed136;
+}
+
+/* footer */
+.cns-footer {
+    background-color: #000;
+    color: #fff;
+}
+
+/* background colors */
+.bg-default { background: #ffffff;}
+.bg-muted {background: #f1f1f1; }
+.bg-dark {background: #252525; color: #eee; }
+.bg-contrast { background: #2b2b2b; color: #eee; }
+.bg-clean { background: #ffffff }
+.bg-fancy {background: #fff url(images/backsquare.jpg) repeat 0 0;}
+
+/* bootstrap elements */
+.jumbotron {
+    background-color: transparent; 
+    border-radius: 0;
+    padding: 15px 5px !important;
+}
+
+.jumbotron > h1
+{
+    margin: 5px 0;
+    font-size: 32px;
+}
+
+.jumbotron > p 
+{
+    font-size: 16px;
+}

@@ -1,0 +1,55 @@
+﻿@model Angelo.Connect.Abstractions.IMenu
+@inject SiteContext site
+
+<style>
+    .panel-group > .panel {
+        margin: 0 !important;
+    }
+
+    .panel-group > .panel-body a:hover 
+    {
+        font-weight: bold;
+    }
+</style>
+
+
+
+
+<div class="panel-group" id="adminMenuPanels">
+
+
+    @for (var i = 0; i < Model.MenuItems.Count; i++)
+    {
+        var item = Model.MenuItems[i];
+        var menuId = Guid.NewGuid().ToString("N");
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+
+                    <a data-toggle="collapse" data-parent="#adminMenuPanels" href="#@menuId">
+                        <i class="@item.Icon.ToString()"></i>
+                        @item.Title
+                    </a>
+                </h4>
+            </div>
+            <div id="@menuId" class="panel-collapse collapse" css-in="i == 0">
+                <div class="panel-body">
+                    <ul class="list-group">
+                        @foreach (var child in item.MenuItems)
+                        {
+                            <li class="list-group-item">
+                                <a href="@child.Url">
+                                    <i class="@child.Icon.ToString()"></i> &nbsp; &nbsp;
+                                    @child.Title
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

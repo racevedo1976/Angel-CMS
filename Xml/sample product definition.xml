@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<product id="3930">
+	<settings>
+		<setting name="MaxNumberOfSites" value="50"/>
+		<setting name="Bandwidth" value="12" />
+	</settings>
+	<templates>
+		<template id="8331" name="school district">		
+			<themes>
+				<theme id="12998" name="frost bite"/>
+				<theme id="13303" name="red buns"/>
+			</themes>
+		</template>
+		<template id="8331" name="school site">		
+			<themes>
+				<theme id="13009" name="autumn breeze"/>
+				<theme id="13401" name="mango delight"/>
+				<theme id="14322" name="banana sunday"/>
+			</themes>
+		</template>
+	</templates>
+	<modules>
+		<module id="66890" name="Angelo.Connect.Library">
+			<settings>
+				<setting name="StorageSpace" value="50"/>
+				<setting name="MaxUploadSize" value="2"/>
+			</settings>
+		</module>
+	</modules>
+</product>
+
+
+
+
+Will define the following information about a product
+•Product Name
+•Product Settings (# of sites allowed)
+•Site Templates Available
+•Themes Available per Template
+•Modules available per Template
+◦Module Specific Settings
+
+
+
+
+
+
+----------------
+ProductInstance
+----------------
+- Id (Identity)
+- ProductId (PrimaryKey)
+- ClientId  (PrimaryKey)
+- TimeStamp
+- Active
+- etc
+
+----------------
+ProductTemplates
+----------------
+- InstanceId
+- TemplateId
+
+----------------
+ProductThemes
+----------------
+- InstanceId
+- TemplateId
+- ThemeId
+
+----------------
+ProductModules
+----------------
+- InstanceId
+- ModuleId
+
+
+----------------
+ProductSettings
+----------------
+- Id (Identity)
+- InstanceId
+- ModuleId
+- FieldName
+- Value
+
+
+InstanceId ModuleId   FieldName       Value
+--------------------------------------------
+1               System         MaxSites        30
+1               Library    MaxUploadSize  8096
+1               Library    MaxFolderDepth  4
+1               Library    AllowUserFiles  true
+1               Library         AllowedExt      gif
+1               Library         AllowedExt      jpg
+1               Library         AllowedExt      pdf
+
+
+public LibrarySettings
+{
+     public int MaxUploadSize {get; set;}
+     public int MaxFolderDepth {get; set;}
+     public bool AllowUserFiles {get; set;}
+     public string[] AllowedExt {get; set;}
+}
+
+

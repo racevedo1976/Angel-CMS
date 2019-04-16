@@ -1,0 +1,24 @@
+﻿@using Angelo.Connect.Rendering
+@inject Angelo.Connect.UI.Routes routes;
+@{
+    var url = ViewContext.HttpContext.Request.Path.ToString();
+}
+
+@* // TODO: Verify old .user-tools css class is not used & remove *@
+
+<div class="cs-usertools user-tools">
+    <ul class="list-inline">
+        <li class="cs-usertools-login">
+            <a href="@routes.Account("login", new { ru = url })">
+                <i class="fa fa-sign-in"></i> &nbsp;
+                @Html.Localize("Login")
+            </a>
+        </li>
+        <li class="cs-usertools-register">
+            <a href="@routes.Account("register", new { ru = url })">
+                @Html.Localize("Register")
+            </a>
+        </li>
+    </ul>
+</div>
+

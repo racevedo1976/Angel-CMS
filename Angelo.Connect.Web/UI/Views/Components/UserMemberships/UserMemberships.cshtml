@@ -1,0 +1,114 @@
+﻿@model List<UserMembershipViewModel>
+
+@using Angelo.Connect.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+
+    var userId = (string)ViewData["userId"];
+    var siteId = (string)ViewData["siteId"];
+    var emailConfirmed = (bool)ViewData["emailConfirmed"];
+    var smsConfirmed = (bool)ViewData["smsConfirmed"];
+
+    var joinColName = "join";
+    var emailColName = "email";
+    var smsColName = "sms";
+}
+
+<style>
+    
+    .angelo-form input[type=checkbox] { 
+     -ms-transform: scale(2); /* IE */
+     -moz-transform: scale(2); /* FF */
+     -webkit-transform: scale(2); /* Safari and Chrome */
+     -o-transform: scale(2); /* Opera */
+      margin: 10px;
+    } 
+
+</style>
+
+<form id="@componentId" action="/api/usergroups/updatememberships" class="form form-horizontal angelo-form" data-ajax-form>
+    @Html.Hidden("UserId", userId)
+    @Html.Hidden("SiteId", siteId)
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-sm-1 text-center">Join</th>
+                <th class="col-sm-7">Group Name</th>
+                <th class="col-sm-4 text-center">Communication Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var index = 0; index < Model.Count; index++)
+            {
+                <tr data-allow-public-enrolement="@(Model[index].AllowPublicEnrollment ? "true" : "false")">
+                    <td class="text-center">
+                        @{
+                            if (Model[index].AllowPublicEnrollment)
+                            {
+                                @Html.CheckBoxFor(model => model[index].IsMember, new { data_col_name = joinColName })
+                            }
+                            else
+                            {
+                                @Html.CheckBoxFor(model => model[index].IsMember, new { @class = "disabled", onclick="return false;" })
+                            }
+                        }
+                    </td>
+                    <td>
+                        <span style="font-size:18px;">@Model[index].UserGroupName</span>
+                        @Html.HiddenFor(model => model[index].UserGroupId)
+                        @Html.HiddenFor(model => model[index].UserGroupName)
+                        @Html.HiddenFor(model => model[index].AllowPublicEnrollment)
+                    </td>
+                    <td>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                @Html.CheckBoxFor(model => model[index].AllowEmailMessaging, new { data_col_name = emailColName })
+                                <label>Email</label>
+                            </div>
+                            <div class="col-sm-6">
+                                @Html.CheckBoxFor(model => model[index].AllowSmsMessaging, new { data_col_name = smsColName })
+                                <label>SMS</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+
+<script>
+
+    $(function() {
+
+        $("#@componentId input[type=checkbox]").click( function() {
+
+            var name = $(this).attr("name");
+            var namePrefix = name.substr(0, name.indexOf(".") + 1);
+            var $join = $("#@componentId input[type='checkbox'][name='" + namePrefix + "IsMember" + "']");
+            var $email = $("#@componentId input[type='checkbox'][name='" + namePrefix + "AllowEmailMessaging" + "']");
+            var $sms = $("#@componentId input[type='checkbox'][name='" + namePrefix + "AllowSmsMessaging" + "']");
+
+            var checked = $(this).prop("checked");
+            var colName = $(this).data("colName");
+            var data = $(this).parents("tr").data();
+
+            if (colName == "@joinColName") {
+                if (checked) {
+                    $email.prop("checked", @emailConfirmed.ToString().ToLower());
+                    $sms.prop("checked", @smsConfirmed.ToString().ToLower());
+                } else {
+                    $email.prop("checked", false);
+                    $sms.prop("checked", false);
+                }
+            } else if (checked && ((colName == "@emailColName") || (colName == "@smsColName"))) {
+                $join.prop("checked", true);
+            }
+        })
+    })
+
+</script>
+

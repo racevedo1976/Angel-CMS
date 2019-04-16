@@ -1,0 +1,186 @@
+﻿[
+  {
+    "id": "image-google",
+    "caption": "Google",
+    "src": "/img/SeedImages/Google.png"
+  },
+  {
+    "id": "image-sis",
+    "caption": "Demo Logo",
+    "src": "/img/SeedImages/SisLogo.png"
+  },
+  {
+    "id": "image-joomla",
+    "caption": "Demo Logo",
+    "src": "/img/SeedImages/Joomlahunt.png",
+    "height": "130px",
+    "width": "100px"
+  },
+  {
+    "id": "image-school-logo",
+    "caption": "School Logo",
+    "src": "/img/SeedImages/HillsboroHelmet.png",
+    "height": "130px",
+    "width": "100px"
+  },
+  {
+    "id": "image-tech-1",
+    "caption": "Demo Tech Image 1",
+    "src": "/img/SeedImages/technics1_400_200.jpg"
+  },
+  {
+    "id": "image-tech-2",
+    "caption": "Demo Tech Image 2",
+    "src": "/img/SeedImages/technics4_400_200.jpg"
+  },
+  {
+    "id": "image-tech-3",
+    "caption": "Demo Tech Image 3",
+    "src": "/img/SeedImages/technics5_400_200.jpg"
+  },
+  {
+    "id": "image-sports-1",
+    "caption": "Demo Sports Image 1",
+    "src": "/img/SeedImages/sports1_400_200.jpg"
+  },
+  {
+    "id": "image-sports-2",
+    "caption": "Demo Sports Image 2",
+    "src": "/img/SeedImages/sports2_400_200.jpg"
+  },
+  {
+    "id": "image-sports-3",
+    "caption": "Demo Sports Image 3",
+    "src": "/img/SeedImages/sports3_400_200.jpg"
+  },
+  {
+    "id": "image-people-1",
+    "caption": "Demo Image",
+    "src": "/img/SeedImages/people1_400_200.jpg"
+  },
+  {
+    "id": "image-people-2",
+    "caption": "Demo Image",
+    "src": "/img/SeedImages/people2_400_200.jpg"
+  },
+  {
+    "id": "image-nature-1",
+    "caption": "Demo Nature Image",
+    "src": "/img/SeedImages/nature2_600_400.jpg"
+  },
+  {
+    "id": "image-nature-2",
+    "caption": "Demo Nature Image",
+    "src": "/img/SeedImages/nature3_600_400.jpg"
+  },
+  {
+    "id": "image-nature-3",
+    "caption": "Demo Nature Image",
+    "src": "/img/SeedImages/nature5_600_400.jpg"
+  },
+  {
+    "id": "inspiration-logo",
+    "caption": "Inspiration Site Logo",
+    "src": "/templates/inspiration/images/Logo.png",
+    "height": "161px",
+    "width": "389px"
+  },
+  {
+    "id": "inspiration-image1",
+    "caption": "School Image 1",
+    "src": "/templates/inspiration/images/1.jpg"
+  },
+  {
+    "id": "inspiration-image2",
+    "caption": "School Image 2",
+    "src": "/templates/inspiration/images/2.jpg"
+  },
+  {
+    "id": "inspiration-image3",
+    "caption": "School Image 3",
+    "src": "/templates/inspiration/images/3.jpg"
+  },
+  {
+    "id": "inspiration-image4",
+    "caption": "School Image 4",
+    "src": "/templates/inspiration/images/4.jpg"
+  },
+  {
+    "id": "inspiration-round1",
+    "caption": "School Round Image 1",
+    "src": "/templates/inspiration/images/button1.png"
+  },
+  {
+    "id": "inspiration-round2",
+    "caption": "School Round Image 2",
+    "src": "/templates/inspiration/images/button2.png"
+  },
+  {
+    "id": "inspiration-round3",
+    "caption": "School Round Image 3",
+    "src": "/templates/inspiration/images/button3.png"
+  },
+  {
+    "id": "inspiration-round4",
+    "caption": "School Round Image 4",
+    "src": "/templates/inspiration/images/button4.png"
+  },
+  {
+    "id": "seed1.image1",
+    "caption": "Sample Image",
+    "src": "/img/seed/default/image1.jpg"
+  },
+  {
+    "id": "seed1.thumb1",
+    "caption": "Sample Thumbnail Image",
+    "src": "/img/seed/default/thumb1.jpg"
+  },
+  {
+    "id": "seed1.thumb2",
+    "caption": "Sample Thumbnail Image",
+    "src": "/img/seed/default/thumb2.jpg"
+  },
+  {
+    "id": "seed1.thumb3",
+    "caption": "Sample Thumbnail Image",
+    "src": "/img/seed/default/thumb3.jpg"
+  },
+  {
+    "id": "seed1.thumb4",
+    "caption": "Sample Thumbnail Image",
+    "src": "/img/seed/default/thumb4.jpg"
+  },
+  {
+    "id": "seed1.round1",
+    "caption": "Sample Round Image 1",
+    "src": "/img/seed/default/round1.png"
+  },
+  {
+    "id": "seed1.round2",
+    "caption": "Sample Round Image 2",
+    "src": "/img/seed/default/round2.png"
+  },
+  {
+    "id": "seed1.round3",
+    "caption": "Sample Round Image 3",
+    "src": "/img/seed/default/round3.png"
+  },
+  {
+    "id": "seed1.round4",
+    "caption": "Sample Round Image 4",
+    "src": "/img/seed/default/round4.png"
+  },
+  {
+    "id": "idea-banner",
+    "caption": "Planning for success",
+    "src": "/img/seedimages/idea-banner.jpg"
+  },
+  {
+    "id": "guidance-logo",
+    "caption": "Guidance Site Logo",
+    "src": "/templates/guidance/images/logo.png",
+    "height": "130px",
+    "width": "390px"
+  }
+
+]

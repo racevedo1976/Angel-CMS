@@ -1,0 +1,185 @@
+﻿@using Microsoft.Extensions.Options
+@using Angelo.Connect
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Rendering
+@using Angelo.Connect.Security
+@using Angelo.Connect.Models;
+@inject IOptions<DriveOptions> _driveOptions
+@inject IContextAccessor<UserContext> _userContextAccessor;
+@model Angelo.Connect.Announcement.UI.ViewModels.AnnouncementPostViewModel
+@{ 
+    var driveUrl = _driveOptions.Value.Authority;
+    var user = _userContextAccessor.GetContext();
+    var categoryIds = String.Join(",", Model.Categories.Select(x => x.Id).ToArray());
+}
+
+<div data-module="console/announcement/design" data-drive-url="@driveUrl" data-user-id="@user.UserId" data-category-count="@Model.Categories.Count()">
+
+    <div class="csc-content-toolbar">
+        <div class="dropdown">
+            <a name="finish" data-toggle="dropdown">
+                <i class="fa fa-flag"></i> @Html.Localize("Finish")
+                <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a name="save" title="@Html.Localize("Save as a draft")">
+                        <i class="fa fa-save"></i> @Html.Localize("Save as Draft")
+                    </a>
+                </li>
+                <li>
+                    <a name="publish" title="@Html.Localize("Publish this post")">
+                        <i class="fa fa-share"></i> @Html.Localize("Publish Immediately")
+                    </a>
+                </li>
+                <li>
+                    <a name="cancel" title="@Html.Localize("Go back to listing")">
+                        <i class="fa fa-undo"></i> @Html.Localize("Cancel without Saving")
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div data-tab="#announcementPostCategories" style="display: none">
+            <div class="csc-seperator"></div>
+            <a name="categoryAdd">
+                <i class="fa fa-plus"></i> @Html.Localize("Create")
+            </a>
+            <a name="categoryMap">
+                <i class="fa fa-list"></i> @Html.Localize("Choose")
+            </a>
+        </div>
+        <div class="pull-right">
+            <a name="version" title="@Model.VersionLabel" >
+                @Html.Localize("Version") @Model.VersionCode &nbsp;
+                <i class="fa fa-caret-down" title="@Html.Localize("Select a different version")"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="csc-content-tabs">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#announcementPostSummary" data-toggle="tab">
+                    <i class="@IconType.Settings.ToString()"></i>
+                    @Html.Localize("Summary")
+                </a>
+            </li>
+            <li>
+                <a href="#announcementPostDesigner" data-toggle="tab">
+                    <i class="@IconType.Pencil.ToString()"></i>
+                    @Html.Localize("Design")
+                </a>
+            </li>
+            <li>
+                <a href="#announcementPostCategories" data-toggle="tab">
+                    <i class="@IconType.Briefcase.ToString()"></i>
+                    @Html.Localize("Categories")
+                </a>
+            </li>
+            <li>
+                <a href="#announcementPostSecurity" data-toggle="tab">
+                    <i class="@IconType.UserGroup.ToString()"></i>
+                    @Html.Localize("Security")
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="csc-content-body">
+        <div class="tab-content" id="tabContent">
+
+            <div id="announcementPostDesigner" class="tab-pane fade">
+                @* Announcement content is rendered here *@
+                <zone name="post-body" allow-containers="false" class="modal-designer-body"></zone>
+            </div>
+
+            <div id="announcementPostSummary" class="tab-pane fade  in active">
+                <form action="/sys/announcement/posts" data-ajax-form>
+                    <input name="Id" value="@Model.Id" type="hidden" />
+                    <input name="CategoryIds" value="@categoryIds" type="hidden" />
+                    <input name="ContentTreeId" value="@Model.ContentTreeId" type="hidden" />
+                    <input name="VersionCode" value="@Model.VersionCode" type="hidden" />
+                    <input name="VersionLabel" value="@Model.VersionLabel" type="hidden"/>
+                    <input name="NewVersionLabel" type="hidden" />
+                    <input name="ShouldPublish" type="hidden"/>
+                    
+                    <div class="form-group">
+                        <label class="form-label">@Html.Localize("Post Title")</label>
+                        <div>
+                            <input id="postTitle" class="form-control" asp-for="Title" spellcheck="true" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">@Html.Localize("Excerpt")</label>
+                        <div>
+                            <textarea class="form-control" asp-for="Excerp" style="height: 100px"></textarea>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <label class="form-label">
+                            <a name="selectImage">
+                                @Html.Localize("Default Image")&nbsp;
+                                <span class="fa fa-edit"></span>
+                            </a>
+                        </label>
+                        <div>
+                            <input class="form-control" asp-for="Image" onchange="$('#postImage').attr('src', this.value)" />
+                        </div>
+                        <a name="cropImage" hide-if="@(Model.Image == null || !Model.Image.Contains(_driveOptions.Value.Authority))"><i class="fa fa-crop"></i></a>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            @Html.Localize("Image Alternate Text")&nbsp;
+                        </label>
+                        <div>
+                            <input id="imageAltText" class="form-control" asp-for="Caption" required spellcheck="true" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">@Html.Localize("Default Image Preview")</label>
+                        <div>
+                            <img name="imagePreview" style="width: 100%; max-width: 600px; height: auto" src="@Model.Image" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+               
+            <div id="announcementPostCategories" class="tab-pane fade">
+                <ul name="announcementPostCategoryList" class="list-group">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <li class="list-group-item" data-category-id="@category.Id">
+                            @category.Title
+                            <a name="categoryUnmap" class="pull-right text-danger" title="@Html.Localize("Remove category from post")">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+                <div name="announcementPostCategoryAlert" class="alert alert-default" css-hidden="@Model.Categories.Count() > 0">
+                    <i class="fa fa-info"></i> &nbsp;
+                    @Html.Localize("No categories have been associated with this post. This post will not show on the public site until at least one category is selected.")
+                </div>
+            </div>
+
+            <div id="announcementPostSecurity" class="tab-pane fade">
+                <div class="form-group">
+                    <div class="alert alert-warning" role="alert">
+                        @Html.Localize("Security updates will be applied to all versions of this post, including the currently published version.")
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label name="privacyOption" class="form-label">
+                        @Html.Localize("Private") &nbsp;
+                        <input name="IsPrivate" type="checkbox" asp-for="IsPrivate"/>
+                    </label>
+                </div>
+                <component type="SecurityUserRoleClaims" arg-configurations="@Model.PostPrivacyConfig"></component>
+            </div>
+
+        </div>
+    </div>
+
+</div>

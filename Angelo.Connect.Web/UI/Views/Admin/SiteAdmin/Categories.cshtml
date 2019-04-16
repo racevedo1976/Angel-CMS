@@ -1,0 +1,154 @@
+﻿@model IEnumerable<CategoryViewModel>
+
+@{
+    var clientId = (string)ViewData["ClientId"];
+    var siteId = (string)ViewData["SiteId"];
+    var level = (string)ViewData["Level"];
+    var ownerId = (string)ViewData["OwnerId"];
+}
+
+@Html.Hidden("localCategoryId", "")
+
+@section Title{
+    @Html.Localize("Categories")
+}
+
+
+@section Panel{
+<ul class="nav nav-tabs nav-justified">
+    <li class="active">
+        <a href="#categoryDetailsFormTab" data-toggle="tab">
+            @Html.Localize("Details")
+        </a>
+    </li>
+    <li>
+        <a href="#categoryFoldersFormTab" data-toggle="tab">
+            Placeholder
+        </a>
+    </li>
+</ul>
+
+<div id="categoryTabs" class="tab-content">
+    <div id="categoryDetailsFormTab" class="tab-pane fade in active">
+        <div id="categoryEditToolbar" class="toolbar">
+            <a id="btnSave" name="save" class="fa fa-save" title="@Html.Localize("Save")"><span>@Html.Localize("Save")</span></a>
+        </div>
+        <div id="categoryAddToolbar" class="toolbar" style="display:none">
+            <a id="btnSave" name="save" class="fa fa-save" title="@Html.Localize("Save")"><span>@Html.Localize("Save")</span></a>
+            <a id="btnBack" name="back" class="fa fa-chevron-left" title="@Html.Localize("Back")">@Html.Localize("Back")</a>
+        </div>
+        <div id="categoryDiv">
+            <component id="categoryEditForm" type="CategoryEditForm" arg-clientId="@clientId" arg-siteId="@siteId"></component>
+        </div>
+    </div>
+
+    <div id="categoryFoldersFormTab" class="tab-pane fade in">
+        <div class="text-muted placeholder">
+            Not Implemented
+        </div>
+    </div>
+
+</div>
+}
+
+<div id="categoryList">
+    <div id="contentToolbar" class="toolbar">
+        <a name="add" class="fa fa-plus-square">
+            <span>@Html.Localize("Create")</span>
+        </a>
+    </div>
+    <component id="categoryGrid" type="CategoryGrid" arg-clientId="@clientId" arg-siteId="@siteId" arg-level="@level"></component>
+</div>
+
+@section Scripts{
+<script>
+        //
+        // Grid
+        //
+        $.on("categoryGrid.change", function (event, data) {
+            var row = data.sender.select();
+            var model = data.sender.dataItem(row);
+            var tempId = model.Id;
+            var tempSiteId = "@siteId";
+            $("#categoryEditForm").component().invoke({ siteId: tempSiteId, categoryId: tempId });
+        });
+
+        $.on("contentToolbar.add", function () {
+            $('#categoryDiv').loadComponent({
+                "type": "CategoryAddForm",
+                "id": "categoryAddForm",
+                "params": {
+                    "clientId": "@clientId",
+                    "siteId": "@siteId",
+                    "level": "@level",
+                    "ownerId": "@ownerId"
+                }
+            }).done(function () {
+
+            });
+            $("#categoryEditToolbar").css("display", "none");
+            $("#categoryAddToolbar").css("display", "block");
+            $("#categoryDiv").css("display", "block");
+        });
+
+        //
+        // Add Category
+        //
+        $.on("categoryAddToolbar.save", function (event, data) {
+            $("#categoryAddForm").form().post();
+        })
+
+        $.on("categoryAddForm.submit", function (event, data) {
+            var grid = $("#categoryGrid").getKendoGrid();
+            grid.dataSource.read();
+            //var newCategoryId = data.result.Id;
+
+            $("#addNewCategory").val('');
+            $("#categoryEditToolbar").css("display", "block");
+            $("#categoryAddToolbar").css("display", "none");
+            $('#categoryDiv').loadComponent({
+                "type": "CategoryEditForm",
+                "id": "categoryEditForm",
+                "params": {
+                    "clientId": "@clientId",
+                    "siteId": "@siteId"
+                }
+            }).done(function () {
+            });
+        })
+
+        $.on("categoryAddToolbar.back", function () {
+            $('#categoryDiv').loadComponent({
+                "type": "CategoryEditForm",
+                "id": "categoryEditForm",
+                "params": {
+                    "clientId": "@clientId",
+                    "siteId": "@siteId"
+                }
+            }).done(function () {
+
+            });
+            $("#categoryEditToolbar").css("display", "block");
+            $("#categoryAddToolbar").css("display", "none");
+        })
+
+        //
+        // Edit Category
+        //
+        $.on("categoryEditToolbar.save", function (event, data) {
+            $("#categoryEditForm").form().put();
+        })
+
+        $.on("categoryEditForm.submit", function (event, data) {
+            var grid = $("#categoryGrid").getKendoGrid();
+            grid.dataSource.read();
+        });
+
+        //
+        // Functions
+        //
+        function setLocalCategoryId(value) {
+            $('#localCategoryId').val(value);
+        }
+</script>
+}

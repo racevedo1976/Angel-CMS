@@ -1,0 +1,95 @@
+/*-------- Begin Exported Site Css, Site: Nebula Demo Site --------*/
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+    letter-spacing: 0.4px;
+    font-family: 'Cormorant Garamond', Times, "Times New Roman", serif; }
+.h1 {
+    font-family: 'Cormorant Garamond', Times, "Times New Roman", serif; }
+
+body { 
+    background: #262626 url(/templates/nebula/images/background.jpg) top center no-repeat;  
+    background-attachment: fixed; 
+    margin: 0px;
+    font-family: Helvetica, Arial, "sans-serif";}
+
+.text-info {
+    color: #022B3F;}
+
+/* template structure */
+.cs-toolbar{ 
+    padding: 5px 15px 0 15px;
+    background: #000; 
+    color: #fff; }
+
+.cs-header{  }
+.cs-header-navbar{}
+.cs-header-content{}
+
+.navbar {
+    border-radius: 0px; margin-bottom: 0;}
+.navbar .navbar-default {margin-bottom: 0 }
+.navbar-default { border: none;background-color: transparent;} 
+.navbar-brand { 
+    font-family: 'Cormorant Garamond', Times, "Times New Roman", serif;}
+.nav > li > a {
+    font-family: 'Cormorant Garamond', Times, "Times New Roman", serif; color: #333; font-size: 18px;}
+.navbar-default .navbar-nav > li > a {
+    color: #fff;}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #ccc;}
+
+.copyright {color: #ffffff;}  
+
+.cs-page{}
+.cs-page-content{}
+.cs-page-side{}
+
+.cs-homecontent{background: #086584;}
+
+.cs-footer{
+    margin-top: 0px;  background: #000000;
+}
+.cs-footer-content { }
+.cs-footer-info {
+    text-align: center}
+
+.cs-socialmediaback { padding: 4px 10px 10px 10px;}
+.cs-socialmedia a { 
+    padding: 5px;
+    color: #000000;
+    font-size: 20px;
+    background: #cccccc;
+    text-align: center;
+    float: left;
+    width: 36px;
+    height: 36px;  
+    margin-right: 7px; /*space between*/} 
+.cs-socialmedia a i {
+    font-size: 20px;
+    line-height: 38px;
+    color: #000000;}
+
+.cs-row-33-66 > .content-widget > .content-layout > .row >  div:first-child { width: 33.33%; }
+.cs-row-33-66 > .content-widget > .content-layout > .row > div:last-child { width: 66.66%; }
+
+.cs-nopadding {padding: 0}
+.cs-row-nopadding > .content-widget > .content-layout > .row > div:not(:first-child){ padding-left: 0 !important }
+.cs-row-nopadding > .content-widget > .content-layout > .row > div:not(:last-child){ padding-right: 0 !important }
+
+.cs-padding20 {padding: 20px}
+
+.cs-whiteback {background: transparent url(/templates/nebula/images/whiteback.png) top center repeat;}
+
+.cs-page-layout-2 {background: #eaeaea; margin: 0;}
+
+.search-field .fa-search { color: #fff;}
+
+/* color schemes */
+.bg-default { background: #ffffff;}
+.bg-muted { background: #eaeaea; }
+.bg-dark {background: #000000; color: #eee; }
+.bg-contrast { background: #022B3F; color: #eee; }
+.bg-clean { background: #ffffff }
+.bg-fancy { background: transparent url(/templates/nebula/images/logobox.png) top center repeat;  }
+.bg-danger {background: #ED5553;}

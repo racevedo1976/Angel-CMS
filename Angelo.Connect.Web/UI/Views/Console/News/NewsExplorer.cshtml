@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Angelo.Connect.News.Models.NewsCategory>
+
+<div name="News-explorer" data-module="console/news/explorer">
+    <ul class="list-unstyled">
+        <li>
+            <div class="clearfix">
+                <a data-route="/sys/console/news/posts" class="pull-left">
+                    <i class="fa fa-list"></i> &nbsp;
+                    @Html.Localize("My News")
+                </a>
+                <a name="post-create" class="pull-right text-success" data-route="/sys/console/news/posts/create">
+                    <i class="fa fa-plus"></i> &nbsp;
+                    @Html.Localize("Create")
+                </a>
+            </div>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>
+            <div class="clearfix">
+                <a name="category-toggle" class="pull-left">
+                    <i class="fa fa-minus-square"></i> &nbsp;
+                    @Html.Localize("Categories")
+                </a>     
+                <a name="category-create" class="pull-right text-success" data-route="/sys/console/news/categories/create">
+                    <i class="fa fa-plus"></i> &nbsp;
+                    @Html.Localize("Create")
+                </a>
+            </div>
+           
+
+            <div name="category-list" style="padding-left: 20px">
+                <ul class="list-unstyled">
+                    @foreach (var cat in Model)
+                    {
+                        <li>
+                            <a data-route="/sys/console/news/categories/@cat.Id">
+                                <i class="fa fa-bookmark"></i> &nbsp;
+                                @cat.Title
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

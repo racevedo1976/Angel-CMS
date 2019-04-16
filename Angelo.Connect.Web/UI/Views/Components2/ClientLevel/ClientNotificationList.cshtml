@@ -1,0 +1,71 @@
+﻿@model IList<NotificationListItemViewModel>
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var ownerLevel = (string)ViewData["ownerLevel"];
+    var ownerId = (string)ViewData["ownerId"];
+    var statusFilterFN = "statusFilter" + componentId;
+   
+    var apiReadRoute = routes.ClientApi("notifications/data", new { ownerLevel = ownerLevel, ownerId = ownerId });
+}
+
+
+@(Html.Kendo().Grid<NotificationListItemViewModel>()
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        columns.Bound(n => n.CreatedDT).Title("Created").Format("{0:MM/dd/yyyy}").Width(120).Filterable(false);
+        columns.Bound(n => n.Title).Title("Title");
+        columns.Bound(n => n.Status).Title("Status").Width(120).Filterable(f => f.UI(statusFilterFN));
+        columns.Bound(n => n.ScheduledDT).Title("Scheduled/Sent").Format("{0:MM/dd/yyyy hh:mm tt}").Filterable(false);
+        columns.Bound(n => n.Id).Hidden(true);
+    })
+    .Pageable()
+    .Sortable(false)
+    .Scrollable(scr => scr.Height(430))
+    .Filterable(filterable => filterable
+        .Extra(false)
+        .Operators(operators => operators
+            .ForString(str => str.Clear()
+                .StartsWith("Starts with")
+                .IsEqualTo("Is equal to")
+                .IsNotEqualTo("Is not equal to")
+            ))
+        )
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Read(read =>
+        {
+            read.Type(HttpVerbs.Post)
+            .Url(apiReadRoute);
+        })
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+        })
+    )
+)
+
+<script type="text/javascript">
+
+    @statusFilterFN = function(element) {
+        element.kendoDropDownList({
+            dataSource: {
+                data: [
+                    "@Angelo.Connect.Models.NotificationStatus.Draft",
+                    "@Angelo.Connect.Models.NotificationStatus.Scheduled",
+                    "@Angelo.Connect.Models.NotificationStatus.Processing",
+                    "@Angelo.Connect.Models.NotificationStatus.Sent",
+                    "@Angelo.Connect.Models.NotificationStatus.Error"
+                ]
+            },
+            optionLabel: "--Select Value--"
+        });
+    }
+
+</script>

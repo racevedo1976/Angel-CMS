@@ -1,0 +1,40 @@
+﻿@model SiteCollectionMapViewModel
+    
+@{
+    var componentId = (string)ViewData["cid"];
+}
+
+
+<form id="@componentId" action="/api/sites/collections" class="form form-horizontal" data-ajax-form>
+    @Html.HiddenFor(m => m.SiteId)
+    @Html.HiddenFor(m => m.ClientId)
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-11">
+                <h4>@Html.Localize("Assigned Site Collections")</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="form-control" style="height:auto;">
+                    @for (int i = 0; i < Model.Items.Count(); i++)
+                    {
+                        <div class="row">
+                            <div class="col-sm-12">
+                                @Html.CheckBoxFor(m => Model.Items[i].Selected)
+                                @Html.HiddenFor(m => Model.Items[i].Id)
+                                @Html.HiddenFor(m => Model.Items[i].OriginalStatus)
+                                @Html.LabelFor(m => Model.Items[i].Selected, Model.Items[i].Name)
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+

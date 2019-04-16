@@ -1,0 +1,187 @@
+﻿@using Angelo.Connect.Security
+@{
+    var siteId = (string)ViewData["SiteId"];
+    var directoryId = (string)ViewData["DirectoryId"];
+}
+
+@section Title {
+    @Html.Localize("Users")
+}
+
+@section Panel {
+    <ul id="adminPanelTabs" class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#userTab" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+        <li>
+            <a href="#rolesTab" data-toggle="tab">
+                @Html.Localize("Roles")
+            </a>
+        </li>
+        <li>
+            <a href="#permissionsTab" data-toggle="tab">
+                @Html.Localize("Permissions")
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="userTab" class="tab-pane fade in active">
+            <div id="userEditArea"  style="display: none">
+                <div id="userEditToolbar" class="toolbar">
+                    <a name="save" asp-authorize asp-policy="@PolicyNames.SiteUsersEdit" class="fa fa-save" title="@Html.Localize("Save")"></a>
+                </div>
+                <component id="usersEditForm" type="SiteUserEdit" lazy="true"></component>
+            </div>
+            <div id="userCreateArea" style="display: none">
+                <div id="userCreateToolbar" class="toolbar">
+                    <a name="save" asp-authorize asp-policy="@PolicyNames.SiteUsersCreate" class="fa fa-save" title="@Html.Localize("Create")"></a>
+                </div>
+                <component id="usersCreateForm" type="SiteUserCreate" lazy="true"></component>
+            </div>
+        </div>    
+        <div id="rolesTab" class="tab-pane fade">
+            <div id="userRolesEditArea">
+                <div id="userRolesEditToolbar" class="toolbar">
+                    <a name="save" asp-authorize asp-policy="@PolicyNames.SiteUsersEdit" class="fa fa-save" title="@Html.Localize("Save")"></a>
+                </div>
+
+                <div id="userRolesTabContent">
+                    <component id="userRolesEditForm" type="SiteUserRolesEdit" lazy="true"></component>
+                </div>
+            </div>
+            <div id="userRolesCreateArea">
+                <div class="padded">
+                    <div class="alert alert-default">
+                        <i class="fa fa-info"></i> &nbsp;
+                        @Html.Localize("The user must be saved before roles can be assigned")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="permissionsTab" class="tab-pane fade">
+            <div id="userPermissionEditArea">
+                <div id="userPermissionEditToolbar" class="toolbar">
+                    <a name="save" asp-authorize asp-policy="@PolicyNames.SiteUsersEdit" class="fa fa-save" title="@Html.Localize("Save")">@Html.Localize("Save")</a>
+                </div>
+
+                <div id="userPermissionTabContent">
+                    <component id="userPermissionsEditForm" type="SiteUserPermissions" lazy="true"></component>
+                </div>
+            </div>
+            <div id="userPermissionCreateArea">
+                <div class="padded">
+                    <div class="alert alert-default">
+                        <i class="fa fa-info"></i> &nbsp;
+                        @Html.Localize("The user must be saved before roles can be assigned")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div id="userList">
+    <div id="userGridToolbar" class="toolbar">
+        <a name="create" class="fa fa-plus-square pull-right" asp-authorize asp-policy="@PolicyNames.SiteUsersCreate">
+            <span>@Html.Localize("Create")</span>
+        </a>
+
+        <a name="delete" class="fa fa-trash-o pull-right" style="display: none">
+            <span>@Html.Localize("Delete")</span>
+        </a>
+    </div>
+    <component id="userGrid" type="SiteUserGrid" arg-siteId="@siteId" arg-directoryId="@directoryId"></component>
+</div>
+
+
+
+@section Scripts {
+    <script>
+
+        var userViewData = {
+            siteId: "@siteId",
+            directoryId: "@directoryId",
+            messages: {
+                userCreateSuccess: "@Html.Localize("User Created")",
+                userUpdateSuccess: "@Html.Localize("User Saved")",
+                userDeleteDisabled: "@Html.Localize("Delete functionality disabled.")"
+            }
+        };
+
+        $.on("userGrid.change", function (event, data) {
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+
+            $("#userCreateArea, #userRolesCreateArea, #userPermissionCreateArea").hide();
+            $("#userEditArea, #userRolesEditArea, #userPermissionEditArea").show();
+            $("#userGridToolbar").toolbar().show("delete");
+
+            $("#usersEditForm").component().invoke({
+                siteId: userViewData.siteId,
+                directoryId: model.directoryId,
+                userId: model.Id
+            });
+
+            $("#userRolesEditForm").component().invoke({
+                siteId: userViewData.siteId,
+                userId: model.Id
+            });
+
+            $("#userPermissionsEditForm").component().invoke({
+                siteId: userViewData.siteId,
+                userId: model.Id
+            });
+        })
+
+        $.on("userGridToolbar.delete", function(){
+            alert(userViewData.messages.userDeleteDisabled);     
+        });
+
+        $.on("userGridToolbar.create", function () {
+            $("#userCreateArea, #userRolesCreateArea, #userPermissionCreateArea").show();
+            $("#userEditArea, #userRolesEditArea, #userPermissionEditArea").hide();
+            $("#userGridToolbar").toolbar().hide("delete");
+
+            $("#usersCreateForm").component().invoke({
+                siteId: userViewData.siteId,
+                directoryId: userViewData.directoryId
+            });
+
+            $("#adminPanelTabs").tabs().show('userTab');
+        });
+
+        $.on("userCreateToolbar.save", function () {
+            $("#usersCreateForm").form().post().done(function(data){
+                $("#userCreateArea, #userRolesCreateArea, #userPermissionCreateArea").hide();
+                $("#userEditArea, #userRolesEditArea, #userPermissionEditArea").show();
+
+                $("#usersEditForm").component().invoke({
+                    siteId: userViewData.siteId,
+                    directoryId: userViewData.directoryId,
+                    userId: data.Id
+                });
+
+                $("#userGrid").getKendoGrid().dataSource.read();
+                //alert(userViewData.messages.userCreateSuccess);
+            });
+        });
+
+        $.on("userEditToolbar.save", function () {
+            $("#usersEditForm").form().put().done(function(){
+                $("#userGrid").getKendoGrid().dataSource.read();
+                //alert(userViewData.messages.userUpdateSuccess);
+            });
+        });
+
+        $.on("userRolesEditToolbar.save", function () {
+            $("#userRolesEditForm").form().post();
+        })
+
+        $.on("userPermissionEditToolbar.save", function () {
+            $("#userPermissionsEditForm").form().post();
+        })
+    </script>
+}

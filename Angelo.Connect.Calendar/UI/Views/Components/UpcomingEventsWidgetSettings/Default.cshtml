@@ -1,0 +1,69 @@
+﻿@model Angelo.Connect.Calendar.Models.UpcomingEventsWidget
+@using Microsoft.Extensions.Options
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Angelo.Connect.Extensions
+@using Kendo.Mvc.Extensions
+
+
+
+<form class="form" data-ajax-form="true" action="/api/widgets/upcomingevents">
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="form-group">
+        <label asp-for="Title">Title</label>
+        <div>
+            <input class="form-control" asp-for="Title" spellcheck="true" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PostsToDisplay">Posts to display</label>
+        <div>
+            <select asp-for="PostsToDisplay" class="form-control">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UseTextColor">Use Custom Text Color</label>
+        <div>
+            <input id="UseTextColor" name="UseTextColor" class="checkbox" asp-for="UseTextColor" />
+        </div>
+    </div>
+
+    <div class="form-group" id="colorPicker" style="display:none;">
+        <label asp-for="TextColor">Text color</label>
+        <div>
+            @Html.EditorFor(x => x.TextColor, "Color", null, nameof(Angelo.Connect.Calendar.Models.UpcomingEventsWidget.TextColor))
+        </div>
+    </div>
+</form>
+
+
+<script type="text/javascript">
+    if ($("#UseTextColor").is(":checked")) {
+        $("#colorPicker").show();
+    }
+
+    $("#UseTextColor").click(function () {
+        if ($(this).is(":checked"))
+        {
+            $("#colorPicker").show();
+        } else {
+            $("#colorPicker").hide();
+        }
+    });
+</script>
+

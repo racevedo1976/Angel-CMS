@@ -1,0 +1,287 @@
+[
+  {
+    "zone": "body",
+    "type": "slideshow lux",
+    "view": "slideshow-carousel",
+    "style": {
+      "background": "bg-fancy",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    }
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "classes": "cs-row-66-33",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<div class=\"col-md-9 text-center\"><div class=\"cns-maincontent\"><h1 style=\"text-align:left;\">Welcome to Pinnacle School District</h1><p style=\"text-align:left;\">Our Vision: We will be recognized nationally for its rigorous \ncurriculum, academic excellence and extracurricular achievement. \nStrengthened by diversity, our district will foster partnerships of \nstaff, families and the community to develop students&rsquo; educational, \nphysical and social-emotional well-being.</p></div></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "title",
+        "view": "title-default",
+        "style": {},
+        "model": {
+          "text": "Links",
+          "cssClass": "h1"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "caption": "Sample Image 10",
+          "src": "/templates/pinnacle/images/homelink1.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "caption": "Sample Image 7",
+          "src": "/templates/pinnacle/images/homelink2.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "caption": "Sample Image 10",
+          "src": "/templates/pinnacle/images/homelink3.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "caption": "Sample Image 1",
+          "src": "/templates/pinnacle/images/homelink4.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Sample Image 4",
+          "src": "/templates/pinnacle/images/homelink5.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-4",
+    "style": {
+      "classes": "cs-darkbackground",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Sample Image 4",
+          "src": "/demo/images/news1.jpg",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<h3><span style=\"color:#ffffff;\">Boys all-star soccer game ends in tie </span></h3><span style=\"color:#ffffff;\"></span><div class=\"news-position\"><span style=\"color:#ffffff;\">It was the second tie in the 15-match history of the series, and the North now leads the series</span></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Sample Image 10",
+          "src": "/demo/images/news2.jpg",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<h3><span style=\"color:#ffffff;\">Library Renovations on Track </span></h3><span style=\"color:#ffffff;\"></span><div class=\"news-position\"><span style=\"color:#ffffff;\">Revolutionary advances in information technology are transforming libraries and societies.</span></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Sample Image 2",
+          "src": "/demo/images/news3.jpg",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<h3><span style=\"color:#ffffff;\">District Test Scores Promising </span></h3><span style=\"color:#ffffff;\"></span><div class=\"news-position\"><span style=\"color:#ffffff;\">A deeper examination of the results from the new state standardized test reveal District students adjusting better.</span></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Sample Image 1",
+          "src": "/demo/images/news4.jpg",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<h3><span style=\"color:#ffffff;\">3rd Grade Field Trip Scheduled </span></h3><span style=\"color:#ffffff;\"></span><div class=\"news-position\"><span style=\"color:#ffffff;\">Make outdoor science fun and engaging on a field trip through The Zoo. </span></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-3",
+    "style": {
+      "classes": "cs-lightbackground",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<h2><img src=\"/templates/pinnacle/images/newsicon.png\" alt=\"School News\" />School News</h2>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<div><div class=\"cns-events\">Elementary School becomes Apple Distinguished School</div><p>Community Club has successful Service Day</p><p>National Board Certified Teachers Announced </p><p>Board meeting March 31, 2017  \n\t\t\t\t\t\t\t\t</p></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<h2><img src=\"/templates/pinnacle/images/eventsicon.png\" alt=\"SEvents\" />Events</h2>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "calendar",
+        "view": "calendar-month-view",
+        "style": {}
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<h2><img src=\"/templates/pinnacle/images/twittericon.png\" alt=\"Twitter\" />Twitter</h2>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "",
+          "staticToolbar": false
+        }
+      }
+    ]
+  }
+]

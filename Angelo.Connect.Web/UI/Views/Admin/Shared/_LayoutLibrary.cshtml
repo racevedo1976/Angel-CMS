@@ -1,0 +1,85 @@
+﻿@using Microsoft.AspNetCore.Mvc.Controllers
+
+@{
+    var site = ViewContext.HttpContext.GetTenant<SiteContext>();
+    Layout = "_MasterLayout";
+}
+
+@section BodyContent
+{
+    <header class="admin-header">
+        @Html.Partial("_AdminHeader")
+    </header>
+
+    <section class="admin-page clearfix">
+        <div class="admin-page-left">
+            <div class="admin-page-head">
+                @RenderSection("AdminPageHeader", required: true)
+                <div class="admin-page-title">
+                    @RenderSection("Title", required: true)
+                </div>
+            </div>
+            <div class="clearfix">
+                <div class="admin-page-menu">
+                    <div class="admin-left-menu">
+
+                        @RenderSection("AdminMenu", required: true)
+                    </div>
+                </div>
+                <div class="admin-page-body">
+                    <div class="admin-page-content">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin-page-right">
+            <div class="admin-page-panel">
+                @RenderSection("Panel", required: false)
+            </div>
+        </div>
+    </section>
+
+
+    <div style="display: none">
+        @RenderSection("Toolbar", required: false)
+        @RenderSection("Buttons", required: false)
+        @RenderSection("Alerts", required: false)
+        @RenderSection("Left", required: false)
+        @RenderSection("PageMenu", required: false)
+    </div>
+
+    <footer class="admin-footer">
+        @Html.Partial("_AdminFooter")
+    </footer>
+
+}
+
+@section WindowTitle {
+    Admin Tools
+}
+
+@section Styles {
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="//kendo.cdn.telerik.com/2018.1.221/styles/kendo.uniform.min.css">
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/toolbar.css" asp-append-version="true" />
+    
+
+    @RenderSection("Styles", required: false)
+}
+
+@section Scripts {
+
+    <script src="~/lib/angelo/angelo.ajax.js"></script>
+    <script src="~/lib/angelo/angelo.dropdown.js"></script>
+    <script src="~/lib/angelo/angelo.checkboxlist.js"></script>
+    <script src="~/lib/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+    <script src="~/js/toolbar.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+}
+
+@section HeadScripts {
+    @RenderSection("HeadScripts", required: false)
+}

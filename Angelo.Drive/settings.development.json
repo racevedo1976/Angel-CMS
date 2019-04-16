@@ -1,0 +1,9 @@
+﻿{
+  "ConnectionStrings": {
+    "ConnectDB": "Server=(localdb)\\MSSQLLocalDb;Database=Dev.Angelo.Connect;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "DriveDB": "Server=(localdb)\\MSSQLLocalDB;Database=Dev.Angelo.Drive;Trusted_Connection=True;"
+  },
+  "OpenIdConnect": {
+    "Authority": "http://localhost:49995"
+  }
+}

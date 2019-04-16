@@ -1,0 +1,121 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Extensions
+
+@model SlideShowWidget
+@{
+    var imageSourceSizes = typeof(Size).GetItemsForEnum();
+    var transitions = typeof(Transition).GetItemsForEnum();
+    var dottedOverlaySizes = typeof(Size).GetItemsForEnum();
+    var shadowTypes = typeof(ShadowType).GetItemsForEnum();
+}
+
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Default Duration</label>
+    <div class="col-sm-4">
+        @Html.EditorFor(x => x.DefaultSlideShowDuration, null, nameof(SlideShowWidget.DefaultSlideShowDuration), new { Minimum = 0, Maximum = int.MaxValue })
+    </div>
+    <label class="form-label col-sm-1 control-label">ms</label>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Initialization Delay</label>
+    <div class="col-sm-4">
+        @*Html.EditorFor(x => x.DefaultSlideShowInitializationDelay, null, nameof(SlideShowWidget.DefaultSlideShowInitializationDelay), new { Minimum = 0, Maximum = int.MaxValue })*@
+    </div>
+    <label class="form-label col-sm-1 control-label">ms</label>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Transitions</label>
+    <div class="col-sm-6">
+        <select class="form-control" asp-for="DefaultSlideShowTransitions">
+            @foreach (var item in transitions)
+{
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Image Source Size</label>
+    <div class="col-sm-6">
+        <select class="form-control" asp-for="DefaultSlideShowImageSourceSize">
+            @foreach (var item in imageSourceSizes)
+{
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Stop Slideshow on Hover</label>
+    <div>
+        @Html.EditorFor(x => x.DefaultSlideShowIsPausedOnHover, null, nameof(SlideShowWidget.DefaultSlideShowIsPausedOnHover))
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Loop Slideshow</label>
+    <div class="col-sm-8">
+        @Html.EditorFor(x => x.DefaultSlideShowIsLooped, null, nameof(SlideShowWidget.DefaultSlideShowIsLooped))
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-5 control-label">Number of Loops</label>
+    <div class="col-sm-7">
+        @Html.EditorFor(x => x.DefaultSlideShowMaximumLoops, null, nameof(SlideShowWidget.DefaultSlideShowMaximumLoops), new { Minimum = -1, Maximum = int.MaxValue })
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Shuffle / Random Mode</label>
+    <div class="col-sm-8">
+        @Html.EditorFor(x => x.DefaultSlideShowIsRandomMode, null, nameof(SlideShowWidget.DefaultSlideShowIsRandomMode))
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Shadow Type</label>
+    <div class="col-sm-8">
+        <select class="form-control" asp-for="DefaultSlideShowShadowType">
+            @foreach (var item in shadowTypes)
+{
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Dotted Overlay Size</label>
+    <div class="col-sm-8">
+        <select class="form-control" asp-for="DefaultSlideShowDottedOverlaySize">
+            @foreach (var item in dottedOverlaySizes)
+{
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Background Color</label>
+    <div class="col-sm-8">
+        @Html.EditorFor(x => x.DefaultSlideShowBackgroundColor, "Color", null, nameof(SlideShowWidget.DefaultSlideShowBackgroundColor))
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Padding as Border</label>
+    <div class="col-sm-8">
+        @Html.EditorFor(x => x.DefaultSlideShowPadding, null, nameof(SlideShowWidget.DefaultSlideShowPadding), new { Minimum = 0, Maximum = 1000 })
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Show Background Image</label>
+    <div class="form-group">
+        <label class="form-label col-sm-3 control-label">Background Image</label>
+    </div>
+    <div class="form-group">
+        <label class="form-label col-sm-3 control-label">Background Image URL</label>
+    </div>
+    <div class="form-group">
+        <label class="form-label col-sm-3 control-label">Background Repeat</label>
+    </div>
+    <div class="form-group">
+        <label class="form-label col-sm-3 control-label">Background Position</label>
+    </div>
+</div>

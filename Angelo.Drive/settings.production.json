@@ -1,0 +1,9 @@
+﻿{
+  "ConnectionStrings": {
+    "ConnectDB": "Data Source=db3,14333;Initial Catalog=Angelo.Connect;Integrated Security=True;MultipleActiveResultSets=true",
+    "DriveDB": "Data Source=db3,14333;Initial Catalog=Angelo.Drive;Integrated Security=True"
+  },
+  "OpenIdConnect": {
+    "Authority": "https://aegis.schoolinsites.com/"
+  }
+}

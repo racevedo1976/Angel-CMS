@@ -1,0 +1,146 @@
+﻿@model Angelo.Connect.Web.UI.ViewModels.Admin.FolderViewModel
+
+<div id="driveToolbar" class="toolbar btn-toolbar" style="margin-left:0px">
+    @* New *@
+    <div class="dropdown">
+        <a class="btn dropdown-toggle fa fa-plus-square" id="addDriveMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="display:inline;">
+            <span>@Html.Localize("Create")</span>
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="addDriveMenu">
+            <li id="addfolder">
+                <a data-toggle="modal" data-target="#myCreateNewFolderModal" href="#">
+                    <span class="fa-stack">
+                        <i class="fa fa-folder fa-stack-2x"></i>
+                        <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
+                    </span>
+                    @Html.Localize("Button.Folder")
+                </a>
+            </li>
+            <li id="adddoc">
+                <a data-toggle="modal" data-target="#uploadDocumentsModal" href="#">
+                    <span class="fa-stack">
+                        <i class="fa fa-file fa-stack-2x"></i>
+                        <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
+                    </span>
+                    @Html.Localize("Button.Document")
+                </a>
+
+            </li>
+        </ul>
+    </div>
+
+    @* Layout *@
+    <div class="btn-group navbar-right" style="margin-right:0px;height:100%;">
+        <a class="btn btn-default" id="gridView" href="#" style="height:100%; ">
+            <i class="fa fa-th" title="Align Left"></i>
+        </a>
+        <a class="btn btn-default" id="listView" href="#"  style="height:100%; ">
+            <i class="fa fa-list-ul" title="Align Center"></i>
+        </a>
+    </div>
+</div>
+<div id="driveCrumbs" style="height:2.5em">
+    <ul id="parentTrail" style="list-style-type:none; "></ul>
+    @*<span id="currentFolderName" class="menu-root">Model.Title</span>*@
+</div>
+
+<script type="text/javascript">
+    var currentSelectedFolderId = '';
+    $(document).ready(function () {
+        var subscriptionFolderViewChange = $('#panelFolderDetails').on('folderViewChange', function (event, obj) {
+            // Do something now that the event has occurred
+            $("#docActionUploadFolderId").val(obj.id);
+            currentSelectedFolderId = obj.id;
+        });
+
+
+            @Url.RouteUrl("Drive", new { })
+
+        var myDropzone = new Dropzone("div#docActionDropZone", {
+            url: "/api/user/library" + "/doc/",
+            dictDefaultMessage: "Drop files here to upload"
+        });
+        myDropzone.on("complete", function (file) {
+            /* Maybe display some more file information on your page */
+            $('#panelFolderDetails').trigger('documentUpdated', {
+                refresh: true // any argument
+            });
+            this.removeFile(file);
+        });
+        myDropzone.on('sending', function (file, xhr, formData) {
+            formData.append('folderId', currentSelectedFolderId);
+        });
+
+
+        //Dropzone.options.dropzoneForm = {
+        //    init: function () {
+        //        this.on("complete", function (data) {
+        //            //var res = eval('(' + data.xhr.responseText + ')');
+        //            //var res = JSON.parse(data.xhr.responseText);
+        //            fmVM.loadDataContext();
+        //            this.removeFile(data);
+        //        });
+
+        //        this.on("success", function (data) {
+        //            //var res = eval('(' + data.xhr.responseText + ')');
+        //            //var res = JSON.parse(data.xhr.responseText);
+        //            fmVM.loadDataContext();
+        //            this.removeFile(data);
+        //        });
+        //    }
+        //};
+
+    });
+
+</script>
+
+
+<!-- Create New Folder Modal -->
+<div id="myCreateNewFolderModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Folder</h4>
+            </div>
+            <div class="modal-body form-group">
+                <label for="folderNewName">Enter the new folder name:</label>
+                <input type="text" class="form-control" placeholder="New folder name" id="folderNewName" name="folderNewName" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-primary" onclick="fmVM.createNewFolder()">Create</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Upload files Modal -->
+<div id="uploadDocumentsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Upload Document(s)</h4>
+            </div>
+            <div class="modal-body form-group">
+                <div class="jumbotron">
+                    <div class="dropzoneForm" id="docActionDropZone">
+                        <div class="dz-message dz-default">
+                            <span>Drop files here to upload</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Done uploading</button>
+            </div>
+        </div>
+    </div>
+</div>

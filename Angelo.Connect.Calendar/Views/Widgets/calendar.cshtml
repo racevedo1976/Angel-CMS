@@ -1,0 +1,393 @@
+﻿@model CalendarWidgetSetting
+@inject Angelo.Connect.Security.UserContext user
+
+<div id='calendar_@Model.Id'></div>
+@{
+                List<string> views = new List<string>();
+                if (Model.MonthView)
+                {
+                    views.Add("month");
+                }
+                if (Model.WeekView)
+                {
+                    views.Add("agendaWeek");
+                }
+                if (Model.DayView)
+                {
+                    views.Add("agendaDay");
+                }
+                if (Model.ListView)
+                {
+                    views.Add("listMonth");
+                }
+
+                var startOfWeek = "0";
+
+                switch (Model.StartDayOfWeek)
+                {
+                    case "Sunday":
+                        startOfWeek = "0";
+                        break;
+                    case "Monday":
+                        startOfWeek = "1";
+                        break;
+                    case "Tuesday":
+                        startOfWeek = "2";
+                        break;
+                    case "Wednesday":
+                        startOfWeek = "3";
+                        break;
+                    case "Thursday":
+                        startOfWeek = "4";
+                        break;
+                    case "Friday":
+                        startOfWeek = "5";
+                        break;
+                    case "Saturday":
+                        startOfWeek = "6";
+                        break;
+                }
+            }
+<script>
+
+    (function($) {
+
+                var customAddBtn = {};
+                var authenticatedUser = false;
+                var showWeekends = @(Model.HideWeekends ? "false": "true");
+                var views = '@string.Join(",", views)';
+                var widgetId = '@Model.Id';
+                var defaultView = '@Model.DefaultView';
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1; //January is 0!
+                var yyyy = today.getFullYear();
+                var widgetTimeFormat = '@(Model.Format12 ? "h(:mm)t" : "H(:mm)")'; //24hrs vs 12hrs format
+
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+        today = yyyy + '-' + mm + '-' + dd;
+
+        $(document).ready(function() {
+
+            // init: function(themeSystem) {
+            $('#calendar_@Model.Id').fullCalendar({
+                themeSystem: 'bootstrap3',
+                header: {
+                    left: 'prev, next', //today
+                    center: 'title',
+                    right: 'add ' + views
+                },
+                defaultView: defaultView,
+                defaultDate: today,
+                navLinks: true, // can click day/week names to navigate views
+                editable: false,
+                eventLimit: true, // allow "more" link when too many events
+                weekNumbers: false, // show week number on the left column
+                weekends: showWeekends, // show/hide weekends  (sat and Sun)
+                //timeFormat: 'H(:mm)', // widgetTimeFormat,// 24hr/12hr settings
+                firstDay: Number(@startOfWeek),
+                //****** Events ***********
+                eventClick: function(calEvent, jsEvent, view) {
+                    
+                    //if (authenticatedUser) {
+                        DisplayEventContainer(calEvent.id);
+                    //} else {
+                    //    var thisObject = this;
+                    //    ShowEventDetailsTooltip(calEvent, jsEvent, view, thisObject);
+                    //}
+
+                },
+                eventDrop: function(event, delta, revertFunc) {
+                },
+                eventResize: function(event, delta, revertFunc) {
+
+                },
+                dayClick: function(date) {
+                    // alert('clicked' + date.format());
+
+                },
+                select: function(start, end) {
+                    //alert('selected ' + start.format() + ' to ' + end.format());
+
+                },
+                eventMouseover: function(event, jsEvent, view) {
+                    var thisObject = this;
+                    ShowEventDetailsTooltip(event, jsEvent, view, thisObject);
+
+                },
+                customButtons: customAddBtn,
+                events: function(start, end, timezone, callback) {
+                    //debugger;
+                    $.ajax({
+                        
+                        url: '/admin/calendardata/GetEvents',
+                        dataType: 'json',
+                        data: {
+                            // our hypothetical feed requires UNIX timestamps
+                            widgetId: widgetId,
+                            from: start.format(),
+                            to: end.format()
+                        },
+                        success: function(doc) {
+                            var events = [];
+                           
+                            callback(doc.result);
+                        }
+                    });
+                },
+                eventDataTransform: function(event) {
+                    //workaround for all days that span more than 1 day.
+                    if(event.allDay) {
+                        event.end = moment(event.end).add(1, 'days');
+                    }
+                    return event;  
+                }     
+
+            });
+
+            //security
+            $.get("/admin/calendardata/CanAddEvents",
+                function(result) {
+                    //debugger;
+                    authenticatedUser = result.isAuthenticated;
+                    if (result.isAuthorized) {
+                        ShowAddEventsButton()
+                    }
+                })
+
+
+            window.showEventEditModal = ShowEventEditContainer;
+        });
+
+        function ShowEventDetailsTooltip(event, jsEvent, view, thisObj) {
+
+            var allDayHeader = "";
+            var startDate = "";
+            var endDate = "";
+            if (event.start != null) {
+                startDate = event.allDay ? event.start.format("MMM D") : event.start.format("MMM D h:mm a");
+            }
+            if (event.end != null) {
+                
+                if (event.allDay && event.start < event.end) {
+                    event.end = moment(event.end).add(-1, 'days');
+                }
+                endDate =  event.allDay ? event.end.format("MMM D") : event.end.format("MMM D h:mm a");
+            }
+            if (event.allDay) {
+                allDayHeader = "<div style='text-align: center;'><b>All Day</b></div>";
+            }
+
+            var location = "";
+            if (event.location) {
+                location = "<p>" + event.location + "</p>";
+            }
+
+            var phone = "";
+            if (event.phone && event.showPhoneNumber) {
+                phone = "<p>" + event.phone + "</p>";
+            }
+
+            var userName = "";
+            if (event.userName && event.showOrganizerName) {
+                userName = "<p>" + event.userName + "</p>";
+            }
+
+            var desc = "";
+            if (event.description) {
+                desc = event.description;
+            }
+            var display = allDayHeader +
+                "<div style='text-align: left;'><p><b>" +
+                event.title +
+                "</b></p><p>" +
+                startDate +
+                " - " +
+                endDate +
+                "</p><p>" +
+                decodeURI(desc) +
+                "</p>" +
+                location +
+                userName +
+                phone +
+                "</div>";
+
+
+            $(thisObj).tooltip({
+                title: display,
+                html: true,
+                container: 'body'
+            });
+            $(thisObj).tooltip('show');
+        }
+
+        function ShowAddEventsButton() {
+            $('#calendar_@Model.Id').fullCalendar('option', {
+            customButtons: {
+                add: {
+                    text: 'Add',
+                        click: function () {
+                        ShowEventEditContainer();
+                    }
+
+                }
+            }
+        });
+
+    }
+
+
+
+    function openMyModalEvent() {
+        var mod = $('#events-modal');
+
+        //check if already open, if it is then exit
+        if (!mod.hasClass('hide')) {
+            return;
+        }
+        mod.removeClass('hide');
+        mod.on('hidden.bs.modal', function () {
+            mod.addClass('hide');
+                $('#calendar_@Model.Id').fullCalendar('refetchEvents');
+
+        });
+        mod.appendTo("body").modal('show');
+    }
+
+
+    var DisplayEventContainer = function (id, sday, shour) {
+            $.dialog("/admin/calendar/displayevent", { eventId: id, day: sday, hour: shour});
+
+            //var displayEventContainer = $("#eventDisplayModeContainer");
+            //displayEventContainer.loadComponent({
+            //    "type": "CalendarEventDisplayMode",
+            //    "id": "calendarEventDisplayMode",
+            //    "params": {
+            //        "eventId": id,
+            //        "day": sday,
+            //        "hour": shour
+            //    }
+            //}).done(function () {
+            //    openMyModalEvent()
+            //});
+        }
+
+        var ShowEventEditContainer = function (id, sday, shour) {
+
+            var fn_validateAndSubmit = function(button){
+                if (button != "save"){
+                    return true;
+                }
+
+                //submit and return result
+                return saveEvent(function(){});
+
+            };
+
+            $.dialog("/admin/calendar/showeventedit", { id: id, day: sday, hour: shour}, fn_validateAndSubmit )
+                .done(function (button) {
+
+        if (button === "save") {
+            //clean ups or refresh calendar
+            // //refresh any calendar widget
+            var x = document.getElementsByClassName("fc");
+            var i;
+            for (i = 0; i < x.length; i++) {
+                            $(x[i]).fullCalendar('refetchEvents');
+            }
+
+        }
+    });
+
+
+
+            //var displayEventContainer = $("#eventDisplayModeContainer");
+            //displayEventContainer.loadComponent({
+            //    "type": "CalendarEventManager",
+            //    "id": "calendarEventManager",
+            //    "params": {
+            //        "eventId": id,
+            //        "day": sday,
+            //        "hour": shour
+            //    }
+            //}).done(function () {
+            //    openMyModalEvent()
+            //});
+        }
+
+
+        function removeCalendarEvent(eventId) {
+            $.get("/api/content/calendar/deletecalendarevent?eventId=" + eventId, function () {
+
+        }).done(function () {
+                //close event view window
+                $('button.viewerCloseBtn').trigger("click");
+                $('#calendar').fullCalendar('refetchEvents');
+
+            // //refresh any calendar widget
+            var x = document.getElementsByClassName("fc");
+            var i;
+            for (i = 0; i < x.length; i++) {
+                    $(x[i]).fullCalendar('refetchEvents');
+            }
+        });
+
+    }
+
+
+
+
+   })(jQuery);
+</script>
+
+<style>
+     .eventError{
+        border-color: red;
+        border-width: 1px;
+        border-style: solid;
+    }
+
+
+    #calendar_@Model.Id {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+</style>
+
+
+
+<div id="events-modal" class="modal fade hide" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Event Details</h4>
+            </div>
+            <div class="modal-body">
+
+
+
+
+                <div id="eventDisplayModeContainer"></div>
+
+
+
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default viewerCloseBtn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

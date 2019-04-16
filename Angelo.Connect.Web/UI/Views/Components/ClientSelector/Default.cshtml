@@ -1,0 +1,24 @@
+﻿@model IList<SelectListItem>
+
+@using Angelo.Connect.Security
+@using Angelo.Connect.Menus
+
+@inject AdminContext menuContext
+
+@{
+
+    if (User.IsInRole(UserRoles.CorporateAdmin) && menuContext.MenuType == MenuType.ClientTools)
+    {
+        <div>
+            <label>Change Client:</label>
+            <form id="clientChange" asp-controller="dashboard" asp-route-menuType="@menuContext.MenuType.ToString()" asp-route-returnUrl="@ViewContext.RouteData.Values["controller"].ToString()" asp-action="index" method="get">
+                <input type="hidden" name="menuType" value="@menuContext.MenuType.ToString()" />
+                <input type="hidden" name="returnUrl" value="/@ViewContext.RouteData.Values["area"].ToString()/@ViewContext.RouteData.Values["controller"].ToString()/@ViewContext.RouteData.Values["action"].ToString()" />
+                <select id="menuId" name="menuId" asp-for="@menuContext.ClientId" asp-items="Model" onchange="clientChange.submit()"></select>
+            </form>            
+            
+        </div>
+        <hr />
+    }
+}
+

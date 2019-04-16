@@ -1,0 +1,33 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.Image
+
+@{ 
+    var borderRadius = Model.Radius ?? "0px";
+    var width = Model.Width ?? "100%";
+    var height = Model.Height ?? "auto";
+    var widthStyle = "max-width: " + width;
+    var heightStyle = "max-height: " + height;
+    var link = Model.Link;
+    var linkTarget = Model.LinkNewWindow ? "_blank" : "_self";
+
+    if (width.Contains("%") && width != "100%")
+    {
+        widthStyle = "width: " + width;
+    }
+    var inlineStyle = "border-radius: " + borderRadius + ";" + widthStyle + ";" + heightStyle;
+}
+
+@if (Model.Src == null || Model.Src == "")
+{
+    <i class="fa fa-picture-o fa-fw content-node-placeholder"></i>
+}
+else
+{
+    @if (link != null)
+    {
+        <a href="@Model.Link" target="@linkTarget"><img src="@Model.Src" class="img-responsive" alt="@Model.Caption" title="@Model.Caption" style="@inlineStyle" /></a>
+    }
+    else
+    {
+        <img src="@Model.Src" class="img-responsive" alt="@Model.Caption" title="@Model.Caption" style="@inlineStyle"/>
+    }
+}

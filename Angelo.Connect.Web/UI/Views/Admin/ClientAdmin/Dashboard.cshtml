@@ -1,0 +1,105 @@
+﻿@model Angelo.Connect.Models.Client
+@inject MenuProvider _menuProvider;
+
+@{ 
+
+    string idTarget1 = "idTargetA";
+    string nameTarget1 = "nameTargetA";
+
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/views/admin/dashboard.css" asp-append-version="true"/>
+
+}
+
+@section Title {
+    @Html.Localize("Client Dashboard")
+}
+
+
+@section Panel
+{
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="panel-title">@Html.Localize("Open Product Requests")</span>
+        </div>
+        <div class="panel-body">
+
+            <div style="display:none;">
+                <button id="browserButton" class="content-select-button">Test Browser</button>
+                <input type="hidden" id="idTarget" value="Id Target" />
+                <input type="text" id="nameTarget" value="Name Target" readonly />
+            </div>
+
+            <div class="placeholder">
+                Placeholder
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="panel-title">@Html.Localize("Recent Site Activity")</span>
+        </div>
+        <div class="panel-body">
+            <div class="placeholder">
+                Placeholder
+            </div>
+        </div>
+    </div>
+}
+
+<div class="dashboard-icons">
+    <div class="row">
+        @{ 
+            var menuItems = await _menuProvider.GetMenuItemsAsync(MenuType.ClientTools);
+        }
+       
+
+        @foreach (var item in menuItems)
+        {
+            <div class="col-xs-6 col-md-4">
+                <a class="thumbnail dashboard-thumbnail" href="@item.Url">
+                    @item.Icon.Render()
+                    <div class="caption">
+                        <h3>@Html.Localize(item.Title)</h3>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+
+       
+
+<component id="contentSelector" type="ContentSelector"></component>
+<script>
+    var onContentSelect = function(list) {
+        debugger;
+        var count = list.length;
+    }
+
+    $(document).ready(function () {
+
+        $("#browserButton").click(function () {
+            ShowContentSelector({
+                title: "Select a Video File:",
+                idTarget: "idTarget",
+                nameTarget: "nameTarget",
+                onSelect: onContentSelect,
+                onCancel: function () { alert('cancel'); }
+            });
+        });
+
+        $("#nameTarget").click(function () {
+            ShowContentSelector();
+        });
+
+    });
+</script>
+
+
+

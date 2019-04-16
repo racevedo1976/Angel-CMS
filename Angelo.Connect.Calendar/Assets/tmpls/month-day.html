@@ -1,0 +1,30 @@
+
+
+<div class="cal-month-day <%= cls %>">
+	<span class="pull-right" data-cal-date="<%= data_day %>" data-cal-view="day" data-toggle="tooltip" title="<%= tooltip %>"><%= day %></span>
+	<% if (events.length > 0) { %>
+		<div class="events-list" data-cal-start="<%= start %>" data-cal-end="<%= end %>">
+			<% _.each(events, function(event) { %>
+            <% 	    
+                    event.date_start = new Date(parseInt(event.start));
+                    event.date_end = new Date(parseInt(event.end)); 
+                    var monthNames = ["January", "February", "March", "April", "May", "June",
+                                            "July", "August", "September", "October", "November", "December"
+                                    ];
+            
+            %>
+				
+                <a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
+                   class="pull-left event <%= event['class'] %>" data-toggle="tooltip"
+                   data-html="true" rel="tooltip"
+                   title="<div>
+                            <b><%= event.title %></b>
+                            <p><%= monthNames[event.date_end.getMonth()] %> <%= event.date_end.getDate() %> @ <%= event.date_end.getHours() %>:<%= addZero(event.date_end.getMinutes()) %> </p>
+                            <p><%= event.description %></p>
+                        </div>"></a>
+			<% }); %>
+		</div>
+	<% } %>
+</div>
+
+

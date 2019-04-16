@@ -1,0 +1,35 @@
+﻿@model Angelo.Connect.Models.SiteSetting 
+@{
+    Layout = "_ModalLayout";
+
+    var cssText = Model?.Value ?? "body{\n}";
+}
+
+@section ModalTitle {
+    @Html.Localize("Edit Site Stylesheet")
+}
+
+
+@section ModalBody {
+    <div data-module="modules/site/cssdialog">
+        <form action="/sys/site/css">
+            <textarea name="css" class="form-control" spellcheck="false" style="min-height: 400px; font-family: 'Courier New'">@cssText</textarea>
+        </form>
+
+        <br />
+        <div class="row">
+            <div class="col-sm-6">
+            </div>
+            <div class="col-sm-6 text-right">
+                <button name="save" class="btn btn-default">
+                    @Html.Localize("Save")
+                </button>
+                &nbsp;&nbsp;
+                <button name="cancel" class="btn btn-default modal-button">
+                    @Html.Localize("Cancel")
+                </button>
+            </div>
+        </div>
+</div>
+}
+

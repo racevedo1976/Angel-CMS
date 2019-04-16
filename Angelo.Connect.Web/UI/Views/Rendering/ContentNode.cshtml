@@ -1,0 +1,55 @@
+﻿@using Angelo.Connect.UI.Extensions;
+@using Angelo.Connect.Configuration;
+@using Angelo.Connect.Rendering;
+@model Angelo.Connect.Models.ContentNode
+@inject Angelo.Connect.Widgets.WidgetProvider widgetProvider
+@{
+    var treeContext = ViewData.GetTreeContext();
+    var widgetInfo = widgetProvider.GetWidgetConfig(Model.WidgetType);
+    var widgetModel = widgetProvider.GetSettings(Model.WidgetType, Model.WidgetId);
+    var widgetView = widgetProvider.GetView(Model.WidgetType, Model.ViewId);
+
+    var nodeCssClasses = Model.BuildNodeCssClasses(treeContext);
+    var nodeCssStyle = Model.BuildNodeCssStyle(treeContext);
+    var widgetCssClasses = Model.BuildWidgetCssClasses(treeContext);
+    var widgetCssStyle = Model.BuildWidgetCssStyle(treeContext);
+}
+
+
+@if(treeContext.Editable)
+{
+    <div id="@Model.Id"
+         class="@nodeCssClasses"
+         style="@nodeCssStyle"
+         css-draggable="@true"
+         css-resizable="@false"
+         data-zone-index="@Model.Index"
+         data-widget-id="@Model.WidgetId"
+         data-widget-type="@Model.WidgetType"
+         data-widget-view="@Model.ViewId"
+         data-widget-has-editor="@(widgetInfo.HasEditor ? "true" : "false")"
+         data-widget-has-settings="@(widgetInfo.HasSettings ? "true" : "false")"
+         data-node-classes="@Model.GetStyle()?.NodeClasses",
+         data-max-height="@Model.GetStyle()?.MaxHeight"
+         data-alignment="@Model.GetStyle()?.Alignment"
+    >
+        <div class="@widgetCssClasses" style="@widgetCssStyle">
+            @if (widgetInfo.HasEditor)
+            {
+                @widgetInfo.Editor.Render(this.ViewContext, widgetModel)
+            }
+            else
+            {
+                @Html.Partial(widgetView, widgetModel)
+            }    
+        </div>
+    </div>
+}
+else
+{
+    <div class="@nodeCssClasses" style="@nodeCssStyle">
+        <div class="@widgetCssClasses" style="@widgetCssStyle">
+            @Html.Partial(widgetView, widgetModel)
+        </div>
+    </div>
+}

@@ -1,0 +1,39 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@model SlideShow
+@{
+    var id = "sshowlayout-" + GetHashCode();
+}
+
+<div>
+    <label>
+        <img src="/assets/slideshow/images/autolayout.png">
+        <input type="radio" id="auto-@id" name="Layout" value="auto" />
+        <label for="auto-@id">Auto</label>
+    </label>
+    <label>
+        <img src="/assets/slideshow/images/fullwidthlayout.png">
+        <input type="radio" id="fullwidth-@id" name="Layout" value="fullwidth" />
+        <label for="fullwidth-@id">Full-Width</label>
+    </label>
+    <label>
+        <img src="/assets/slideshow/images/fullscreenlayout.png">
+        <input type="radio" id="fullscreen-@id" name="Layout" value="fullscreen" />
+        <label for="fullscreen-@id">Full-Screen</label>
+    </label>
+</div>
+<div class="form-group">
+    <div class="col-sm-2 form-group">
+        <input type="radio" name="customButton" id="layout"/>
+        <label class="form-label col-sm-2" for="customButton">Custom</label>
+    </div>
+
+    <div class="col-sm-3">
+        <input class="form-control" asp-for="FormWidth" />
+    </div>
+    <label class="form-label col-sm-2" for="FormWidth">px (W)</label>
+
+    <div class="col-sm-3">
+        <input class="form-control" asp-for="FormHeight" />
+    </div>
+    <label class="form-label col-sm-2" for="FormHeight">px (H)</label>
+</div>

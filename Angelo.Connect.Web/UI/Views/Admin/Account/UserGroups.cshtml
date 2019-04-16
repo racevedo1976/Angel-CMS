@@ -1,0 +1,384 @@
+﻿@using Angelo.Connect.Security;
+
+@{
+    Layout = "_ModalLayout";
+
+    var ownerLevel = (string)ViewData["ownerLevel"];
+    var ownerId = (string)ViewData["ownerId"];
+    var userGroupType = (string)ViewData["userGroupType"];
+    var poolId = (string)ViewData["poolId"];
+    var userGroupTitle = (string)ViewData["userGroupTitle"];
+}
+
+@section ModalTitle {
+    @userGroupTitle
+}
+
+
+@section ModalBody {
+
+
+<div style="background-color:#fff !important; display:inline-block">
+    <div id="UserGroupListSection" style="float:left;min-width:100px;width:450px;padding-right:10px;">
+        <div id="listToolbar" class="toolbar">
+            <a name="create" class="fa fa-plus-square" title="@Html.Localize("Create new group.")"><span>@Html.Localize("Create")</span></a>
+            <a name="delete" class="fa fa-trash-o pull-right" title="@Html.Localize("Delete selected group.")" disabled><span>@Html.Localize("Delete")</span></a>
+        </div>
+        <component id="userGroupList" type="GroupList"
+                   arg-ownerLevel="@ownerLevel"
+                   arg-ownerId="@ownerId"
+                   arg-userGroupType="@userGroupType"></component>
+    </div>
+
+    <div style="float:left;min-width:100px;width:440px;padding-left:10px;">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active">
+                <a href="#detailsTabPane" data-toggle="tab">
+                    @Html.Localize("Details")
+                </a>
+            </li>
+            <li>
+                <a href="#membersTabPane" data-toggle="tab">
+                    @Html.Localize("Members")
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="detailsTabPane" class="tab-pane fade in active">
+
+                <div class="tab-sub-pane" style="display:none">
+                    <div id="detailsEditToolbar" class="toolbar">
+                        <a name="save" class="fa fa-save pull-right" title="@Html.Localize("Save group details.")"><span>@Html.Localize("Save")</span></a>
+                    </div>
+                    <component id="detailsEdit" type="GroupDetailsEdit"></component>
+                </div>
+
+            </div>
+
+            <div id="membersTabPane" class="tab-pane fade">
+
+                <div class="tab-sub-pane" style="display:none">
+                    <div id="memberListToolbar" class="toolbar">
+                        <a name="add" class="fa fa-plus-square" title="@Html.Localize("Add user to group.")"><span>@Html.Localize("Add")</span></a>
+                        @*<a name="edit" class="fa fa-edit pull-right" title="@Html.Localize("Edit user membership.")"><span>@Html.Localize("Edit")</span></a>*@
+                        <a name="remove" class="fa fa-minus-square pull-right" title="@Html.Localize("Remove user from group.")"><span>@Html.Localize("Remove")</span></a>
+                    </div>
+                    <component id="memberList" type="GroupMemberList"></component>
+                </div>
+
+                <div class="tab-sub-pane" style="display:none">
+                    <div id="memberAddToolbar" class="toolbar">
+                        <a name="save" class="fa fa-save pull-right" title="@Html.Localize("Save user membership.")"><span>@Html.Localize("Save")</span></a>
+                        <a name="cancel" class="fa fa-arrow-left" title="@Html.Localize("Ignore changes made and return to member list.")"><span>@Html.Localize("Back")</span></a>
+                    </div>
+                    <component id="memberCreate" type="GroupMemberCreate" arg-poolId="@poolId"></component>
+                </div>
+
+                <div class="tab-sub-pane" style="display:none">
+                    <div id="memberEditToolbar" class="toolbar">
+                        <a name="save" class="fa fa-save pull-right" title="@Html.Localize("Save user membership.")"><span>@Html.Localize("Save")</span></a>
+                        <a name="cancel" class="fa fa-arrow-left" title="@Html.Localize("Ignore changes made and return to member list.")"><span>@Html.Localize("Back")</span></a>
+                    </div>
+                    <component id="memberEdit" type="GroupMemberEdit"></component>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+    <script>
+
+        $(document).ready(function () {
+            $(".admin-outer-body").css("width", "calc(100% - 500px)");
+            $(".admin-outer-right").css("width", "500px");
+        });
+
+        $(document).on('keypress', 'input', function (e) {
+            //debugger;
+            if (e.which == 13) {
+                var tagName = e.target.tagName.toLowerCase();
+                if (tagName !== "textarea") {
+                    return false;
+                }
+            }
+        });
+
+        // Select User Group
+        $.off("userGroupList.change").on("userGroupList.change", function (event, data) {
+            //debugger;
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+            if (model) {
+                $("#listToolbar").toolbar().enable("delete");
+                $("#detailsEditToolbar").toolbar().disable("save");
+                InvokeComponent("detailsEdit", { id: model.Id });
+                $("#memberListToolbar").toolbar().disable("remove");
+                $("#memberListToolbar").toolbar().disable("add");
+                $("#memberListToolbar").toolbar().disable("edit");
+                InvokeComponent("memberList", { id: model.Id });
+            }
+            else {
+                $("#listToolbar").toolbar().enable("create");
+                $("#listToolbar").toolbar().disable("delete");
+                HideTabPane("detailsTabPane");
+                HideTabPane("membersTabPane");
+            }
+        })
+
+        // Create User Group
+        $.off("listToolbar.create").on("listToolbar.create", function () {
+            $("#listToolbar").toolbar().disable("delete");
+            $("#detailsEditToolbar").toolbar().disable("save");
+            InvokeComponent("detailsEdit", { id: "" });
+            HideTabPane("membersTabPane");
+            $('.nav-tabs a[href="#detailsTabPane"]').tab('show');
+        });
+
+        // Edit User Group
+        $.off("detailsEdit.load").on("detailsEdit.load", function (event, data) {
+            $("#detailsEditToolbar").toolbar().enable("save");
+        });
+
+        $.off("detailsEditToolbar.save").on("detailsEditToolbar.save", function () {
+            $("#detailsEdit").form().post();
+        });
+
+        $.off("detailsEdit.submit").on("detailsEdit.submit", function (event, data) {
+            UpdateGridRow(data.result);
+            SelectGridRow(data.result.Id);
+        });
+
+        // Delete User Group
+        $.off("listToolbar.delete").on("listToolbar.delete", function () {
+            var grid = $("#userGroupList").getKendoGrid();
+            var item = grid.select();
+            var model = grid.dataItem(item);
+            if (model) {
+                if (confirm("@Html.Localize("Are you sure you want to delete the selected Group?")")) {
+                    $("#listToolbar").toolbar().disable("delete");
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '/api/group',
+                        data: { id: model.Id },
+                        success: function (result) {
+                            DeleteGridRow(model.Id);
+                            HideTabPane("detailsTabPane");
+                            HideTabPane("membersTabPane");
+                        },
+                        error: function (xhr) {
+                            alert("@Html.Localize("Error: Unable to delete Group.")");
+                            $("#listToolbar").toolbar().enable("delete");
+                        }
+                    });
+                }
+            }
+        });
+
+        // List Group Members
+        $.off("memberList.load").on("memberList.load", function (event, data) {
+            $("#memberListToolbar").toolbar().enable("add");
+        });
+
+        $.off("memberList.change").on("memberList.change", function (event, data) {
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+            if (model) {
+                $("#memberListToolbar").toolbar().enable("remove");
+                $("#memberListToolbar").toolbar().enable("edit");
+            }
+            else {
+                $("#memberListToolbar").toolbar().disable("remove");
+                $("#memberListToolbar").toolbar().disable("edit");
+            }
+        })
+
+        // Add User Group Member
+        $.off("memberListToolbar.add").on("memberListToolbar.add", function () {
+            var userGroupId = $("#detailsEdit").form().model().Id;
+            $("#memberAddToolbar").toolbar().disable("save");
+            $("#memberEdit").html("");
+            
+            InvokeComponent("memberCreate", { usergroupid: userGroupId, poolid: "@poolId" });
+        });
+
+        $.off("memberCreate.load").on("memberCreate.load", function (event, data) {
+            $("#memberAddToolbar").toolbar().enable("save");
+        });
+
+        $.off("memberAddToolbar.cancel").on("memberAddToolbar.cancel", function () {
+            ShowParentTabSubPane("memberList");
+        });
+
+        $.off("memberAddToolbar.save").on("memberAddToolbar.save", function () {
+            $("#memberCreate").form().post();
+        });
+
+        $.off("memberCreate.submit").on("memberCreate.submit", function (event, data) {
+            ShowParentTabSubPane("memberList");
+            InvokeComponent("memberList", { id: data.result.GroupId });
+            
+            UpdateMemberGridRow(data.result);
+            SelectMemberGridRow(data.result.Id);
+        });
+
+        // Edit Group Member
+        $.off("memberListToolbar.edit").on("memberListToolbar.edit", function () {
+            var grid = $("#memberList").getKendoGrid();
+            var item = grid.select();
+            var model = grid.dataItem(item);
+            if (model) {
+                $("#memberEditToolbar").toolbar().disable("save");
+                $("#memberCreate").html("");
+                InvokeComponent("memberEdit", { userGroupId: model.UserGroupId, userId: model.UserId });
+            }
+        });
+
+        $.off("memberEdit.load").on("memberEdit.load", function (event, data) {
+            $("#memberEditToolbar").toolbar().enable("save");
+        });
+
+        $.off("memberEditToolbar.cancel").on("memberEditToolbar.cancel", function () {
+            ShowParentTabSubPane("memberList");
+        });
+
+        $.off("memberEditToolbar.save").on("memberEditToolbar.save", function () {
+            $("#memberEdit").form().post();
+        });
+
+        $.off("memberEdit.submit").on("memberEdit.submit", function (event, data) {
+            ShowParentTabSubPane("memberList");
+            UpdateMemberGridRow(data.result);
+            SelectMemberGridRow(data.result.Id);
+        });
+
+        // Delete Group Member
+        $.off("memberListToolbar.remove").on("memberListToolbar.remove", function (event, data) {
+            var grid = $("#memberList").getKendoGrid();
+            var item = grid.select();
+            var model = grid.dataItem(item);
+            if (model) {
+                if (confirm("@Html.Localize("Are you sure you want to remove the selected User from this Group?")")) {
+                    $("#memberEditToolbar").toolbar().disable("edit");
+                    $("#memberEditToolbar").toolbar().disable("remove");
+                    //debugger;
+                    $.ajax({
+                        type: "DELETE",
+                        dataType: "json",
+                        url: "/api/group/membership/remove",
+                        data: { GroupId: model.GroupId, UserId: model.UserId, Id : model.Id },
+                        success: function () {
+                            DeleteMemberGridRow(model.Id);
+                        },
+                        error: function () {
+                            $("#memberEditToolbar").toolbar().enable("edit");
+                            $("#memberEditToolbar").toolbar().enable("remove");
+                            alert("@Html.Localize("Error: Unable to remove member from group.")");
+                        }
+                    });
+                }
+            }
+        });
+
+        UpdateGridRow = function (data) {
+            if (!data.Id) return;
+            var grid = $("#userGroupList").getKendoGrid();
+            var dataItem = grid.dataSource.get(data.Id);
+            if (dataItem) {
+                dataItem.Name = (data.Name) ? data.Name : dataItem.Name;
+                dataItem.AllowPublicEnrollment = (typeof data.AllowPublicEnrollment === 'boolean') ? data.AllowPublicEnrollment : dataItem.AllowPublicEnrollment;
+                grid.dataSource.pushUpdate(dataItem);
+            } else {
+                grid.dataSource.pushCreate({
+                    Id: data.Id,
+                    Name: data.Name,
+                    AllowPublicEnrollment: data.AllowPublicEnrollment,
+                    CreatedDT: new Date()
+                });
+            }
+        }
+
+        SelectGridRow = function (Id) {
+            var grid = $("#userGroupList").getKendoGrid();
+            var dataItem = grid.dataSource.get(Id);
+            if (dataItem) {
+                var row = grid.content.find("tr[data-uid=" + dataItem.uid + "]");
+                grid.select(row);
+            }
+        }
+
+        DeleteGridRow = function (Id) {
+            var grid = $("#userGroupList").getKendoGrid();
+            var dataItem = grid.dataSource.get(Id);
+            if (dataItem) {
+                grid.dataSource.pushDestroy(dataItem);
+            }
+        }
+
+        UpdateMemberGridRow = function (data) {
+            if (!data.Id) return;
+            var grid = $("#memberList").getKendoGrid();
+            var dataItem = grid.dataSource.get(data.Id);
+            if (dataItem) {
+                dataItem.UserName = (data.UserName) ? data.UserName : dataItem.UserName;
+                dataItem.AccessLevel = (data.AccessLevel) ? data.AccessLevel : dataItem.AccessLevel;
+                dataItem.AccessLevelName = (data.AccessLevelName) ? data.AccessLevelName : dataItem.AccessLevelName;
+                dataItem.AllowMessaging = (typeof data.AllowMessaging === 'boolean') ? data.AllowMessaging : dataItem.AllowMessaging;
+                grid.dataSource.pushUpdate(dataItem);
+            } else {
+                grid.dataSource.pushCreate({
+                    Id: data.Id,
+                    UserGroupId: data.UserGroupId,
+                    UserId: data.UserId,
+                    UserName: data.UserName,
+                    AccessLevel: data.AccessLevel,
+                    AccessLevelName: data.AccessLevelName,
+                    AllowMessaging: data.AllowMessaging
+                });
+            }
+        }
+
+        SelectMemberGridRow = function (Id) {
+            var grid = $("#memberList").getKendoGrid();
+            var dataItem = grid.dataSource.get(Id);
+            if (dataItem) {
+                var row = grid.content.find("tr[data-uid=" + dataItem.uid + "]");
+                grid.select(row);
+            }
+        }
+
+        DeleteMemberGridRow = function (Id) {
+            var grid = $("#memberList").getKendoGrid();
+            var dataItem = grid.dataSource.get(Id);
+            if (dataItem) {
+                grid.dataSource.pushDestroy(dataItem);
+            }
+        }
+
+        HideTabPane = function (tabPane) {
+            $("#" + tabPane + " >.tab-sub-pane").css("display", "none");
+        }
+
+        ShowParentTabSubPane = function (childName) {
+            var subPane = $("#" + childName).parents("div.tab-sub-pane")[0];
+            if (subPane) {
+                $(subPane).siblings(".tab-sub-pane").css("display", "none");
+                $(subPane).css("display", "");
+            }
+        }
+
+        InvokeComponent = function (cid, data) {
+            $("#" + cid).component().invoke(data);
+            ShowParentTabSubPane(cid);
+        }
+
+    </script>
+
+
+
+
+    }

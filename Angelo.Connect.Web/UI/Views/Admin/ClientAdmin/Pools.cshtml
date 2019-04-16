@@ -1,0 +1,7 @@
+﻿@model IEnumerable<SelectListItem>
+@{ 
+    var clientId = (string)ViewData["ClientId"];
+}
+<form id="userPoolForm" style="padding: 0px;" asp-action="Index" asp-route-clientId="@clientId" method="post">
+    <select class="form-control" name="poolId" asp-items="Model" onchange="userPoolForm.submit()"></select>
+</form>

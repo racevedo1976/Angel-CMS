@@ -1,0 +1,132 @@
+[
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "zone",
+        "view": "zone-4-8",
+        "style": {
+          "background": "bg-muted",
+          "classes": "cs-gray-white-panel"
+        },
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "slideshow lux",
+            "view": "slideshow-carousel",
+            "style": {}
+          },
+          {
+            "zone": "cell-1",
+            "type": "title",
+            "view": "title-default",
+            "style": {},
+            "model": {
+              "text": "Welcome",
+              "cssClass": "h1"
+            }
+          },
+          {
+            "zone": "cell-1",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "15px",
+              "paddingBottom": "15px"
+            },
+            "model": {
+              "html": "Our Vision: We will be recognized nationally for its rigorous \ncurriculum, academic excellence and extracurricular achievement. \nStrengthened by diversity, our district will foster partnerships of \nstaff, families and the community to develop students&rsquo; educational, \nphysical and social-emotional well-being.",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-1",
+            "type": "blog",
+            "view": "blog-posts-normal",
+            "style": {},
+            "model": {
+              "title": "Sample Blog Posts",
+              "pageSize": 5,
+              "createBlog": true,
+              "blogId": "96bf65b97a57411db06bc55a1c7ac0c6"
+            }
+          },
+          {
+            "zone": "cell-1",
+            "type": "zone",
+            "view": "zone-2",
+            "style": {},
+            "model": {},
+            "children": [
+              {
+                "zone": "cell-1",
+                "type": "title",
+                "view": "title-default",
+                "style": {},
+                "model": {
+                  "text": "What's New",
+                  "cssClass": "h1"
+                }
+              },
+              {
+                "zone": "cell-1",
+                "type": "html",
+                "view": "html-raw",
+                "style": {
+                  "paddingTop": "15px",
+                  "paddingBottom": "15px"
+                },
+                "model": {
+                  "html": "<div class=\"homelinks\"><p>Elementary School becomes Apple Distinguished School</p><p>Community Club has successful Service Day</p><p>National Board Certified Teachers Announced </p><p>Board meeting March 31, 2017 </p></div>",
+                  "staticToolbar": false
+                }
+              },
+              {
+                "zone": "cell-2",
+                "type": "title",
+                "view": "title-default",
+                "style": {},
+                "model": {
+                  "text": "Top Events",
+                  "cssClass": "h1"
+                }
+              },
+              {
+                "zone": "cell-2",
+                "type": "html",
+                "view": "html-raw",
+                "style": {
+                  "paddingTop": "15px",
+                  "paddingBottom": "15px"
+                },
+                "model": {
+                  "html": "It was the second tie in the 15-match history of the series, and the North now leads the series",
+                  "staticToolbar": false
+                }
+              }
+            ]
+          },
+          {
+            "zone": "cell-2",
+            "type": "calendar",
+            "view": "calendar-month-view",
+            "style": {
+              "classes": "cs-paddingcalendar",
+              "paddingTop": "15px",
+              "paddingBottom": "15px"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

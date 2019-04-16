@@ -1,0 +1,140 @@
+﻿@using Angelo.Connect.Security
+@model UserViewModel
+@{
+    var componentId = (string)ViewData["cid"];
+    var birthDate = "";
+
+    var providerSelectList = (List<SelectListItem>)ViewData["providerSelectList"];
+
+    if (Model.BirthDate.HasValue)
+    {
+        birthDate = Model.BirthDate.Value.ToString("MM/dd/yyyy");
+    }
+}
+
+<form id="@componentId" action="@routes.ClientApi("users")" class="form-horizontal" data-ajax-form>
+        <input name="Id" type="hidden" asp-for="Id" />
+        <input name="DirectoryId" type="hidden" asp-for="DirectoryId" />
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="IsActive"></label>
+            <div class="col-sm-8">
+                <input name="IsActive" class="pull-left" asp-for="IsActive" />
+            </div>
+        </div>
+        <div class="form-group">
+            
+            <label class="col-sm-4" asp-for="UserName"></label>
+            <div class="col-sm-8">
+                <input name="UserName" type="text" class="form-control" asp-for="UserName" placeholder="(Required)" asp-readonly="@(Model.LdapGuid != null)" />
+                <i class="fa fa-exclamation-circle" title="Can't edit the Username on a Ldap user.'" show-if="@(Model.LdapGuid != null)" /> 
+                
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="Title"></label>
+            <div class="col-sm-8">
+                <input name="Title" type="text" class="form-control" asp-for="Title" />
+            </div>
+        </div>
+        <div class="form-group">
+            
+            <label class="col-sm-4" asp-for="FirstName"></label>
+            <div class="col-sm-8">
+                <input name="FirstName" type="text" class="form-control" asp-for="FirstName" />
+               
+            </div>
+        </div>
+        <div class="form-group">
+            
+            <label class="col-sm-4" asp-for="LastName"></label>
+            <div class="col-sm-8">
+                <input name="LastName" type="text" class="form-control" asp-for="LastName" />
+               
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="Suffix"></label>
+            <div class="col-sm-8">
+                <input name="Suffix" type="text" class="form-control" asp-for="Suffix" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="DisplayName"></label>
+            <div class="col-sm-8">
+                <input name="DisplayName" type="text" class="form-control" asp-for="DisplayName" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="BirthDate"></label>
+            <div class="col-sm-8">
+                <input name="BirthDate" id="BirthDate" type="text" class="form-control" value="@birthDate" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="PhoneNumber"></label>
+            <div class="col-sm-8">
+                <input name="PhoneNumber" type="tel" class="form-control" asp-for="PhoneNumber" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="WirelessProviderId"></label>
+            <div class="col-sm-8">
+                @Html.DropDownListFor(model => model.WirelessProviderId, providerSelectList, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="Email"></label>
+            <div class="col-sm-8">
+                <input name="Email" type="text" class="form-control" asp-for="Email" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                @if (Model != null)
+                {
+                    if (Model.EmailConfirmed)
+                    {
+                        <i class="fa fa-check pull-left admin-page-icons">
+                            <span>@Html.Localize("Verified")</span>
+                        </i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-warning pull-left admin-page-icons">
+                            <span>@Html.Localize("Not Verified")</span>
+                        </i>
+                        <a name="confirmEmail" id="confirmEmail" asp-authorize asp-policy="@PolicyNames.ClientUsersEdit" class="admin-page-icons fa fa-mail-forward pull-left" title="@Html.Localize("Resend Confirmation Email")">
+                            <span>@Html.Localize("Resend Confirmation Email")</span>
+                        </a>
+                        <span id="confirmResult" class="pull-left"></span>
+                    }
+                }
+            </div>
+        </div>
+       
+       
+</form>
+
+<script type="text/javascript">
+    $("#confirmEmail").on("click", function () {
+
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            url: "@routes.ClientApi("users")" + "/" + "@Model.Id" + "/confirm",
+            beforeSend: function () {
+                $("#confirmEmail").hide();
+            },
+            success: function () {
+                $("#confirmResult").addClass("alert cs-form-alert alert-success");
+                $("#confirmResult").text("Email has been sent.");
+            },
+            error: function () {
+                $("#confirmResult").addClass("alert cs-form-alert alert-danger");
+                $("#confirmResult").text("There was a problem sending the email.");
+            }
+        });
+    });
+</script>

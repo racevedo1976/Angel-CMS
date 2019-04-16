@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Angelo.Connect.News.Models.NewsPost>
+@{ 
+    var i = 0;
+}
+
+<div data-module="console/news/list">
+    @foreach (var post in Model)
+    {
+        <div class="row" css-row-alt="@(++i % 2 == 0)" style="padding: 5px">
+            <div class="col-sm-3">
+                <img src="@post.Image" style="width: 100%; height: auto;" alt="@post.Caption" />
+            </div>
+            <div class="col-sm-7" style="padding-left: 15px">
+                <h4 style="padding: 0; margin: 0 0 5px 0">@post.Title</h4>
+                <p class="card-text" style="height: 45px; overflow: hidden">
+                    @post.Excerp
+                </p>
+                <p>
+                    <small class="text-muted">
+                        <i>@post.Posted.ToString("ddd MMM dd hh:mm tt")</i>
+                    </small>
+                </p>
+            </div>
+            <div class="col-sm-2">
+
+                <div style="margin: 0 10px 3px 0; border-bottom: 1px #ccc solid">
+                    <label class="text-success" show-if="@post.Published">
+                        <i class="fa fa-check"></i> &nbsp;
+                        @Html.Localize("Published")
+                    </label>
+
+                    <label class="text-muted" hide-if="@post.Published">
+                        <i class="fa fa-info"></i> &nbsp;
+                        @Html.Localize("Draft")
+                    </label>
+                </div>
+
+                <div class="dropdown">
+                    <button class="csc-button dropdown-toggle" data-toggle="dropdown">
+                        @Html.Localize("Actions") <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a data-route="/sys/console/News/posts/@post.Id?version=@post.VersionCode">
+                                <i class="fa fa-fw fa-share"></i> &nbsp;
+                                @Html.Localize("View")
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/sys/content/newspost/@post.Id?version=@post.VersionCode&preview=true" target="_blank">
+                                <i class="fa fa-fw fa-window-maximize"></i> &nbsp;
+                                @Html.Localize("Open")
+                            </a>
+                        </li>
+                        <li>
+                            <a name="design" data-id="@post.Id" data-version="@post.VersionCode" data-status="@((int)post.Status)">
+                                <i class="fa fa-fw fa-edit"></i> &nbsp;
+                                @Html.Localize("Design")
+                            </a>
+                        </li>
+                        <li>
+                            <a data-route="/sys/console/news/posts/@post.Id/settings">
+                                <i class="fa fa-fw fa-gear"></i> &nbsp;
+                                @Html.Localize("Settings")
+                            </a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a name="delete" data-id="@post.Id">
+                                <i class="fa fa-fw fa-trash"></i> &nbsp;
+                                @Html.Localize("Delete")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>

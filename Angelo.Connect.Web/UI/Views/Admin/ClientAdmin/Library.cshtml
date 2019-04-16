@@ -1,0 +1,242 @@
+﻿@{
+    var clientId = (string)ViewData["ClientId"];
+}
+
+@section Title {
+    @Html.Localize("Shared Folders")
+}
+
+@section Panel {
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#folderDetails" data-toggle="tab">
+                @Html.Localize("Folder Details")
+            </a>
+        </li>
+        <li>
+             &nbsp;
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="folderDetails" class="tab-pane fade in active">
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="folderDetailsToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save" title="@Html.Localize("Save changes to shared folder")"><span>@Html.Localize("Save")</span></a>
+                </div>
+                <component id="folderDetailsEdit" type="SharedFolderDetailsEdit"></component>
+            </div>
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="folderCreateToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save" title="@Html.Localize("Create the new shared folder")"><span>@Html.Localize("Create")</span></a>
+                    <a name="cancel" class="fa fa-times" title="@Html.Localize("Cancel folder creation.")"><span>@Html.Localize("Cancel")</span></a>
+                </div>
+                <component id="folderCreate" type="SharedFolderCreate"></component>
+            </div>
+        </div>
+
+        <div id="folderTags" class="tab-pane fade">
+
+        </div>
+
+    </div>
+
+}
+
+<div id="FolderTreeSection">
+    <div id="contentToolbar" class="toolbar">
+        <a name="create" class="fa fa-plus-square" title="@Html.Localize("Create a new shared folder")" disabled><span>@Html.Localize("Create")</span></a>
+        <a name="delete" class="fa fa-trash-o pull-right" title="@Html.Localize("Delete the selected folder")" disabled><span>@Html.Localize("Delete")</span></a>
+    </div>
+    <component id="folderTree" type="SharedFolderTree" arg-clientId="@clientId"></component>
+</div>
+
+@section Scripts {
+    <script>
+
+        // Folder tree events
+        $.on("folderTree.change", function (event, data) {
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+
+            if (model.NodeType == 1) {
+                $("#contentToolbar").toolbar().enable("create");
+                $("#contentToolbar").toolbar().disable("delete");
+                HideTabPane("folderDetails");
+            }
+            else if (model.NodeType == 2) {
+                $("#contentToolbar").toolbar().enable("create");
+                $("#contentToolbar").toolbar().enable("delete");
+                $("#folderCreate").html("");
+                $("#folderDetailsToolbar").toolbar().disable("save");
+                InvokeComponent("folderDetailsEdit", { folderId: model.FolderId });
+            }
+            else {
+                $("#contentToolbar").toolbar().disable("create");
+                $("#contentToolbar").toolbar().disable("delete");
+                HideTabPane("folderDetails");
+            }
+        })
+
+        $.on("contentToolbar.create", function () {
+            $("#contentToolbar").toolbar().disable("delete");
+            $("#folderDetailsEdit").html("");
+            $("#folderCreateToolbar").toolbar().disable("save");
+            $("#folderCreateToolbar").toolbar().disable("cancel");
+            var tree = $("#folderTree").getKendoTreeList();
+            var item = tree.select();
+            var model = tree.dataItem(item);
+            if (model) {
+                InvokeComponent("folderCreate", { clientId: "@clientId", documentType: model.DocumentType, parentFolderId: model.FolderId });
+            }
+            else {
+                InvokeComponent("folderCreate", { clientId: "@clientId", documentType: model.DocumentType });
+            }
+            //HideTabPane("folderTags");
+            //$('.nav-tabs a[href="#folderDetails"]').tab('show');
+        });
+
+        $.on("contentToolbar.delete", function () {
+            var tree = $("#folderTree").getKendoTreeList();
+            var item = tree.select()
+            var model = tree.dataItem(item);
+            var folderId = model.FolderId;
+            if (confirm("@Html.Localize("Are you sure you want to delete the selected folder?")")) {
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "/api/folders",
+                    data: { FolderId: folderId },
+                    success: function () {
+                        $("#contentToolbar").toolbar().disable("create");
+                        $("#contentToolbar").toolbar().disable("delete");
+                        HideTabPane("folderDetails");
+                        var tree2 = $("#folderTree").getKendoTreeList();
+                        tree2.dataSource.pushDestroy(model);
+                        //tree2.dataSource.read();
+                    },
+                    error: function () {
+                        alert("@Html.Localize("Unable to delete selected folder.")");
+                    }
+                });
+            }
+        });
+
+
+        // Folder Create events
+        $.on("folderCreate.load", function (event, data) {
+            $("#folderCreateToolbar").toolbar().enable("save");
+            $("#folderCreateToolbar").toolbar().enable("cancel");
+        });
+
+        $.on("folderCreateToolbar.save", function () {
+            $("#folderCreateToolbar").toolbar().disable("save");
+            $("#folderCreateToolbar").toolbar().disable("cancel");
+            $("#folderCreate").form().post();
+        });
+
+        $.on("folderCreateToolbar.cancel", function () {
+            var tree = $("#folderTree").getKendoTreeList();
+            var item = tree.select()
+            var model = tree.dataItem(item);
+            if (model && (model.NodeType == 2)) {
+                $("#contentToolbar").toolbar().enable("delete");
+                InvokeComponent("folderDetailsEdit", { folderId: model.FolderId });
+            }
+            else {
+                $("#contentToolbar").toolbar().disable("delete");
+                HideTabPane("folderDetails");
+            }
+        });
+
+        $.on("folderCreate.error", function (event, data) {
+            $("#folderCreateToolbar").toolbar().enable("save");
+            $("#folderCreateToolbar").toolbar().enable("cancel");
+        });
+
+        $.on("folderCreate.submit", function (event, data) {
+            var tree = $("#folderTree").getKendoTreeList();
+            var item = tree.select()
+            var node1 = tree.dataItem(item);
+            if (node1) {
+                var node2 = {
+                    id: "FOLDER:" + data.result.FolderId,
+                    parentId: node1.NodeId,
+                    NodeId: "FOLDER:" + data.result.FolderId,
+                    ParentNodeId: node1.Node,
+                    NodeType: 2,
+                    DocumentType: node1.DocumentType,
+                    FolderId: data.result.FolderId,
+                    Title: data.result.Title
+                };
+                tree.dataSource.pushCreate(node2);
+                SelectNodeId(node2.NodeId);
+            }
+        });
+
+
+        // Folder Edit events
+        $.on("folderDetailsEdit.load", function (event, data) {
+            $("#folderDetailsToolbar").toolbar().enable("save");
+        });
+
+        $.on("folderDetailsToolbar.save", function () {
+            $("#folderDetailsEdit").form().put();
+        });
+
+        $.on("folderDetailsEdit.submit", function (event, data) {
+            var tree = $("#folderTree").getKendoTreeList();
+            var item = tree.select()
+            var node = tree.dataItem(item);
+            if (node) {
+                node.Title = data.result.Title;
+                tree.dataSource.pushUpdate(node);
+            }
+            alert("@Html.Localize("Folder changes were successfully saved.")");
+        });
+
+
+        ExpandNodeId = function (nodeId) {
+            var tree = $("#folderTree").getKendoTreeList();
+            var dataItem = tree.dataSource.get(nodeId);
+            if (dataItem) {
+                if (dataItem.parentId) {
+                    ExpandNodeId(dataItem.parentId);
+                }
+                var row = tree.content.find("tr[data-uid=" + dataItem.uid + "]");
+                tree.expand(row);
+            }
+        }
+
+        SelectNodeId = function (nodeId) {
+            var tree = $("#folderTree").getKendoTreeList();
+            var dataItem = tree.dataSource.get(nodeId);
+            if (dataItem) {
+                ExpandNodeId(nodeId);
+                var row = tree.content.find("tr[data-uid=" + dataItem.uid + "]");
+                tree.select(row);
+            }
+        }
+
+        HideTabPane = function (tabPane) {
+            $("#" + tabPane + " >.tab-sub-pane").css("display", "none");
+        }
+
+        ShowParentTabSubPane = function (childName) {
+            var subPane = $("#" + childName).parents("div.tab-sub-pane")[0];
+            if (subPane) {
+                $(subPane).siblings(".tab-sub-pane").css("display", "none");
+                $(subPane).css("display", "");
+            }
+        }
+
+        InvokeComponent = function (cid, data) {
+            $("#" + cid).component().invoke(data);
+            ShowParentTabSubPane(cid);
+        }
+
+
+    </script>
+}

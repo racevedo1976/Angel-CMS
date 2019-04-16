@@ -1,0 +1,22 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.Alert
+
+<form class="form" action="/api/widgets/alert" data-ajax-form="true">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="form-group">
+        <label class="form-label">Alert Style</label>
+        <div>
+            <select class="form-control" name="Style">
+                <option value="alert-success" asp-selected="@(Model.Style == "alert-success")">Success</option>
+                <option value="alert-info" asp-selected="@(Model.Style == "alert-info")">Information</option>
+                <option value="alert-warning" asp-selected="@(Model.Style == "alert-warning")">Warning</option>
+                <option value="alert-danger" asp-selected="@(Model.Style == "alert-danger")">Danger</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Alert Text</label>
+        <div>
+            <textarea class="form-control" name="Text" style="height: 150px">@Model.Text</textarea>
+        </div>
+    </div>
+</form>

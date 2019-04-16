@@ -1,0 +1,509 @@
+﻿.csc-modal
+{
+    display: block !important;
+}
+
+.csc-modal > .modal-dialog
+{
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    top: 20px;
+    bottom: 20px;
+    width: calc(100% - 80px) !important;
+    margin: 0 !important;
+}
+
+.csc-modal .modal-content
+{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.25);
+}
+
+.csc-modal-close 
+{
+    position: absolute;
+    top: -2px;
+    right: 20px;
+    font-size: 36px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+.csc-modal-close:hover 
+{
+    text-decoration: none;
+}
+
+.csc-content-panel,
+.csc-content-host
+{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    overflow: hidden;
+}
+
+.csc-content-panel
+{
+    left: 300px;
+    width: calc(100% - 300px);
+}
+
+.csc-content-host
+{
+    left: 0px;
+    width: 100%;
+}
+
+.csc-content-host 
+{
+   padding: 10px 20px;
+   overflow-x: hidden;
+   overflow-y: auto;
+}
+
+
+.csc-content-tabs
+{
+    padding: 0px;
+    margin-bottom: 5px;
+	height: 50px;
+	overflow: hidden;
+	font-size: 20px;
+}
+
+.csc-content-tabs.nav-tabs a,
+.csc-content-tabs > .nav-tabs a
+{
+	font-size: 18px;
+	line-height: 1;
+}
+
+.csc-content-tabs.nav-tabs a > i,
+.csc-content-tabs > .nav-tabs a > i
+{
+    padding-right: 3px;
+}
+
+.csc-content-toolbar
+{
+    position: relative;
+	height: 40px;
+	margin-bottom: 5px;
+	position: relative;
+    margin-left: -10px;
+	margin-top: -5px;
+    padding-right: 30px;
+}
+
+.csc-content-toolbar::after
+{
+    /* clearfix */
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+.csc-content-toolbar a,
+.csc-content-toolbar .csc-seperator
+{
+	color: #222 !important;
+	display: inline-block;
+	position: relative;
+	font-size: 20px;
+	line-height: 1;
+	padding: 10px;
+	vertical-align: middle;
+}
+
+.csc-seperator:before {
+	content: "";
+	position: absolute;
+	top: -3px; bottom: -3px;
+	display: block;
+	width: 1px;
+	border-right: 1px solid #aaa;
+}
+
+.csc-content-toolbar a > i
+{
+    padding-right: 5px;
+}
+
+.csc-content-toolbar a:hover,
+.csc-content-toolbar .dropdown-menu a:hover
+{
+	color: #01f !important;
+	background: #f7f7f7 !important;
+}
+
+.csc-content-toolbar .dropdown-menu a {
+    font-size: 16px;
+}
+
+.csc-content-toolbar a:not(:last-child){
+	margin-right: 5px;
+}
+
+.csc-content-toolbar div
+{
+    display: inline-block;
+    width: auto;
+}
+
+.csc-content-body
+{
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    bottom: 10px;
+	right: 15px;
+	padding-right: 5px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.csc-content-toolbar + .csc-content-body,
+.csc-content-tabs + .csc-content-body
+{
+    top: 60px;
+}
+
+.csc-content-toolbar + .csc-content-tabs + .csc-content-body,
+.csc-content-tabs + .csc-content-toolbar + .csc-content-body
+{
+    top: 110px;
+}
+
+.csc-content-message
+{
+    position: absolute;
+    height: auto;
+    left: 10px;
+    right: 45px;
+    font-size: 18px;
+    color: #555;
+}
+
+.csc-nav-panel
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    width: 300px;
+    background: #f7f7f7;
+    border-right: 1px #aaa solid;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.csc-nav-panel-toggle
+{
+    display: none;
+    padding-right: 15px;
+    cursor: pointer;
+}
+
+.csc-nav-panel-toggle:hover
+{
+    text-decoration: none;
+}
+
+.csc-nav-panel a
+{
+    font-size: 18px;
+}
+
+.csc-nav-panel a:hover
+{
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+.csc-nav-section
+{
+    margin-bottom: 15px;
+}
+
+.csc-nav-title
+{
+    font-size: 20px;
+    padding: 10px;
+    margin-top: 0px;
+    background: #eaeaea;
+    color: #222;
+}
+
+.csc-nav-title > a
+{
+    font-size: 20px;
+}
+
+.csc-nav-title > a:hover
+{
+    color: #f00;
+}
+
+.csc-nav-menu
+{
+    padding: 10px 10px 0 10px;
+}
+
+.csc-nav-menu > a
+{
+	color: #0b4e9a;
+	padding: 2px;
+}
+.csc-nav-menu > a:hover
+{
+	color: #052e5e;
+}
+
+.csc-nav-tree li
+{
+    padding: 2px 0;
+}
+
+.csc-nav-branch > .csc-nav-tree
+{
+    padding-left: 20px;
+}
+
+.csc-nav-expander
+{
+    display: inline-block;
+    width: 20px;
+}
+
+
+/* child modal popup */ 
+.csc-popup
+{
+    display: block !important;
+}
+
+.csc-popup > .modal-dialog 
+{
+    height: auto;
+    margin: auto;
+    margin-top: 80px;
+    width: 400px !important;  
+}
+
+.csc-popup-lg > .modal-dialog 
+{
+    width: 800px !important;
+}
+
+.csc-popup .modal-content 
+{
+    position: relative;
+    min-height: 300px;
+}
+
+.csc-popup-lg .modal-content 
+{
+    min-height: 500px;
+}
+
+.csc-popup-message {
+    font-size: 18px;
+    padding-bottom: 20px;
+}
+
+.csc-popup-input 
+{
+
+}
+
+.csc-popup-notes {
+    padding: 10px 0;
+    color: #aaa;
+    font-size: 16px;
+}
+
+.csc-popup-buttons 
+{
+    position: absolute;
+    height: 40px;
+    text-align: right;
+    bottom: 0px;
+    left: 25px;
+    right: 15px;
+}
+
+.csc-popup-buttons > a
+{
+    color: #222 !important;
+    display: inline-block;
+    font-size: 20px;
+    line-height: 1;
+    padding: 10px;
+    vertical-align: middle;
+    margin-left: 10px;
+    padding: 8px 15px;
+}
+
+.csc-popup-buttons a > i
+{
+    padding-right: 5px;
+}
+
+.csc-popup-buttons a:hover
+{
+	color: #01f !important;
+	background: #f7f7f7;
+}
+
+.csc-popup-title
+{
+    height: 50px;
+    font-size: 24px;
+    line-height: 1;
+    padding: 12px 25px;
+    background: #f7f7f7;
+}
+
+.csc-popup-body 
+{
+    position: absolute;
+    top: 70px;
+    left: 25px;
+    right: 25px;
+    bottom: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.csc-popup-buttons + .csc-popup-body
+{
+    bottom: 50px;
+    border-bottom: 1px #ccc solid;
+}
+
+/* Common Element Styles */
+.csc-modal a,
+.csc-popup a
+{
+    text-decoration: none !important;
+}
+
+.csc-modal .text-lg,
+.csc-popup .text-lg
+{ 
+    font-size: 20px; 
+}
+
+.csc-modal .text-xl,
+.csc-popup .text-lg
+{ 
+    font-size: 24px; 
+}
+
+.csc-popup .tab-pane
+{
+    padding-top: 15px;
+}
+
+
+.csc-button {
+
+}
+
+/* Responsive Sizing */
+
+/*xs*/
+@media (min-width: 1px) and (max-width: 767px) 
+{
+    .csc-modal > .modal-dialog
+    {
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        margin: 0px;
+        width: 100% !important;
+    }
+
+    .csc-modal .modal-content
+    {
+        box-shadow: none;
+        border-width: 0;
+    }
+
+    .csc-nav-panel
+    {
+        display: none;
+        width: 100%;
+        top: 45px;
+    }
+
+    .csc-nav-panel-visible
+    {
+        display: block;
+    }
+
+    .csc-nav-panel-toggle
+    {
+        display: inline;
+    }
+
+    .csc-content-panel
+    {
+        left: 0px;
+        width: 100%;
+    }
+
+    .csc-popup > .modal-dialog  {
+        width: 100% !important;
+        margin-top: 0;
+    }
+
+}
+
+/*sm*/
+@media (min-width: 768px) and (max-width: 991px) {
+    .csc-modal > .modal-dialog
+    {
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        width: 100% !important;
+    }
+
+    .csc-content-panel
+    {
+        left: 200px;
+        width: calc(100% - 200px);
+    }
+
+    .csc-nav-panel
+    {
+        width: 200px;
+    }
+
+    .csc-popup > .modal-dialog  {
+        margin-top: 15px;
+    }
+}
+
+/*lg*/
+@media (min-width: 992px) and (max-width: 1199px){
+    /* no changes needed*/
+}
+
+/*xl*/
+@media (min-width: 1200px)
+{
+    /* no changes needed */
+}
+
+

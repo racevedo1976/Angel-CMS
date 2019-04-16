@@ -1,0 +1,36 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model SlideShowWidget
+
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Progress Bar Active</label>
+    <div class="col-sm-4">
+        @Html.EditorFor(x => x.DefaultProgressBarIsActive, null, nameof(SlideShowWidget.DefaultProgressBarIsActive))
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Progress Bar Position</label>
+    <div class="col-sm-4">
+        @Html.EditorFor(x => x.DefaultProgressBarPosition, null, nameof(SlideShowWidget.DefaultProgressBarPosition))
+    </div>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Progress Bar Height</label>
+    <div class="col-sm-4">
+        @Html.EditorFor(x => x.DefaultProgressBarHeight, null, nameof(SlideShowWidget.DefaultProgressBarHeight), new { Minimum = 0, Maximum = 1000 })
+    </div>
+    <label class="form-label col-sm-1 control-label">px</label>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Progress Bar Opacity</label>
+    <div class="col-sm-4">
+        @Html.EditorFor(x => x.DefaultProgressBarOpacity, null, nameof(SlideShowWidget.DefaultProgressBarOpacity), new { Minimum = 0, Maximum = 100, Type = "percentage" })
+    </div>
+    <label class="form-label col-sm-1 control-label">%</label>
+</div>
+<div class="form-group">
+    <label class="form-label col-sm-4 control-label">Progress Bar Color</label>
+    <div class="col-sm-4">
+        @Html.EditorFor(x => x.DefaultProgressBarColor, "Color", null, nameof(SlideShowWidget.DefaultProgressBarColor))
+    </div>
+</div>

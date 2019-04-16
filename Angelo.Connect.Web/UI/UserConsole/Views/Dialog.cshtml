@@ -1,0 +1,53 @@
+﻿@model  UserConsoleViewModel
+
+<div class="modal csc-modal" data-module="console/shell">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="csc-content-panel">
+                             
+                <div class="csc-content-host route-host" data-default-route="@Model.DefaultRoute">                
+                    @Html.Raw(Model.DefaultContent)
+                </div>
+
+                <div class="csc-content-message" style="display: none"></div>
+            </div>
+
+            <div class="csc-nav-panel" data-route-host=".csc-content-host">
+                @foreach (var explorerView in Model.ExplorerViews)
+                {
+                    <div class="csc-nav-section" data-component-type="@explorerView.Component.ComponentType">
+                        @Html.Partial("~/UI/UserConsole/Views/Explorer.cshtml", explorerView)
+                    </div>
+                }
+            </div>
+        </div>
+        <a class="csc-modal-close modal-button">&times;</a>
+    </div>
+</div>
+
+<script id="consolePopupTemplate" type="text/template">
+    <div class="modal csc-popup">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="csc-popup-title"></div>
+                <div class="csc-popup-buttons csc-prompt-buttons">
+                    <a name="cancel" class="modal-button">@Html.Localize("Cancel")</a>
+                    <a name="ok" class="modal-button">@Html.Localize("Submit")</a>
+                </div>
+                <div class="csc-popup-buttons csc-confirm-buttons">
+                    <a name="cancel" class="modal-button">@Html.Localize("No Way")</a>
+                    <a name="ok" class="modal-button">@Html.Localize("Yes")</a>
+                </div>
+                <div class="csc-popup-body">
+                    <div class="csc-popup-message"></div>
+                    <input class="csc-popup-input form-control" />
+                    <div class="csc-popup-notes"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+    // $(".uc-content").load("@Model.DefaultRoute");
+</script>

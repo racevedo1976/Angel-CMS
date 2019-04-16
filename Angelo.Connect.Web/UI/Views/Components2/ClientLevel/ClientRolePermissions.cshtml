@@ -1,0 +1,159 @@
+﻿@*@model IList<Angelo.Connect.Web.UI.ViewModels.Admin.PoolRoleClaimViewModel>*@
+
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Security
+@using Kendo.Mvc.UI.Fluent
+
+@{
+    var poolId = (string)ViewData["PoolId"];
+    var roleId = (string)ViewData["RoleId"];
+    var isLocked = (bool)ViewData["IsLocked"];
+    var componentId = (string)ViewData["cid"];
+
+    var claims =  (IList<SecurityClaim>)ViewData["ClaimList"];
+    var selectedClaims = (IList<Angelo.Identity.Models.RoleClaim>)ViewData["SelectedClaims"];
+    var permissions = (IEnumerable<SecurityPermissionViewModel>)ViewData["PermissionGroups"];
+}
+
+<form class="form form-horizontal" action="@routes.ClientApi($"roles/{roleId}/permissions")" id="@componentId">
+    <input type="hidden" value="@poolId" name="PoolId" />
+    <input type="hidden" value="@roleId" name="RoleId" />
+    
+    <div>
+        @(
+        Html.Kendo().TreeView()
+        .Name(componentId + "TreeView")
+        .Checkboxes(checkboxes => checkboxes.CheckChildren(true))
+        .ExpandAll(true)        
+        .CheckboxTemplate("<input type='checkbox' name='SelectedPermissionGroups' value='#= item.text #' data-title='#= item.text #' class='claimChk' #if(item.checked) { # checked # } # />")
+        .Events(events =>
+                events
+                //.Check("onGroupChecked")
+                .DataBound("onDataBound")
+                )
+        .BindTo(permissions, (NavigationBindingFactory<TreeViewItem> mappings) =>
+        {
+            mappings.For<SecurityPermissionViewModel>(bindings => bindings.ItemDataBound((item, category) =>
+            {
+                item.Text = category.Title;
+                item.Checked = category.Selected;
+                //item.Expanded = true;
+            })
+           .Children(category => category.Permissions));
+        })
+        //.LoadOnDemand(false)
+        .AutoBind (true)
+        )
+       
+
+    </div>
+</form>
+
+<script>
+
+    var permissionViewData = {
+        poolId: '@poolId',
+        roleId: '@roleId',
+        locked: +'@(isLocked ? 1 : 0)',
+        apiUrl: '@routes.ClientApi($"roles/{roleId}/permissions")'
+    };
+
+    function onDataBound(e) {
+        e.sender.expand(".k-item");
+    }
+
+    function onGroupChecked(e) {
+        var thisSelectedPermission = this.dataItem(e.node);
+
+        var viewModel = {
+            PermissionTitle: thisSelectedPermission.text,
+            PoolId: permissionViewData.poolId,
+            RoleId: permissionViewData.roleId
+        }
+
+        if(!permissionViewData.locked) {
+            thisSelectedPermission.checked
+                ? addPermissionToRole(viewModel)
+                : removePermissionToRole(viewModel);
+        }
+    }
+
+    var removePermissionToRole = function (viewModel, callback) {
+        $.ajax({
+            type: "POST",
+            url: permissionViewData.apiUrl + "/remove",
+            data: viewModel,
+            success: function (data) {
+                //debugger;
+                callback();
+            },
+            dataType: "json",
+            traditional: true
+        });
+    }
+
+    var addPermissionToRole = function (viewModel) {
+        $.ajax({
+            type: "POST",
+            url: permissionViewData.apiUrl + "/add",
+            data: viewModel,
+            success: function (data) {
+                //alert("save!");
+            },
+            dataType: "json",
+            traditional: true
+        });
+    }
+
+    function OnClaimCheckChange() {
+        //debugger;
+        var checked = this.checked;
+        var title = $(this).data('title');
+
+        var viewModel = {
+            PermissionTitle: title,
+            PoolId: permissionViewData.poolId,
+            RoleId: permissionViewData.roleId
+        }
+
+        if (!permissionViewData.locked) {
+            if (!checked)
+                removePermissionToRole(viewModel, AddSelectedPermissionGroups);
+            else
+                addPermissionToRole(viewModel);
+        }
+    }
+
+    function AddSelectedPermissionGroups() {
+        //verification process to add claims selected that should not be removed.
+        //when a permission group is remove, it could possible remove claims
+        //included in another permission group. This will re-add those ones that should still be in the list.
+        $("input:checkbox[class=claimChk]:checked").each(function () {
+
+            var viewModelToAdd = {
+                PermissionTitle: $(this).data('title'),
+                PoolId: permissionViewData.poolId,
+                RoleId: permissionViewData.roleId,
+            }
+            addPermissionToRole(viewModelToAdd);
+        });
+
+    }
+
+    $(document).ready(function () {
+        if (permissionViewData.locked) {
+            $(".claimChk").attr("disabled", "disabled");
+        }
+
+        $(".chkSelected").each(function (i, chk) {
+
+            $(chk).prop("checked", true);
+        });
+    });
+
+</script>
+
+
+
+

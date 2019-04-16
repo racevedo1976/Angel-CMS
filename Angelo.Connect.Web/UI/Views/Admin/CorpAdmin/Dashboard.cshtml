@@ -1,0 +1,38 @@
+﻿@inject MenuProvider _menuProvider;
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/views/admin/dashboard.css" asp-append-version="true"/>
+}
+
+
+@section Title {
+    @Html.Localize("Corporate Dashboard")
+}
+
+
+@section Panel
+{
+    @Html.Partial("_DashboardReports");
+}
+
+<div class="dashboard-icons">
+    <div class="row">
+        @{ 
+            var menuItems = await _menuProvider.GetMenuItemsAsync(MenuType.CorporateTools);
+        }
+       
+        @foreach(var item in menuItems)
+        {
+            <div class="col-xs-6 col-md-4">
+                <a class="thumbnail dashboard-thumbnail" href="@item.Url">
+                    @item.Icon.Render()
+                    <div class="caption">
+                        <h3>@Html.Localize(item.Title)</h3>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+       

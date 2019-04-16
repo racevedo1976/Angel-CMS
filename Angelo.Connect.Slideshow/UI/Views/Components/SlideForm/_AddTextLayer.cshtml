@@ -1,0 +1,80 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model SlideLayer
+
+<div style="@GetStyle(Model.Slide)">
+    <div class="canvas-control" style="font-size:x-large;background-color:#999999;width:150pt;opacity:.75;">
+        <span>Caption Text 1</span>
+    </div>
+</div>
+
+@functions{
+    public static string GetStyle(Slide slide)
+    {
+        var fit = GetFit(slide); var tiling = GetTiling(slide); var position = GetPosition(slide); var url = slide?.ImageUrl ?? string.Empty;
+        return $"height:400pt;background-image:url(\"{url}\");background-position:{position};background-repeat:{tiling}";
+    }
+
+    public static string GetFit(Slide slide)
+    {
+        var result = string.Empty;
+        switch (slide?.BackgroundFit ?? Fit.None)
+        {
+            case Fit.Contain:
+                result = "contain";
+                break;
+            case Fit.Cover:
+                result = "cover";
+                break;
+            default:
+            case Fit.None:
+                result = "inherit";
+                break;
+        }
+
+        return result;
+    }
+    public static string GetTiling(Slide slide)
+    {
+        var result = string.Empty;
+        switch (slide?.Tiling ?? Tiling.None)
+        {
+            case Tiling.None:
+                result = "none";
+                break;
+            case Tiling.Horizontal:
+                result = "repeat-x";
+                break;
+            case Tiling.Vertical:
+                result = "repeat-y";
+                break;
+            case Tiling.Both:
+                result = "repeat";
+                break;
+        }
+
+        return result;
+    }
+
+    public static string GetPosition(Slide slide)
+    {
+        var result = string.Empty;
+        switch (slide?.Position ?? Position.None)
+        {
+            case Position.None:
+                result = "inherit";
+                break;
+            case Position.Center:
+                result = "center";
+                break;
+            case Position.Top:
+                result = "top";
+                break;
+            case Position.Bottom:
+                result = "bottom";
+                break;
+        }
+
+        return result;
+    }
+}

@@ -1,0 +1,42 @@
+﻿@model IList<Angelo.Connect.Video.Models.VideoStreamLink>
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+
+@{
+    var componentId = (string)ViewData["cid"];
+    string clientId = (string)ViewData["clientId"];
+}
+
+
+@(Html.Kendo().Grid<Angelo.Connect.Video.Models.VideoStreamLink>()
+        .Name(componentId)
+        .Columns(columns =>
+        {
+            columns.Bound(p => p.Title).Title(Html.ShortNameFor(x => x.First().Title).ToString());
+            columns.Bound(p => p.Path).Title(Html.ShortNameFor(x => x.First().Path).ToString());
+            columns.Bound(p => p.Id).Hidden(true);
+        })
+        .Pageable()
+        .Sortable()
+        .Scrollable(scr => scr.Height(430))
+        .Filterable()
+        .Selectable(s => s.Mode(GridSelectionMode.Single))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(20)
+            .Model(model =>
+            {
+                model.Id(p => p.Id);
+                model.Field(p => p.Title);
+                model.Field(p => p.Path);
+                model.Field(p => p.ClientId);
+            })
+            .Read(read =>
+            {
+                read.Type(HttpVerbs.Post)
+                .Url("/api/clients/videostreamlinks/data?clientId=" + @clientId);
+            })
+        )
+)
+
+

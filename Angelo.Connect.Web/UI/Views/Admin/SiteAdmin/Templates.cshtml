@@ -1,0 +1,90 @@
+﻿@model SiteTemplateViewModel
+@{ 
+    string baseRoute = routes.SiteAdmin("templates");
+}
+
+@section Title {
+    @Html.Localize("Site Templates")
+}
+
+@section Panel {
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#themesTab" data-toggle="tab" style="text-align: left !important">
+                @Html.Localize("Template Options")
+            </a>
+        </li>
+    </ul>
+    <br />
+    <div class="tab-content">
+        <div id="themesTab" class="tab-pane fade in active">
+            <div class="text-center padded">
+                <img class="img-responsive" id="themeImg" src="@Model.SelectedTheme.PreviewImage" alt="@Model.SelectedTemplate.Title" />
+            </div>
+            <br />
+            <form action="@baseRoute" method="post" class="form" role="form">
+
+                <input name="TemplateId" type="hidden" value="@Model.SelectedTemplate.Id" />
+                <input name="SiteId" type="hidden" value="@Model.SiteId" />
+
+                <div class="form-group">
+                    <label>@Html.Localize("Select a Theme")</label>
+                    <select class="form-control" name="themeId" onchange="$('#themeImg')[0].src = $(this).find(':selected').data().previewImage">
+                        @foreach (var theme in Model.SelectedTemplate.Themes)
+                        {
+                            @* Note: Razor will not let you write "selected" out inside <>. This was my work around *@
+                            @if (theme.Id == Model.SelectedTheme.Id)
+                            {
+                                <option value="@theme.Id" data-preview-image="@theme.PreviewImage" selected>
+                                    @theme.Title
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@theme.Id" data-preview-image="@theme.PreviewImage">
+                                    @theme.Title
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <br />
+                    <button type="submit" class="btn btn-primary">@Html.Localize("Apply")</button>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+
+<div class="padded">
+    <div class="row">
+        @foreach (var template in Model.AvailableTemplates)
+        {
+            <div class="col-sm-4">
+                <div class="thumbnail" css-active="@(template.Id == Model.SelectedTemplate.Id)">
+                    <img src="@template.PreviewImage" alt="@template.Title" />
+                    <div class="caption">
+                        <h4 class="clearfix">
+                            <a href="@($"{baseRoute}?templateId={template.Id}")">
+                                @template.Title
+                            </a>
+                            <span class="pull-right" show-if="@(template.Id == Model.ActiveTemplate.Id)">
+                                <i class="fa fa-check text-success"></i>
+                            </span>
+                        </h4>
+                        <p>
+                            @template.Description
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+

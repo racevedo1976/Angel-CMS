@@ -1,0 +1,463 @@
+﻿@model Angelo.Connect.Web.UI.ViewModels.Admin.DocumentViewModel
+@{
+    var x = Model;
+
+}
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<script src="~/lib/bootstrap3-typeahead/bootstrap3-typeahead.min.js"></script>
+<script src="~/lib/bootstrap-tagsinput/dist/bloodhound.js"></script>
+<script src="~/lib/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+<script src="~/app/modules/components/documentDetails.js"></script>
+
+<link href="~/lib/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
+
+<div id="panelNonSelectedFile">
+    <form>
+
+        <div class="form-group row">
+            <div class="col-sm-12 center-block" style="float: none;text-align:center">
+                <i class="fa fa-comment fa-3x"></i>
+                Select a file or folder to view its details.
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div id="panelDocDetails" class="tab-content hidden">
+    <div class="toolbar">
+        <a id="getdocs" title="@Html.Localize("Button.Download")" data-toggle="modal" data-target="#downloadItemsModal" href="#" class="fa fa-cloud-download hidden"></a>
+        <a id="movedocs" title="@Html.Localize("Button.Move")" data-toggle="modal" data-target="#moveItemModal" href="#" class="fa fa-arrow-right hidden"></a>
+        <a id="copydocs" title="@Html.Localize("Button.Copy")" data-toggle="modal" data-target="#copyItemModal" href="#" class="fa fa-copy hidden"></a>
+        <a id="renamedoc" title="@Html.Localize("Button.Rename")" data-toggle="modal" data-target="#renameItemNameModal" href="#" class="fa fa-pencil hidden"></a>
+        <a id="deletedocs" title="@Html.Localize("Delete")" data-toggle="modal" data-target="#confirmDeleteModal" href="#" class="fa fa-trash hidden"></a>
+        <a id="sharedocs" title="@Html.Localize("Button.Share")" data-toggle="modal" data-target="#shareItemModal" href="#" class="fa fa-users hidden"></a>
+    </div>
+    <form>
+        <div class="form-group row">
+            <div>
+                <h3>
+                    <div class="col-sm-1">
+                        <i class="" id="headerFileIcon"></i>
+                    </div>
+
+                    <div class="col-sm-11">
+
+                        <input type="text" name="fileName" id="fileName" onblur="updateDocument()" />
+                    </div>
+                </h3>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+
+            <div class="col-sm-12 center-block " style="float: none;text-align:center">
+                <img class="hidden" id="fileThumbnailSrc" height="80" width="80" />
+                <i id="otherFilesIcon" class="hidden"></i>
+            </div>
+        </div>
+        <hr />
+        <style>
+            .docTextArea {
+                display: block;
+                width: 100%;
+                border: 0;
+                padding: 10px 5px;
+                background: white no-repeat;
+                max-width: 100% !important;
+                /*
+                 * IMPORTANT PART HERE
+                 */
+                /* 2 imgs : 1px gray line (normal state) AND 2px green line (focus state) */
+                background-image: linear-gradient(to bottom, #1A60BC, #1A60BC), linear-gradient(to bottom, silver, silver);
+                /* sizes for the 2 images (default state) */
+                background-size: 0 2px, 100% 1px;
+                /* positions for the 2 images. Change both "50%" to "0%" or "100%" and tri again */
+                background-position: 50% 100%, 50% 100%;
+                /* animation solely on background-size */
+                transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+            }
+
+                input:focus,
+                .docTextArea:focus {
+                    /* sizes for the 2 images (focus state) */
+                    background-size: 100% 2px, 100% 1px;
+                    outline: none;
+                }
+
+            .bootstrap-tagsinput {
+                width: 100%;
+            }
+        </style>
+        <div class="form-group row">
+            <div class="col-sm-12 ">
+                <textarea class="docTextArea" id="fileDescription" onblur="updateDocument()" placeholder="Add a description"></textarea>
+
+            </div>
+        </div>
+        <hr />
+        <div class="form-group row">
+            <label class="col-sm-4">Type:</label>
+            <div class="col-sm-8 ">
+                <span id="fileType"></span>
+
+            </div>
+        </div>
+        @*<div class="form-group row">
+                <label class="col-sm-4">Size:</label>
+                <div class="col-sm-8">
+                    <span id="fileSize"></span>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4">Location:</label>
+                <div class="col-sm-8">
+                    <span id="fileLocation"></span>
+                </div>
+            </div>*@
+        <div class="form-group row">
+            <label class="col-sm-4">Owner:</label>
+            <div class="col-sm-8">
+                <span id="fileOwner"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4">Created:</label>
+            <div class="col-sm-8">
+                <span id="fileCreated"></span>
+            </div>
+        </div>
+        <hr />
+
+        <div class="form-group row">
+            <label class="col-sm-4">Tag:</label>
+            <div class="col-sm-8">
+                <input type="text" id="documentTags" data-provide="typeahead" />
+
+
+            </div>
+        </div>
+
+
+        <input type="hidden" name="fileId" id="fileId" />
+    </form>
+</div>
+
+<div id="panelFolderDetails" class="hidden">
+    <div class="toolbar">
+        <a id="getfolders" title="@Html.Localize("Button.Download")" data-toggle="modal" data-target="#downloadItemsModal" href="#" class="fa fa-cloud-download hidden"></a>
+        <a id="movefolders" title="@Html.Localize("Button.Move")" data-toggle="modal" data-target="#moveItemModal" href="#" class="fa fa-arrow-right hidden"></a>
+        <a id="copyfolders" title="@Html.Localize("Button.Copy")" data-toggle="modal" data-target="#copyItemModal" href="#" class="fa fa-copy hidden"></a>
+        <a id="renamefolder" title="@Html.Localize("Button.Rename")" data-toggle="modal" data-target="#renameItemNameModal" href="#" class="fa fa-pencil hidden"></a>
+        <a id="deletefolders" title="@Html.Localize("Delete")" data-toggle="modal" data-target="#confirmDeleteModal" href="#" class="fa fa-trash hidden"></a>
+    </div>
+    <form>
+        <div class="form-group row">
+            <div>
+                <h3>
+                    <div class="col-sm-2">
+                        @*<i class="fa fa-folder fa-2x"></i>*@
+                        <i class="glyphicon glyphicon-folder-close"></i>
+                    </div>
+                    <div class="col-sm-10">
+                        <input type="text" name="folderName" id="folderName" onblur="updateFolder()" />
+                    </div>
+                </h3>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group row">
+            <div class="col-sm-12 ">
+                <textarea class="docTextArea" id="folderDescription" onblur="updateFolder()" placeholder="Add a description"></textarea>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group row">
+            <label class="col-sm-4">Type:</label>
+            <div class="col-sm-8 ">
+                <span id="folderType"></span>
+
+            </div>
+        </div>
+        @*<div class="form-group row">
+                <label class="col-sm-4">Location:</label>
+                <div class="col-sm-8">
+                    <span id="folderLocation"></span>
+                </div>
+            </div>*@
+        <div class="form-group row">
+            <label class="col-sm-4">Owner:</label>
+            <div class="col-sm-8">
+                <span id="folderOwner"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-4">Created:</label>
+            <div class="col-sm-8">
+                <span id="folderCreated"></span>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group row">
+            <label class="col-sm-4">Tag:</label>
+            <div class="col-sm-8">
+                <input type="text" id="folderTags" data-provide="typeahead" />
+            </div>
+        </div>
+    </form>
+    <div>
+        <div class="col-sm-12">
+            <label>Upload files to this folder:</label>
+            <div class="jumbotron">
+
+                <div class="dropzoneForm" id="detailsDropZone">
+                    <div class="dz-message dz-default">
+                        <span>Drop files here to upload</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+
+        $("#selectUser").click(function () {
+            var usersAutocomplete = $('#users').data('kendoMultiSelect');
+
+            var promises = [];
+
+            promises.push($("#frmSharedDocuments").form().post());
+
+            $.when.apply($, promises).done(function () {
+
+                alert("done");
+            });
+
+        });
+
+
+        var myDetailsDropzone = new Dropzone("div#detailsDropZone", {
+            url: "/api/user/library" + "/doc/",
+            dictDefaultMessage: "Drop files here to upload"
+        });
+        myDetailsDropzone.on("complete", function (file) {
+            /* Maybe display some more file information on your page */
+            $('#panelFolderDetails').trigger('documentUpdated', {
+                refresh: true // any argument
+            });
+            this.removeFile(file);
+        });
+        myDetailsDropzone.on('sending', function (file, xhr, formData) {
+            formData.append('folderId', folderModel.id);
+        });
+
+
+        attachSubsPubEvents();
+
+        //Configure and display default selection based on injection.
+        //{
+        //    if (ViewBag.DocumentDefaultView != null)
+        //    {
+        //        <text> applyDocumentModelToForm({
+        //    id: "iewBag.DocumentDefaultView.SelectedToken("id")",
+        //    fileName: "ViewBag.DocumentDefaultView.SelectedToken("fileName")",
+        //    fileType: "ViewBag.DocumentDefaultView.SelectedToken("fileType")",
+        //    description: "ViewBag.DocumentDefaultView.SelectedToken("description")",
+        //    createdDateString: "ViewBag.DocumentDefaultView.SelectedToken("createdDateString")",
+        //    fileSize: "ViewBag.DocumentDefaultView.SelectedToken("fileSize")",
+        //    fileLocation: "ViewBag.DocumentDefaultView.SelectedToken("fileLocation")"
+        //                })
+
+        //        </text>
+        //    }else
+        //    {
+
+        //         <text> applyFolderModelToForm(Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, new Newtonsoft.Json.JsonSerializerSettings { ContractResolver =  new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver() })))  </text>
+        //    }
+        //}
+
+    });
+</script>
+
+
+
+<!-- Rename Item Name Modal -->
+<div id="renameItemNameModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Rename Item</h4>
+            </div>
+            <div class="modal-body form-group">
+                <label for="renameItemNewName">Enter the new item name:</label>
+                <input type="text" class="form-control" placeholder="New Item name" id="renameItemNewName" name="renameItemNewName" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-primary" onclick="fmVM.renameSelected()">Rename</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Copy Item Modal -->
+<div id="copyItemModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Copy Item(s)</h4>
+            </div>
+            <div class="modal-body form-group">
+                <label for="destinationFolderCopy">Select a destination folder: </label>
+                <select id="destinationFolderCopy" class="form-control" data-bind="foreach: allFoldersExceptMe">
+                    @*<option data-bind="value: id, text: name"></option>*@
+                </select>
+            </div>
+            <div id="copyItemNewNamePanel" class="modal-body form-group">
+                <label for="copyItemNewName">Copy as:</label>
+                <input type="text" class="form-control" placeholder="New Item name" id="copyItemNewName" name="copyItemNewName" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-primary" onclick="fmVM.copySelected()">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Move Item Modal -->
+<div id="moveItemModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Move Item(s)</h4>
+            </div>
+            <div class="modal-body form-group">
+                <label for="destinationFolder">Select a destination folder: </label>
+                <select id="destinationFolder" class="form-control" data-bind="foreach: allFoldersExceptMe">
+                    @*<option data-bind="value: id, text: name"></option>*@
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-primary" onclick="fmVM.moveSelected()">Move</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Delete Item Modal -->
+<div id="confirmDeleteModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Item(s)</h4>
+            </div>
+            <div class="modal-body form-group">
+                <span>Are you sure you want to delete the item(s) - </span>
+                <span id="deleteItemName"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" onclick="fmVM.deleteSelected()">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Share Item Modal -->
+<div id="shareItemModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Share Document</h4>
+            </div>
+            <div class="modal-body form-group">
+                <form id="frmSharedDocuments" method="post" action="/api/user/library/sharedocument/users" class="form form-horizontal" data-ajax-form>
+                    <input type="hidden" id="id" name="id" value="@Model.Id" />
+
+                    @(Html.Kendo().MultiSelect()
+                    .Name("users")
+                    .Filter("startswith")
+                    .Placeholder("Start typing the user's name...")
+                    .DataTextField("DisplayName")
+                    .DataValueField("Id")
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .PageSize(7)
+                        .Read(read => read.Url("/api/users/data/?clientId=&siteId=&directoryId=" + @ViewBag.DirectoryId + "&poolId="))
+                        .ServerOperation(false)
+
+                    )
+                    //.BindTo(new string[]
+                    //{
+                    //    "Ricardo Acevedo",
+                    //    "Michael Johnson",
+                    //    "Bill Charbonnet",
+                    //    "Andrew Lynn"
+
+                    //})
+
+
+                    )
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="selectUser" type="button" class="btn btn-default btn-primary" data-dismiss="modal">Done</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Download files Modal -->
+<div id="downloadItemsModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Download Folder(s)/Document(s)</h4>
+            </div>
+            @Html.Partial("~/UI/Views/Admin/User/_Download.cshtml")
+        </div>
+    </div>
+</div>
+<style>
+    .dropzoneForm {
+        background: lightgray;
+        border: black dashed 2px;
+        width: 100%;
+        padding: 50px;
+        text-align: center;
+        color: dimgray;
+    }
+
+    .k-autocomplete {
+        width: 100%;
+    }
+</style>

@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Angelo.Connect.Models.TreeView>
+@using Kendo.Mvc.UI.Fluent
+
+@{
+    var fetchContentDetails = false;
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["siteId"];
+
+
+    var nodeIdToExpand = (string)ViewData["ExpandNodeId"];
+
+    if (((string)ViewData["ExpandNodeId"] == ""))
+    {
+        //no node selected, open first node by default
+        nodeIdToExpand = $"{Model.FirstOrDefault().ContentBrowserType}_{Model.FirstOrDefault().Id}";
+        fetchContentDetails = true;
+    }
+}
+
+@(
+        Html.Kendo().TreeView()
+            .Name(componentId)
+            .Events(events => events
+                 .Select("onTreeViewSelect")
+             )
+             .ExpandAll(true)
+             .LoadOnDemand(false)
+             .BindTo(Model, (NavigationBindingFactory<TreeViewItem> mappings) =>
+             {
+                 mappings.For<Angelo.Connect.Models.TreeView>(binding => binding.ItemDataBound((item, treeNodeItem) =>
+                 {
+                     item.Text = treeNodeItem.Text;
+                     item.SpriteCssClasses = treeNodeItem.IconClass;
+                     item.Id = $"{treeNodeItem.ContentBrowserType}_{treeNodeItem.Id}";
+
+                 })
+                     .Children(category => category.Items));
+
+             })
+
+)
+
+<script>
+    var nodeIdToExpand = '@nodeIdToExpand';
+    var fetchContentDetails = @(fetchContentDetails ? "true" : "false")
+
+    $(document).ready(function () {
+        var treeView = $("#@componentId").data("kendoTreeView");
+
+        treeView.expand(".k-item");
+
+        if (nodeIdToExpand != "") {
+            //debugger;
+           
+            var selectedItem = treeView.dataSource.get(nodeIdToExpand);
+            var selectedFolder = treeView.findByUid(selectedItem.uid);
+            treeView.expand(selectedFolder);
+            treeView.select(selectedFolder);
+            
+            if (fetchContentDetails) {
+
+                $(document).trigger('RefreshBrowserDetailsView', {
+                    refresh: true, // any argument
+                    id: nodeIdToExpand,
+                    isShared: 'false'
+                });
+            }
+        }
+        $(".k-treeview .k-icon").removeClass("k-i-loading");
+    });
+   
+</script>
+
+<style> 
+    .k-sprite{
+        line-height:1em;
+        font-size:15px;
+    }
+    div.k-treeview{
+        overflow:visible;
+    }
+</style>

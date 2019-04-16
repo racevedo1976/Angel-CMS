@@ -1,0 +1,150 @@
+﻿@model UserProfileViewModel
+@using Newtonsoft.Json
+
+@section Title{
+    My User Profile
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/views/user/profile.css" asp-append-version="true" />
+}
+
+@section AdminMenu{
+    @Html.Partial("~/UI/Views/Admin/Shared/_UserMenu.cshtml")
+}
+
+@section Panel {
+}
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="mock-profile">
+            <i class="glyphicon glyphicon-user text-muted"></i>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Your Info
+                    <a href="@routes.Account("ProfileEdit")">
+                        <span class="fa fa-edit pull-right"></span>
+                    </a>
+                </div>
+
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item row">
+                    <label class="col-sm-4" asp-for="UserName"></label>
+                    <span class="col-sm-8">@Model.UserName</span>
+
+                </li>
+                <li class="list-group-item row">
+                    <label class="col-sm-4" asp-for="FullName"></label>
+                    <span class="col-sm-8">@Model.FullName</span>
+                </li>
+                <li class="list-group-item row">
+                    <label class="col-sm-4" asp-for="DisplayName"></label>
+                    <span class="col-sm-8">@Model.DisplayName</span>
+
+                </li>
+                <li class="list-group-item row">
+                    <label class="col-sm-4" asp-for="Email"></label>
+                    <span class="col-sm-8">@Model.Email</span>
+                </li>
+
+                <li class="list-group-item row">
+                    <label class="col-sm-4" asp-for="BirthDate"></label>
+                    <span class="col-sm-8"> @Model.BirthDate.Value.ToString("MM/dd/yyyy")</span>
+                </li>
+                <li class="list-group-item row">
+                    <label class="col-sm-4" asp-for="PhoneNumber"></label>
+                    <span class="col-sm-8"> @Model.PhoneNumber</span>
+                </li>
+                <li class="list-group-item row"> 
+                    <label class="col-sm-4" asp-for="WirelessProviderId"></label>
+                    <span class="col-sm-8"> @Model.WirelessProviderId</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">User Roles</div>
+    </div>
+    @if (Model.CorpRoles.Count > 0)
+    {
+        @*<label asp-for="CorpRoles"></label>*@
+        <div class="panel-body text-muted">
+            @foreach (var role in Model.CorpRoles)
+            {
+                <h4>
+                    @IconType.UserGroup.Render()
+                    @role.Name
+                </h4>
+            }
+        </div>
+    }
+    @if (Model.ClientRoles.Count > 0)
+    {
+        @*<label class="col-sm-2" asp-for="ClientRoles"></label>*@
+        <div class="panel-body text-muted">
+            @foreach (var role in Model.ClientRoles)
+            {
+                <h4>
+                    @IconType.UserGroup.Render()
+                    @role.Name
+                </h4>
+            }
+        </div>
+    }
+    @if (Model.SiteRoles.Count > 0)
+    {
+        @*<label class="col-sm-2" asp-for="SiteRoles"></label>*@
+        <div class="panel-body text-muted">
+            @foreach (var role in Model.SiteRoles)
+            {
+                <h4>
+                    @IconType.UserGroup.Render()
+                    @role.Name
+                </h4>
+            }
+        </div>
+    }
+    <div class="panel-heading">
+        <div class="panel-title">User Permissions</div>
+    </div>
+    <div class="panel-body text-muted">
+        @foreach (var claim in User.Claims.Where(x => x.Type == "permission"))
+        {
+            <h4>
+                <i class="glyphicon glyphicon-lock"></i>
+                @claim.Value
+            </h4>
+        }
+    </div>
+    @*
+        <div class="panel-heading">
+            <div class="panel-title">
+                <i class="glyphicon glyphicon-flash text-primary"></i> &nbsp;
+                Available Actions
+            </div>
+        </div>
+        <div class="panel-body">
+            <ul class="list-unstyled">
+                <li>
+                    <i class="glyphicon glyphicon-triangle-right text-muted"></i> &nbsp;
+                    <a href="#">Edit Profile Information</a>
+                </li>
+                <li>
+                    <i class="glyphicon glyphicon-triangle-right text-muted"></i> &nbsp;
+                    <a href="#">Setup Two Factor Security</a>
+                </li>
+            </ul>
+        </div>
+    *@
+</div>
+
+

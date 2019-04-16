@@ -1,0 +1,19 @@
+﻿@using Angelo.Connect.Abstractions
+
+@model IFolder
+
+<div class="thumbnail" style="width:150pt;">
+    <div style="text-align:center;height:80pt;">
+        @*NOTE: Thumbnail is just a document icon*@
+        <span class="glyphicon glyphicon-folder"/>
+    </div>
+    <div class="caption panel-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12" style="text-overflow:ellipsis;">
+                    @Model.Title
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

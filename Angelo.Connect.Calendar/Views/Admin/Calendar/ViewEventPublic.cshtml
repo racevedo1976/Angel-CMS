@@ -1,0 +1,15 @@
+﻿@model Angelo.Connect.Calendar.Models.CalendarEvent
+
+@{
+    
+    var id = ViewData["id"];
+    var day = ViewData["day"];
+    var hour = ViewData["hour"];
+}
+
+<div class="page-body">
+    <div class="container">
+        @await Component.InvokeAsync("CalendarEventDisplayMode", new { eventId = Model.EventId, day = day, hour = hour })
+    </div>
+
+</div>

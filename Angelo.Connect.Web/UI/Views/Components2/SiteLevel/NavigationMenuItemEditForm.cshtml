@@ -1,0 +1,186 @@
+﻿@model NavigationMenuItemViewModel
+
+@using Angelo.Connect.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var formTitle = (string)ViewData["FormTitle"];
+    var createOrEdit = (string)ViewData["CreateOrEdit"];
+
+    var treeviewName = componentId + "-treeview";
+    var externalLinkSectionName = componentId + "-external-link-section";
+    var providerSectionName = componentId + "-provider-section";
+    var targetTypeSectionName = componentId + "-target-type";
+    var providerTreeDivName = componentId + "-provider-tree-div";
+    var contentTitleName = componentId + "-content-title";
+    var toggleTreeFuncName = componentId + "ToggleTree";
+    var onSelectNodeFuncName = componentId + "OnSelectNode";
+
+    string externalLinkSectionStyle = "display:none;";
+    string providerSectionStyle = "display:none;";
+    string targetTypeSectionStyle = "";
+    if (Model.ContentType == NavigationMenuItemType.ExternalURL)
+    {
+        externalLinkSectionStyle = "";
+    }
+    else if (Model.ContentType == NavigationMenuItemType.Label)
+    {
+        targetTypeSectionStyle = "display:none;";
+    }
+    else if (Model.ContentType != NavigationMenuItemType.Label)
+    {
+        providerSectionStyle = "";
+    }
+}
+
+<form id="@componentId" action="@routes.SiteApi("navigationmenuitems")" class="form-horizontal" data-ajax-form>
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.NavMenuId)
+    @Html.HiddenFor(x => x.ParentId)
+    @Html.HiddenFor(x => x.ContentId)
+
+    <div>
+        <h4>@formTitle</h4>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4" asp-for="Title"></label>
+        <div class="col-sm-8">
+            <input id="Title" type="text" class="form-control" asp-for="Title" required spellcheck="true" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.Localize("Link Type")</label>
+        <div class="col-sm-8">
+            <div style="border:solid; border-width:1px">
+                <div style="margin:5px;">
+                    @foreach (var provider in Model.ContentProviders)
+                    {
+                        <div>
+                            @Html.RadioButtonFor(x => x.ContentType, provider.Value, new { data_section_title = provider.Text })
+                            <label>@provider.Text</label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="@externalLinkSectionName" style="@externalLinkSectionStyle">
+        <div class="form-group">
+            <label class="col-sm-4" asp-for="@Model.ExternalURL"></label>
+            <div class="col-sm-8">
+                <input class="form-control" asp-for="@Model.ExternalURL" />
+            </div>
+        </div>
+    </div>
+
+    <div id="@providerSectionName" style="@providerSectionStyle">
+        <div class="form-group">
+            <label class="col-sm-4">@Model.ContentTypeLabel</label>
+            <div class="col-sm-8">
+                <div style="border:solid; border-width:1px; padding:5px; min-height:30px; cursor:pointer;" onclick="@(toggleTreeFuncName)();" >
+                    <span id="@contentTitleName">@Model.ContentTitle</span>
+                    <span class="fa fa-caret-down pull-right"></span>
+                </div>
+                <div id="@providerTreeDivName" style="margin-top:2px; border:solid; border-width:1px; height:200px; padding:10px; overflow-y:auto; display:none;">
+                    @(Html.Kendo().TreeView()
+                        .Name(treeviewName)
+                        .DataSource(dataSource => dataSource
+                            .Read(read =>
+                            {
+                            read.Type(HttpVerbs.Post)
+                            .Url(routes.SiteApi("navigationMenuItems/content") + "?contentType=" + Model.ContentType);
+                            })
+                        )
+                        .ExpandAll(true)
+                        .Template(
+                            "<div>" +
+                            "<span style=\"font-size:large;\">#: item.name #</span>" +
+                            "&nbsp;" +
+                            "</div>"
+                            )
+                        .Events(events => events
+                            .Select(onSelectNodeFuncName))
+                    )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="@targetTypeSectionName" class="form-group" style="@targetTypeSectionStyle">
+        <label class="col-sm-4" asp-for="TargetType"></label>
+        <div class="col-sm-8">
+            <input id="TargetType" name="TargetType" class="pull-left" asp-for="TargetType" />
+        </div>
+    </div>
+</form>
+
+<script>
+
+    @(toggleTreeFuncName) = function() {
+        $("#@providerTreeDivName").toggle();
+        return false;
+    }
+
+    @(onSelectNodeFuncName) = function(e) {
+        var treeview = $("#@(treeviewName)").data("kendoTreeView");
+        var model = treeview.dataItem(e.node);
+        $("#@contentTitleName").html(model.description);
+        $('input[id="Title"]').val(model.description);
+        $("#@(componentId) [name=ContentId]").val(model.id);
+        $("#@providerTreeDivName").toggle(false);
+    }
+
+
+    $("[name=ContentType]").on("change", function () {
+        var itemType = $("[name=ContentType]:checked").val();
+        var formType = "@createOrEdit";
+
+        if (itemType == "@NavigationMenuItemType.Label") {
+            $("#@(externalLinkSectionName)").hide();
+            $("#@(providerSectionName)").hide();
+            $('#TargetType').prop('checked', false);
+            $("#@(targetTypeSectionName)").hide();
+        }
+        else if (itemType == "@NavigationMenuItemType.ExternalURL") {
+            $("#@(externalLinkSectionName)").show();
+            $("#@(providerSectionName)").hide();
+            if (formType == "create"){
+                $('#TargetType').prop('checked', true);
+            }
+            $("#@(targetTypeSectionName)").show();
+        }
+        else {
+            var itemLabel = $("[name=ContentType]:checked").data('sectionTitle');
+            $("#@(providerSectionName) label:first").html(itemLabel);
+
+            var treeview = $("#@treeviewName").data("kendoTreeView");
+            treeview.setDataSource(new kendo.data.HierarchicalDataSource({
+                transport: {
+                    read: {
+                        url: "@routes.SiteApi("navigationmenuitems/content")?contentType=" + itemType,
+                        //dataType: "jsonp",
+                        type: "POST"
+                    }
+                },
+                schema: {
+                    model: {
+                        id: "id",
+                        hasChildren: "hasChildren"
+                    }
+                }
+            }));
+            $("#@contentTitleName").html("");
+            $("#@(componentId) [name=ContentId]").val("");
+
+            $("#@(externalLinkSectionName)").hide();
+            $("#@(providerSectionName)").show();
+            if (formType == "create"){
+                $('#TargetType').prop('checked', false);
+            }
+            $("#@(targetTypeSectionName)").show();
+        }
+    });
+
+</script>

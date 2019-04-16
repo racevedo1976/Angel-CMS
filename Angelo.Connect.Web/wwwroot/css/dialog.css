@@ -1,0 +1,200 @@
+﻿body.modal-open{
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* kendo components used in modals are placed in the body.*/
+body.modal-open > [class^='k-'], 
+body.modal-open > [class*=' k-']
+{
+    pointer-events: auto !important;
+}
+
+.modal
+{
+    width: auto;
+    z-index: 1050;
+}
+
+/* 
+    Only enable pointer events and background effect on the last .modal
+    Note: must use :nth-child to target a specific css class
+*/
+body.modal-open > .modal:nth-child(n),
+body.modal-open .custom-modal
+{
+    pointer-events: auto !important;
+}
+
+body.modal-open > .modal:nth-child(n)::before {
+    content: "";
+    position: absolute;
+    left: 0px; top: 0px; right: 0px; bottom: 0px;
+    background: rgba(50,50,50,.65);
+    z-index: 1000 !important;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.modal-dialog {
+    height: auto;
+    margin: auto;
+    margin-top: 25px;
+    width: 960px !important;  
+    background: #fff !important;
+}
+
+
+
+.modal-dialog.modal-dialog-sm {
+    width: 600px !important;
+}
+
+.modal-dialog.modal-dialog-xs {
+    width: 480px !important;
+}
+
+
+.modal-dialog .modal-close
+{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 32px !important;
+    z-index: 10;
+}
+
+.modal-dialog .modal-header {
+    vertical-align: middle;
+    line-height: 26px !important;
+    font-size: 20px;
+    background: #f7f7f7 !important;
+}
+
+.modal-dialog .modal-content {
+    background: #fff !important;
+    position: relative;
+    z-index: 1300;
+}
+
+.modal-dialog .modal-footer{
+    border: none !important;
+}
+
+.modal-layout .modal-header i {
+    margin-right: 10px;
+}
+
+
+.modal-layout-with-menu .modal-menu {
+    position: absolute;
+    top: 60px;
+    left: 0px;
+    width: 300px;
+    height: 480px !important;
+    background: #f7f7f7;
+    z-index: 0;
+}
+
+.modal-layout-with-menu .modal-body {
+    margin-left: 300px;
+    height: 480px !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.modal-layout-with-menu .modal-footer {
+    border-top: 1px #eee solid !important;
+}
+
+
+/* Sliding Classes */
+.slide-left-in {
+    transform: translateX(0);
+    animation: slide-left-in 500ms 1;
+}
+
+.slide-left-out {
+    transform: translateX(-100%);
+    animation: slide-left-out 500ms 1;
+}
+
+.slide-right-in {
+    /*transform: translateX(0);*/
+    animation: slide-right-in 500ms 1;
+}
+
+.slide-right-out {
+    transform: translateX(100%);
+    animation: slide-right-out 500ms 1;
+}
+
+/* Sliding Overlay */
+.layer {
+    position: absolute;
+    margin: 0;
+    z-index: 1999;
+    font-size: 14px;
+}
+
+.layer-body {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+
+.layer-close{
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.layer-in {
+    transform: translateX(0);
+    animation: slide-left-in 500ms 1;
+}
+
+.layer-out{
+    transform: translateX(100%);
+    animation: slide-right-out 500ms 1;
+}
+
+
+@media screen and (max-width: 600px) {
+    .modal-dialog {
+        width: 88% !important;
+    }
+}
+
+/* Responsive Sizing */
+
+/*xs*/
+@media (min-width: 1px) and (max-width: 767px) 
+{
+    .modal-dialog {
+        width: 88% !important;
+    }
+}
+
+/*sm*/
+@media (min-width: 768px) and (max-width: 991px) {
+    .modal-dialog {
+        width: 88% !important;
+    }
+}
+
+/*lg*/
+@media (min-width: 992px) and (max-width: 1199px){
+    /* no changes needed*/
+}
+
+/*xl*/
+@media (min-width: 1200px)
+{
+    /* no changes needed */
+}
+

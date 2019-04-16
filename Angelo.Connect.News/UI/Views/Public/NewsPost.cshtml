@@ -1,0 +1,28 @@
+﻿@model Angelo.Connect.News.Models.NewsPost
+
+<div class="page-body">
+
+    <div class="container">
+        <h1 show-if="@(Model.Image == null)">
+            @Model.Title
+        </h1>
+
+        <div class="row" show-if="@(Model.Image != null)">
+            <div class="col-sm-10">
+                <h1>
+                    @Model.Title
+                </h1>
+            </div>
+            <div class="col-sm-2">
+                <img src="@Model.Image" style="width: 100%; height: auto; margin-bottom: -15px; margin-top: 5px;" alt="@Model.Caption"/>
+            </div>
+        </div>
+        <hr />
+    </div>
+
+    @* Page Designer content will get rendered here*@
+
+    <zone name="post-body"></zone>
+
+</div>
+

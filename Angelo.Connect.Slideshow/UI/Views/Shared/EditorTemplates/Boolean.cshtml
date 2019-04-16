@@ -1,0 +1,10 @@
+﻿@model Boolean
+
+<div class="form-group">
+    <label class="radio-inline">
+        <input name="@ViewData.TemplateInfo.HtmlFieldPrefix" type="radio" value="true" checked="@Model"/>On
+    </label>
+    <label class="radio-inline">
+        <input name="@ViewData.TemplateInfo.HtmlFieldPrefix" type="radio" value="false" checked="@(!Model)"/>Off
+    </label>
+</div>

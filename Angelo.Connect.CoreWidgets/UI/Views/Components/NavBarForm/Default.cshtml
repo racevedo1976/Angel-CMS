@@ -1,0 +1,11 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.NavBar
+
+<form class="form" action="/api/widgets/html/navbar" data-ajax-form="true">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="form-group">
+        <label class="form-label">Item Width</label>
+        <div>
+            <input class="form-control" name="ItemWidth" value="@Model.ItemWidth" />
+        </div>
+    </div>  
+</form>

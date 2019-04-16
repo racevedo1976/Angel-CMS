@@ -1,0 +1,55 @@
+﻿<div class="site-toolbar">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9">
+                <pagetools></pagetools>
+            </div>
+            <div class="col-sm-3 text-right">
+                <usertools></usertools>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-header bg-default">
+    <div class="container">
+        <div class="row">
+            <div class="site-banner col-sm-7">
+                <zone name="header" allow-containers="false" allow-padding="false"></zone>
+            </div>
+            <div class="site-banner-side col-sm-5">
+                <zone name="social" allow-containers="false" allow-padding="false"></zone>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-nav">
+    <div class="container">
+        <content name="site-nav" type="navmenu" model="main-menu"></content>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container">
+        <div class="row">
+            <div class="left-nav col-sm-4">
+                <!-- Embedded Auto Nav -->
+                <content name="auto-nav" type="navauto"></content>
+                <zone name="side" allow-containers="false"></zone>
+            </div>
+            <div class="col-sm-8">
+                <!-- Page Content Insertion Point-->
+                <page allow-containers="false"></page>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer bg-dark">
+    <div class="container">
+        <zone name="footer" allow-containers="false"></zone>
+        <copyright></copyright>
+    </div>
+</footer>

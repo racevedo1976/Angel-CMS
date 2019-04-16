@@ -1,0 +1,37 @@
+﻿@{ 
+    var siteUrl = ViewData["SiteUrl"].ToString();
+    var resultsUrl = siteUrl + "/sys/search";
+}
+
+<div class="search-field search-field-lucene">
+    <label for="q" class="hidden-sc">Search</label>
+    <input id="q" type="text" placeholder="Search"/>
+    <i class="fa fa-search"></i> &nbsp;
+</div>
+<style>
+   .hidden-sc 
+    {
+        position:absolute;
+        left:-10000px;
+        top:auto;
+        width:1px;
+        height:1px;
+        overflow:hidden;
+    }
+</style>
+<script>
+    $(function () {
+        function _submitSearch() {
+            var q = window.encodeURIComponent($('#q').val());
+            location.href = "/sys/search?q=" + q;
+        };
+
+        $("#q").on("keypress", function (event) {
+            if ((event.which == 13 || event.keyCode == 13) && this.value.trim() !== "" ){
+                _submitSearch();
+            }
+        });
+
+        $("#q").next().on("click", _submitSearch);
+    });
+</script>

@@ -1,0 +1,49 @@
+﻿@*
+    // NOTE: This wraps the underlying content view with correct tree context
+    //       and loads the design tools if needed.
+    //
+    //       Do not expose internal content ids (if possible) unless we're in design mode
+    //       to prevent bad actors from inspecting source code, acquiring them, and trying
+    //       to hack ajax apis
+*@
+
+@using Angelo.Connect.Rendering
+@{ 
+    var renderingContext = ViewData.GetRenderingContext();
+}
+
+
+@if (renderingContext.LoadDesignTools)
+{
+    <link href="/css/designer.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@if (renderingContext.ContentEditable)
+{
+    <div class="content-tree cs-content-tree editable" id="@renderingContext.ContentTreeId">
+        @{
+            await Html.RenderPartialAsync(renderingContext.ContentViewPath, renderingContext.ContentViewModel);
+        }
+    </div>
+}
+else
+{
+    <div class="content-tree cs-content-tree">
+        @{
+            await Html.RenderPartialAsync(renderingContext.ContentViewPath, renderingContext.ContentViewModel);
+        }
+    </div>
+}
+
+
+@if (Model.LoadDesignTools)
+{
+    await Html.RenderPartialAsync("/UI/Views/Rendering/Designer/WidgetModal.cshtml");
+    await Html.RenderPartialAsync("/UI/Views/Rendering/Designer/NodeToolbar.cshtml");
+
+    <script type="text/javascript">
+        require(['designer'], function (designer) {
+            designer.init("@renderingContext.ContentTreeId", true);
+        });
+    </script>
+}

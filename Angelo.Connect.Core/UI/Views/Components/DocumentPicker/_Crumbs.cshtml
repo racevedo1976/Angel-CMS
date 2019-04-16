@@ -1,0 +1,43 @@
+﻿@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Models
+
+@model IFolder
+
+@inject IFolderManager<FileDocument> _folderManager
+@{ 
+    var parents = string.IsNullOrEmpty(Model.ParentId) ? Enumerable.Empty<Folder>() : GetTrail(_folderManager.GetFolderAsync(Model.ParentId).Result);
+    var siblings = string.IsNullOrEmpty(Model.ParentId) ? new[] { Model } : _folderManager.GetFoldersAsync(_folderManager.GetFolderAsync(Model.ParentId).Result).Result;
+}
+
+<ol id="parentTrail" class="breadcrumb">
+    @foreach (var parent in parents)
+    {
+        <li href="#" role="button" data-id="@parent.Id">@(string.IsNullOrEmpty(parent.ParentId) && string.IsNullOrEmpty(parent.Title) ? "My Root" : parent.Title)</li>
+    }
+    @if (string.IsNullOrEmpty(Model.ParentId))
+    {
+        <li id="currentFolderName" class="menu-root active" role="button">@(string.IsNullOrEmpty(Model.Title) ? "My Root" : Model.Title)</li>
+    }
+    else
+    {
+        <li class="active dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@Model.Title <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                @foreach (var sibling in siblings)
+                {
+                    <li href="#" role="button" data-id="@sibling.Id">@sibling.Title</li>
+                }
+            </ul>
+        </li>
+    }
+</ol>
+
+@functions {
+    public IEnumerable<IFolder> GetTrail(IFolder folder)
+    {
+        var results = string.IsNullOrEmpty(folder.ParentId)
+            ? Enumerable.Empty<IFolder>()
+            : GetTrail(_folderManager.GetFolderAsync(folder.ParentId).Result);
+        return results.Concat(new[] { folder });
+    }
+}

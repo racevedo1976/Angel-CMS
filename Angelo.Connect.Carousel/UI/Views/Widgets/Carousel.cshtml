@@ -1,0 +1,80 @@
+﻿@using Angelo.Connect.Carousel.Models
+
+@model CarouselWidget
+@{
+    var count = 0;
+}
+@if (Model.Slides.Any())
+{
+    <div class="row cs-carousel-widget-container">
+        <div class="col-md-10 col-md-offset-1">
+            <div id="slideshow" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var slide in Model.Slides.OrderBy(x => x.Sort).ToList())
+                    {
+                        <div class="item @(count == 0 ? "active" : "") cs-carousel-widget-slide-container">
+                            <div class="">
+                                <div class="cs-carousel-widget-title">
+                                    @slide.Title
+                                </div>
+                                <div class="cs-carousel-widget-description">
+                                    @slide.Description
+                                </div>
+                                <div class="cs-carousel-widget-link">
+                                    <a href="@slide.LinkUrl" target="@(@slide.LinkTarget)">
+                                        @slide.LinkText
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                     
+                           
+                        count++;
+                    }
+                    
+                </div>
+            </div>
+        </div>
+   
+        <div class="col-md-1">
+            @if (Model.Slides.Count > 1)
+            {
+                <div class="carousel-controls cs-carousel-widget-controls">
+                    <a class="left carousel-control cs-carousel-widget-left-btn" href="#slideshow" data-slide="prev">
+                        <span class="fa fa-chevron-left">&nbsp;</span>
+                    </a>
+
+                    <a class="right carousel-control cs-carousel-widget-right-btn" href="#slideshow" data-slide="next">
+                        <span class="fa fa-chevron-right"></span>
+                    </a>
+                </div>
+            }
+           
+        </div>
+    </div>
+
+}
+
+<style>
+    
+    .row {
+        display: table;
+        width: 100%
+    }
+
+    .row [class*="col-"] {
+        float: none;
+        display: table-cell;
+        vertical-align: top;
+    }
+
+    .carousel-control.left {
+        background-image: none !important;
+    }
+    .carousel-control.right {
+        background-image: none !important;
+    }
+
+   
+
+</style>

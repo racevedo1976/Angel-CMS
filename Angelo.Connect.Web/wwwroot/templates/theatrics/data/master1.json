@@ -1,0 +1,137 @@
+[
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-3",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Motto",
+          "src": "/templates/theatrics/images/motto.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "search",
+        "view": "search-search1",
+        "style": {
+          "classes": "text-center cs-text-white",
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "title": ""
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<p style=\"text-align:center;\"><br /><a href=\"http://www.schoolinsites.com\" target=\"_blank\"><img src=\"/demo/images/SisPoweredSmall.png\" alt=\"SCHOOLinSITES\" /></a></p>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "html",
+    "view": "html-raw",
+    "style": {
+      "classes": "cs-headerback",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {
+      "html": "<div style=\"text-align:center;\"><img src=\"/templates/theatrics/images/logo.png\" alt=\"Logo\" style=\"width:100%;max-width:693px;\" /></div>",
+      "staticToolbar": false
+    }
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "classes": "cs-graystripe",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-3",
+    "style": {
+      "classes": "cs-mascotback",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><div style=\"text-align:center;\"><img src=\"/templates/theatrics/images/motto.png\" alt=\"Motto\" /></div><p><span style=\"color:#ffffff;\">5555 Main Street, Mobile, AL 52343</span></p></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><img src=\"/templates/theatrics/images/mascot.png\" alt=\"Mascot\" width=\"222\" height=\"178\" /></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><div style=\"text-align:center;\"><a href=\"http://facebook.com\" title=\"Faccebook\" target=\"_blank\"><img src=\"/templates/theatrics/images/facebook.png\" alt=\"Facebook\" /></a>&nbsp; <a href=\"http://twitter.com\" title=\"Twitter\" target=\"_blank\"><img src=\"/templates/theatrics/images/twitter.png\" alt=\"Twitter\" /></a></div><p><span style=\"color:#ffffff;\">PH: 234-623-2523 | FX: 234-623-2523</span></p></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  }
+]

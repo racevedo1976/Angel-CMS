@@ -1,0 +1,79 @@
+﻿@using System
+@using Angelo.Connect.Calendar.Models
+@using Angelo.Connect.Calendar.Services
+@using Angelo.Connect.Extensions
+
+@model UpcomingEventsWidget
+@inject CalendarQueryService calendarQueryService
+@{
+    var calendarEvents = calendarQueryService.GetUpcomingEventsByDate(Model.Id, DateTime.Today, DateTime.Today.AddDays(7))
+                            .OrderBy(x => x.EventStart)
+                            .Take(Model.PostsToDisplay);
+    var displayStartDate = "";
+    var displayEndDate = "";
+    var displayDate = "";
+    var colorStyle = "";
+
+    if (Model.UseTextColor)
+    {
+        colorStyle = "color: " + Model.TextColor + ";";
+    }
+}
+
+@if (calendarEvents.Count() == 0)
+{
+    <div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>Upcoming Events Placeholder</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (!String.IsNullOrEmpty(Model.Title))
+{
+    <div class="container-fluid cs-upcoming-events-widget-title" style="@colorStyle">
+        <h3>@Model.Title</h3>
+    </div>
+}
+@foreach (var calEvent in calendarEvents)
+{
+    displayStartDate = String.Format("{0:MMM d}", calEvent.EventStart);
+    displayEndDate = String.Format("{0:MMM d}", calEvent.EventEnd);
+
+    if(!calEvent.IsRecurrent && (displayStartDate != displayEndDate))
+    {
+        displayDate = displayStartDate + " - " + displayEndDate;
+    }
+    else
+    {
+        displayDate = displayStartDate;
+    }
+
+    <div class="cs-upcoming-event-container panel panel-default" style="background-color: transparent; @colorStyle">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12 cs-upcoming-event-title text-right ">
+                    <h4><a href="/sys/calendar/event/@calEvent.EventId">@calEvent.Title</a></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 cs-upcoming-event-time">
+                    @String.Format("{0:t}", calEvent.EventStart)
+                </div>
+                <div class="col-sm-8 cs-upcoming-event-date text-right">
+                    @displayDate
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 cs-upcoming-event-description">
+                    @CustomStringExtension.Truncate(calEvent.Description, 50)
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "zone": "body",
+    "type": "slideshow lux",
+    "view": "slideshow-carousel",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    }
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "background": "bg-dark",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<span id=\"homebody\"><h1 style=\"text-align:center;\"><span style=\"color:#ffffff;\">Why you&rsquo;ll love Connect Suite</span></h1><p style=\"text-align:center;\"><span style=\"color:#ffffff;\">Connect Suite from SCHOOLinSITES is a powerful and easy-to-use digital solution&nbsp;for your district or school.</span><br /><span style=\"color:#ffffff;\">Providing online community and education tools, Connect Suite is a unified system</span><br /><span style=\"color:#ffffff;\">that will bring all of your users together, all in one place.</span><br /><span style=\"color:#ffffff;\">It connects all your dots.</span></p></span>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "zone",
+        "view": "zone-3",
+        "style": {},
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<div style=\"text-align:center;\"><p><span style=\"color:#ffffff;\"><img src=\"/templates/sis/images/1.png\" alt=\"Icon\" /></span></p><p>&nbsp;</p></div><h2><span style=\"color:#ffffff;\">It&rsquo;s the best way to do the things you do every day.</span></h2><p><span style=\"color:#ffffff;\">&nbsp;</span></p><p style=\"text-align:left;\"><span style=\"color:#ffffff;\">Everything you do with Connect Suite is \neasier and more intuitive. Whether you&rsquo;re messaging parents and \nstudents, reading and writing email, broadcasting LIVE football games, \nchecking student grades, or turning in your homework, you can do it all \nfrom any device, anywhere.</span></p>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<div style=\"text-align:center;\"><p><span style=\"color:#ffffff;\"><img src=\"/templates/sis/images/2.png\" alt=\"Icon\"/></span></p><p>&nbsp;</p></div><h2><span style=\"color:#ffffff;\">It does so much, so much better.<br /></span></h2><p><span style=\"color:#ffffff;\">&nbsp;</span></p><p style=\"text-align:left;\"><span id=\"homebody\">Connect Suite is a unified experience, built ground \r\nup for education. No matter what you want to do, a single sign-on means \r\nyou can get there quickly. Permissions-based access means that you only \r\nsee the information that matters to you, and an&nbsp;industry-leading \r\ncommitment to development means that new modules will continue to \r\nprovide customized functionality.</span></p>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-3",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<div style=\"text-align:center;\"><p><span style=\"color:#ffffff;\"><img src=\"/templates/sis/images/3.png\"  alt=\"Icon\"/></span></p><p>&nbsp;</p></div><h2><span style=\"color:#ffffff;\">Your District, School, and Users work even better together.<br /></span></h2><p><span style=\"color:#ffffff;\">&nbsp;</span></p><p style=\"text-align:left;\"><span style=\"color:#ffffff;\">With Connect Suite, your students, parents, teachers, and administrators can work seamlessly with one another. Shared news and calendars combined with powerful email, SMS, and real-time messaging tools keep everyone on the same page. Parents can keep up with all online interactions between their students and teachers, and an unlimited number of users means that there is plenty of room for everyone. We are your complete digital learning community.</span></p>",
+              "staticToolbar": false
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "background": "bg-contrast",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><a hrf=\"/demo\"><img src=\"/templates/sis/images/demo.png\" /></a></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  }
+]

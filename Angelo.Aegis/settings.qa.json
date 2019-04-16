@@ -1,0 +1,13 @@
+﻿{
+  "Data": {
+    "ConnectionString": "Data Source=QaDB;Initial Catalog=Angelo.Identity;Integrated Security=True"
+  },
+  "OpenId": {
+    "Providers": {
+      "Google": {
+        "ClientId": "343476720235-46ej6abab3cp5l5qe45quic60cspeqni.apps.googleusercontent.com",
+        "ClientSecret": "S33pcVUeV_knIORtrUiwKInv"
+      }
+    }
+  }
+}

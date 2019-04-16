@@ -1,0 +1,57 @@
+﻿@using Angelo.Connect.Menus
+@using Angelo.Connect.Models
+@using Angelo.Connect.Rendering
+@using Angelo.Connect.Security
+@using Angelo.Connect.Security.Services
+@using Angelo.Connect.Services
+@using Angelo.Connect.Configuration
+
+@inject PageSecurityService pageSecurity
+@inject UserContext userContext
+
+@model Page
+
+@{ 
+    var renderingContext = ViewData.GetRenderingContext();
+
+    var page = Model;
+    var versionCode = renderingContext.ContentVersionInfo.VersionCode;
+    var versionLabel = renderingContext.ContentVersionInfo.VersionLabel;
+
+
+    var canBeDesigned = pageSecurity.CanDesignPage(userContext, page);
+    var canBePublished = pageSecurity.CanPublishPage(userContext, page);
+
+    var publishUrl = $"/sys/page/{page.Id}/publish?version={versionCode}";
+    var previewUrl = $"/sys/page/{page.Id}/preview?version={versionCode}";
+    var revertUrl = $"/sys/page/{page.Id}/revert?version={versionCode}";
+}
+
+<ul class="list-inline" show-if="@canBeDesigned">
+    <li show-if="@canBePublished">
+        <a onclick="page.postAsForm('@publishUrl')">
+            <i class="fa fa-save"></i> &nbsp;
+            @Html.Localize("Publish")
+        </a>
+    </li>
+    <li>
+        <a onclick="page.openWindow('@previewUrl')">
+            <i class="fa fa-eye"></i> &nbsp;
+            @Html.Localize("Preview")
+        </a>
+    </li>
+    <li>
+        <a onclick="page.postAsForm('@revertUrl')">
+            <i class="fa fa-delete"></i> &nbsp;
+            @Html.Localize("Cancel")
+        </a>
+    </li>
+      
+    <li class="page-edit-info" show-if="@(versionCode != null)">
+        <i class="fa fa-pencil"></i>
+        <span>
+            @Html.Localize("Editing"): &nbsp; @versionCode &ndash; @versionLabel
+        </span>
+    </li>
+</ul>
+

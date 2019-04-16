@@ -1,0 +1,9 @@
+﻿[
+  {
+    "zone": "header",
+    "type": "title",
+    "model": {
+      "text": "Site Name"
+    }
+  }
+]

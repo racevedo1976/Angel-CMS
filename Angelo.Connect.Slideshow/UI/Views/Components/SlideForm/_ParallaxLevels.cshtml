@@ -1,0 +1,77 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model Parallax
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="container-fluid">
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 1</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth1, null, nameof(Parallax.LevelDepth1))
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 2</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth2, null, nameof(Parallax.LevelDepth2))
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 3</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth3, null, nameof(Parallax.LevelDepth3))
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 4</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth4, null, nameof(Parallax.LevelDepth4))
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 5</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth5, null, nameof(Parallax.LevelDepth5))
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 6</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth6, null, nameof(Parallax.LevelDepth6))
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 7</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth7, null, nameof(Parallax.LevelDepth7))
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 8</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth8, null, nameof(Parallax.LevelDepth8))
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 9</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth9, null, nameof(Parallax.LevelDepth9))
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="form-label col-sm-" 3">Level Depth 10</label>
+                    <div class="col-sm-4">
+                        @Html.EditorFor(x => x.LevelDepth10, null, nameof(Parallax.LevelDepth10))
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <p>Each individual layer can be assigned a "Parallax Level". You can define up to 10 different "levels".</p>
+            <p>Applying different levels to different slide layers is what gives the content its "depth" in relation to other parallax layers.</p>
+            <p>When choosing your parallax leve values, a smaller number would mean less movement, and a higher number would allow for a larger amount of movement.</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+﻿@using Angelo.Connect.Models
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect.SlideShow.Models
+
+@model SlideLayer
+
+<div class="container-fluid">
+    <div class="form-group">
+        <label class="form-label col-sm-3">Choose Video Type</label>
+        <div class="col-sm=7">
+            <input type="radio" id="fromVidLibrary" /><label class="form-label" for="fromVidLibrary">From Video Library</label>
+            <input type="radio" id="fromYouTube" /><label class="form-label" for="fromYouTube">From YouTube</label>
+            <input type="radio" id="fromVimeo" /><label class="form-label" for="fromVimeo">From Vimeo</label>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-primary">Insert Video</button>
+        </div>
+    </div>
+</div>
+<div id="addVideo">
+    @await Component.InvokeAsync("DocumentPicker", new { rootFolderId = default(string), settings = new DocumentPickerSettings() { FileType = FileType.Image, IsMultiSelect = false, AreContentDocumentsHidden = false, AreContentFoldersHidden = true } })
+</div>

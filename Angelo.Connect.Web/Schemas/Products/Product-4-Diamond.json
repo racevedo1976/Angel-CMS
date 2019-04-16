@@ -1,0 +1,103 @@
+﻿{
+  "ProductId": "product-4",
+  "Version": "2017.11.15",
+  "Title": "Angelo Platinum Plan",
+  "Description": "",
+  "Active": true,
+  "BaseSiteMB": "5000",
+  "Features": [
+    {
+      "Id": "Connect-Core",
+      "Type": "site",
+      "Title": "Connect Core Functionality",
+      "Settings": {
+
+      }
+    },
+    {
+      "Name": "notifyMe",
+      "Type": "widget",
+      "Title": "Notify Me Widget",
+      "Settings": {
+
+      }
+    },
+    {
+      "Name": "Widgets",
+      "Type": "",
+      "Title": "Allowed Widgets",
+      "Settings": {
+        "PageWidgets": [
+          "html-raw",
+          "icon-1",
+          "image-inline",
+          "title-default",
+          "alert-alert1",
+          "hero-hero1",
+          "search-search1",
+          "blog-posts-normal",
+          "news-posts-normal",
+          "announcement-posts-normal",
+          "calendar-month-view",
+          "document-list",
+          "h-nav-menu",
+          "v-nav-menu",
+          "v-nav-auto",
+          "slideshow-carousel",
+          "media-gallery",
+          "video-player",
+          "zone-1",
+          "zone-2",
+          "zone-3",
+          "zone-4",
+          "zone-5",
+          "zone-6",
+          "zone-2-10",
+          "zone-3-9",
+          "zone-9-3",
+          "zone-4-8",
+          "zone-8-4"
+        ]
+      }
+    },
+    {
+      "Name": "slideshowvideos",
+      "Type": "widget",
+      "Title": "Enable Videos in Slideshow Widget",
+      "Settings": {
+        "enabled": "false"
+      }
+    },
+    {
+      "Name": "alerts",
+      "Type": "widget",
+      "Title": "Enable Site Alerts",
+      "Settings": {
+        "enabled": "false"
+      }
+    },
+    {
+      "Name": "documentsharing",
+      "Type": "feature",
+      "Title": "Enable document sharing ability in Library",
+      "Settings": {
+        "enabled": "false"
+      }
+    }
+  ],
+  "SiteTemplates": [
+    "inspiration",
+    "guidance",
+    "cityscape",
+    "essential",
+	  "royal",
+	  "theatrics",
+	  "nebula",
+	  "tidal",
+	  "aurora",
+	  "matrix",
+	  "pinnacle",
+	  "carnival",
+	  "sis"
+  ]
+}

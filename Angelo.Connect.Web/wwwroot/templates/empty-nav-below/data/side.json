@@ -1,0 +1,9 @@
+﻿[
+  {
+    "zone": "side",
+    "type": "html",
+    "model": {
+      "html": "<div class=\"well\" style=\"height: 400px\"></div>"
+    }
+  }
+]

@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Button.Add" xml:space="preserve">
+    <value>AÑADIR</value>
+  </data>
+  <data name="Button.Allow" xml:space="preserve">
+    <value>Sí, permitir!</value>
+  </data>
+  <data name="Button.Cancel" xml:space="preserve">
+    <value>¡Cancelar!</value>
+  </data>
+  <data name="Button.CompleteRegistration" xml:space="preserve">
+    <value>Completar registro</value>
+  </data>
+  <data name="Button.Create" xml:space="preserve">
+    <value>¡Crear!</value>
+  </data>
+  <data name="Button.Delete" xml:space="preserve">
+    <value>¡Eliminar!</value>
+  </data>
+  <data name="Button.DoNotAllow" xml:space="preserve">
+    <value>No, no permite!</value>
+  </data>
+  <data name="Button.Proceed" xml:space="preserve">
+    <value>¡Proceder a la página de inicio!</value>
+  </data>
+  <data name="Button.Register" xml:space="preserve">
+    <value>¡Regístrese!</value>
+  </data>
+  <data name="Button.Save" xml:space="preserve">
+    <value>Ahorra!</value>
+  </data>
+  <data name="Button.Submit" xml:space="preserve">
+    <value>¡Enviado!</value>
+  </data>
+  <data name="Button.Yes" xml:space="preserve">
+    <value>¡Sí!</value>
+  </data>
+  <data name="Label.Consent.ApplicationAccess" xml:space="preserve">
+    <value>Acceso a la aplicación!</value>
+  </data>
+  <data name="Label.Consent.Personal.Information" xml:space="preserve">
+    <value>Información personal</value>
+  </data>
+  <data name="Label.Consent.RememberDecision" xml:space="preserve">
+    <value>¡Recordar mi decisión!</value>
+  </data>
+  <data name="Label.Consent.UncheckPermissions" xml:space="preserve">
+    <value>Desactive los permisos que no desea conceder.!</value>
+  </data>
+  <data name="Label.Create" xml:space="preserve">
+    <value>¡Crear!</value>
+  </data>
+  <data name="Label.Delete" xml:space="preserve">
+    <value>¡Eliminar!</value>
+  </data>
+  <data name="Label.Edit" xml:space="preserve">
+    <value>Editar!</value>
+  </data>
+  <data name="Label.Error" xml:space="preserve">
+    <value>¡Error!</value>
+  </data>
+  <data name="Label.Error.RequestID" xml:space="preserve">
+    <value>Solicitar ID:!</value>
+  </data>
+  <data name="Label.Error.UnexpectedError" xml:space="preserve">
+    <value>Lo sentimos, hubo un error inesperado.!</value>
+  </data>
+  <data name="Label.Home.Aegis" xml:space="preserve">
+    <value>Aegis</value>
+  </data>
+  <data name="Label.Home.AegisDefinition" xml:space="preserve">
+    <value>La protección, respaldo o apoyo de una persona u organización.!</value>
+  </data>
+  <data name="Label.Home.AegisSynonyms" xml:space="preserve">
+    <value>Sinónimos: protección, respaldo, apoyo, atención, orientación, control, tutela, tutela, protección.</value>
+  </data>
+  <data name="Label.Home.IdentityList" xml:space="preserve">
+    <value>Está conectado con estas identidades:!</value>
+  </data>
+  <data name="Label.Layout.LoginDifferent" xml:space="preserve">
+    <value>Iniciar sesión con otra cuenta!</value>
+  </data>
+  <data name="Label.Layout.Toggle" xml:space="preserve">
+    <value>Toggle de Navegación</value>
+  </data>
+  <data name="Label.Login.AngeloLogin" xml:space="preserve">
+    <value>Angelo Login!</value>
+  </data>
+  <data name="Label.Login.Associate1" xml:space="preserve">
+    <value>Asociar su!</value>
+  </data>
+  <data name="Label.Login.Associate2" xml:space="preserve">
+    <value>cuenta.!</value>
+  </data>
+  <data name="Label.Login.Authenticated" xml:space="preserve">
+    <value>Ha autenticado correctamente con!</value>
+  </data>
+  <data name="Label.Login.ChangePassword" xml:space="preserve">
+    <value>Cambiar Su Contraseña</value>
+  </data>
+  <data name="Label.Login.CheckEmail" xml:space="preserve">
+    <value>Por favor revise su correo electrónico un enlace restablecer tu contraseña!</value>
+  </data>
+  <data name="Label.Login.ClickToLogin" xml:space="preserve">
+    <value>Por favor, haga clic aquí para Iniciar Sesión.</value>
+  </data>
+  <data name="Label.Login.Consent.RequestPermission" xml:space="preserve">
+    <value>está solicitando su permiso.!</value>
+  </data>
+  <data name="Label.Login.EmailConfirmed" xml:space="preserve">
+    <value>Se ha confirmado tu dirección de correo electrónico!</value>
+  </data>
+  <data name="Label.Login.EmailSubmission" xml:space="preserve">
+    <value>Después de proporcionar su dirección de correo electrónico, se le enviará un enlace con instrucciones para continuar. Espere varios minutos para que el correo llegar!</value>
+  </data>
+  <data name="Label.Login.EnterUserName" xml:space="preserve">
+    <value>Introduzca un nombre de usuario de este sitio de abajo y haga clic en el botón de registro para terminar la sesión.!</value>
+  </data>
+  <data name="Label.Login.Female" xml:space="preserve">
+    <value>Mujer</value>
+  </data>
+  <data name="Label.Login.LDAP.Login" xml:space="preserve">
+    <value>Inicie sesión</value>
+  </data>
+  <data name="Label.Login.Lockout.Notification" xml:space="preserve">
+    <value>Esta cuenta ha sido bloqueada, por favor, inténtelo de nuevo más tarde.</value>
+  </data>
+  <data name="Label.Login.LoginFailed" xml:space="preserve">
+    <value>Inicio de sesión sin éxito con servicio!</value>
+  </data>
+  <data name="Label.Login.LostForgotten" xml:space="preserve">
+    <value>Contraseñas perdidas u olvidadas.</value>
+  </data>
+  <data name="Label.Login.Male" xml:space="preserve">
+    <value>Hombre</value>
+  </data>
+  <data name="Label.Login.PasswordRequirement1" xml:space="preserve">
+    <value>1. debe tener al menos 6 caracteres!</value>
+  </data>
+  <data name="Label.Login.PasswordRequirement2" xml:space="preserve">
+    <value>2. debe tener al menos un dígito (0-9).</value>
+  </data>
+  <data name="Label.Login.PasswordRequirement3" xml:space="preserve">
+    <value>3. debe tener al menos un carácter alfanumérico.</value>
+  </data>
+  <data name="Label.Login.PasswordResetMsg1" xml:space="preserve">
+    <value>Su contraseña ha sido restablecida.</value>
+  </data>
+  <data name="Label.Login.PasswordResetMsg2" xml:space="preserve">
+    <value>Por favor, haga clic aquí para Iniciar Sesión.</value>
+  </data>
+  <data name="Label.Login.Passwords" xml:space="preserve">
+    <value>Contraseñas</value>
+  </data>
+  <data name="Label.Login.PrivacyPolicy" xml:space="preserve">
+    <value>Política de privacidad</value>
+  </data>
+  <data name="Label.Login.ProvideEmail" xml:space="preserve">
+    <value>Proporcione el correo electrónico asociado a tu cuenta.</value>
+  </data>
+  <data name="Label.Login.RememberLogin" xml:space="preserve">
+    <value>¡Recordar mi Login!</value>
+  </data>
+  <data name="Label.Login.Return" xml:space="preserve">
+    <value>Volver a la página de inicio de sesión ...</value>
+  </data>
+  <data name="Label.Login.ThirdParty" xml:space="preserve">
+    <value>Inicio de sesión mediante un servicio de partido 3!</value>
+  </data>
+  <data name="Label.Login.Tools" xml:space="preserve">
+    <value>Herramientas de inicio de sesión!</value>
+  </data>
+  <data name="Label.Login.TwoFactorAuth" xml:space="preserve">
+    <value>Seleccione el proveedor de autenticación de dos factores:!</value>
+  </data>
+  <data name="Label.Login.VerifySecurity" xml:space="preserve">
+    <value>¡Comprobar el código de seguridad!</value>
+  </data>
+  <data name="Label.Logout.ClickToReturn1" xml:space="preserve">
+    <value>Clic</value>
+  </data>
+  <data name="Label.Logout.ClickToReturn2" xml:space="preserve">
+    <value>¡Aquí!</value>
+  </data>
+  <data name="Label.Logout.ClickToReturn3" xml:space="preserve">
+    <value>para volver a la!</value>
+  </data>
+  <data name="Label.Logout.ClickToReturn4" xml:space="preserve">
+    <value>aplicación.!</value>
+  </data>
+  <data name="Label.Logout.LoggedOut.Confirmation" xml:space="preserve">
+    <value>Ahora está desconectado.</value>
+  </data>
+  <data name="Label.Logout.LogoutIdentityServer" xml:space="preserve">
+    <value>¿Quieres cerrar la sesión en IdentityServer?</value>
+  </data>
+  <data name="Page.Home.Title" xml:space="preserve">
+    <value>Bienvenido al servidor de identidad auspicios!</value>
+  </data>
+  <data name="Page.Login.ChangePassword.Title" xml:space="preserve">
+    <value>CAMBIAR CONTRASEÑA</value>
+  </data>
+  <data name="Page.Login.ConfirmEmail.Title" xml:space="preserve">
+    <value>Confirmar correo electrónico</value>
+  </data>
+  <data name="Page.Login.Failure.Title" xml:space="preserve">
+    <value>Error en Login.</value>
+  </data>
+  <data name="Page.Login.ForgotPassword.Title" xml:space="preserve">
+    <value>¿Olvidó su contraseña?</value>
+  </data>
+  <data name="Page.Login.ForgotPasswordConfirmation.Title" xml:space="preserve">
+    <value>Olvidé contraseña confirmación!</value>
+  </data>
+  <data name="Page.Login.LockedOut" xml:space="preserve">
+    <value>Bloqueado</value>
+  </data>
+  <data name="Page.Login.NotAllowedNotification" xml:space="preserve">
+    <value>Esta cuenta está desactivada y ya no puede iniciar sesión, póngase en contacto con el administrador del sitio.!</value>
+  </data>
+  <data name="Page.Register.Title" xml:space="preserve">
+    <value>¡Regístrese!</value>
+  </data>
+  <data name="Page.Login.RegisterUserData.Title" xml:space="preserve">
+    <value>Completar registro para:!</value>
+  </data>
+  <data name="Page.Login.RegisterUsernamePassword.Title" xml:space="preserve">
+    <value>Registro para una cuenta nueva!</value>
+  </data>
+  <data name="Page.Login.RegistrationComplete.Title" xml:space="preserve">
+    <value>Registro completo!</value>
+  </data>
+  <data name="Page.Login.ResetPasswordDone.Title" xml:space="preserve">
+    <value>¡Restablecer la confirmación de la contraseña!</value>
+  </data>
+  <data name="Page.Login.SendCode.Title" xml:space="preserve">
+    <value>CÓDIGO DE VERIFICACIÓN</value>
+  </data>
+  <data name="Page.Login.Title" xml:space="preserve">
+    <value>Inicie sesión</value>
+  </data>
+  <data name="Page.Login.Verify.Title" xml:space="preserve">
+    <value>Verificar</value>
+  </data>
+  <data name="Page.Logout.Title" xml:space="preserve">
+    <value>Cerrar sesión</value>
+  </data>
+  <data name="Site.Language.Prompt" xml:space="preserve">
+    <value>Seleccione Idioma preferido!</value>
+  </data>
+  <data name="Site.Language.Short" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="Site.Title" xml:space="preserve">
+    <value>Aegis Identity Server!</value>
+  </data>
+  <data name="Button.UpdatePassword" xml:space="preserve">
+    <value>ACTUALIZAR CONTRASEÑA</value>
+  </data>
+  <data name="Label.Login.Google" xml:space="preserve">
+    <value>Inicio de sesión con Google</value>
+  </data>
+  <data name="Label.Login.LDAP" xml:space="preserve">
+    <value>Inicio de sesión con LDAP / Active Directory</value>
+  </data>
+  <data name="Site.Login.Logout" xml:space="preserve">
+    <value>Cerrar sesión</value>
+  </data>
+  <data name="Site.Login.Manage" xml:space="preserve">
+    <value>Administrar</value>
+  </data>
+  <data name="Site.Login.Register" xml:space="preserve">
+    <value>¡Regístrese!</value>
+  </data>
+</root>

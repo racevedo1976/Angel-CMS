@@ -1,0 +1,19 @@
+﻿@model CategoryViewModel
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var clientId = (string)ViewData["ClientId"];
+    var siteId = (string)ViewData["SiteId"];
+
+}
+
+<form id="@componentId" action="/api/category" data-ajax-form>
+    <input hidden="hidden" name="OwnerLevel" asp-for="OwnerLevel" value="@Model.OwnerLevel" />
+    <input hidden="hidden" name="OwnerId" asp-for="OwnerId" value="@Model.OwnerId" />
+    <div class="form-group">
+        <label>@Html.Localize("Title")</label>
+        <div>
+            <input id="addNewCategory" name="Title" type="text" class="form-control" asp-for="Title" value="@Model.Title" required autofocus spellcheck="true" />
+        </div>
+    </div>
+</form>

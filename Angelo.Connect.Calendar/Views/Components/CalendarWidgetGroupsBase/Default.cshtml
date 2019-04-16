@@ -1,0 +1,51 @@
+﻿
+@using Angelo.Connect.Calendar.Models
+
+
+@model CalendarWidgetSetting
+ 
+<div id="calendarGroupsContent">
+    <component id="calendarWidgetGroups" type="CalendarWidgetGroups"
+               arg-calendarWidgetId="@Model.Id" arg-allEventGroups="false"></component>
+</div>
+
+
+<script>
+
+
+    $(document).on("change", "#CalendarEventGroupsRadioButtons input[type='radio']", function (e) {
+        radioButtonsWidgetCalendarGroups(e)
+    });
+
+    function radioButtonsWidgetCalendarGroups(e) {
+        var showAll = e.currentTarget.value;
+
+        invokeEventGroup(showAll);
+    }
+
+
+    function invokeEventGroup(showAllShared) {
+
+        $('#calendarGroupsContent').loadComponent({
+            "type": "CalendarWidgetGroups",
+            "id": "calendarWidgetGroups",
+            "params": {
+                "calendarWidgetId": "@Model.Id",
+                "allEventGroups": showAllShared
+            }
+        }).done(function () { });
+
+    }
+
+    invokeEventGroup(false);
+</script>
+
+<style>
+    .modal-layout .modal-layout-with-menu .modal-body u, .modal-layout .modal-layout-with-menu .modal-body > .row > * {
+    height: 100% !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0 !important;
+}
+
+</style>

@@ -1,0 +1,10 @@
+﻿{
+  "ProductId": "addon-2",
+  "Version": "2017.11.15",
+  "Title": "Storage: +1000MB",
+  "Description": "Adds an additional 1000MB shared storage.",
+  "Active": true,
+  "IncClientMB":  "1000",
+  "Features": [],
+  "SiteTemplates": []
+}

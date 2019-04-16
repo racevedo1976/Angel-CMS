@@ -1,0 +1,197 @@
+﻿@using Angelo.Connect.Menus
+
+@{
+    Layout = "~/UI/Views/Admin/ClientAdmin/_Layout.cshtml";
+
+    var clientId = (string)ViewData["clientId"];
+}
+
+@section Title{
+    Manage Live Streams
+}
+
+@section Panel {
+<ul class="nav nav-tabs nav-justified">
+    <li class="active">
+        <a href="#DetailsTab" data-toggle="tab">
+            Video Source Details
+        </a>
+    </li>
+    <li>
+        &nbsp;
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div id="DetailsTab" class="tab-pane fade in active">
+
+        <div class="tab-sub-pane" style="display:none">
+            <div id="DetailsEditToolbar" class="toolbar">
+                <a name="save" class="fa fa-save" title="Save changes to video link source"><span>Save</span></a>
+            </div>
+            <component id="videoStreamLinkEdit" type="VideoStreamLinkEdit"></component>
+        </div>
+
+        <div class="tab-sub-pane" style="display:none">
+            <div id="DetailsCreateToolbar" class="toolbar">
+                <a name="save" class="fa fa-save" title="Save new video link source."><span>Save</span></a>
+                <a name="cancel" class="fa fa-times" title="Ignore changes made to video link source."><span>Cancel</span></a>
+            </div>
+            <component id="videoStreamLinkCreate" type="VideoStreamLinkCreate"></component>
+        </div>
+    </div>
+</div>
+
+}
+
+
+<div id="ListSection">
+    <div id="ListToolbar" class="toolbar">
+        <a name="create" class="fa fa-plus-square" title="Create new video source."><span>Create</span></a>
+        <a name="delete" class="fa fa-trash-o pull-right" title="Delete selected video source." )" disabled><span>Delete</span></a>
+    </div>
+    <component id="videoStreamLinkList" type="VideoStreamLinkList" arg-clientId="@clientId"></component>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        // Video source list events
+        $.on("videoStreamLinkList.change", function (event, data) {
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+            if (model) {
+                $("#ListToolbar").toolbar().enable("delete");
+                $("#videoStreamLinkCreate").html("");
+                $("#DetailsEditToolbar").toolbar().disable("save");
+                InvokeComponent("videoStreamLinkEdit", { id: model.Id });
+            }
+        })
+
+        $.on("ListToolbar.create", function () {
+            var grid = $("#videoStreamLinkList").getKendoGrid();
+            grid.clearSelection();
+//            grid.dataSource.read();
+            $("#ListToolbar").toolbar().disable("delete");
+            $("#videoStreamLinkEdit").html("");
+            $("#DetailsCreateToolbar").toolbar().disable("save");
+            $("#DetailsCreateToolbar").toolbar().disable("cancel");
+            InvokeComponent("videoStreamLinkCreate", { clientId: "@(clientId)" });
+        });
+
+        $.on("ListToolbar.delete", function () {
+            var grid = $("#videoStreamLinkList").getKendoGrid();
+            var row = grid.select()
+            var model = grid.dataItem(row);
+            var sourceId = model.Id;
+            if (confirm("Are you sure you want to delete this Video Link Source?")) { // need to localize
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "/api/clients/videostreamlink",
+                    data: { Id: sourceId, clientId: "@clientId" },
+                    success: function () {
+                        $("#ListToolbar").toolbar().disable("delete");
+                        HideTabPane("DetailsTab");
+                        var grid2 = $("#videoStreamLinkList").getKendoGrid();
+                        grid2.dataSource.pushDestroy(model);
+                        //grid2.dataSource.read();
+                    },
+                    error: function () {
+                        alert("@Html.Localize("Alert.Site.Delete.Error")");
+                    }
+                });
+            }
+        });
+
+        // Video Source Create events
+        $.on("videoStreamLinkCreate.load", function (event, data) {
+            $("#DetailsCreateToolbar").toolbar().enable("save");
+            $("#DetailsCreateToolbar").toolbar().enable("cancel");
+        });
+
+        $.on("DetailsCreateToolbar.save", function () {
+            $("#DetailsCreateToolbar").toolbar().disable("save");
+            $("#DetailsCreateToolbar").toolbar().disable("cancel");
+            $("#videoStreamLinkCreate").form().post();
+        });
+
+        $.on("DetailsCreateToolbar.cancel", function () {
+            HideTabPane("DetailsTab");
+        });
+
+        $.on("videoStreamLinkCreate.error", function (event, data) {
+            $("#DetailsCreateToolbar").toolbar().enable("save");
+            $("#DetailsCreateToolbar").toolbar().enable("cancel");
+        });
+
+        $.on("videoStreamLinkCreate.submit", function (event, data) {
+            var grid = $("#videoStreamLinkList").getKendoGrid();
+            var data2 = {
+                Id: data.result.Id,
+                Title: data.result.Title,
+                Path: data.result.Path,
+                ClientId: data.result.ClientId
+            };
+            grid.dataSource.pushCreate(data2);
+            var data3 = grid.dataSource.get(data2.Id);
+            var row = grid.content.find("tr[data-uid=" + data3.uid + "]");
+            grid.select(row);
+        });
+
+        // Video Source Edit events
+        $.on("videoStreamLinkEdit.load", function (event, data) {
+            $("#DetailsEditToolbar").toolbar().enable("save");
+        });
+
+        $.on("DetailsEditToolbar.save", function () {
+            $("#videoStreamLinkEdit").form().put();
+        });
+
+        $.on("videoStreamLinkEdit.submit", function (event, data) {
+            $("#ListToolbar").toolbar().disable("delete");
+            var grid = $("#videoStreamLinkList").getKendoGrid();
+            var data1 = grid.dataSource.get(data.result.Id);
+            if (data1) {
+                data1.Title = data.result.Title;
+                data1.Path = data.result.Path;
+                grid.dataSource.pushUpdate(data1);
+            }
+            var data2 = grid.dataSource.get(data.result.Id);
+            if (data2) {
+                var row = grid.content.find("tr[data-uid=" + data2.uid + "]");
+                grid.select(row);
+            }
+            alert("Video Link Source successfully saved."); // Localize
+        });
+
+
+
+
+
+
+
+        HideTabPane = function (tabPane) {
+            $("#" + tabPane + " >.tab-sub-pane").css("display", "none");
+        }
+
+        ShowParentTabSubPane = function (childName) {
+            var subPane = $("#" + childName).parents("div.tab-sub-pane")[0];
+            if (subPane) {
+                $(subPane).siblings(".tab-sub-pane").css("display", "none");
+                $(subPane).css("display", "");
+            }
+        }
+
+        InvokeComponent = function (cid, data) {
+            $("#" + cid).component().invoke(data);
+            ShowParentTabSubPane(cid);
+        }
+
+
+
+
+    </script>
+}
+

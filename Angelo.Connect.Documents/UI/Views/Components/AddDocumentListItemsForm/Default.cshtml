@@ -1,0 +1,183 @@
+﻿@using Angelo.Common.Mvc
+@using Angelo.Connect.Documents.Models
+@using Angelo.Connect.Documents.Services
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Angelo.Connect.Extensions
+@using Microsoft.Extensions.Options
+
+@inject IOptions<DriveOptions> _driveOptions
+
+@model DocumentListWidget
+
+<div class="container-fluid">
+    <h3>@Html.Localize("Document List")</h3>
+    <div class="pull-right">
+        
+        <button class="btn btn-primary btn-sm padded" onclick="addNewFolder()">@Html.Localize("Add New Folder")</button>
+        <button class="btn btn-primary btn-sm padded" onclick="selectMultiDocuments();">@Html.Localize("Add File")</button>
+        <button class="btn btn-primary btn-sm padded" onclick="AddUrlFile();">@Html.Localize("Add Url")</button>
+    </div>
+</div>
+
+<div id="documentListContainer">
+    <component id="documentList" type="DocumentList" arg-widgetId="@Model.Id"></component>
+</div>
+
+<script>
+    var userId = '@User.GetUserId()';
+    var driveUrl = '@_driveOptions.Value.Authority';
+    var widgetId = '@Model.Id';
+    var extensions = @Html.Raw("['" + string.Join("','", DocumentExtensions.GetAllExtensions()) + "']");
+
+    function selectMultiDocuments() {
+        $.documentBrowser({
+                title: "Select a Document",
+                showAll: true,
+                userId: userId,
+                driveUrl: driveUrl,
+                multi: true,
+                allowedExtensions: extensions
+            })
+            .done(function (documents) {
+                
+                var queue = [];
+                $.each(documents, function (i, doc) {
+                    
+                    queue.push(doc.name);
+
+                    var model = {
+                        WidgetId: widgetId,
+                        Url: doc.url,
+                        Title: doc.name
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/widgets/documentlist/add',
+                        data: model,
+                        success: function (result) {
+                            var i = queue.pop();
+
+                            if (queue.length == 0) {
+                                $("#documentListContainer").loadComponent({
+                                    "type": "DocumentList",
+                                    "id": "documentList",
+                                    "params": {
+                                        "widgetId": model.WidgetId
+                                    }
+                                });
+                            }
+                           
+                        },
+                        error: function (xhr) {
+
+                        }
+                    });
+
+
+                });
+
+
+               // $input.val(document ? document.url : "");
+
+            })
+    }
+
+
+    function selectOne() {
+        //debugger;
+        var $input = $("#ImageUrl");
+
+        $.documentBrowser({
+            title: "Select a Document",
+            showAll: true,
+            userId: userId,
+            driveUrl: driveUrl
+        })
+        .done(function (document) {
+            //debugger;
+            var widgetId = '@Model.Id';
+            var model = {
+                WidgetId: widgetId,
+                Url: document.url,
+                Title: document.name
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/api/widgets/documentlist/add',
+                data: model,
+                success: function (result) {
+                    $("#documentListContainer").loadComponent({
+                        "type": "DocumentList",
+                        "id": "documentList",
+                        "params": {
+                            "widgetId": model.WidgetId
+                        }
+                    });
+                },
+                error: function (xhr) {
+
+                }
+            });
+
+            $input.val(document ? document.url : "");
+        })
+    }
+
+    function AddUrlFile() {
+        var widgetId = '@Model.Id';
+        var model = {
+            WidgetId: widgetId,
+            Url: "",
+            Title: ""
+        };
+        $.ajax({
+            type: 'POST',
+            url: '/api/widgets/documentlist/add',
+            data: model,
+            success: function (result) {
+                $("#documentListContainer").loadComponent({
+                    "type": "DocumentList",
+                    "id": "documentList",
+                    "params": {
+                        "widgetId": model.WidgetId
+                    }
+                });
+            },
+            error: function (xhr) {
+
+            }
+        });
+
+    }
+
+    function addNewFolder() {
+        var widget = document.getElementById("_widgetId").value;
+
+        var model = {
+            widgetId: widget
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/widgets/documentlist/addFolder',
+            data: model,
+            success: function (result) {
+                $("#documentListContainer").loadComponent({
+                    "type": "DocumentList",
+                    "id": "documentList",
+                    "params": {
+                        "widgetId": widget
+                    }
+                });
+            },
+            error: function (xhr) {
+
+            }
+        });
+    }
+
+
+</script>

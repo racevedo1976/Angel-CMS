@@ -1,0 +1,220 @@
+﻿@using Microsoft.Extensions.Options
+@using Angelo.Connect
+
+@model Angelo.Connect.Web.UI.ViewModels.Admin.DocumentViewModel
+
+@inject IOptions<DriveOptions> _driveOptions
+
+
+<script src="~/lib/bootstrap3-typeahead/bootstrap3-typeahead.min.js"></script>
+<script src="~/lib/bootstrap-tagsinput/dist/bloodhound.js"></script>
+<script src="~/lib/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+<script src="~/app/modules/components/documentDetails.js"></script>
+
+<link href="~/lib/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet" />
+
+<div id="panelNonSelectedFile" class="hidden">
+    <form>
+        
+        <div class="form-group row">
+            <div class="col-sm-12 center-block" style="float: none;text-align:center">
+                <i class="fa fa-comment fa-3x"></i>
+                Select a file or folder to view its details.
+            </div>
+        </div>
+    </form>
+</div>
+
+<form id="formDocumentUpdate" name="formDocumentUpdate" action="/api/user/library/doc/update" method="post" data-ajax-form>
+    @Html.HiddenFor(mod => mod.FileExtension)
+    @Html.HiddenFor(mod => mod.DocumentId)
+    @Html.HiddenFor(mod => mod.Title)
+    @Html.HiddenFor(mod => mod.FileSize)
+    @Html.HiddenFor(mod => mod.FileType)
+    @Html.HiddenFor(mod => mod.ContentLength)
+    @Html.HiddenFor(mod => mod.CreatedDate)
+
+    <div id="panelDocDetails" class="tab-content ">
+
+        <form>
+            <div class="form-group row">
+                <div>
+                    <h3>
+                        <div class="col-sm-1">
+                            <i class="" id="headerFileIcon"></i>
+                        </div>
+
+                        <div class="col-sm-11">
+
+                            <input type="text" class="docTextArea" name="fileName" id="fileName" asp-for="FileName" onblur="updateDocument()" />
+                        </div>
+                    </h3>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+
+                <div class="col-sm-12 center-block " style="float: none;text-align:center">
+                    <img class="hidden" id="fileThumbnailSrc" height="80" width="80" />
+                    <img src='@_driveOptions.Value.Authority/download/thumbnail/@Model.DocumentId' style="width: 250px;"/>
+
+                    <i id="otherFilesIcon" class="hidden"></i>
+                </div>
+            </div>
+            <hr />
+            <style>
+
+                .docTextArea {
+                    display: block;
+                    width: 100%;
+                    border: 0;
+                    padding: 10px 5px;
+                    background: white no-repeat;
+                    max-width: 100% !important;
+                    /*
+                     * IMPORTANT PART HERE
+                     */
+                    /* 2 imgs : 1px gray line (normal state) AND 2px green line (focus state) */
+                    background-image: linear-gradient(to bottom, #1A60BC, #1A60BC), linear-gradient(to bottom, silver, silver);
+                    /* sizes for the 2 images (default state) */
+                    background-size: 0 2px, 100% 1px;
+                    /* positions for the 2 images. Change both "50%" to "0%" or "100%" and tri again */
+                    background-position: 50% 100%, 50% 100%;
+                    /* animation solely on background-size */
+                    transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+                }
+
+                    input:focus,
+                    .docTextArea:focus {
+                        /* sizes for the 2 images (focus state) */
+                        background-size: 100% 2px, 100% 1px;
+                        outline: none;
+                    }
+
+                .bootstrap-tagsinput {
+                    width: 100%;
+                }
+            </style>
+            <div class="form-group row">
+                <div class="col-sm-12 ">
+                    <textarea class="docTextArea" id="fileDescription" asp-for="Description" onblur="updateDocument()" placeholder="Add a description"></textarea>
+
+                </div>
+            </div>
+            <hr />
+            <div class="form-group row">
+                <label class="col-sm-4">Type:</label>
+                <div class="col-sm-8 ">
+                    <span id="fileType" asp-for="FileType">@Model.FileType</span>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4">Size:</label>
+                <div class="col-sm-8">
+                    <span id="fileSize" asp-for="ContentLength">@Model.ContentLength</span>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4">Owner:</label>
+                <div class="col-sm-8">
+                    <span id="fileOwner">@ViewBag.DisplayName</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4">Location:</label>
+                <div class="col-sm-8">
+                    <span class="fa fa-folder"></span>
+                    <span id="fileCreated" asp-for="CreatedDate">@ViewBag.Location</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4">Created:</label>
+                <div class="col-sm-8">
+                    <span id="fileCreated" asp-for="CreatedDate">@Model.CreatedDate</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4">Url:</label>
+                <div class="col-sm-8 dont-break-out">
+                    <a target="_blank" href="@_driveOptions.Value.Authority/documents/@(Model.DocumentId + Model.FileExtension)">@_driveOptions.Value.Authority/documents/@(Model.DocumentId + Model.FileExtension)</a>
+                </div>
+            </div>
+            <hr />
+
+            <div class="form-group row">
+                <label class="col-sm-4">Tag:</label>
+                <div class="col-sm-8">
+                    <input type="text" id="documentTags" data-provide="typeahead" />
+
+
+                </div>
+            </div>
+
+
+            <input type="hidden" name="fileId" id="fileId" />
+        </form>
+    </div>
+
+</form>
+
+<script>
+
+    $(document).ready(function () {
+
+
+    });
+
+    function updateDocument() {
+
+        var promises = [];
+        debugger;
+        promises.push($("#formDocumentUpdate").form().post());
+
+        $.when.apply($, promises).done(function () {
+            //usersAutocomplete.value('');
+            //alert("done");
+            //$('#shareItemModal').modal('hide');
+        });
+
+    }
+</script>
+
+
+<style>
+    .dropzoneForm {
+        background: lightgray;
+        border: black dashed 2px;
+        width: 100%;
+        padding: 50px;
+        text-align: center;
+        color: dimgray;
+    }
+    .k-autocomplete {
+        width:100%;
+    }
+
+    .dont-break-out {
+
+          /* These are technically the same, but use both */
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+
+          -ms-word-break: break-all;
+          /* This is the dangerous one in WebKit, as it breaks things wherever */
+          word-break: break-all;
+          /* Instead use this non-standard one: */
+          word-break: break-word;
+
+          /* Adds a hyphen where the word breaks, if supported (No Blink) */
+          -ms-hyphens: auto;
+          -moz-hyphens: auto;
+          -webkit-hyphens: auto;
+          hyphens: auto;
+
+    }
+</style>

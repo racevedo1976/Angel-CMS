@@ -1,0 +1,200 @@
+﻿@model NotificationDetailsViewModel
+
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+
+
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var ownerLevel = (string)ViewData["ownerLevel"];
+    var ownerId = (string)ViewData["ownerId"];
+    var TimeZoneList = (List<SelectListItem>)ViewData["timeZoneList"];
+    var emailHeaderList = (List<SelectListItem>)ViewData["EmailHeaderSelectListItems"];
+    var enableDT = (Model.ScheduleAction == NotificationDetailsViewModel.ScheduleActions.Schedule);
+    var apiEditRoute = routes.SiteApi("notifications");
+    var apiReadNotifyGroupsRoute = routes.Account("GetSendToNotificationGroups", new { ownerLevel = ownerLevel });
+    var apiReadConnGroupsRoute = routes.Account("GetSendToConnectionGroups"); 
+}
+
+<form id="@componentId" action="@apiEditRoute" class="form-horizontal-l" data-ajax-form>
+    
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.Status)
+    @Html.HiddenFor(x => x.OwnerLevel)
+    @Html.HiddenFor(x => x.OwnerId)
+    @Html.HiddenFor(x => x.CreatedUTC)
+    @Html.HiddenFor(x => x.CreatedBy)
+
+    <div class="container-fluid">
+
+        <div class="table span12">
+
+            <div class="row"><h3>Notification Scheduling:</h3></div>
+            <div class="row">@Html.RadioButtonFor(model => model.ScheduleAction, NotificationDetailsViewModel.ScheduleActions.Draft)@Html.Label("Save as Draft (save but do not send or schedule notification)")</div>
+            <div class="row">@Html.RadioButtonFor(model => model.ScheduleAction, NotificationDetailsViewModel.ScheduleActions.SendNow)@Html.Label("Send Notification Now")</div>
+            <div class="row">@Html.RadioButtonFor(model => model.ScheduleAction, NotificationDetailsViewModel.ScheduleActions.Schedule)@Html.Label("Schedule Notification to be Sent Later")</div>
+            <div class="row">
+                @(Html.Kendo().DatePicker()
+                    .Name("ScheduledDate")
+                    .Value(Model.ScheduledDate)
+                    .Enable(enableDT)
+                )
+                @(Html.Kendo().TimePicker()
+                    .Name("ScheduledTime")
+                    .Value(Model.ScheduledTime)
+                    .Enable(enableDT)
+                )
+            </div>
+            <div class="row" style="padding-top:5px;">
+                @Html.DropDownListFor(model => model.TimeZoneId, TimeZoneList, 
+                    new { @class = "form-control", style = "width: 350px; max-width:350px;", disabled = "disabled" })
+            </div>
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <h3>Send To:</h3>
+            </div>
+            <div class="row">
+                <label for="notificationGroupsIds">Notification Groups:</label>
+            </div>
+            <div class="row">
+                @(Html.Kendo().MultiSelect()
+                .Name("notificationGroupIds")
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .Placeholder("Click here to select groups...")
+                .AutoBind(true)
+                .Value(Model.NotificationGroups)
+                .Filter("contains")
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(20)
+                    .Read(read =>
+                    {
+                        read.Type(HttpVerbs.Post)
+                        .Url(apiReadNotifyGroupsRoute);
+                    })
+                )
+                )
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label for="connectionGroupsIds">Connection Groups:</label>
+            </div>
+            <div class="row">
+                @(Html.Kendo().MultiSelect()
+                .Name("connectionGroupIds")
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .Placeholder("Click here to select groups...")
+                .AutoBind(true)
+                .Value(Model.ConnectionGroups)
+                .Filter("contains")
+                .DataSource(dataSource => dataSource
+                     .Ajax()
+                     .PageSize(20)
+                     .Read(read =>
+                     {
+                         read.Type(HttpVerbs.Post)
+                         .Url(apiReadConnGroupsRoute);
+                     })
+                )
+                )
+            </div>
+
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <div class="row"><h3>Notification Email:</h3></div>
+            <div class="row">
+                @Html.CheckBoxFor(model => model.SendEmail)
+                <label for="SendEmail">Send an Email Notification</label>
+            </div>
+
+            <div class="row" style="padding:5px;">
+                <div class="col-sm-4">
+                    <label for="EmailHeaderId">Email Header:</label>
+                </div>
+                <div class="col-sm-8">
+                    @Html.DropDownListFor(model => model.EmailHeaderId, emailHeaderList, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="row" style="padding:5px;">
+                <div class="col-sm-4">
+                    <label for="EmailSubject">Email Subject:</label>
+                </div>
+                <div class="col-sm-8">
+                    @Html.TextBoxFor(model => model.EmailSubject, new { style = "width:100%; height:35px", @class = "form-field" } )
+                </div>
+            </div>
+
+            <div class="row" style="padding:5px;">
+                <div class="col-sm-4">
+                    <label for="EmailBody">Email Body:</label>
+                </div>
+                <div class="col-sm-8">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="row" style="border-style:solid; border-width:1px;">
+                
+                @(Html.Kendo().EditorFor(model => model.EmailBody)
+                    .HtmlAttributes(new { style = "width: 100%; height: 300px;" })
+                    .Tools(tools => tools
+                        .Bold().Italic().Underline()
+                        .JustifyLeft().JustifyCenter().JustifyRight()
+                    //.InsertUnorderedList().InsertOrderedList()
+                    //.Outdent().Indent()
+                    //.FontName()
+                    //.FontSize()
+                    //.ForeColor()//.BackColor()
+                    ).Encoded(false)
+                )
+            </div>
+
+
+
+                    <div class="row" style="border-bottom:solid">&nbsp;</div>
+                    <div class="row">&nbsp;</div>
+
+                    <div class="row"><h3>Notification SMS:</h3></div>
+                    <div class="row">
+                        @Html.CheckBoxFor(model => model.SendSms)
+                        <label for="SendSms">Send an Sms Notification</label>
+                    </div>
+
+                    <div class="row">
+                        <label for="SmsMessage">Sms Message:</label>
+                    </div>
+                    <div class="row">
+                        @Html.TextAreaFor(model => model.SmsMessage, new { @class = "form-control" })
+                    </div>
+
+
+
+                </div>
+
+    </div>
+
+</form>
+
+<script>
+    (function () {
+        $('#@componentId [name="ScheduleAction"]').on('change', function (e) {
+            var enabled = (($(this).val() == "@NotificationDetailsViewModel.ScheduleActions.Schedule") && ($(this)[0].checked)); 
+            $('#@componentId [name="ScheduledDate"]').data('kendoDatePicker').enable(enabled);
+            $('#@componentId [name="ScheduledTime"]').data('kendoTimePicker').enable(enabled);
+            if (enabled)
+                $("#TimeZoneId").removeAttr("disabled");
+            else
+                $("#TimeZoneId").attr("disabled", "disabled");
+        });
+    })();
+
+</script>
+

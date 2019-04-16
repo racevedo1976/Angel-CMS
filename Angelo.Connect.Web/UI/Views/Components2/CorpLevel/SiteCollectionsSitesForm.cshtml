@@ -1,0 +1,40 @@
+﻿@{
+    var clientId = (string)ViewData["ClientId"];
+    var componentId = (string)ViewData["cid"];
+    var collectionId = (string)ViewData["CollectionId"];
+}
+
+@(Html.Kendo().Grid<SiteViewModel>()
+        .Name(componentId)
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Hidden(true);
+            columns.Bound(c => c.ClientId).Hidden(true);
+            columns.Bound(c => c.Title);
+            columns.Command(command => { command.Destroy().Text("Remove"); });
+        }
+        )
+        .Scrollable()
+        .Selectable(selectable => selectable
+            .Enabled(true)
+            .Type(GridSelectionType.Row)
+        )
+        .Sortable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5)
+        )
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(7)
+            .Read(read => read.Url("/api/siteCollections/siteList/?collectionId=" + collectionId))
+            .ServerOperation(false)
+            .Model(model =>
+            {
+                model.Id(x => x.Id);
+            }
+            )
+            .Destroy(destroy => destroy.Type(HttpVerbs.Delete).Url("/api/siteCollections/deleteSite/?collectionId=" + collectionId))
+        )
+)

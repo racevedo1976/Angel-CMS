@@ -1,0 +1,46 @@
+﻿@using Angelo.Connect.Menus
+@using Angelo.Connect.Rendering
+@using Angelo.Connect.Security
+@using Angelo.Connect.Icons
+@using Newtonsoft.Json.Serialization
+@using System.Net
+
+@model CalendarEvent
+
+@inject UserContext user
+@inject MenuProvider menuProvider
+
+@{
+    var url = ViewContext.HttpContext.Request.Path.ToString();
+    var optionMenuItems = await menuProvider.GetMenuItemsAsync(MenuType.EventTools);
+    optionMenuItems = optionMenuItems.OrderBy(x => x.SortOrder);
+    /*ar contentMenuItems = await menuProvider.GetMenuItemsAsync(MenuType.UserContent);*/
+}
+
+@* // TODO: Verify old .user-tools css class is not used & remove *@
+
+<div class="cs-eventtools user-tools">
+    <ul class="list-inline">
+       
+        <li class="cs-usertools-user">
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-gear"></i> &nbsp;Actions
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    @foreach (var item in optionMenuItems)
+                    {
+                        <li class="dropdown-item">
+                            <a href="@item.Url.Replace("[eventid]", Model.EventId).Replace("[title]", Model.Title ).Replace("[startdate]", Model.EventStart.ToString("yyyyMMddTHHmmssZ")).Replace("[enddate]", Model.EventEnd.ToString("yyyyMMddTHHmmssZ")).Replace("[description]", WebUtility.HtmlEncode(Model.Description))">
+                                <i class="@item.Icon.ToString()"></i>
+                                &nbsp;
+                                @Html.Localize(item.Title)
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

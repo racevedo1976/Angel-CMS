@@ -1,0 +1,23 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Services
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Angelo.Common.Mvc
+@using Microsoft.Extensions.Options
+
+@inject GalleryService _galleryService
+
+@model GalleryWidget
+
+<div class="container-fluid">
+    <h3>@Html.Localize("Gallery Title")</h3>
+    <form class="form" action="/api/widgets/gallery/title" data-ajax-form="true">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="form-group">
+            <div>
+                <input class="form-control" name="Title" value="@Model.Title" spellcheck="true" />
+            </div>
+        </div>
+    </form>
+</div>

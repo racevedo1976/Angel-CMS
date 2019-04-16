@@ -1,0 +1,29 @@
+﻿
+@model Angelo.Connect.Video.Models.VideoStreamLink
+
+@{
+    var componentId = (string)ViewData["cid"];
+}
+
+ 
+<form id="@componentId" action="/api/clients/videostreamlink" class="form form-horizontal" onsubmit="return false" data-ajax-form>
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.ClientId)
+
+    <h3>Edit Video Link Source</h3>
+
+    <div class="form-group">
+        <label class="col-sm-3">@Html.ShortNameFor(x => x.Title)</label>
+        <div class="col-sm-9">
+            @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3">@Html.ShortNameFor(x => x.Path)</label>
+        <div class="col-sm-9">
+            @Html.TextBoxFor(model => model.Path, new { @class = "form-control" })
+        </div>
+    </div>
+
+</form>

@@ -1,0 +1,50 @@
+﻿
+<div class="welcome-page">
+    <div class="row page-header">
+        <div class="col-sm-8">
+            <h1>
+                <img class="icon hidden" src="~/img/aegis-logo-sm.png">
+                @Html.Localize("Welcome to SchoolInSites Identity Server")
+                @*<small>(build {version})</small>*@
+            </h1>
+        </div>
+    </div>
+    <div class="row hidden">
+        <div class="col-sm-8">
+            <p>
+                <h3>@Html.Localize("Label.Home.Aegis")</h3>
+                <blockquote>
+                    @Html.Localize("Label.Home.AegisDefinition")
+                </blockquote>
+                <i>
+                    @Html.Localize("Label.Home.AegisSynonyms")
+                </i>
+            </p>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-8">
+            <p>
+                @{
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <span class="panel-title">@Html.Localize("Label.Home.IdentityList")</span>
+                            </div>
+                            <ul class="list-group">
+                                @foreach (var identity in User.Identities)
+                                {
+                                    <li class="list-group-item">
+                                        @identity.Name <code>@identity.AuthenticationType</code>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                }
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+﻿@model SharedFolderViewModel
+
+@{
+    var componentId = (string)ViewData["cid"];
+}
+
+<form id="@componentId" action="/api/folders" class="form" data-ajax-form>
+    @Html.HiddenFor(x => x.FolderId)
+    @Html.HiddenFor(x => x.ParentFolderId)
+    @Html.HiddenFor(x => x.DocumentType)
+    @Html.HiddenFor(x => x.OwnerLevel)
+    @Html.HiddenFor(x => x.FolderFlags)
+    @Html.HiddenFor(x => x.FolderType)
+    @Html.HiddenFor(x => x.OwnerId)
+    @Html.HiddenFor(x => x.CreatedBy)
+
+    <div class="row" hide-if="ViewContext.ModelState.IsValid">
+        <div class="col-sm-11">
+            <div class="alert alert-danger">
+                @Html.ValidationSummary(excludePropertyErrors: false)
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>@Html.ShortNameFor(x => x.Title)</label>
+        <div>
+            <input class="form-control" asp-for="Title" required />
+        </div>
+    </div>
+
+    @*<div class="form-group">
+        <label class="col-sm-3">@Html.ShortNameFor(x => x.DocumentType)</label>
+        <div class="col-sm-9">
+            @(Html.Kendo().TextBoxFor(model => model.DocumentType)
+                .HtmlAttributes(new { required = "required", style = "width: 80%" })
+            )
+            @Html.ValidationMessageFor(x => x.DocumentType, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+
+</form>

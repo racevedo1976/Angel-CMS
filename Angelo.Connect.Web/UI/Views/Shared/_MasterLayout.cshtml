@@ -1,0 +1,75 @@
+﻿@using Microsoft.AspNetCore.Mvc.Controllers
+@{ 
+    var userAuthenticated = User?.Identity != null && User.Identity.IsAuthenticated;
+}
+<!DOCTYPE html>
+<html style="min-height: 100%" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @RenderSection("MetaTags", required: false)
+    <title>
+        @RenderSection("WindowTitle", required: false)
+    </title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/css/animations.css" />
+    <link rel="stylesheet" href="~/css/common.css" />
+    <link rel="stylesheet" href="~/css/custom-icons.css" />
+    <link rel="stylesheet" href="~/css/dialog.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/toolbar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/mediabrowser.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/documentbrowser.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/console.css" asp-append-version="true" />
+    <link rel='stylesheet' href='~/lib/fullCalendar/fullcalendar.css' />
+    <link rel='stylesheet' href='~/lib/fullCalendar/fullcalendar.print.css'  media='print' />
+    <link rel="stylesheet" href="~/lib/cropperjs/cropper.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/imagecropper.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+
+    <!-- load these scripts first -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Put JW Player scripts here for now.  TO DO: Update widget framework to allow for adding javascripts dependencies. -->
+    <script src="~/js/jwplayer/jwplayer.js"></script>
+    <script>jwplayer.key = "e2ENuQrC9eoMFbWWNz3dxcI6mkbnbK5iF070aGKXo28=";</script>
+
+    @RenderSection("HeadScripts", required: false)
+</head>
+<body css-cs-authenticated="@userAuthenticated">
+    @RenderSection("BodyContent", required: true)
+
+    <!--
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- MVC View Scripts-->
+    @RenderSection("Scripts", required: false)
+
+    <!-- Site Components: Render after MVC View Scripts -->
+    <script src="~/js/dialog.js" asp-append-version="true"></script>
+    <script src="~/js/toolbar.js" asp-append-version="true"></script>
+    <script src="~/js/siteform.js" asp-append-version="true"></script>
+    <script src="~/js/mediabrowser.js" asp-append-version="true"></script>
+    <script src="~/js/documentbrowser.js" asp-append-version="true"></script>
+    <script src="~/lib/cropperjs/cropper.js" asp-append-version="true"></script>
+    <script src="~/js/imagecropper.js" asp-append-version="true"></script>
+
+    <!-- Load Kendo Last-->
+    <script src="~/js/kendo-ui/kendo.all.min.js"></script>
+    <script src="~/js/kendo-ui/kendo.aspnetmvc.min.js"></script>
+    <script src="~/js/sitekendo.js" asp-append-version="true"></script>
+
+    <!-- Load FullCalendar -->
+        <script src='~/lib/fullCalendar/moment.min.js'></script>
+        <script src='~/lib/fullCalendar/fullcalendar.js'></script>
+
+    <!-- Require Js -->
+    <script src="~/lib/requirejs/require.js" data-main="/js/app0001"></script>
+
+</body>
+</html>

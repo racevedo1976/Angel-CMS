@@ -1,0 +1,36 @@
+﻿[
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-3",
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "model": {
+          "html": "<div>5555 Main Street, Mobile, AL 52343</div><div>800-555-2212</div>"
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "style": {
+          "classes": "text-center"
+        },
+        "model": {
+          "html": "<a href=\"http://www.schoolinsites.com/\">\r\n<img alt=\"SCHOOLinSITES\" src=\"/img/sislogo.png\">\r\n</a>\r\n"
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "style": {
+          "classes": "text-right"
+        },
+        "model": {
+          "html": "<a href=\"#\">\r\n<i title=\"Facebook\" class=\"fa fa-facebook\"></i>\r\n</a>\r\n<a href=\"#\">\r\n<i title=\"Twitter\" class=\"fa fa-twitter\"></i>\r\n</a>\r\n<a href=\"#\">\r\n<i title=\"Instagram\" class=\"fa fa-instagram\"></i>\r\n</a>"
+        }
+      }
+    ]
+  }
+]

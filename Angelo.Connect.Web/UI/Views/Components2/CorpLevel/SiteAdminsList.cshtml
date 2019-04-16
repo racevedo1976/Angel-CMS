@@ -1,0 +1,34 @@
+﻿
+@using Angelo.Connect.Kendo.Extensions
+
+@{
+    string siteId = (string)(ViewData["siteId"] ?? "");
+    string poolId = (string)(ViewData["poolId"] ?? "");
+    var componentId = (string)ViewData["cid"];
+}
+
+@(Html.Kendo().Grid<UserViewModel>()
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Id).Hidden(true);
+        columns.Bound(c => c.UserName);
+        columns.Bound(c => c.Email);
+    })
+    .Scrollable(scr => scr.Height(430))
+    .Sortable()
+    .Pageable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(7)
+        .Read(read => read.Url("/api/pool/users/data/?poolId=" + poolId))
+        .Destroy(destroy => destroy.Type(HttpVerbs.Delete).Url("/api/pool/users/?poolId=" + poolId))
+        .ServerOperation(false)
+        .Model(m =>
+        {
+            m.Id(x => x.Id);
+        })
+    )
+    //.HtmlAttributes(new { style = "height:430px;" })
+)
+

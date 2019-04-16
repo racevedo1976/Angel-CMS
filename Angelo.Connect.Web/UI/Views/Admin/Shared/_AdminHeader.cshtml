@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Authorization
+
+@inject MenuProvider menuProvider
+@inject IContextAccessor<SiteContext> siteContextAccessor
+
+
+@{
+
+    var siteContext = siteContextAccessor.GetContext();
+    var menuItems = await menuProvider.GetMenuItemsAsync(MenuType.UserOptions);
+    menuItems = menuItems.OrderBy(x => x.SortOrder);
+}
+
+<div id="sitenav" class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">@Html.Localize("Toggle navigation")</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a href="/admin/dashboard" class="navbar-brand">@Html.Localize("Connect Suite Admin")</a>
+
+        <a class="btn" style="float:left; padding:15px 15px;" aria-label="Left Align" href="@("http://" + siteContext.DefaultDomain)/">
+            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    @IconType.User.Render() &nbsp;
+                    @User.GetUserName() <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    @foreach (var item in menuItems)
+                    {
+                        <li>
+                            <a href="@item.Url">
+                                <i class="@item.Icon.ToString()"></i>
+                                &nbsp;
+                                @Html.Localize(item.Title)
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

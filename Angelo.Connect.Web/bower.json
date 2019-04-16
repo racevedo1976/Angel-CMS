@@ -1,0 +1,21 @@
+{
+  "name": "ASP.NET",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "3.3.5",
+    "fontawesome": "4.7.*",
+    "jquery": "2.2.4",
+    "requirejs": "2.3.5",
+    "jquery-validation": "1.14.0",
+    "jquery-validation-unobtrusive": "3.2.4",
+    "devbridge-autocomplete": "https://github.com/devbridge/jQuery-Autocomplete.git#^1.2.26",
+    "dropzonejs": "4.3.0",
+    "bootstrap3-typeahead": "4.0.2",
+    "bootstrap-tagsinput": "0.8.0",
+    "bloodhound": "1.0.4"
+
+  },
+  "resolutions": {
+    "jquery": ">= 1.7.2"
+  }
+}

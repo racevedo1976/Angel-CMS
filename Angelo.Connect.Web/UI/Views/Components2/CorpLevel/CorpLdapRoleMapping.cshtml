@@ -1,0 +1,118 @@
+﻿@model IEnumerable<Angelo.Identity.Models.LdapMapping>
+
+@{
+
+    var componentId = (string)ViewData["cid"];
+    var roleId = (string)ViewData["id"];
+
+    var poolId = (string)ViewData["poolId"];
+    var directoryId = (string)ViewData["directoryId"];
+    
+    
+}
+
+<form id="@componentId" action="@routes.CorpApi("ldaprolemapping/save")" class="form-horizontal" data-ajax-form role="form">
+    <input type="hidden" name="RoleId" value="@roleId" />
+   <div id="mappingContainer">
+
+   </div>
+
+
+    <div class="form-group">
+    <label class="col-sm-4">@Html.Localize("Mappings:")</label>
+    <div class="col-sm-8">
+        <div id="mappingTableDisplay">
+            
+        </div>
+    </div>
+</div>
+    
+    
+
+</form>
+
+<script>
+    var directoryId = '@directoryId';
+    var poolId = '@poolId';
+    var roleId = '@roleId';
+    var mappings = [];
+    @foreach (var map in Model)
+    {
+        <text>
+            mappings.push({
+                id: '@map.Id',
+                roleId: '@map.RoleId',
+                objectGuid: '@map.ObjectGuid',
+                distinguishedName: '@map.DistinguishedName',
+                name: '@map.Name'
+            });
+
+        </text>
+    }
+
+    function refreshDisplayMappings() {
+        var displayMapTable = $("#mappingTableDisplay");
+        var hiddenContainer = $("#mappingContainer");
+
+        displayMapTable.html('');
+        hiddenContainer.html('');
+
+        $.each(mappings, function (i, map) {
+            displayMapTable.append("<div style='width: 100%'>" + map.name + "<i style='cursor:pointer' class='fa fa-trash pull-right'  data-idx='" + i + "' data-name='" + map.name + "' onclick='deleteMap(this)'></i></div>")
+            
+
+            hiddenContainer.append("<input type='hidden' name='ldapMappings[" + i + "].Name' value='" + map.name + "' />")
+            hiddenContainer.append("<input type='hidden' name='ldapMappings[" + i + "].DistinguishedName' value='" + map.distinguishedName + "' />")
+            hiddenContainer.append("<input type='hidden' name='ldapMappings[" + i + "].ObjectGuid' value='" + map.objectGuid + "' />")
+            hiddenContainer.append("<input type='hidden' name='ldapMappings[" + i + "].RoleId' value='" + map.roleId + "' />")
+        })
+
+    }
+
+    function deleteMap(mappingObject) {
+        
+        var nameOfObject = mappingObject.attributes['data-name'].value;
+        var index = mappingObject.attributes['data-idx'].value;
+        
+        mappings.splice(index, 1);
+
+        refreshDisplayMappings();
+
+    }
+    function OpenLdapBrowser() {
+        
+
+        var $input = $("#SamAccountName");
+
+        $.ldapBrowser({
+            title: "Select an Group",
+            directoryId: directoryId,
+            poolId: poolId
+        })
+            .done(function (ldapEntrySelected) {
+            //debugger;
+                // if no selection is made image will be undefined
+            mappings.push({
+                id: '',
+                roleId: roleId,
+                objectGuid: ldapEntrySelected.objectGuid,
+                distinguishedName: ldapEntrySelected.distinguishedName,
+                name: ldapEntrySelected.name
+            });
+
+            refreshDisplayMappings();
+        })
+    }
+
+    function SetLdap() {
+
+        document.getElementsByName("SamAccountName")[0].value = "test";
+        document.getElementsByName("ObjectGuid")[0].value = "test";
+        document.getElementsByName("DistinguishedName")[0].value = "test";
+
+
+    }
+
+
+    refreshDisplayMappings();
+</script>

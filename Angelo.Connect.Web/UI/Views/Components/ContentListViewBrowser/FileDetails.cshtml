@@ -1,0 +1,152 @@
+﻿@using Angelo.Connect.Models
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Extensions
+@using Angelo.Connect
+@using Angelo.Identity
+@using Microsoft.Extensions.Options
+@using Angelo.Connect.Web.UI.ViewModels.Extensions;
+
+
+@inject IFolderManager<FileDocument> folderManager
+@inject IOptions<DriveOptions> _driveOptions
+@inject UserManager _userManager
+@inject IEnumerable<ISecurityGroupProvider> groupsProvider
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var id = (string)ViewData["contentId"];
+    var model = (IEnumerable<IContentType>)ViewData["model"];
+    var filter = (string)ViewData["filter"];
+    var onSelect = (string)ViewData["onSelect"];
+    var driveUrl = _driveOptions.Value.Authority;
+
+
+    //cast to model used by this specific
+    var docViewModelList = new List<FileExplorerViewModel>();
+    foreach (var item in model)
+    {
+        if (item is FileDocument)
+        {
+            var fileDoc = item as FileDocument;
+            if (string.IsNullOrEmpty(filter) || filter.Contains(fileDoc.FileExtension.ToUpper()))
+            {
+                docViewModelList.Add(new FileExplorerViewModel()
+                {
+                    Size = fileDoc.ContentLength.ToString(),
+                    Id = fileDoc.DocumentId,
+                    ObjectType = typeof(FileDocument).Name,
+                    Name = fileDoc.FileName,
+                    FileType = fileDoc.FileType,
+                    FileUrl = @driveUrl + "/download?id=" + Uri.EscapeDataString(fileDoc.DocumentId),
+                    ThumbUrl = @driveUrl + "/download/image?id=" + Uri.EscapeDataString(fileDoc.DocumentId) + "&x=110&y=110"
+                });
+            }
+        }
+    }
+
+}
+
+<div id="@componentId" class="content-list-container">
+    <div class="content-list-header">
+        <div style="width:50%;">File Name</div>
+        <div style="width:20%;">Type</div>
+        <div>Size</div>
+    </div>
+    <div class="content-list-body">
+        @foreach (var doc in docViewModelList)
+        {
+            <div class="content-list-row" 
+                 data-content-id="@doc.Id" 
+                 data-name="@doc.Name"
+                 data-file-url="@doc.FileUrl"
+                 data-thumb-url="@doc.ThumbUrl">
+                <div style="width:50%;">@(doc.Name)</div>
+                <div style="width:20%;">@(doc.FileType)</div>
+                <div>@(doc.Size)</div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<style>
+
+    .content-list-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .content-list-container .content-list-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 30px;
+        right: 0;
+        background: #1C6EA4;
+        background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+        background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+        background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+        border-bottom: 2px solid #444444;
+    }
+
+    .content-list-container .content-list-header div {
+        padding-left: 10px;
+        padding-top: 5px;
+        text-align:left;
+        display: inline-block;
+        font-size: 16px;
+        font-weight: bold;
+        color: #FFFFFF;    
+    }
+
+    .content-list-container .content-list-body {
+        position: absolute;
+        top: 30px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: scroll;
+    }
+
+    .content-list-container .content-list-row {
+        border-bottom: 1px solid #AAAAAA
+    }
+
+    .content-list-container .content-list-row:nth-child(even) {
+        background: #D0E4F5;
+    }
+
+    .content-list-container .content-list-row:hover {
+        background: #5592bb;
+    }
+
+    .content-list-container .content-list-row div {
+        padding-left: 10px;
+        padding-top: 10px;
+        text-align:left;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+</style>
+
+<script>
+    var onSelect = "@onSelect";
+
+    $(".content-list-body .content-list-row").click(function (event) {
+        var data = $(this).data();
+        if (onSelect) {
+            window[onSelect]({
+                contentId: data.contentId,
+                contentType: "file",
+                name: data.name,
+                fileUrl: data.fileUrl,
+                thumbUrl: data.thumbUrl
+            });
+        }
+    });
+
+</script>
+

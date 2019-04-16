@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "_ModalLayout";
+
+    var eventId = ViewData["eventId"];
+    var day = ViewData["day"];
+    var hour = ViewData["hour"];
+}
+
+@section ModalTitle {
+    Event Details
+}
+
+
+@section ModalBody {
+
+    @await Component.InvokeAsync("CalendarEventDisplayMode", new { eventId = eventId, day = day, hour = hour })
+
+    <br/>
+   
+    <a href="/sys/calendar/event/@eventId">View Event Page</a>
+}
+
+@section ModalFooter {
+    @*<button type="button" class="btn btn-primary viewerCloseBtn" data-dismiss="modal" onclick="saveEvent()">Save</button>*@
+    <button type="button" name="close" class="btn btn-default modal-button viewerCloseBtn" data-dismiss="modal">Close</button>
+}

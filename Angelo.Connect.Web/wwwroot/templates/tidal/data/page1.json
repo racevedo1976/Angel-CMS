@@ -1,0 +1,153 @@
+[
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "slideshow lux",
+        "view": "slideshow-carousel",
+        "style": {
+          "classes": "cs-homecontent"
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "cs-homecontent",
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "html": "<section id=\"maincontent\"><div class=\"container\"><div class=\"row cns-maincontentback\"><div class=\"col-md-12\"><div class=\"cns-maincontent\"><h3 style=\"text-align:center;\"><span style=\"color:#ffffff;\">Welcome</span></h3><p style=\"text-align:center;\"><span style=\"color:#ffffff;\">Our Vision: We will be recognized nationally for its rigorous \ncurriculum, academic excellence and extracurricular achievement. \nStrengthened by diversity, </span><br /><span style=\"color:#ffffff;\">our district will foster partnerships of \nstaff, families and the community to develop students&rsquo; educational, \nphysical and social-emotional well-being.</span></p></div></div></div></div></section>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "caption": "Home Photo",
+          "src": "/templates/tidal/images/homephoto.jpg",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "background": "bg-contrast",
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;padding:10px;\">403 Star Way, Mobile, AL 36608 | Ph: 251.284.4566 </div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "zone",
+        "view": "zone-1",
+        "style": {
+          "classes": "cs-homestripes",
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "title",
+            "view": "title-default",
+            "style": {},
+            "model": {
+              "text": "Welcome to Our Website",
+              "cssClass": "h1"
+            }
+          },
+          {
+            "zone": "cell-1",
+            "type": "zone",
+            "view": "zone-3",
+            "style": {},
+            "model": {},
+            "children": [
+              {
+                "zone": "cell-1",
+                "type": "blog",
+                "view": "blog-posts-normal",
+                "style": {},
+                "model": {
+                  "title": "Sample Blog Posts",
+                  "pageSize": 5,
+                  "createBlog": true,
+                  "blogId": "8a13e09900b94156b20ab7d830762c88"
+                }
+              },
+              {
+                "zone": "cell-2",
+                "type": "image",
+                "view": "image-inline",
+                "style": {},
+                "model": {
+                  "caption": "News",
+                  "src": "/demo/images/newnews1.jpg",
+                  "radius": "0px",
+                  "linkNewWindow": false
+                }
+              },
+              {
+                "zone": "cell-2",
+                "type": "html",
+                "view": "html-raw",
+                "style": {},
+                "model": {
+                  "html": "<h3>Boys all-star soccer game ends in tie </h3><div class=\"news-position\">It was the second tie in the 15-match history of the series, and the North now leads the series</div>",
+                  "staticToolbar": false
+                }
+              },
+              {
+                "zone": "cell-3",
+                "type": "image",
+                "view": "image-inline",
+                "style": {},
+                "model": {
+                  "caption": "News",
+                  "src": "/demo/images/newnews2.jpg",
+                  "radius": "0px",
+                  "linkNewWindow": false
+                }
+              },
+              {
+                "zone": "cell-3",
+                "type": "html",
+                "view": "html-raw",
+                "style": {},
+                "model": {
+                  "html": "<h3>Library Renovations on Track </h3><div class=\"news-position\">Revolutionary advances in information technology are transforming libraries and societies.</div>",
+                  "staticToolbar": false
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

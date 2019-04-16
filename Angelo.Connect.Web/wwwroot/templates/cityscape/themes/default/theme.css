@@ -1,0 +1,96 @@
+﻿.site-background,
+.site-background-small
+{
+    background-image: url(images/headerbackground.png);
+}
+
+.bg-default { background: #144067; color: #fff }
+.bg-contrast { background: #c5c5c5; }
+.bg-muted {background: #f7f7f7; }
+.bg-dark {background: #444444; color: #eee; }
+.bg-clean { background: #ffffff }
+.bg-fancy {background: #FFFFFF url(images/backsquare.jpg) repeat 0 0;}
+
+ 
+.site-toolbar
+{
+    background-color: rgba(8, 38, 65, 0.0);
+    padding-top: 5px;
+}
+
+.site-toolbar,
+.site-toolbar a 
+{
+    color: #fff;
+}
+
+
+.site-toolbar a:hover
+{
+    color: #ccc;
+}
+
+.search-field input[type=text]
+{
+    border: 1px #fff solid !important;
+    background-color: transparent !important;
+    color: #fff;
+}
+
+.search-field i.fa
+{
+    color: #fff;
+}
+
+
+.site-navigation .navbar,
+.site-navigation .nav
+{
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+.site-navigation .nav a
+{
+    background-color: none !important;
+    color: #d0b34d  !important;
+    text-transform: uppercase !important;
+}
+
+    .site-navigation .nav a:hover,
+    .site-navigation .nav a:focus,
+    .site-navigation .nav a:active
+    {
+        color: #ccc !important;
+    }
+
+
+.left-navigation .navbar
+{
+    background-color: #eee;
+}
+
+.left-navigation .navbar-header
+{
+    background-color: #144067; 
+}
+
+    .left-navigation .navbar-header a.navbar-brand
+    {
+        text-transform: uppercase;
+        color: #d0b34d;
+    }
+
+    .left-navigation .navbar-header a.navbar-brand:hover,
+    .left-navigation .navbar-header a.navbar-brand:focus,
+    .left-navigation .navbar-header a.navbar-brand:active
+    {
+        color: #ccc;
+    }
+
+.site-social,
+.site-social a,
+.site-social a:hover,
+.site-social a:active
+{
+    color: #fff !important;
+}

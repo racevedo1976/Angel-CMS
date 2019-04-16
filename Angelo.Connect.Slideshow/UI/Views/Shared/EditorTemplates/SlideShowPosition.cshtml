@@ -1,0 +1,25 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Extensions;
+
+@model string
+
+
+                <select class="form-control" style="width:150px" asp-for="@Model">
+                    <optgroup label="Top">
+                        <option value="TopLeft">Top Left</option>
+                        <option value="TopCenter">Top Center</option>
+                        <option value="TopRight">Top Right</option>
+                    </optgroup>
+                    <optgroup label="Middle">
+                        <option value="MiddleLeft">Middle Left</option>
+                        <option value="MiddleCenter">Middle Center</option>
+                        <option value="MiddleRight">Middle Right</option>
+                    </optgroup>
+                    <optgroup label="Bottom">
+                        <option value="BottomLeft">Bottom Left</option>
+                        <option value="BottomCenter">Bottom Center</option>
+                        <option value="BottomRight">Bottom Right</option>
+                    </optgroup>
+
+
+</select>

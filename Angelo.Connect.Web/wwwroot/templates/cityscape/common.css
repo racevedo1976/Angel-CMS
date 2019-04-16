@@ -1,0 +1,104 @@
+﻿body 
+{
+    font-size: 15px;
+    font-family: "Open Sans", Arial, sans-serif
+}
+
+.container { max-width: 1200px; }
+
+.site-banner img 
+{
+    width: 100%;
+    height: auto;
+}
+
+.site-background,
+.site-background-small {
+    position: absolute;
+    width: 100%;
+    height: 550px;
+    z-index: -1;
+    background-position-x: left;
+    background-position-y: top;
+    background-repeat: repeat-x;
+}
+
+.site-background-small
+{
+    margin-top: -115px;
+}
+
+.site-header{
+    margin-bottom: 15px;
+}
+
+.site-search 
+{
+    padding-top: 40px;
+}
+
+.search-field input[type=text]
+{
+    font-size: 14px;
+    padding: 5px;
+    width: 225px;
+}
+
+.search-field i.fa
+{
+    padding-left: 10px;
+    font-size: 20px;
+}
+
+.navbar 
+{
+    border-radius: 0 !important;
+    margin-bottom: 0 !important;
+    border: none !important;
+}
+
+.navbar .nav a
+{
+    font-size: 18px;
+    transition: none !important;
+}
+
+.page-body{
+    min-height: 450px;
+}
+
+.left-navigation .navbar
+{
+    margin-top: 20px;
+    min-height: 400px;
+}
+
+.left-navigation .navbar-header
+{
+    display: block;
+    width: 100%;
+}
+
+.left-navigation .navbar-header .navbar-brand
+{
+    font-size: 20px;
+}
+
+
+.left-navigation .navbar a
+{
+    font-size: 18px;
+}
+
+
+
+
+.page-body .content-node 
+{
+    padding-bottom: 20px;
+}
+
+.site-footer
+{
+    padding: 20px 0;
+}

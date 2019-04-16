@@ -1,0 +1,158 @@
+[
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "zone",
+        "view": "zone-2",
+        "style": {
+          "background": "bg-muted",
+          "classes": "cs-gray-white-panel cs-row-33-66"
+        },
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-2",
+            "type": "title",
+            "view": "title-default",
+            "style": {},
+            "model": {
+              "text": "Welcome",
+              "cssClass": "h1"
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "Our Vision: We will be recognized nationally for its rigorous \ncurriculum, academic excellence and extracurricular achievement. \nStrengthened by diversity, our district will foster partnerships of \nstaff, families and the community to develop students&rsquo; educational, \nphysical and social-emotional well-being.",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "title",
+            "view": "title-default",
+            "style": {},
+            "model": {
+              "text": "District News",
+              "cssClass": "h1"
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "zone",
+            "view": "zone-2",
+            "style": {},
+            "model": {},
+            "children": [
+              {
+                "zone": "cell-1",
+                "type": "image",
+                "view": "image-inline",
+                "style": {},
+                "model": {
+                  "caption": "Sample Image 4",
+                  "src": "/demo/images/newnews1.jpg",
+                  "radius": "0px",
+                  "linkNewWindow": false
+                }
+              },
+              {
+                "zone": "cell-1",
+                "type": "html",
+                "view": "html-raw",
+                "style": {},
+                "model": {
+                  "html": "<h3>Boys all-star soccer game ends in tie </h3><div class=\"news-position\">It was the second tie in the 15-match history of the series, and the North now leads the series</div>",
+                  "staticToolbar": false
+                }
+              },
+              {
+                "zone": "cell-2",
+                "type": "image",
+                "view": "image-inline",
+                "style": {},
+                "model": {
+                  "caption": "Sample Image 7",
+                  "src": "/demo/images/newnews2.jpg",
+                  "radius": "0px",
+                  "linkNewWindow": false
+                }
+              },
+              {
+                "zone": "cell-2",
+                "type": "html",
+                "view": "html-raw",
+                "style": {},
+                "model": {
+                  "html": "<h3>Library Renovations on Track </h3><div class=\"news-position\">Revolutionary advances in information technology are transforming libraries and societies.</div>",
+                  "staticToolbar": false
+                }
+              }
+            ]
+          },
+          {
+            "zone": "cell-2",
+            "type": "zone",
+            "view": "zone-2",
+            "style": {},
+            "model": {},
+            "children": [
+              {
+                "zone": "cell-1",
+                "type": "title",
+                "view": "title-default",
+                "style": {},
+                "model": {
+                  "text": "School News",
+                  "cssClass": "h1"
+                }
+              },
+              {
+                "zone": "cell-1",
+                "type": "html",
+                "view": "html-raw",
+                "style": {},
+                "model": {
+                  "html": "<div class=\"homelinks\"><p><a href=\"http://connectdemo.schoolinsites.com/websites/DemoDistrictSites/ConnectDemo/Royal/index.html#\">Elementary School becomes Apple Distinguished School</a></p><p><a href=\"http://connectdemo.schoolinsites.com/websites/DemoDistrictSites/ConnectDemo/Royal/index.html#\">Community Club has successful Service Day</a></p><p><a href=\"http://connectdemo.schoolinsites.com/websites/DemoDistrictSites/ConnectDemo/Royal/index.html#\">National Board Certified Teachers Announced </a></p><p><a href=\"http://connectdemo.schoolinsites.com/websites/DemoDistrictSites/ConnectDemo/Royal/index.html#\">Board meeting March 31, 2017 </a></p></div>",
+                  "staticToolbar": false
+                }
+              },
+              {
+                "zone": "cell-2",
+                "type": "title",
+                "view": "title-default",
+                "style": {},
+                "model": {
+                  "text": "Top Events",
+                  "cssClass": "h1"
+                }
+              },
+              {
+                "zone": "cell-2",
+                "type": "html",
+                "view": "html-raw",
+                "style": {},
+                "model": {
+                  "html": "It was the second tie in the 15-match history of the series, and the North now leads the series",
+                  "staticToolbar": false
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,351 @@
+﻿@inject Angelo.Connect.UI.Routes Routes
+
+@{
+    var clientId = (string)ViewData["ClientId"];
+    var appId = (string)ViewData["AppId"];
+    var corpId = "pcmac";
+    var deleteSiteRoute = Routes.CorpApi("sites/{id}");
+    var deleteDomainRoute = Routes.CorpApi("sites/{id}/domains/0");
+}
+
+@section Title {
+    @Html.Localize("Manage Sites")
+}
+
+@section Panel {
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#siteDetails" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+
+        <li>
+            <a href="#siteDomains" data-toggle="tab">
+                @Html.Localize("Domains")
+            </a>
+        </li>
+
+        @*<li>
+            <a href="#siteCollections" data-toggle="tab">
+                @Html.Localize("Collections")
+            </a>
+        </li>
+
+        <li>
+            <a href="#siteAdmins" data-toggle="tab">
+                @Html.Localize("Administrators")
+            </a>
+        </li>*@
+    </ul>
+
+    <div class="tab-content">
+        <div id="siteDetails" class="tab-pane fade in active">
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="siteDetailsEditToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save" title="@Html.Localize("Save Site Details")"><span>@Html.Localize("Save")</span></a>
+                </div>
+                <component id="siteDetailsEdit" type="CorpSiteDetailsEdit"></component>
+                @*@await Component.InvokeAsync("SiteDetailsEdit", new {clientId = Model.SelectedSite.ClientId, siteId = Model.SelectedSite.Id})*@
+            </div>
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="siteDetailsCreateToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save" title="@Html.Localize("Create Site")"><span>@Html.Localize("Create")</span></a>
+                    <a name="cancel" class="fa fa-times" title="@Html.Localize("Cancel Site Creation")"><span>@Html.Localize("Cancel")</span></a>
+                </div>
+                <component id="siteDetailsCreate" type="CorpSiteDetailsCreate"></component>
+            </div>
+        </div>
+
+        <div id="siteDomains" class="tab-pane fade">
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="siteDomainsListToolbar" class="toolbar">
+                    <a name="create" class="fa fa-plus-square" title="@Html.Localize("Add a domain to this site")"><span>@Html.Localize("Add")</span></a>
+                    <a name="delete" class="fa fa-trash pull-right" title="@Html.Localize("Remove the selected domain from this site")" disabled><span>@Html.Localize("Delete")</span></a>
+                    <a name="edit" class="fa fa-pencil-square-o pull-right" title="@Html.Localize("Rename the selected domain")" disabled><span>@Html.Localize("Edit")</span></a>
+                </div>
+                <component id="siteDomainsList" type="CorpSiteDomainsList"></component>
+            </div>
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="siteDomainsCreateToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save" title="@Html.Localize("Save Domain")"><span>@Html.Localize("Save")</span></a>
+                    <a name="cancel" class="fa fa-times" title="@Html.Localize("Cancel Domain Changes")"><span>@Html.Localize("Cancel")</span></a>
+                </div>
+                <component id="siteDomainsCreate" type="CorpSiteDomainsCreate"></component>
+            </div>
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="siteDomainsEditToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save" title="@Html.Localize("Save Domain")"><span>@Html.Localize("Save")</span></a>
+                    <a name="cancel" class="fa fa-times" title="@Html.Localize("Cancel Domain Changes")"><span>@Html.Localize("Cancel")</span></a>
+                </div>
+                <component id="siteDomainsEdit" type="CorpSiteDomainsEdit"></component>
+            </div>
+
+        </div>
+
+
+        @*<div id="siteCollections" class="tab-pane fade">
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="siteCollectionsEditToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save" title="@Html.Localize("Save Site Collection Selections")"><span>@Html.Localize("Save")</span></a>
+                    <a name="manage" class="fa fa-pencil-square-o pull-right" title="@Html.Localize("Manage Site Collections")"><span>Manage</span></a>
+                </div>
+                <component id="siteCollectionsEdit" type="SiteCollectionsEdit"></component>
+            </div>
+
+        </div>
+
+        <div id="siteAdmins" class="tab-pane fade">
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="siteAdminsListToolbar" class="toolbar">
+                    <a name="create" class="fa fa-plus-square" title="@Html.Localize("Add")"><span>@Html.Localize("Add")</span></a>
+                </div>
+                <component id="siteAdminsList" type="SiteAdminsList"></component>
+            </div>
+
+        </div>*@
+    </div>
+
+}
+
+<div id="SiteListSection">
+    <div id="contentToolbar" class="toolbar">
+        <a name="create" class="fa fa-plus-square" title="@Html.Localize("Create a new Site")"><span>@Html.Localize("Create")</span></a>
+        <a name="delete" class="fa fa-trash-o pull-right" title="@Html.Localize("Delete the selected Site")" disabled><span>@Html.Localize("Delete")</span></a>
+        <a name="manage" class="fa fa-pencil-square-o pull-right" title="@Html.Localize("Manage the selected Site")" disabled><span>Manage</span></a>
+    </div>
+    <component id="siteList" type="CorpSiteList"></component>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteSiteRoute = "@deleteSiteRoute";
+        var deleteDomainRoute = "@deleteDomainRoute";
+        var corpId = "@corpId";
+
+
+
+        // Site list events
+        $.on("siteList.change", function (event, data) {
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+            $("#contentToolbar").toolbar().enable("delete");
+            $("#contentToolbar").toolbar().enable("manage");
+            $("#siteDetailsCreate").html("");
+            $("#siteDetailsEditToolbar").toolbar().disable("save");
+            InvokeComponent("siteDetailsEdit", { siteId: model.Id });
+            $("#siteDomainsListToolbar").toolbar().disable("edit");
+            $("#siteDomainsListToolbar").toolbar().disable("delete");
+            InvokeComponent("siteDomainsList", { siteId: model.Id });
+            @*InvokeComponent("siteCollectionsEdit", { clientId: "@clientId", siteId: model.Id });
+            InvokeComponent("siteAdminsList", { siteId: model.Id });*@
+        });
+
+        @*$.on("siteList.nav-to-site-admin", function (event, data) {
+            var menuTypeSite = "@Angelo.Connect.Menus.MenuType.SiteTools.ToString()";
+            var url = "/admin/dashboard/index?menuType=" + menuTypeSite + "&menuId=" + data.SiteId;
+            window.location = url;
+        })*@
+
+        $.on("contentToolbar.create", function () {
+            var grid = $("#siteList").getKendoGrid();
+            grid.dataSource.read();
+            $("#contentToolbar").toolbar().disable("delete");
+            $("#contentToolbar").toolbar().disable("manage");
+            $("#siteDetailsEdit").html("");
+            $("#siteDetailsCreateToolbar").toolbar().disable("save");
+            $("#siteDetailsCreateToolbar").toolbar().disable("cancel");
+            InvokeComponent("siteDetailsCreate", { corpId: corpId });
+            HideTabPane("siteDomains");
+            //HideTabPane("siteCollections");
+            //HideTabPane("siteAdmins");
+            $('.nav-tabs a[href="#siteDetails"]').tab('show');
+        });
+
+        $.on("contentToolbar.manage", function () {
+            var grid = $("#siteList").getKendoGrid();
+            var row = grid.select()
+            var model = grid.dataItem(row);
+            if (model) {
+                var tenant = model.TenantKey;
+                var url = "/sys/sites/" + tenant + "/admin";
+
+                window.location = url;
+            }
+        });
+
+        $.on("contentToolbar.delete", function () {
+            var grid = $("#siteList").getKendoGrid();
+            var row = grid.select()
+            var model = grid.dataItem(row);
+            var siteId = model.Id;
+            if (confirm("@Html.Localize("Are you sure you want to delete the selected Site?")")) {
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: deleteSiteRoute.replace("{id}", siteId),
+                    success: function () {
+                        $("#contentToolbar").toolbar().disable("delete");
+                        $("#contentToolbar").toolbar().disable("manage");
+                        HideTabPane("siteDetails");
+                        HideTabPane("siteDomains");
+                        HideTabPane("siteCollections");
+                        HideTabPane("siteAdmins");
+                        var grid = $("#siteList").getKendoGrid();
+                        grid.dataSource.read();
+                    },
+                    error: function () {
+                        alert("@Html.Localize("Unable to delete the selected site.")");
+                    }
+                });
+            }
+        });
+
+
+        // Site Details events
+        $.on("siteDetailsCreate.load", function (event, data) {
+            $("#siteDetailsCreateToolbar").toolbar().enable("save");
+            $("#siteDetailsCreateToolbar").toolbar().enable("cancel");
+        });
+
+        $.on("siteDetailsCreateToolbar.save", function () {
+            $("#siteDetailsCreateToolbar").toolbar().disable("save");
+            $("#siteDetailsCreateToolbar").toolbar().disable("cancel");
+            $("#siteDetailsCreate").form().post();
+        });
+
+        $.on("siteDetailsCreateToolbar.cancel", function () {
+            HideTabPane("siteDetails");
+        });
+
+        $.on("siteDetailsCreate.error", function (event, data) {
+            $("#siteDetailsCreateToolbar").toolbar().enable("save");
+            $("#siteDetailsCreateToolbar").toolbar().enable("cancel");
+        });
+
+        $.on("siteDetailsCreate.submit", function (event, data) {
+            $("#siteDetailsCreate").html("");
+            InvokeComponent("siteDetailsEdit", { siteId: data.result.Id });
+            InvokeComponent("siteDomainsList", { siteId: data.result.Id });
+
+            var grid = $("#siteList").getKendoGrid();
+            grid.dataSource.read();
+        });
+
+        $.on("siteDetailsEdit.load", function (event, data) {
+            $("#siteDetailsEditToolbar").toolbar().enable("save");
+        });
+
+        $.on("siteDetailsEditToolbar.save", function () {
+            $("#siteDetailsEdit").form().post();
+        });
+
+        $.on("siteDetailsEdit.submit", function (event, data) {
+            $("#contentToolbar").toolbar().disable("manage");
+            $("#contentToolbar").toolbar().disable("delete");
+            var grid = $("#siteList").getKendoGrid();
+            grid.dataSource.read();
+        });
+
+
+
+        // Site Domain events
+        $.on("siteDomainsListToolbar.create", function (event, data) {
+            var siteId = $("#siteDetailsEdit").form().model().Id;
+            $("#siteDomainsEdit").html("");
+            InvokeComponent("siteDomainsCreate", { siteId: siteId });
+        });
+
+        $.on("siteDomainsCreateToolbar.cancel", function (event, data) {
+            ShowParentTabSubPane("siteDomainsList");
+        });
+
+        $.on("siteDomainsCreateToolbar.save", function (event, data) {
+            $("#siteDomainsCreate").form().post();
+        });
+
+        $.on("siteDomainsCreate.submit", function (event, data) {
+            var siteId = $("#siteDetailsEdit").form().model().Id;
+            $("#siteDomainsListToolbar").toolbar().disable("edit");
+            $("#siteDomainsListToolbar").toolbar().disable("delete");
+            InvokeComponent("siteDomainsList", { siteId: siteId });
+        });
+
+        $.on("siteDomainsEditToolbar.cancel", function (event, data) {
+            ShowParentTabSubPane("siteDomainsList");
+        });
+
+        $.on("siteDomainsEditToolbar.save", function (event, data) {
+            $("#siteDomainsEdit").form().post();
+        });
+
+
+        $.on("siteDomainsEdit.submit", function (event, data) {
+            var siteId = $("#siteDetailsEdit").form().model().Id;
+            $("#siteDomainsListToolbar").toolbar().disable("edit");
+            $("#siteDomainsListToolbar").toolbar().disable("delete");
+            InvokeComponent("siteDomainsList", { siteId: siteId });
+        });
+
+        $.on("siteDomainsList.change", function (event, data) {
+            $("#siteDomainsListToolbar").toolbar().enable("edit");
+            $("#siteDomainsListToolbar").toolbar().enable("delete");
+        })
+
+        $.on("siteDomainsListToolbar.edit", function (event, data) {
+            var grid = $("#siteDomainsList").getKendoGrid();
+            var row = grid.select()
+            var model = grid.dataItem(row);
+            $("#siteDomainsCreate").html("");
+            InvokeComponent("siteDomainsEdit", { siteId: model.SiteId, domainKey: model.DomainKey, isDefault: model.IsDefault });
+        });
+
+        $.on("siteDomainsListToolbar.delete", function (event, data) {
+            var grid = $("#siteDomainsList").getKendoGrid();
+            var row = grid.select()
+            var model = grid.dataItem(row);
+            if (confirm("@Html.Localize("Are you sure you want to remove the selected domain from this site?")")) {
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: deleteDomainRoute.replace("{id}", model.SiteId),
+                    data: { SiteId: model.SiteId, OriginalDomainKey: model.DomainKey },
+                    success: function () {
+                        $("#siteDomainsListToolbar").toolbar().disable("edit");
+                        $("#siteDomainsListToolbar").toolbar().disable("delete");
+                        InvokeComponent("siteDomainsList", { siteId: model.SiteId });
+                    }
+                });
+            }
+        });
+
+
+        HideTabPane = function (tabPane) {
+            $("#" + tabPane + " >.tab-sub-pane").css("display", "none");
+        }
+
+        ShowParentTabSubPane = function (childName) {
+            var subPane = $("#" + childName).parents("div.tab-sub-pane")[0];
+            if (subPane) {
+                $(subPane).siblings(".tab-sub-pane").css("display", "none");
+                $(subPane).css("display", "");
+            }
+        }
+
+        InvokeComponent = function (cid, data) {
+            $("#" + cid).component().invoke(data);
+            ShowParentTabSubPane(cid);
+        }
+
+
+
+
+    </script>
+}

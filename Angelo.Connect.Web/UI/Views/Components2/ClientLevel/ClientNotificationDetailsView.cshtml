@@ -1,0 +1,161 @@
+﻿@model NotificationDetailsViewModel
+
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Models
+
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var ownerLevel = (string)ViewData["ownerLevel"];
+    var ownerId = (string)ViewData["ownerId"];
+    var emailHeaderList = (List<SelectListItem>)ViewData["EmailHeaderSelectListItems"];
+    var apiNotificationRoute = routes.ClientApi("notifications");
+    var apiNotificationGroupRoute = routes.ClientApi("notifications/groups?ownerLevel=" + ownerLevel + "&ownerId=" + ownerId);
+    var apiNotificationConnectionRoute = routes.ClientApi("notifications/connectiongroups?ownerLevel=" + ownerLevel + "&ownerId=" + ownerId);
+}
+
+<form id="@componentId" action="@apiNotificationRoute" class="form-horizontal" data-ajax-form>
+    
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.Status)
+    @Html.HiddenFor(x => x.OwnerLevel)
+    @Html.HiddenFor(x => x.OwnerId)
+    @Html.HiddenFor(x => x.CreatedUTC)
+    @Html.HiddenFor(x => x.CreatedBy)
+
+    <div class="container-fluid">
+
+        <div class="table span12">
+
+            <div class="row">
+                <h3>Scheduling:</h3>
+            </div>
+
+            <div class="row" show-if='Model.Status==NotificationStatus.Processing'>
+                <div style="display:inline-block;">
+                    <image src="/img/animated/blue-gear.gif" style="float:left;">
+                        <h4 style="float:left;padding-left:10px;">Sending Notification..</h4>
+                </div>
+            </div>
+            <div show-if='Model.Status==NotificationStatus.Scheduled'>
+                Notification to be send on: <br />@Model.ScheduledDT.ToString("f") <br />@Model.TimeZoneName
+            </div>
+            <div show-if='Model.Status==NotificationStatus.Sent'>
+                Notification Message sent on: <br />@Model.ScheduledDT.ToString("f") <br />@Model.TimeZoneName
+            </div>
+            <div show-if='Model.Status==NotificationStatus.Error'>
+                One or more errors occured while attempting to send out notification.<br />
+                Will attempt to reprocess notification in a minute.
+            </div>
+
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <h3>Send To:</h3>
+            </div>
+            <div class="row">
+                <label for="notificationGroupsIds">Notification Groups:</label>
+            </div>
+            <div class="row">
+                @(Html.Kendo().MultiSelect()
+                .Name("notificationGroupIds")
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .AutoBind(false)
+                .Value(Model.NotificationGroups)
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(20)
+                    .Read(read =>
+                    {
+                        read.Type(HttpVerbs.Post)
+                        .Url(apiNotificationGroupRoute);
+                    })
+                ).Enable(false)
+                )
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label for="connectionGroupsIds">Connection Groups:</label>
+            </div>
+            <div class="row">
+                @(Html.Kendo().MultiSelect()
+            .Name("connectionGroupIds")
+            .DataTextField("Name")
+            .DataValueField("Id")
+            .AutoBind(false)
+            .Value(Model.ConnectionGroups)
+            .DataSource(dataSource => dataSource
+                 .Ajax()
+                 .PageSize(20)
+                 .Read(read =>
+                 {
+                     read.Type(HttpVerbs.Post)
+                     .Url(apiNotificationConnectionRoute);
+                 })
+            ).Enable(false)
+                )
+            </div>
+
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <div class="row"><h3>Notification Email:</h3></div>
+            <div class="row">
+                @Html.CheckBoxFor(model => model.SendEmail, new { @disabled = "disabled" })
+                <label for="SendEmail">Send an Email Notification</label>
+            </div>
+
+            <div class="row" style="padding-bottom:4px">
+                <div class="col-sm-4">
+                    <label for="EmailHeaderId">Email Header:</label>
+                </div>
+                <div class="col-sm-8">
+                    @Html.DropDownListFor(model => model.EmailHeaderId, emailHeaderList, new { @class = "form-control", @disabled = "disabled" })
+                </div>
+            </div>
+
+            <div class="row form-group" style="padding-bottom:4px">
+                <div class="col-sm-4">
+                    <label for="EmailSubject">Email Subject:</label>
+                </div>
+                <div class="col-sm-8">
+                    <div class="static-text-box">@Model.EmailSubject</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <label for="EmailBody">Email Body:</label>
+            </div>
+            <div class="row">
+                <div class="static-text-box">
+                    @Html.Raw(Model.EmailBody)
+                </div>
+            </div>
+
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <div class="row"><h3>Notification SMS:</h3></div>
+            <div class="row">
+                @Html.CheckBoxFor(model => model.SendSms, new { @disabled = "disabled" })
+                <label for="SendSms">Send an Sms Notification</label>
+            </div>
+
+            <div class="row">
+                <label for="SmsMessage">Sms Message:</label>
+            </div>
+            <div class="row static-text-box">
+                @Model.SmsMessage
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+

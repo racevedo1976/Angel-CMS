@@ -1,0 +1,35 @@
+﻿@{
+    var componentId = (string)ViewData["cid"];
+    var directoryId = (string)ViewData["DirectoryId"];
+}
+
+<div>
+    @(Html.Kendo().Grid<UserViewModel>()
+        .Name(componentId)
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Hidden(true);
+            columns.Bound(c => c.UserName);
+            columns.Bound(c => c.LastName);
+            columns.Bound(c => c.FirstName);
+            columns.Bound(c => c.Email);
+            columns.Bound(c => c.EmailConfirmed).Filterable(false);
+            columns.Bound(c => c.IsLockedOut).Filterable(false);
+        })
+        .Scrollable()
+        .Sortable()
+        .Pageable()
+        .Filterable()
+        .Selectable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(50)
+                       .Read(read => read.Url(routes.ClientApi("users/data", new { directoryId = directoryId })))
+            .ServerOperation(true)
+            .Model(m =>
+            {
+                m.Id(x => x.Id);
+            })
+        )
+    )
+</div>

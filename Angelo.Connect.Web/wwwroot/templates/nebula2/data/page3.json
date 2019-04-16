@@ -1,0 +1,24 @@
+[
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "background": "bg-default",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "calendar",
+        "view": "calendar-month-view",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        }
+      }
+    ]
+  }
+]

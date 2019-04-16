@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Telerik.UI.for.AspNet.Core.Trial</id>
+    <version>2016.3.1118</version>
+    <title>Telerik UI for ASP.NET MVC Core 1.0.0</title>
+    <authors>Telerik</authors>
+    <owners>Telerik</owners>
+    <licenseUrl>http://www.telerik.com/purchase/license-agreement/aspnet-mvc</licenseUrl>
+    <projectUrl>http://www.telerik.com/aspnet-mvc</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Telerik UI for ASP.NET MVC provides server-side helpers for Kendo UI's JavaScript framework. It enables developers comfortable with the ASP.NET MVC framework to easily configure and work with Kendo UI via familiar server-side programming instead of relying solely on hand-coding of HTML and JavaScript.</description>
+    <tags>aspnet,mvc,aspnext,vnext,VS2015,Kendo,Kendo UI,JavaScript,UI</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5.1">
+        <dependency id="Microsoft.AspNetCore.Mvc" version="[1.0.0, )" />
+        <dependency id="Microsoft.AspNetCore.Mvc.Core" version="[1.0.0, )" />
+        <dependency id="Microsoft.AspNetCore.Mvc.TagHelpers" version="[1.0.0, )" />
+        <dependency id="Microsoft.AspNetCore.Mvc.Formatters.Xml" version="[1.0.0, )" />
+        <dependency id="Microsoft.AspNetCore.Routing" version="[1.0.0, )" />
+        <dependency id="Microsoft.Extensions.PlatformAbstractions" version="[1.0.0, )" />
+        <dependency id="System.Linq.Queryable" version="[4.0.1, )" />
+        <dependency id="System.Data.Common" version="[4.1.0, )" />
+      </group>
+      <group targetFramework=".NETStandard1.6">
+        <dependency id="System.Reflection.TypeExtensions" version="[4.1.0, )" />
+        <dependency id="System.Xml.XmlDocument" version="[4.0.1, )" />
+        <dependency id="Microsoft.AspNetCore.Mvc" version="[1.0.0, )" />
+        <dependency id="Microsoft.AspNetCore.Mvc.Core" version="[1.0.0, )" />
+        <dependency id="Microsoft.AspNetCore.Mvc.TagHelpers" version="[1.0.0, )" />
+        <dependency id="Microsoft.AspNetCore.Mvc.Formatters.Xml" version="[1.0.0, )" />
+        <dependency id="Microsoft.AspNetCore.Routing" version="[1.0.0, )" />
+        <dependency id="Microsoft.Extensions.PlatformAbstractions" version="[1.0.0, )" />
+        <dependency id="System.Linq.Queryable" version="[4.0.1, )" />
+        <dependency id="System.Data.Common" version="[4.1.0, )" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

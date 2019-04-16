@@ -1,0 +1,309 @@
+﻿@using Kendo.Mvc
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+@using Angelo.Connect.Calendar.Services
+@using Angelo.Connect.Security
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Models
+
+@model CalendarEvent
+
+@inject IEnumerable<ISecurityGroupProvider> _groupProviders
+@{
+
+    var eventGroups = (IEnumerable<CalendarEventGroup>)ViewData["EventGroups"];
+
+    var eventId = ViewData["eventId"].ToString();
+    var allEventGroups = (bool)ViewData["AllEventGroups"];
+
+}
+
+<div id="CalendarEventGroupsRadioButtons" style="padding-bottom:1EM; padding-top:1EM">
+    <input  type="radio" value="false" id="radAllEventGroups" checked="@(!allEventGroups)" /> @Html.Localize("My Event Groups")
+    &nbsp;
+    &nbsp;
+    <input type="radio" value="true" id="radAllEventGroups" checked="@allEventGroups" /> @Html.Localize("Shared Event Groups (with me)")
+</div>
+
+
+<div class="form-group">
+    <h3>Select groups to be included on this event.</h3>
+</div>
+<div class="form-group">
+    
+        @(Html.Kendo().Grid(eventGroups)
+        .Name("Grid2")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.EventGroupId).Hidden(true);
+            columns.Bound(c => c.SiteId).Hidden(true);
+            columns.Bound(c => c.UserId).Hidden(true);
+            columns.Template("<input type='checkbox' id='#= EventGroupId #' class='chkbx' value='#= EventGroupId #'/>")
+                        .Width(75)
+                        .Title("Select");
+            columns.Bound(p => p.Title).Title("Name").Filterable(ftb => ftb.Cell(cell => cell.Operator("contains").SuggestionOperator(FilterType.Contains)));
+
+            columns.Command(command => command.Custom(Html.Localize("Set Security").ToString()).Click("showDetails")).Width(180).Hidden(allEventGroups);
+
+        })
+        .Editable(editable => editable.Mode(GridEditMode.PopUp))
+        .ToolBar(toolbar =>
+              {
+                  toolbar.ClientTemplateId("GridToolbarTemplate");
+              })
+        .Pageable(pageable => pageable
+           .Input(true)
+           .Numeric(true)
+         )
+        .Groupable(false)
+        .Sortable()
+        .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+        .Events(events =>
+        {
+            events.DataBound("CategoryGrid_DataBound");
+        })
+        .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(5)
+                //.Group(g => g.Add("GroupType", typeof(string)))
+                //.Read(read => read.Url("/api/usergroups/usergroups"))
+                .ServerOperation(false)
+                //.Create(update => update.Url("/admin/calendardata/CreateEventGroup"))
+
+         )
+        )
+
+
+
+
+</div>
+
+
+<script language="javascript">
+    function CategoryGrid_DataBound(e) {
+        @foreach (var item in Model.EventGroupEvents)
+        {
+
+            @Html.Raw($"$('#{item.EventGroupId}').prop('checked', true);");
+
+        }
+
+    }
+
+    function saveCatSelected() {
+        var checked = [];
+        for(var i in checkedIds){
+            if(checkedIds[i]){
+                checked.push(i);
+            }
+        }
+
+       var postData = { eventId: '@eventId' , values: checked };
+
+        return $.post("/api/content/calendar/saveeventgroups", postData);
+
+
+    }
+
+    $(document).ready(function(){
+        var grid = $("#Grid2").data("kendoGrid");
+
+        grid.table.on("click", ".chkbx" , selectCatRow);
+    });
+
+    var checkedIds = {};
+
+        @foreach (var cat in Model.EventGroupEvents)
+        {
+            @Html.Raw($"checkedIds['{cat.EventGroupId}'] = true;");
+        }
+
+
+
+    function selectCatRow() {
+        //debugger;
+        var checked = this.checked,
+        row = $(this).closest("tr"),
+        grid = $("#Grid2").data("kendoGrid"),
+        dataItem = grid.dataItem(row);
+
+        checkedIds[dataItem.EventGroupId] = checked;
+        if (checked) {
+            //-select the row
+            row.addClass("k-state-selected");
+        } else {
+            //-remove selection
+            row.removeClass("k-state-selected");
+        }
+
+        //saveCatSelected();
+    }
+
+
+
+    function showDetails(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var wnd = $("#Details").data("kendoWindow");
+
+
+        $('#securityComponentContainer').loadComponent({
+            "type": "CalendarEventGroupSecurity",
+            "id": "calendarEventGroupSecurity",
+            "params": {
+                "eventGroupId": dataItem.EventGroupId
+
+            }
+        }).done(function () {
+
+
+            //$('#shareItemModal').modal('show');
+            openMyModalEvent("shareItemModal")
+        });
+
+
+
+    }
+
+    function openMyModalEvent(modalId) {
+        var mod = $('#' + modalId);
+
+        //check if already open, if it is then exit
+        if (!mod.hasClass('hide')) {
+            return;
+        }
+        mod.removeClass('hide');
+        mod.on('hidden.bs.modal', function () {
+            mod.addClass('hide');
+            //$('#calendar').fullCalendar('refetchEvents');
+
+        });
+        mod.appendTo("body").modal('show');
+    }
+
+
+
+    var tools = {};
+    tools.prompt = function (message, options) {
+        var defaults = { icon: "", title: "", value: "", placeholder: "", notes: "", required: false },
+            $popup = $($("#consolePopupTemplate").html()),
+            task = $.Deferred();
+
+        options = $.extend({}, defaults, options);
+
+        $popup.find(".csc-confirm-buttons").hide();
+        $popup.find(".csc-popup-icon").attr("class", options.icon);
+        $popup.find(".csc-popup-title").html(options.title);
+        $popup.find(".csc-popup-notes").html(options.notes);
+        $popup.find(".csc-popup-message").html(message);
+
+        $popup.find(".csc-popup-input")
+            .attr("placeholder", options.placeholder)
+            .val(options.value);
+
+        $popup.appendTo(document.body).find(".modal-button").on("click",
+            function () {
+                var value = $popup.find(".csc-popup-input").val().trim();
+                $popup.remove();
+
+                // TODO: Handled required values
+                if ($(this).attr("name") === "cancel" || (options.required && value === ""))
+                    return task.fail();
+
+                task.resolve(value);
+            });
+
+        $popup.find(".csc-popup-input").focus();
+
+        return task.promise();
+    }
+
+
+    $(function () {
+        var grid = $("#Grid2");
+        grid.find(".k-grid-toolbar").on("click", ".k-add-category", function (e) {
+            e.preventDefault();
+            tools.prompt("Category Name", { title: "Add New Category", placeholder: "Category Name" }).done(function (value) {
+
+                var postData = { model: { title: value, EventGroupId: '' } };
+
+                $.post("/admin/calendardata/CreateEventGroup", postData, function (eventGroup) {
+                    
+                    var grid2 = $("#Grid2").data("kendoGrid");
+                    grid2.dataSource.add(eventGroup.Data[0]);
+                    grid2.refresh();
+                });
+
+            });
+        });
+    });
+
+</script>
+
+
+
+
+<script id="GridToolbarTemplate" type="text/x-kendo-template">
+    <div class="refreshBtnContainer">
+        <a href="\\#" class="k-add-category k-link k-button " title="Add Category">
+            <span class="k-icon k-i-plus"></span> Add New Event Group
+        </a>
+    </div>
+
+</script>
+
+<script id="consolePopupTemplate" type="text/template">
+    <div class="modal csc-popup">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="csc-popup-title"></div>
+                <div class="csc-popup-buttons csc-prompt-buttons">
+                    <a name="cancel" class="modal-button">@Html.Localize("Cancel")</a>
+                    <a name="ok" class="modal-button">@Html.Localize("Submit")</a>
+                </div>
+                <div class="csc-popup-buttons csc-confirm-buttons">
+                    <a name="cancel" class="modal-button">@Html.Localize("No Way")</a>
+                    <a name="ok" class="modal-button">@Html.Localize("Yes")</a>
+                </div>
+                <div class="csc-popup-body">
+                    <div class="csc-popup-message"></div>
+                    <input class="csc-popup-input form-control" />
+                    <div class="csc-popup-notes"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<!-- Share Item Modal -->
+<div id="shareItemModal" class="modal fade hide" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Set Category Security</h4>
+            </div>
+            <div class="modal-body form-group">
+                <form id="frmSharedDocuments" method="post" action="/api/user/library/sharedocument/users" class="form form-horizontal" data-ajax-form>
+                    <input type="hidden" id="id" name="id" value="" />
+
+                    <span id="documentsTobeShareList"></span>
+                    <br />
+
+
+                    <div id="securityComponentContainer">
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="selectUser" type="button" class="btn btn-default btn-primary" data-dismiss="modal">Done</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

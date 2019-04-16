@@ -1,0 +1,85 @@
+[
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-3",
+    "style": {},
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<div style=\"text-align:center;\"><a href=\"https://www.facebook.com/SCHOOLinSITES\" target=\"_blank\"><img src=\"/templates/sis/images/FB.png\" alt=\"Facebook\" width=\"75\" /></a></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "text-center"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><a href=\"https://twitter.com/SCHOOLinSITES\" target=\"_blank\"><img src=\"/templates/sis/images/TW.png\" alt=\"Twitter\" width=\"75\" /></a></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "text-right"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><a href=\"https://www.linkedin.com/company/schoolinsites\" target=\"_blank\"><img src=\"/templates/sis/images/IN.png\" alt=\"LinkedIn\" width=\"75\" /></a></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "caption": "Logo",
+          "src": "/templates/sis/images/Logo.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "search",
+        "view": "search-search1",
+        "style": {
+          "classes": "text-center",
+          "paddingTop": "30px",
+          "paddingBottom": "30px"
+        },
+        "model": {
+          "title": ""
+        }
+      }
+    ]
+  }
+]

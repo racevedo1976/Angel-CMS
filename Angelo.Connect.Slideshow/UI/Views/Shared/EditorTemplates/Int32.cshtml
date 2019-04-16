@@ -1,0 +1,12 @@
+﻿@model Int32
+@{
+    var inputType = ViewData["Type"] ?? "number";
+    var min = ViewData["Minimum"] ?? "0"; var max = ViewData["Maximum"] ?? "100";
+    var name = ViewData.TemplateInfo.HtmlFieldPrefix;
+    var id = name?.Replace('.', '_');
+}
+
+<input class="form-control" style="width:150px" value="@Model" type='number' id="@id" name="@name" min='@min' max='@max'/>
+<script type="text/javascript">
+    //$("#@id").kendoNumericTextBox();
+</script>

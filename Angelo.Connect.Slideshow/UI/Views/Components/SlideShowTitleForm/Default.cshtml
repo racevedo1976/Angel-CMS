@@ -1,0 +1,106 @@
+﻿@using Angelo.Connect.Security
+@using Angelo.Connect.SlideShow.Services
+@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Extensions;
+@using Kendo.Mvc
+@using Kendo.Mvc.UI
+
+@model SlideShowWidget
+
+@inject UserContext _userContext
+@inject SlideShowService _service
+@{
+    var userId = _userContext.UserId;
+    var transitions = typeof(Transition).GetItemsForEnum();
+    //var templates = _service.List(userId).Select(x => new SelectListItem() { Text = x.Title, Value = x.Id });
+    var slideshows = "22";
+
+    //default height
+    if (string.IsNullOrEmpty(Model.Height))
+    {
+        Model.Height = "100%";
+    }
+    // templates = new[] { new SelectListItem { Text = "Select Template" } }.Concat(templates);
+    // slideshows = new[] { new SelectListItem { Text = "Select Slideshow" } }.Concat(slideshows);
+    }
+
+<form class="form" data-ajax-form="true" action="/api/widgets/slideshow/title">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="SiteId" />
+
+    <div class="form-group">
+        <label>Give your slideshow a title</label>
+        <div>
+            <input class="form-control" asp-for="Title" placeholder="Slideshow Title..." spellcheck="true" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Give your slideshow a description</label>
+        <div>
+            <input class="form-control" asp-for="Description" placeholder="Description..." spellcheck="true" />
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Transition</label>
+                <div>
+                    <select class="form-control" asp-for="Transition">
+                        @foreach (var item in transitions)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Duration (ms)</label>
+                <div>
+                    @Html.EditorFor(x => x.Duration, null, nameof(SlideShowWidget.Duration), new { Minimum = 0, Maximum = int.MaxValue })
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>SlideShow Height</label>
+        <div>
+            <input class="form-control" asp-for="Height" placeholder="Example: [100% or 300px]" />
+        </div>
+
+    </div>
+
+    
+    <div class="form-group">
+        <label>Background Color</label>
+        <div>
+            @Html.EditorFor(x => x.BackgroundColor, "Color", null, nameof(SlideShowWidget.BackgroundColor))
+        </div>
+    </div>
+    @*<div class="form-group">
+        <label>Import slideshow template</label>
+        <div>
+            <select class="form-control" id="TemplateId" asp-items="@templates"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Import existing slideshow</label>
+        <div>
+            <select class="form-control" asp-for="SlideShowId" asp-items="@slideshows"></select>
+        </div>
+    </div>*@
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#SlideShowId').change(function () {
+            $('.modal .modal-footer button.btn-primary').click();
+        });
+    });
+</script>

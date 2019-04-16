@@ -1,0 +1,45 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.Models
+
+@model SlideLayer
+
+<div class="container-fluid">
+    <div class="form-group row-fluid">
+        <div class="btn-group col-sm-12">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-plus" />
+                Add New Layer
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#pnlLayerText" aria-controls="pnlLayerText" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-text-background" />Text</a></li>
+                <li><a href="#pnlLayerImage" aria-controls="pnlLayerImage" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-picture" />Image</a></li>
+                <li><a href="#pnlLayerVideo" aria-controls="pnlLayerVideo" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-facetime-video" />Video</a></li>
+                <li><a href="#pnlLayerButton" aria-controls="pnlLayerButton" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-modal-window" />Button</a></li>
+                <li><a href="#pnlLayerShape" aria-controls="pnlLayerShape" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-object-align" />Shape</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-6">
+            <input class="form-control" type="text" asp-for="Title" placeholder="Layer Name..." />
+        </div>
+     </div>
+</div>
+<br/>
+<div class="tab-content">
+    <div id="pnlLayerText" role="tabpanel" class="tab-pane">
+        @Html.Partial("_AddTextLayer.cshtml")
+    </div>
+    <div id="pnlLayerImage" role="tabpanel" class="tab-pane">
+        @Html.Partial("_AddImageLayer.cshtml")
+    </div>
+    <div id="pnlLayerVideo" role="tabpanel" class="tab-pane">
+        @Html.Partial("_AddVideoLayer.cshtml")
+    </div>
+    <div id="pnlLayerButton" role="tabpanel" class="tab-pane">
+        @Html.Partial("_AddButtonLayer.cshtml")
+    </div>
+    <div id="pnlLayerShape" role="tabpanel" class="tab-pane">
+        @Html.Partial("_AddShapeLayer.cshtml")
+    </div>
+</div>

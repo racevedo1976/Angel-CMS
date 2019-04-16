@@ -1,0 +1,33 @@
+﻿@model UserPageViewModel
+
+
+<div class="csc-content-toolbar">
+    <a name="create" title="@Html.Localize("Create")">
+        <i class="fa fa-save"></i> @Html.Localize("Save")
+    </a>
+</div>
+
+
+<div class="csc-content-tabs">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#pageDetails" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="csc-content-body">
+    <div class="tab-content">
+        <div id="pageDetails" class="tab-pane fade in active" style="padding: 20px;">
+            @Html.Partial("/UI/UserConsole/Views/Pages/_PageForm.cshtml", Model)
+        </div>
+    </div>
+</div>
+
+
+  
+        
+
+

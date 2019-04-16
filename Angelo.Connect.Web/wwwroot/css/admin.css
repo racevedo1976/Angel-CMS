@@ -1,0 +1,339 @@
+﻿/* -------------------------------------------------------------------- */
+/* Admin Page Layout */
+/* -------------------------------------------------------------------- */
+body {
+  padding-bottom: 30px;
+  padding-top: 50px;
+  min-height: 100%;
+}
+
+body * {
+    box-sizing: border-box;
+}
+
+.admin-page-head {
+    height: 40px;
+    width: 100%;
+    border-bottom: 1px #ddd solid;
+}
+
+.admin-page-left {
+    min-height: 1000px;
+    width: calc(100% - 420px);
+    float: left;
+}
+
+.admin-page-panel-hidden .admin-page-left{
+    width: calc(100% - 22px);
+}
+
+.admin-page-right {
+    min-height: 1000px;
+    width: 420px;
+    border-left: 1px #ddd solid;
+    float: left;
+}
+
+.admin-page-panel-hidden .admin-page-right{
+    width: 22px;
+}
+
+.admin-page-panel-hidden .admin-page-panel{
+    display: none;
+}
+
+.admin-page-menu {
+    min-height: 960px;
+    width: 200px;
+    float: left;
+    border-right: 1px #ddd solid;
+}
+
+.admin-page-body {
+    min-height: 960px;
+    width: calc(100% - 200px);
+    float: left;
+}
+
+.footer-content {
+    padding: 10px 10px 0 10px;
+    border-top: 1px #ddd solid;
+    background: #fff;
+}
+
+
+/* -------------------------------------------------------------------- */
+/* Admin Navigation Styles  */
+/* -------------------------------------------------------------------- */
+
+.admin-header .navbar {
+    height: 50px;
+    padding-right: 10px !important;
+}
+
+/* admin breadcrumbs */
+#parentTrail .btn {
+    margin: 0px;
+}
+
+
+/* -------------------------------------------------------------------- */
+/* Admin Content Styles */
+/* -------------------------------------------------------------------- */
+
+.admin-page-title
+{
+    font-size: 24px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    display: inline-block;
+}
+
+.admin-panel-toggle
+{
+    position: absolute;
+    z-index: 999;
+    margin-left: -22px;
+    margin-top: 6px;
+    font-size: 16px;
+    line-height: 28px;
+    vertical-align: middle;
+    width: 22px;
+    height: 28px;
+    text-align: center;
+    background: #ddd;
+    color: #fff;
+    border-radius: 4px 0 0 4px;
+    padding: 0 0 0 2px;
+}
+
+.admin-page-content {
+    padding: 0 !important;
+}
+
+.admin-page-content table,
+.admin-page-panel table 
+{
+    border: none !important;
+}
+
+.admin-page-content table tr > th,
+.admin-page-content table tr > td,
+.admin-page-panel table tr > th,
+.admin-page-panel table tr > td
+{
+    border: none !important;
+}
+
+    .admin-page-content table tr > th,
+    .admin-page-panel table tr > th 
+    {
+        border-bottom: 1px #ddd solid !important;
+    }
+
+    .admin-page-content table tr.active,
+    .admin-page-content table tr.active td,
+    .admin-page-panel table tr.active,
+    .admin-page-panel table tr.active td
+    {
+        background-color: rgba(182, 214, 243, 0.30) !important;
+    }
+
+.admin-page-content .padded,
+.admin-page-panel .padded 
+{
+    padding-left: 20px  !important;
+    padding-right: 20px !important;
+}
+
+.admin-page-content .panel,
+.admin-page-panel .panel
+{
+    border-radius: 0;
+    border: none;
+}
+
+.admin-page-panel {
+    padding: 0 !important;
+}
+
+.admin-page-content .nav-tabs,
+.admin-page-panel .nav-tabs
+{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 40px !important;
+    overflow: hidden;
+}
+
+.admin-page-content .nav-tabs a,
+.admin-page-panel .nav-tabs a
+{
+    box-sizing: border-box;
+    border-radius: 0 !important;
+    border: none !important;
+    height: 40px !important;
+    /* border-right: 1px #ddd solid !important; */
+    border-bottom: 1px #ddd solid !important;
+}
+
+.admin-page-content .nav-tabs a:last-child,
+.admin-page-panel .nav-tabs a:last-child
+{
+    border-right: none !important;
+}
+
+.admin-page-content .nav-tabs li:not(.active),
+.admin-page-panel .nav-tabs li:not(.active)
+{
+    /* background-color: #f7f7f7 !important; */
+    /* border-bottom: 1px #ddd solid !important; */
+}
+
+.admin-page-content .nav-tabs li.active:not(:last-child) a,
+.admin-page-panel .nav-tabs li.active:not(:last-child) a
+{
+   border-right: 1px #ddd solid !important;
+}
+
+.admin-page-content .nav-tabs li.active:not(:last-child) a,
+.admin-page-panel .nav-tabs li.active:not(:first-child) a
+{
+    border-left: 1px #ddd solid !important;
+}
+
+.admin-page-panel .tab-pane,
+.admin-page-panel .tab-pane
+{
+    padding: 0 !important;
+}
+
+
+.admin-page-content form,
+.admin-page-panel form
+{
+    padding: 15px;
+    margin-right: 20px;
+}
+
+.admin-page-content .k-toolbar,
+.admin-page-panel .k-toolbar
+{
+    border-top: none !important;
+}
+
+
+/* -------------------------------------------------------------------- */
+/* administrative left menu */
+/* -------------------------------------------------------------------- */
+
+.admin-left-menu a {
+    padding: 4px !important;
+    font-size: 14px !important;
+    color: #444;
+}
+
+.admin-left-menu a.active {
+    color:#23527c;
+}
+
+.admin-left-menu a:hover {
+    text-decoration: none !important;
+    text-shadow: 3px 3px 3px rgba(187, 187, 187, 0.30);
+}
+
+.admin-left-menu li {
+    width: 100%;
+    position: relative !important;
+}
+
+.admin-left-menu .menu-root 
+{
+    font-size: 16px !important;
+    font-weight: bold;
+}
+
+.admin-left-menu .menu-section {
+    display: none;
+    margin-left: 10px;
+}
+
+.admin-left-menu .menu-section.open {
+    display: block;
+}
+
+.admin-left-menu .menu-toggle {
+    display: inline-block;
+    position: absolute;
+    z-index: 15;
+    top: 0;
+    right: 5px;
+}
+
+/* -------------------------------------------------------------------- */
+/* Bootstrap Overrides */
+/* -------------------------------------------------------------------- */
+
+ul.list-unstyled > li{
+    padding: 2px 0;
+}
+
+
+.list-group-item.active {
+    background: rgba(0,0,0,.2) !important;
+}
+
+.glyphicon { margin-right:5px; }
+
+.modal-body{
+    min-height: 150px;
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+input,
+select,
+textarea {
+  max-width: 280px;
+}
+
+h1, h2, h3, h4, h5
+{
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+}
+
+/* -------------------------------------------------------------------- */
+/* Layout Helpers*/
+/* -------------------------------------------------------------------- */
+.inline{
+    display: inline;
+}
+
+/* -------------------------------------------------------------------- */
+/* Custom Components */
+/* -------------------------------------------------------------------- */
+
+.static-text-box {
+    width: 100%;
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkgray;
+    padding: 5px;
+    min-height: 28px;
+}
+
+.admin-page-icons {
+    padding: 6px;
+    font-size: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    color: #555;
+}
+
+.admin-page-icons > a > span, .admin-page-icons > span {
+    font-size: 15px;
+    padding-left: 2px;
+    vertical-align: top;
+    font-family: sans-serif;
+}

@@ -1,0 +1,38 @@
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@using Angelo.Connect.Models
+@using Angelo.Connect.Blog.Models;
+@using Angelo.Connect.Blog.UI.ViewModels
+
+@model BlogWidgetCategoryFormViewModel
+
+
+@(Html.Kendo().Grid(Model.BlogCategories)
+    .Name("blogWidgetCategoryGrid")
+    .Columns(columns => {
+        columns.Bound(c => c.Id).Hidden(true);
+        columns.Template("<input type='checkbox' id='#= Id #' class='chkbx' value='#= Id #'/>").Width(50);
+        columns.Bound(c => c.Title).Title(Html.Localize("Title").ToString());
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .Selectable(selectable => selectable
+        .Mode(GridSelectionMode.Single)
+        .Type(GridSelectionType.Cell))
+    .Events(events => {
+        events.DataBound("blogWidgetCategoryGrid_DataBound");
+    })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .ServerOperation(false)
+    )
+)
+
+
+@*     Hidden form for holding and posting checkbox changes     *@
+<form id="blogWidgetCategoryForm" class="form" action="/api/widgets/blogCategory" data-ajax-form="true">
+    <input type="hidden" name="WidgetId" value="@Model.WidgetId" />
+    <input id="Categories" type="hidden" name="Categories" value="@(String.Join(",", Model.SelectedCategoryIds))" />
+</form>

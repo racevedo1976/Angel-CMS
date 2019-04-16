@@ -1,0 +1,91 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.SlideShow.Services
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Microsoft.Extensions.Options
+
+@inject GalleryService _galleryService
+
+@model GalleryWidget
+@{
+    var galleryItems = await _galleryService.GetItems(Model.Id);
+}
+
+
+<input type="hidden" id="_widgetId" value="@Model.Id" />
+<div class="list-group">
+    <form class="form" action="/api/widgets/gallery/captions" data-ajax-form="true">
+
+        @for (int i = 0; i < galleryItems.Count; i++)
+        {
+            <input type="hidden" name="galleryItems[@i].Id" value="@galleryItems[i].Id" />
+            <input type="hidden" name="galleryItems[@i].WidgetId" value="@galleryItems[i].WidgetId" />
+            <input type="hidden" name="galleryItems[@i].ThumbnailUrl" value="@galleryItems[i].ThumbnailUrl" />
+            <input type="hidden" name="galleryItems[@i].Url" value="@galleryItems[i].Url" />
+
+            <input type="hidden" name="galleryItems[@i].IsLinkEnabled" value="@galleryItems[i].IsLinkEnabled" />
+            <input type="hidden" name="galleryItems[@i].LinkUrl" value="@galleryItems[i].LinkUrl" />
+            <input type="hidden" name="galleryItems[@i].LinkTarget" value="@galleryItems[i].LinkTarget" />
+
+            <div class="list-group-item">
+                <div style="width: 100%; display: table">
+                    <div style="float: right;">
+                        <button type="button" class="btn btn-default btn-sm" onclick="removeItem('@galleryItems[i].Id');">Remove</button>
+                    </div>
+                    <div style="float: left">
+                        <img style="width:300px;" class="thumbnail" id="thumb_@galleryItems[i].Id" src="@galleryItems[i].Url" alt="@galleryItems[i].Title">
+                    </div>
+                    <div style="float: left;">
+                        <a style="float: left;" onclick="cropSavedImaged('thumb_@galleryItems[i].Id', '@galleryItems[i].Id', '@galleryItems[i].Url');" href="#"><i class="fa fa-crop"></i></a>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="container-fluid">
+                        <input type="text" class="form-control input-sm paddi" placeholder="Add caption text here..." id="galleryItems[@i].Title" name="galleryItems[@i].Title" value="@galleryItems[i].Title" spellcheck="true"
+                               onchange="updateItem('@galleryItems[i].Id', document.getElementById('galleryItems[@i].Title').value);" />
+                    </div>
+
+                </div>
+              
+            </div>
+        }
+    </form>
+</div>
+
+<script>
+    function cropSavedImaged(element, id, url) {
+
+        var $thumb = $("#" + element);
+
+        $.imageCropper({
+            editImageMode: true,           //set to true if image already cropped (previously) and we are just edting that cropped version
+            editImageUrl: url,    //if editImageMode = true, then pass the URL used for this cropped image with coordinates.
+            driveUrl: driveUrl             // *Require*  drive host, url.
+        }).done(function (image) {
+            //the return is the new url with new coordinates
+            //$input.val(image ? image.croppedUrl : "");
+
+            var model = {
+                Url: image.croppedUrl,
+                Id: id
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/widgets/gallery/url',
+                data: model,
+                success: function (result) {
+
+                },
+                error: function (xhr) {
+
+                }
+            });
+
+
+            $thumb.attr("src", image.croppedUrl);
+        });
+    }
+</script>

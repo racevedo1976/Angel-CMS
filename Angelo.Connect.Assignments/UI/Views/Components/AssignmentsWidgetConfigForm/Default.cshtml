@@ -1,0 +1,31 @@
+﻿@model Angelo.Connect.Assignments.ViewModels.AssignmentsWidgetViewModel
+@using Kendo.Mvc.UI
+@*@using Kendo.Mvc.Examples.Models.TreeList*@
+@*@using Angelo.Connect.Kendo.Extensions*@
+@using Angelo.Connect.Assignments.Models;
+
+@{ 
+    string TreeListName = "tree-" + Model.Id;
+    string clientId = (string)ViewData["clientId"];
+    //IEnumerable<TreeViewItemModel> videoSourceNodes = ViewBag.videoSourceNodes;
+}
+
+<form class="form" data-ajax-form="true" action="/api/widgets/assignments">
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="form-group">
+        <label asp-for="Title">Title</label>
+        <div>
+            <input class="form-control" asp-for="Title" spellcheck="true" />
+        </div>
+    </div>
+
+</form>
+
+<script>
+
+
+
+
+</script>
+

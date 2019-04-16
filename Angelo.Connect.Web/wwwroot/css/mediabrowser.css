@@ -1,0 +1,79 @@
+﻿/* Media Browswer Styles*/
+.media-browser
+{
+    border: 1px #ddd solid;
+    background: #fff;
+    width: 80%;
+    margin: 30px auto 0 auto;
+}
+
+.media-browser-heading
+{
+    background-color: #ddd;
+    padding: 10px 15px;
+}
+
+.media-browser-title
+{
+    font-size: 14pt;
+}
+
+.media-browser-body
+{
+    padding: 15px;
+}
+
+.media-browser-folders
+{
+    max-height: 250px;
+}
+
+.media-browser-results
+{
+}
+
+.media-browser-selection{
+    max-height: 240px;
+    overflow: auto;
+}
+
+/* single select style */
+.media-browser-selection img
+{
+    width: 100%; height: auto;
+}
+
+/* multi select style */
+.media-browser-multi .media-browser-selection img
+{
+    height: 50px; width: auto; margin: 0 5px 5px 0;
+}
+
+.media-browser-files
+{
+    min-height: 400px;
+}
+
+.media-browser-footer
+{
+    padding: 0 15px 15px 15px;
+}
+
+.media-browser-commands > button:not(:last-child)
+{
+    margin-right: 15px;
+}
+
+/* Kendo cleanup */
+.media-browser .k-filebrowser .k-tiles-arrange .k-dropdown {
+    width: 7em;
+}
+
+.media-browser img.k-image {
+    width: 100%;
+    height: auto;
+}
+
+.media-browser li.k-tile {
+    font-size: .85em;
+}

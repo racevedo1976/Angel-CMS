@@ -1,0 +1,38 @@
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@using Angelo.Connect.Models
+@using Angelo.Connect.Announcement.Models;
+@using Angelo.Connect.Announcement.UI.ViewModels
+
+@model AnnouncementWidgetCategoryFormViewModel
+
+
+@(Html.Kendo().Grid(Model.AnnouncementCategories)
+    .Name("announcementWidgetCategoryGrid")
+    .Columns(columns => {
+        columns.Bound(c => c.Id).Hidden(true);
+        columns.Template("<input type='checkbox' id='#= Id #' class='chkbx' value='#= Id #'/>").Width(50);
+        columns.Bound(c => c.Title).Title(Html.Localize("Title").ToString());
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .Selectable(selectable => selectable
+        .Mode(GridSelectionMode.Single)
+        .Type(GridSelectionType.Cell))
+    .Events(events => {
+        events.DataBound("announcementWidgetCategoryGrid_DataBound");
+    })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .ServerOperation(false)
+    )
+)
+
+
+@*     Hidden form for holding and posting checkbox changes     *@
+<form id="announcementWidgetCategoryForm" class="form" action="/api/widgets/announcementCategory" data-ajax-form="true">
+    <input type="hidden" name="WidgetId" value="@Model.WidgetId" />
+    <input id="Categories" type="hidden" name="Categories" value="@(String.Join(",", Model.SelectedCategoryIds))" />
+</form>

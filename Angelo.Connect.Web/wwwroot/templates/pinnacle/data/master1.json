@@ -1,0 +1,111 @@
+[
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "background": "bg-fancy",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Logo",
+          "src": "/templates/pinnacle/images/logo.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "30px",
+          "paddingBottom": "30px"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><a href=\"http://www.schoolinsites.com\"><img src=\"/templates/pinnacle/images/SisPoweredSmall.png\" alt=\"SCHOOLinSITES\" /></a></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "background": "bg-default",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Logo",
+          "src": "/templates/pinnacle/images/logo.png",
+          "radius": "0px",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "734 Pinnacle Ln | Glacier, AK 81300 | PH: 907.555.3009<br />",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "search",
+        "view": "search-search1",
+        "style": {
+          "classes": "text-center",
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "title": ""
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\"><img src=\"/templates/pinnacle/images/motto.png\" alt=\"Motto\" /></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  }
+]

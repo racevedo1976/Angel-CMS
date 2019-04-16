@@ -1,0 +1,9 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.Title
+
+@{ 
+    var apiUrl = $"/api/widgets/title/{Model.Id}";
+}
+
+<div class="@Model.CssClass">
+    <input type="text" class="wysi-control" asp-for="@Model.Text" onchange="$.post('@apiUrl', { text: this.value })" spellcheck="true" />
+</div>

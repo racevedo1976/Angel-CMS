@@ -1,0 +1,38 @@
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@using Angelo.Connect.Models
+@using Angelo.Connect.Calendar.Models;
+@using Angelo.Connect.Calendar.UI.ViewModels
+
+@model UpcomingEventsGroupFormViewModel
+
+
+@(Html.Kendo().Grid(Model.UpcomingEventGroups)
+    .Name("upcomingEventsWidgetGroupGrid")
+    .Columns(columns => {
+        columns.Bound(c => c.EventGroupId).Hidden(true);
+        columns.Template("<input type='checkbox' id='#= EventGroupId #' class='chkbx' value='#= EventGroupId #'/>").Width(50);
+        columns.Bound(c => c.Title).Title(Html.Localize("Title").ToString());
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable()
+    .Selectable(selectable => selectable
+        .Mode(GridSelectionMode.Single)
+        .Type(GridSelectionType.Cell))
+    .Events(events => {
+        events.DataBound("upcomingEventsWidgetGroupGrid_DataBound");
+    })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .ServerOperation(false)
+    )
+)
+
+
+@*     Hidden form for holding and posting checkbox changes     *@
+<form id="upcomingEventsWidgetGroupForm" class="form" action="/api/content/calendar/upcomingevents/savewidgetgroups" data-ajax-form="true">
+    <input type="hidden" name="WidgetId" value="@Model.WidgetId" />
+    <input id="Groups" type="hidden" name="Groups" value="@(String.Join(",", Model.SelectedGroupIds))" />
+</form>

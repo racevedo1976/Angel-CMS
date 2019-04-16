@@ -1,0 +1,18 @@
+﻿[
+  {
+    "id": "hero-inspiration",
+    "title": "Welcome to Inspiration School District",
+    "body": "The mission of the Inspiration School District is to provide a child-centered environment that cultivates character, fosters academic excellence, and embraces diversity. District families, community, and staff join as partners to develop creative, exemplary learners with the skills and enthusiasm to contribute to a constantly changing global society."
+  },
+  {
+    "id": "seed1.welcome",
+    "title": "Welcome to Your Website!",
+    "body": "This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information."
+  },
+  {
+    "id": "hero-lorem",
+    "title": "Yo, Lorem",
+    "body": "Why you be ipsum."
+  }
+]
+

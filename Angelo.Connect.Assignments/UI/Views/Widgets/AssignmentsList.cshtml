@@ -1,0 +1,15 @@
+﻿@model Angelo.Connect.Assignments.ViewModels.AssignmentsWidgetViewModel
+
+@{ 
+    var flagName = "WidgetInitFlag" + Model.Id.Replace("-", "");
+    var ename = "VP_" + Model.Id;
+    var loadedEventName = Model.Id + ".loaded";
+    var destroyEventName = Model.Id + ".destroy";
+}
+
+<div class="panel panel-info">
+     <div class="panel-heading">
+        <h4>@Model.Title</h4>
+    </div>
+</div>
+

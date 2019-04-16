@@ -1,0 +1,18 @@
+﻿@model Angelo.Connect.NavMenu.Data.NavMenuViewItem
+
+<li>
+    <a href="@Model.Link">@Model.Title</a>
+    <ul class="navbar-submenu">
+        @foreach(var child in Model.Children)
+        {
+            @if (child.Children.Count > 0)
+            {
+                @await Html.PartialAsync("~/UI/Views/Widgets/NavigationSubItem.cshtml", child)
+            }
+            else
+            {
+                <li><a href="@child.Link">@child.Title</a></li>
+            }
+        }
+    </ul>
+</li>

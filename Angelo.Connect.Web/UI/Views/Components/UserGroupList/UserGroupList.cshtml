@@ -1,0 +1,44 @@
+﻿@model IList<Angelo.Connect.Models.UserGroup>
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var ownerLevel = (string)ViewData["ownerLevel"];
+    var ownerId = (string)ViewData["ownerId"];
+    var userGroupType = (string)ViewData["userGroupType"];
+    var hideEnrollmentColumn = (bool)ViewData["hideEnrollmentColumn"];
+}
+
+
+@(Html.Kendo().Grid<UserGroup>()
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        columns.Bound(n => n.CreatedDT).Title(Html.Localize("Created").ToString()).Format("{0:MM/dd/yyyy}").Width(120);
+        columns.Bound(n => n.Name).Title(Html.Localize("Name").ToString());
+        columns.Bound(n => n.AllowPublicEnrollment).Title(Html.Localize("Open Enrollment").ToString()).Hidden(hideEnrollmentColumn);
+        columns.Bound(n => n.Id).Hidden(true);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable(scr => scr.Height(430))
+    .Filterable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .Read(read =>
+        {
+            read.Type(HttpVerbs.Post)
+            .Url("/api/usergroups/byownerandtype?ownerLevel=" + ownerLevel + "&ownerId=" + ownerId + "&userGroupType=" + userGroupType);
+        })
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+        })
+    )
+)
+

@@ -1,0 +1,104 @@
+﻿@using Kendo.Mvc
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+
+@model IEnumerable<CalendarEventTag>
+@inject TagManager _tagManager
+@{
+    var allTags = await _tagManager.GetAllTagsAsync();
+    var eventId = ViewData["eventId"].ToString();
+}
+
+<div id="gridCalendarEventTagWidget">
+    @(Html.Kendo().Grid(allTags)
+            .Name("calendarEventTagGrid")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.Id).Hidden(true);
+                columns.Bound(c => c.IsActive)
+                        .ClientTemplate("<input type='checkbox' id='#= Id #' class='chkbxTag' value='#= Id #'/>")
+                        .Width(75)
+                        .Title("");
+                columns.Bound(c => c.TagName).Title("Name"); ;
+            })
+        //.ToolBar(toolbar => toolbar.Create().Text("Add New Tag"))
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Pageable()
+        .Sortable()
+        .Selectable(selectable => selectable
+            .Mode(GridSelectionMode.Single)
+            .Type(GridSelectionType.Cell))
+        .Events(events =>
+        {
+            events.DataBound("TagGrid_DataBound");
+        })
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(5)
+            .ServerOperation(false)
+            .Create(update => update.Url("/api/posts/blogWidgetTagCreate/?widgetId=" + eventId))
+         )
+    )
+</div>
+
+<script>
+    function TagGrid_DataBound(e) {
+
+    }
+
+    $(document).ready(function () {
+        var grid = $("#calendarEventTagGrid").data("kendoGrid");
+
+        grid.table.on("click", ".chkbxTag", selectTagRow);
+    });
+
+    var checkedTagIds = {};
+    
+    @foreach (var tag in Model)
+    {
+        Html.Raw($"checkedTagIds[{tag.TagId}] = checked;");
+    }
+
+   
+
+    function selectTagRow() {
+        var checked = this.checked,
+        row = $(this).closest("tr"),
+        grid = $("#calendarEventTagGrid").data("kendoGrid"),
+        dataItem = grid.dataItem(row);
+
+        checkedTagIds[dataItem.Id] = checked;
+        if (checked) {
+            //-select the row
+            row.addClass("k-state-selected");
+        } else {
+            //-remove selection
+            row.removeClass("k-state-selected");
+        }
+        
+        saveTagSelected();
+    }
+
+    function saveTagSelected() {
+        var checked = [];
+        for (var i in checkedTagIds) {
+            if (checkedTagIds[i]) {
+                checked.push(i);
+            }
+        }
+
+        var postData = { eventId: '@eventId', values: checked };
+
+        $.ajax({
+            type: "POST",
+            url: "/api/content/calendar/saveeventtags",
+            data: postData,
+            success: function (data) {
+                alert("save!");
+            },
+            dataType: "json",
+            traditional: true
+        });
+
+    }
+</script>

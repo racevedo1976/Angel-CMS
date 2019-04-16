@@ -1,0 +1,100 @@
+﻿@model ClientViewModel
+@{
+    var componentId = (string)ViewData["cid"];
+    var create = ViewData["Create"];
+    var formPostRoute = routes.CorpApi("clients");
+}
+
+
+@((create.Equals(false)) ? @Html.Localize("Edit Client") : @Html.Localize("Create Client"))
+
+@section Alerts{
+    <div asp-validation-summary="All" class="alert alert-danger" hide-if="ViewContext.ModelState.IsValid"></div>
+}
+
+
+<form id="@componentId" action="@formPostRoute" class="form-horizontal" data-ajax-form role="form">
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.Active)</label>
+        <div class="col-sm-8 checkbox">
+            @Html.CheckBox("Active") @Html.Localize("Active")
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.Name)</label>
+        <div class="col-sm-8">
+            <input name="Name" required placeholder="REQUIRED" type="text" asp-for="Name" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.TenantKey)</label>
+        <div class="col-sm-8">
+            <input name="TenantKey" required placeholder="REQUIRED" type="text" asp-for="TenantKey" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.PreferredName)</label>
+        <div class="col-sm-8">
+            <input name="PreferredName" type="text" class="form-control" asp-for="PreferredName" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.ShortName)</label>
+        <div class="col-sm-8">
+            <input name="ShortName" type="text" class="form-control" asp-for="ShortName" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.AnniversaryDate)</label>
+        <div class="col-sm-8">
+            <input name="Client.AnniversaryDate" type="datetime" class="form-control" asp-for="AnniversaryDate" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.Address1)</label>
+        <div class="col-sm-8">
+            <input name="Address1" type="text" class="form-control" asp-for="Address1" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.Address2)</label>
+        <div class="col-sm-8">
+            <input name="Address2" type="text" class="form-control" asp-for="Address2" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.City)</label>
+        <div class="col-sm-8">
+            <input name="City" type="text" class="form-control" asp-for="City" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.State)</label>
+        <div class="col-sm-8">
+            <input name="State" type="text" class="form-control" asp-for="State" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.Country)</label>
+        <div class="col-sm-8">
+            <input name="Country" type="text" class="form-control" asp-for="Country" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.PostalCode)</label>
+        <div class="col-sm-8">
+            <input name="PostalCode" type="text" class="form-control" asp-for="PostalCode" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-4">@Html.ShortNameFor(x => x.Notes)</label>
+        <div class="col-sm-8">
+            <textarea name="Notes" cols="40" rows="10" class="form-control" asp-for="Notes"></textarea>
+        </div>
+    </div>
+</form>

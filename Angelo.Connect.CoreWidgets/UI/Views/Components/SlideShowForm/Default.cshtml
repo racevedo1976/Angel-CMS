@@ -1,0 +1,64 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.SlideShow
+
+<form class="form" action="/api/widgets/html/slideshow" data-ajax-form="true">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="form-group">
+        <label class="form-label">Transition Speed</label>
+        <div>
+            <select class="form-control" name="Speed" value="@Model.Speed">
+                <option value="1000" @(Model.Speed == 1000 ? "selected" :"")>1 second(s)</option>
+                <option value="2000" @(Model.Speed == 2000 ? "selected" :"")>2 second(s)</option>
+                <option value="3000" @(Model.Speed == 3000 ? "selected" :"")>3 second(s)</option>
+                <option value="4000" @(Model.Speed == 4000 ? "selected" :"")>4 second(s)</option>
+                <option value="5000" @(Model.Speed == 5000 ? "selected" :"")>5 second(s)</option>
+                <option value="6000" @(Model.Speed == 6000 ? "selected" :"")>6 second(s)</option>
+                <option value="7000" @(Model.Speed == 7000 ? "selected" :"")>7 second(s)</option>
+                <option value="8000" @(Model.Speed == 8000 ? "selected" :"")>8 second(s)</option>
+                <option value="9000" @(Model.Speed == 9000 ? "selected" :"")>9 second(s)</option>
+             </select>
+        </div>
+    </div>
+
+    <div style="height: 20px"></div>
+    <div class="form-group">
+        <label class="form-label">Image 1 Caption</label>
+        <div>
+            <input class="form-control" name="Image1Caption" value="@Model.Image1Caption" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Image 1 Url</label>
+        <div>
+            <input class="form-control" name="Image1Src" value="@Model.Image1Src" />
+        </div>
+    </div>
+
+    <div style="height: 20px"></div>
+    <div class="form-group">
+        <label class="form-label">Image 2 Caption</label>
+        <div>
+            <input class="form-control" name="Image2Caption" value="@Model.Image2Caption" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Image 2 Url</label>
+        <div>
+            <input class="form-control" name="Image2Src" value="@Model.Image2Src" />
+        </div>
+    </div>
+
+    <div style="height: 20px"></div>
+    <div class="form-group">
+        <label class="form-label">Image 3 Caption</label>
+        <div>
+            <input class="form-control" name="Image3Caption" value="@Model.Image3Caption" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Image 3 Url</label>
+        <div>
+            <input class="form-control" name="Image3Src" value="@Model.Image3Src" />
+        </div>
+    </div>
+</form>

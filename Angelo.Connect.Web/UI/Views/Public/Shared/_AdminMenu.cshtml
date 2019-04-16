@@ -1,0 +1,27 @@
+﻿@using Angelo.Connect.Menus
+@using Angelo.Connect.Rendering
+@using Angelo.Connect.Security
+
+@model PageContext
+@inject UserContext user
+
+@* TODO: Move to css file *@
+<style>    
+     .sys-admin-menu {
+        position: absolute;
+        z-index: 999;
+        width: 300px;
+        bottom: 0px;
+        display: none;
+        background-color2: #111;
+        border-top: 1px #444 solid;
+    }
+</style>
+
+@if (user.IsAuthenticated)
+{
+    <div class="sys-admin-menu bg-primary clearfix">
+        <component id="sysAdminMenu" type="UserCapabilityMenu"></component>
+    </div>
+
+}

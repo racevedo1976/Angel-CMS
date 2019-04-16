@@ -1,0 +1,47 @@
+﻿@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Models
+
+@model IFolder
+
+@inject IFolderManager<FileDocument> _folderManager
+@{ 
+    var isTrash = Model.Id == null && string.Equals("Trash", Model.Title, StringComparison.CurrentCultureIgnoreCase);
+    var children = _folderManager.GetFoldersAsync(Model).Result;
+    var icon = isTrash
+        ? "glyphicon-trash"
+        : "glyphicon-folder-close";
+}
+
+<div class="text-nowrap">
+    @if (!isTrash && children.Any())
+    {
+        <a role="button" data-toggle="collapse" href="#nd-@Model.GetHashCode()" aria-controls="nd-@Model.GetHashCode()" aria-expanded="false">
+            <span class="glyphicon glyphicon-plus" />
+        </a>
+        <a class="treenode" data-id="@Model.Id" style="">
+            <span class="glyphicon @icon" />
+            <label class="form-label">@Model.Title</label>
+        </a>
+        <div class="collapse" style="margin-left:10pt" id="nd-@Model.GetHashCode()">
+            @foreach (var child in GetFolders(Model))
+            {
+                @Html.Partial("_Node.cshtml", child)
+            }
+        </div>
+    }
+    else
+    {
+        <span class="glyphicon glyphicon-plus invisible" />
+        <a href="#" class="treenode" data-id="@Model.Id" style="">
+            <span class="glyphicon @icon" />
+            <label class="form-label">@Model.Title</label>
+        </a>
+    }
+</div>
+
+@functions{
+    public IEnumerable<IFolder> GetFolders(IFolder parent)
+    {
+        return parent == null ? Enumerable.Empty<IFolder>() : _folderManager.GetFoldersAsync(parent).Result;
+    }
+}

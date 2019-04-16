@@ -1,0 +1,19 @@
+﻿@{
+    var parentId = (string)ViewData["ParentNodeId"];
+    var menuId = Guid.NewGuid().ToString();
+}
+
+<div class="content-layout">
+    <div class="btn-group">
+        <a href="#@menuId" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            Button <span class="caret"></span>
+        </a>
+        <div id="@menuId" class="dropdown-menu" style="width: 300px; min-height: 30px">
+            <div class="row">
+                <div class="col-sm-12">
+                    <zone id="@parentId" name="menu-1"></zone>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

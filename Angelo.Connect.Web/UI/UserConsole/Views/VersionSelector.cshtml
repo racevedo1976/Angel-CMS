@@ -1,0 +1,102 @@
+﻿@using Angelo.Connect.Models
+@model IEnumerable<Angelo.Connect.Models.ContentVersion>
+@{
+    var draftVersions = Model.Where(x => x.Status == Angelo.Connect.Models.ContentStatus.Draft).OrderByDescending(x => x.Created);
+    var archiveVersions = Model.Where(x => x.Status != Angelo.Connect.Models.ContentStatus.Draft).OrderByDescending(x => x.Created);
+}
+
+<div class="modal csc-popup csc-popup-lg">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="csc-popup-title">
+                @Html.Localize("Version Selector")
+            </div>
+            <div class="csc-popup-body">
+                <ul class="nav nav-tabs">
+                    <li hide-if="@draftVersions.Count() == 0" css-active="@draftVersions.Count() > 0">
+                        <a href="#draftVersions" data-toggle="tab">
+                            @Html.Localize("Draft Copies")
+                        </a>
+                    </li>
+                    <li hide-if="@archiveVersions.Count() == 0" css-active="@draftVersions.Count() == 0">
+                        <a href="#archiveVersions" data-toggle="tab">
+                            @Html.Localize("Other Versions")
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="draftVersions" class="tab-pane fade in" hide-if="@draftVersions.Count() == 0" css-active="@draftVersions.Count() > 0">
+                        <div>
+                            <table class="table table-condensed table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>@Html.Localize("Version")</th>
+                                        <th>@Html.Localize("Label")</th>
+                                        <th>@Html.Localize("Created")</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in draftVersions)
+                                {
+                                        <tr>
+                                            <td class="text-primary">
+                                                <a class="modal-button" data-version-code="@item.VersionCode" data-version-status="@item.Status">
+                                                    <i class="fa fa-file-o"></i> &nbsp; @Html.Localize("Select")
+                                                </a>
+                                            </td>
+                                            <td>@item.VersionCode</td>
+                                            <td>@item.VersionLabel</td>
+                                            <td>@item.Created.ToString("MM/dd/yy hh:mm tt")</td>
+
+                                        </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="archiveVersions" class="tab-pane fade in" hide-if="@archiveVersions.Count() == 0" css-active="@draftVersions.Count() == 0">
+                        <div>
+                            <table class="table table-condensed table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>@Html.Localize("Version")</th>
+                                        <th>@Html.Localize("Label")</th>
+                                        <th>@Html.Localize("Created")</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in archiveVersions)
+                                {
+                                        <tr>
+                                            <td class="text-primary">
+                                                <a class="modal-button" data-version-code="@item.VersionCode" data-version-status="@item.Status">
+                                                    <i class="fa fa-file-archive-o"></i> &nbsp; @Html.Localize("Select")
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @item.VersionCode
+
+                                                @if(item.Status == ContentStatus.Published)
+                                                {
+                                                    <span title="@Html.Localize("Published")">&nbsp;<i class="fa fa-check text-success"></i></span>
+                                                }
+                                            </td>
+                                            <td>@item.VersionLabel</td>
+                                            <td>@item.Created.ToString("MM/dd/yy hh:mm tt")</td>
+                                        </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="csc-modal-close modal-button">&times;</a>
+    </div>
+
+</div>

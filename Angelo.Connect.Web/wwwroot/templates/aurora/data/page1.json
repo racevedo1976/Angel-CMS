@@ -1,0 +1,200 @@
+[
+  {
+    "zone": "body",
+    "type": "slideshow lux",
+    "view": "slideshow-carousel",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    }
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "classes": "cs-graybar",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {}
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-4",
+    "style": {
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Parents",
+          "src": "/templates/aurora/images/HomeImage1.jpg",
+          "radius": "0px",
+          "link": "https://auroratemplateqa.schoolinsites.com/parents",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Students",
+          "src": "/templates/aurora/images/HomeImage2.jpg",
+          "radius": "0px",
+          "link": "https://auroratemplateqa.schoolinsites.com/students",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Community",
+          "src": "/templates/aurora/images/HomeImage3.jpg",
+          "radius": "0px",
+          "link": "https://auroratemplateqa.schoolinsites.com/community",
+          "linkNewWindow": false
+        }
+      },
+      {
+        "zone": "cell-4",
+        "type": "image",
+        "view": "image-inline",
+        "style": {},
+        "model": {
+          "caption": "Employees",
+          "src": "/templates/aurora/images/HomeImage4.jpg",
+          "radius": "0px",
+          "link": "https://auroratemplateqa.schoolinsites.com/employees",
+          "linkNewWindow": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "classes": "cs-graybar",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {}
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<h2 class=\"subheads\">Aurora School District</h2><p>The mission of the Aurora School District is to provide a \nchild-centered environment that cultivates character, fosters academic \nexcellence, and embraces diversity. District families, community, and \nstaff join as partners to develop creative, exemplary learners with the \nskills and enthusiasm to contribute to a constantly changing global \nsociety. </p>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "zone",
+        "view": "zone-2",
+        "style": {},
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<h2 class=\"subheads\">Quicklinks</h2><p data-percent=\"100%\"><p>Athletics</p><p>Community</p><p>Parents</p><p>Students</p></p>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<h2 class=\"subheads\">Twitter</h2>",
+              "staticToolbar": false
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "background": "bg-muted",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "<h2 class=\"subheads\">District News</h2><p>The mission of the Aurora School District is to provide a \nchild-centered environment that cultivates character, fosters academic \nexcellence, and embraces diversity. District families, community, and \nstaff join as partners to develop creative, exemplary learners with the \nskills and enthusiasm to contribute to a constantly changing global \nsociety. </p>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "zone",
+        "view": "zone-2",
+        "style": {},
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<h2 class=\"subheads\">School News</h2><p data-percent=\"100%\"><p>Fall Festival</p><p>Swim Team Tryouts</p></p>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<h2 class=\"subheads\">Upcoming Events</h2><div class=\"cns-upcomingevents\"><p data-percent=\"100%\"><p>May 24 - High School Graduation</p><p>June 1 - Summer Vacation Begins</p><p>June 12 - Teacher Work Day</p><p>August 6 - First Day of School</p></p></div>",
+              "staticToolbar": false
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

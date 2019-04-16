@@ -1,0 +1,56 @@
+﻿{
+  "ConnectionStrings": {
+    "ConnectDB": "Server=(localdb)\\MSSQLLocalDb;Database=Dev.Angelo.Connect;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "JobsDB": "Server=(localdb)\\MSSQLLocalDb;Database=Dev.Angelo.Connect;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "IdentityDB": "Server=(localdb)\\MSSQLLocalDb;Database=Dev.Angelo.Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "DriveDB": "Server=(localdb)\\MSSQLLocalDB;Database=Dev.Angelo.Drive;Trusted_Connection=True",
+    "LdapProxyServer": "http://localhost:54020/"
+  },
+  "OpenIdConnect": {
+    "Authority": "http://localhost:49995",
+    "EndPoints": {
+      "Authorize": "http://localhost:49995/connect/authorize",
+      "UserInfo": "http://localhost:49995/connect/userinfo",
+      "ObtainToken": "http://localhost:49995/connect/token",
+      "RevokeToken": "http://localhost:49995/connect/revocation",
+      "ValidateToken": "http://localhost:49995/connect/validation",
+      "Register": "http://localhost:49995/ui/register",
+      "Logout": "http://localhost:49995/auth/{0}/account/logoff",
+      "Meta": "http://localhost:49995/.well-known/openid-configuration",
+      "TenantUsers": "http://localhost:49995/api/tenants/{0}/users",
+      "TenantRoles": "http://localhost:49995/api/tenants/{0}/roles",
+      "PoolUsers": "http://localhost:49995/api/pools/{0}/users",
+      "PoolRoles": "http://localhost:49995/api/pools/{0}/roles",
+      "Ldap": "http://localhost:49995/api/pools/{0}/ldap",
+      "SetPassword": "http://localhost:49995/auth/{0}/account/NewUserSetPassword/?userId={1}&code={2}&ru={3}"
+    }
+  },
+  "WebServer": {
+    "UseHttpsRoutes": false,
+    "UseHttpsRewriter": false,
+    "SessionMinutes": 720
+  },
+  "Drive": {
+    "Authority": "http://localhost:24000/api",
+    "EndPoints": {
+    }
+  },
+  "NotifyMe": {
+    "UnsubscribeDefaultDomain": "http://localhost:60000",
+    "UnsubscribePath": "/sys/notifyme/unsubscribe",
+    "EmailServerHost": "antispam.pcmac.org"
+  },
+
+  "SiteOptions": [
+    {
+      "SiteKey": "sis",
+      "Key": "GoogleSiteId",
+      "Value": "zXvqOMdNsVd1vMZjHN4NfQhtWOmtGz9I31iJfbzHv4E"
+    },
+    {
+      "SiteKey": "sis",
+      "Key": "GoogleSearchCode",
+      "Value": "015230287576461061678:qw_te68o84q"
+    }
+  ]
+}

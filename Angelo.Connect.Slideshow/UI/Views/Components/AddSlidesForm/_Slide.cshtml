@@ -1,0 +1,52 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model Slide
+
+@*TODO Move these styles to class overrides*@
+<div class="thumbnail" style="width:150pt;">
+    <div style="text-align:center;height:80pt;">
+        @*NOTE: Thumbnail is just a document icon*@
+        <img src="@Model.ImageUrl" width="190" height="100"/>
+    </div>
+    <div class="caption panel-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-8" style="text-overflow:ellipsis;">
+                    @Model.Title
+                </div>
+                <div class="col-sm-2">
+                    <a href="#" onclick="editSlide('@Model.DocumentId')">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" />
+                    </a>
+                    
+                    <a href="#" onclick="deleteSlide('@Model.Title', '@Model.DocumentId')">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function editSlide(id) {
+        $('#modalBuffer').html($('.modal-content').html());
+
+        $('.modal-content').empty().loadComponent({
+            "type": "SlideForm",
+            "id": "slideForm",
+            "params": {
+                "documentId": id
+                }
+        }).done(function () {
+        });
+    }
+    function deleteSlide(title, id) {
+        if (!confirm('Are you sure you want to delete the slide "' + title + '"?')) {
+            return;
+        }
+
+        alert('Nonexistent!');
+    }
+</script>

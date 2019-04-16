@@ -1,0 +1,59 @@
+﻿@{ 
+    var selectedContentId = "";
+    var selectedTreeNodeId = "";
+}
+
+@section Title{
+    My Library
+}
+
+
+@section AdminMenu{
+  
+    <component id="ContentTreeViewBrowser" type="ContentTreeViewBrowser" arg-userId="@User.GetUserId()" arg-expandNodeId="@selectedTreeNodeId"></component>
+}
+
+
+<component id="ContentBrowserDetailsView" type="ContentBrowserDetailsView" arg-userId="@User.GetUserId()" arg-selectedContentId="@selectedContentId"></component>
+
+
+@section Scripts{
+
+<script>
+    var userId = '@User.GetUserId()'
+    var expandTreeNodeId = '@selectedTreeNodeId'
+
+    function onTreeViewSelect(e) {
+        var treeview = $("#ContentTreeViewBrowser").data("kendoTreeView");
+        
+        var data = treeview.dataItem(e.node);
+
+        $("#ContentBrowserDetailsView").component().invoke({
+            userId: userId, selectedContentId: data.id,
+            isShared: data.isShared || false
+        });
+    }
+
+
+    $(document).on("RefreshTreeView", function (event, data) {
+        //alert('refreshing tree view2 ' + data.expandTreeNodeId);
+        
+       
+        $("#ContentTreeViewBrowser").component().invoke({ userId: userId, expandNodeId: data.expandTreeNodeId });
+    });
+
+    $(document).on("RefreshBrowserDetailsView", function (event, data) {
+       // alert('refreshing  ContentBrowserDetailsView');
+       // $.component("ContentTreeViewBrowser").reload();
+       
+        $("#ContentBrowserDetailsView").component().invoke({
+            userId: userId,
+            selectedContentId: data.id,
+            isShared : data.isShared || false
+        });
+    });
+
+
+</script>
+
+}

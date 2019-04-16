@@ -1,0 +1,77 @@
+﻿@using Angelo.Connect.Rendering
+@{
+    var renderingContext = ViewData.GetRenderingContext() as ShellContext;
+
+    ViewData["WindowTitle"] = renderingContext.WindowTitle;
+
+    Layout = "_PublicLayout";
+}
+
+@*
+    // NOTE: This loads the underlying page template for the master page, wraps it with
+    //       correct tree context, and loads the design tools if needed.
+    //
+    //       Do not expose internal content ids (if possible) unless we're in design mode
+    //       to prevent bad actors from inspecting source code, acquiring them, and trying
+    //       to hack ajax apis
+*@
+
+@section MetaTags {
+    @if (renderingContext.MetaTags != null)
+    {
+        @foreach (var meta in Model.MetaTags)
+        {
+            <meta name="@meta.Key" content="@meta.Value" />
+        }
+    }
+}
+
+@section Styles {
+    @if (renderingContext.LoadDesignTools)
+    {
+        <link href="/css/designer.css" rel="stylesheet" asp-append-version="true" />
+    }
+}
+
+@section Scripts {
+    @if (renderingContext.LoadDesignTools)
+    {
+        var treeId = renderingContext.ContentEditable ? renderingContext.ContentTreeId : renderingContext.MasterPageTreeId;
+        
+        <script src="/js/designer.js" asp-append-version="true"></script>
+        <script type="text/javascript">
+                $(document).ready(function () {
+                    designer.init("@treeId");
+                });
+        </script>
+    }
+}
+
+
+@if (renderingContext.MasterPageEditable)
+{
+    <div class="master-content content-tree cs-content-tree editable" id="@renderingContext.MasterPageTreeId">
+        @{
+            await Html.RenderPartialAsync(renderingContext.MasterPageTemplate.ViewPath);
+        }
+    </div>
+}
+else
+{
+    <div class="master-content content-tree cs-content-tree">
+        @{
+            await Html.RenderPartialAsync(renderingContext.MasterPageTemplate.ViewPath);
+        }
+    </div>
+}
+
+
+@if (renderingContext.LoadDesignTools)
+{
+    await Html.RenderPartialAsync("/UI/Views/Rendering/Designer/WidgetBar.cshtml");
+    await Html.RenderPartialAsync("/UI/Views/Rendering/Designer/NodeToolbar.cshtml");
+}
+ 
+@{
+    await Html.RenderPartialAsync("/UI/Views/Public/Alerts/SiteAlerts.cshtml");
+}

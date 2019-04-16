@@ -1,0 +1,35 @@
+[
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "background": "bg-default",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "title",
+        "view": "title-default",
+        "style": {},
+        "model": {
+          "text": "Contact",
+          "cssClass": "h1"
+        }
+      },
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {},
+        "model": {
+          "html": "",
+          "staticToolbar": false
+        }
+      }
+    ]
+  }
+]

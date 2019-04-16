@@ -1,0 +1,13 @@
+﻿@{
+    var origin = ViewData["Origin"];
+}
+
+<h1>@Html.Localize("Registration Confirmation")</h1>
+<p>
+    @Html.Localize("Please check your email for a link to verify your account.")
+</p>
+<div class="pull-right">
+    <a href="@origin">
+        @Html.Localize("Return to Login Page")
+    </a>
+</div>

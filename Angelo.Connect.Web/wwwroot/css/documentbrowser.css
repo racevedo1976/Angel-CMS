@@ -1,0 +1,84 @@
+﻿/* document Browswer Styles*/
+.document-browser
+{
+    border: 1px #ddd solid;
+    background: #fff;
+    width: 80%;
+    margin: 30px auto 0 auto;
+}
+
+.document-browser-heading
+{
+    background-color: #ddd;
+    padding: 10px 15px;
+}
+
+.document-browser-title
+{
+    font-size: 14pt;
+}
+
+.document-browser-body
+{
+    padding: 15px;
+}
+
+.document-browser-folders
+{
+    max-height: 250px;
+}
+
+.document-browser-results
+{
+}
+
+/* single select style */
+.document-browser-selection img
+{
+    width: 100%; height: auto;
+}
+
+/* multi select style */
+.document-browser-multi .document-browser-selection img
+{
+    height: 50px; width: auto; margin: 0 5px 5px 0;
+}
+
+.document-browser-files
+{
+    min-height: 400px;
+}
+
+.document-browser-upload
+{
+    min-height: 400px;
+}
+
+.k-filebrowser .k-upload .k-upload-status {
+    display: inline !important;
+}
+
+
+.document-browser-footer
+{
+    padding: 0 15px 15px 15px;
+}
+
+.document-browser-commands > button:not(:last-child)
+{
+    margin-right: 15px;
+}
+
+/* Kendo cleanup */
+.document-browser .k-filebrowser .k-tiles-arrange .k-dropdown {
+    width: 7em;
+}
+
+
+.k-filebrowser .k-upload-files{
+    display: inline !important;
+}
+.k-filebrowser .k-file{
+    width: 100% !important;
+    height: 100% !important;
+}

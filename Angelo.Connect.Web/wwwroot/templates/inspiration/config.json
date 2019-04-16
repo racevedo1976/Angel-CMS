@@ -1,0 +1,43 @@
+﻿{
+  "id": "inspiration",
+  "title": "Inspiration",
+  "pageTemplates": [
+    {
+      "id": "Splash.cshtml",
+      "title": "Home Page",
+      "seedData": [
+        "header.json",
+        "footer.json"
+      ]
+    },
+    {
+      "id": "Page.cshtml",
+      "title": "Secondary Page",
+      "seedData": [
+        "header.json",
+        "footer.json"
+      ]
+    }
+  ],
+  "scripts": [],
+  "themes": [
+    {
+      "id": "default",
+      "title": "Default Theme",
+      "coreStyles": [
+        "/css/themes/cosmo.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common-material.min.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.material.min.css"
+      ]
+    },
+    {
+      "id": "muted",
+      "title": "Muted Colors",
+      "coreStyles": [
+        "/css/themes/cosmo.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.common-material.min.css",
+        "//kendo.cdn.telerik.com/2018.1.221/styles/kendo.material.min.css"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1373 @@
+﻿@using Angelo.Connect.Models
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.Extensions
+@using Angelo.Connect
+@using Angelo.Identity
+@using Microsoft.Extensions.Options
+@using Angelo.Connect.Web.UI.ViewModels.Extensions;
+@using Kendo.Mvc
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+
+
+@inject IFolderManager<FileDocument> folderManager
+@inject IOptions<DriveOptions> _driveOptions
+@inject UserManager _userManager
+@inject IEnumerable<ISecurityGroupProvider> groupsProvider
+@inject IContextAccessor<SiteContext> siteContextAccessor
+
+@{
+    //cast to model used by this specific
+
+    var userId = (string)ViewData["userId"];
+    var id = (string)ViewData["contentId"];
+    var model = (IEnumerable<IContentType>)ViewData["model"];
+    var directoryId = (await _userManager.GetUserAsync(userId)).DirectoryId;
+    var driveUrl = _driveOptions.Value.Authority;
+    var isShareMode = (bool)ViewData["isShared"];
+    var canManageLibrary = (bool)ViewData["canManageLibrary"];
+    var providerName = (string)ViewData["providerName"];
+    var fileExtensions = string.Join(",", DocumentExtensions.GetAllExtensions()) ;
+
+    //Get Product Definition flag for sharing Documents
+    var isSiteDocumentSharingEnabled = siteContextAccessor.GetContext().ProductContext.Features.Get(FeatureId.DocumentSharing)?.GetSettingValue<bool>("enabled") ?? false;
+
+    IFolder folder = new Folder();
+    string folderName = "";
+    IEnumerable<IFolder> folderTree = new List<IFolder>();
+    string disabled = "";
+    IList<FileExplorerViewModel> docViewModelList = new List<FileExplorerViewModel>();
+
+    //sharecontent handling
+    if (id == "sharedcontent" || isShareMode)
+    {
+        folderName = "Shared";
+        disabled = "disabled";
+        foreach (var itemDoc in model)
+        {
+
+            var viewModel = itemDoc.ToFileExplorerViewModel();
+            if (itemDoc is FileDocument)
+            {
+                var item = (FileDocument)itemDoc;
+                var parentFolder = await folderManager.GetFolderAsync(item);
+                //viewModel.Id = parentFolder.Id;
+                viewModel.ParentFolderId = parentFolder.Id;
+            }
+
+            //viewModel.FolderOwnerId = parentFolder.OwnerId;
+            docViewModelList.Add(viewModel);
+        }
+
+    }
+    else
+    {
+        docViewModelList = model.ToFileExplorerViewModel();
+        folder = await folderManager.GetFolderAsync(id);
+        folderName = folder.Title;
+        folderTree = await folderManager.GetFoldersPathAsync(folder);
+        foreach (var item in docViewModelList)
+        {
+            item.ParentFolderId = id;
+
+        }
+    }
+
+    }
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["siteId"];
+}
+
+<link rel="stylesheet" href="~/css/document.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/lib/dropzonejs/dist/dropzone.css"  asp-append-version="true" />
+<link rel="stylesheet" href="~/lib/dropzonejs/dist/basic.css"  asp-append-version="true" />
+
+
+<script src="~/lib/dropzonejs/dist/min/dropzone.min.js"></script>
+
+<form id="@componentId" action="/api/pages" class="form-horizontal" style="height:100%;" data-ajax-form>
+
+    <div id="driveCrumbs" class="toolbar btn-toolbar" style="height:2.5em">
+
+        <ul id="parentTrail" style="list-style-type:none; float:left">
+            @foreach (var f in folderTree)
+            {
+                if (f.Id == id)
+                {
+                    continue;
+                }
+
+                <li class="parent">
+                    @(f.Title == "" ? ViewData["rootFolderName"].ToString() : f.Title)
+                </li>
+                <li class="parent">
+                    <i class="fa fa-angle-right"></i>
+                </li>
+            }
+
+            <li class="parent">
+                <div class="dropdown" style="float:left">
+                    <a class="btn dropdown-toggle" id="addDriveMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="display:inline;padding-top:inherit;">
+                        <span>@(folderName == "" ? ViewData["rootFolderName"].ToString() : folderName)</span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="addDriveMenu">
+                        <li id="addfolder" hide-if="@(!canManageLibrary || (((folder?.IsSystemFolder ?? false) && folderName == "Trash")))">
+                            <a id="CreateNewFolderLink" data-toggle="modal" data-target="#myCreateNewFolderModal" href="#" class="@disabled">
+                                <span class="fa-stack">
+                                    <i class="fa fa-folder fa-stack-2x"></i>
+                                    <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
+                                </span>
+                                @Html.Localize("Add New Folder")
+                            </a>
+                        </li>
+                        <li id="adddoc" hide-if="@(!canManageLibrary || (((folder?.IsSystemFolder ?? false) && folderName == "Trash")))">
+                            <a id="UploadDocumentLink" data-toggle="modal" data-target="#uploadDocumentsModal" href="#" class="@disabled">
+                                <span class="fa-stack">
+                                    <i class="fa fa-file fa-stack-2x"></i>
+                                    <i class="fa fa-plus fa-stack-1x fa-inverse"></i>
+                                </span>
+                                @Html.Localize("Upload Document")
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+        </ul>
+
+
+
+        <div class="btn-group  navbar-right" style="margin-right:0px;height:100%;padding-right:20px;">
+            <a id="restoreFile" title="@Html.Localize("Restore")" hide-if="@(!canManageLibrary)" data-toggle="modal" data-target="#restoreFilesModal" href="#" class="fa fa-undo hidden" style="padding-right:6px;"></a>
+            <a id="deletePermanently" title="@Html.Localize("Delete Permanently")" hide-if="@(!canManageLibrary)" data-toggle="modal" data-target="#confirmDeletePermanentlyModal" href="#" class="fa fa-trash hidden" style="padding-right:6px;"></a>
+
+            <a id="downloadFile" title="@Html.Localize("Download")" data-toggle="modal" data-target="#downloadItemsModal" href="#" class="fa fa-cloud-download hidden" style="padding-right:6px;"></a>
+            <a id="movedocs" title="@Html.Localize("Move")" hide-if="@(!canManageLibrary)" data-toggle="modal" data-target="#moveItemModal" href="#" class="fa fa-arrow-right hidden @disabled" style="padding-right:6px;"></a>
+            <a id="copydocs" title="@Html.Localize("Copy")" hide-if="@(!canManageLibrary)" data-toggle="modal" data-target="#copyItemModal" href="#" class="fa fa-copy hidden @disabled" style="padding-right:6px;"></a>
+            <a id="renamedoc" title="@Html.Localize("Rename")" hide-if="@(!canManageLibrary)" data-toggle="modal" data-target="#renameItemNameModal" href="#" class="fa fa-pencil hidden @disabled" style="padding-right:6px;"></a>
+            <a id="deletedocs" title="@Html.Localize("Delete")" hide-if="@(!canManageLibrary)" data-toggle="modal" data-target="#confirmDeleteModal" href="#" class="fa fa-trash hidden" style="padding-right:6px;"></a>
+            <a id="sharedocs" title="@Html.Localize("Share")" hide-if="@(!canManageLibrary || !isSiteDocumentSharingEnabled)" data-toggle="modal" data-target="#shareItemModal" href="#" class="fa fa-user hidden @disabled" style="padding-right:16px;"></a>
+            <a id="sharegroups" title="@Html.Localize("Share with Groups")" hide-if="@(!canManageLibrary  || !isSiteDocumentSharingEnabled)" data-toggle="modal" data-target="#shareGroupsModal" href="#" class="fa fa-users hidden @disabled" style="padding-right:16px;"></a>
+            <a id="documentInfo" title="@Html.Localize("Information")" href="#" class="fa fa-info hidden" style="padding-right:16px;"></a>
+            <a id="doc-gridView" href="#" style="padding-right:6px;height:100%; ">
+                <i class="fa fa-th" title="Tile View"></i>
+            </a>
+            <a id="doc-listView" href="#" style="padding-right:6px;height:100%; ">
+                <i class="fa fa-list-ul" title="List View"></i>
+            </a>
+        </div>
+    </div>
+
+    <div style="width:100%; position:relative;height:100%">
+        <div id="MainDocumentList" class="MainDocumentList">
+            <div class="document-header row k-header">
+                <div class="cel thumb"></div>
+                <div class="cel filen"><a href="#" onclick="Sort('FileName')">File Name</a></div>
+                <div class="cel filet">Type</div>
+                <div class="cel filez">Size</div>
+            </div>
+            @(Html.Kendo().ListView<FileExplorerViewModel>(docViewModelList)
+                  .Name("listView")
+                  .TagName("div")
+                  .ClientTemplateId("explorerTemplate")
+                  .DataSource(dataSource =>
+                  {
+                      dataSource.Custom().PageSize(20);
+
+                  })
+                  .Pageable(pageable =>
+                      pageable.PageSizes(new int[] { 20, 50 })
+                  )
+                  .Events(events => events.DataBound("onDataBound"))
+                  )
+
+        </div>
+        <script type="text/x-kendo-template" id="explorerTemplate">
+            <div class="documentItem document-list row" data-id="#=Id#" data-extension="#=Extension#" data-folderId="#=ParentFolderId#" data-type="#=ObjectType#">
+
+                # if ((ObjectType != "Folder")) { #
+
+                <div>
+                    <img src='@driveUrl/download/thumbnail/#:encodeURIComponent(Id)#?tz=#=CreatedDateString#' />
+                </div>
+                # }else{ #
+                <div class="thumbn">
+                    <i class="fa fa-folder"></i> &nbsp;
+                </div>
+                # } #
+                <div class="document-name" title="#=Name#">
+                    #=Name.substring(0, 50) + (Name.length > 50 ? '...' : '')#  &nbsp;&nbsp;&nbsp;
+                  
+                </div>
+                <div class="document-type" title="#=FileType#">#=FileType.substring(0, 25) + (FileType.length > 25 ? '...' : '')#</div>
+                <div class="document-size" title="#=Size#">#=Size#</div>
+            </div>
+
+        </script>
+        <div id="DocumentDetailsView" class="DocumentDetailsView">
+            <a href="javascript:void(0)" class="closebtn" onclick="CloseDocumentDetailsView()">&times;</a>
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active">
+                    <a href="#detailsTab" data-toggle="tab">
+                        Details
+                    </a>
+                </li>
+                <li>
+                    <a href="#historyTab" data-toggle="tab">
+                        History
+                    </a>
+                </li>
+
+            </ul>
+            <div class="tab-content">
+                <div id="detailsTab" class="tab-pane fade in active">
+
+                    <div id="documentDetailsContainer"></div>
+
+                </div>
+                <div id="historyTab" class="tab-pane fade">
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</form>
+
+
+
+
+
+<style>
+
+    /* right panel styling */
+
+    .DocumentDetailsView {
+        height:100%;
+        width:0%;
+        position: absolute;
+        z-index:1;
+        top:0;
+        right:0;
+        background-color: transparent;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 40px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .closebtn{
+        position:absolute;
+        top:0;
+        right:25px;
+        font-size:36px;
+        margin-left: 50px;
+    }
+
+    .MainDocumentList{
+        transition: margin-right .5s;
+        padding:5px;
+    }
+
+
+    .expandDetailsViewDiv {
+        width: 350px;
+        right: 1px;
+    }
+
+    .decreaseListViewDiv {
+        /*width: calc(100% - 200px); */
+        margin-right:350px;
+    }
+
+
+    
+    .admin-page-left{
+        width:100% !important;
+    }
+
+     .admin-page-body{
+       overflow:hidden;
+       position:relative;
+       height:100%;
+       min-height: 960px !important;
+    }
+
+    .admin-page-content{
+       overflow:hidden;
+       position:absolute;
+       width:100%;
+       height:100%;
+    }
+
+    /*  End of right panel */
+
+    #parentTrail .parent{
+        float:left;
+        padding-right: 3px;
+        padding:6px 6px;
+    }
+
+      .dropzoneForm {
+        background: lightgray;
+        border: black dashed 2px;
+        width: 100%;
+        padding: 50px;
+        text-align: center;
+        color: dimgray;
+    }
+    .k-autocomplete {
+        width:100%;
+    }
+
+    .disabled {
+    color: #636c72;
+    cursor: not-allowed;
+    background-color: transparent;
+}
+
+</style>
+
+<script>
+    var currentSelectedFolderId = '@id';
+    var isShareFolder = '@(id == "sharedcontent")';
+    var isTrashFolder = '@(((folder?.IsSystemFolder ?? false) && folderName == "Trash") ? true : false )';
+    var providerName = '@providerName';
+    var fileExtensions = '@fileExtensions';
+
+    $(document).ready(function () {
+        GetAvailableFolders();
+
+        var myDropzone = new Dropzone("div#docActionDropZone", {
+            url: "/api/user/library/doc",
+            dictDefaultMessage: "Drag and drop or click here to select files for upload",
+            maxFilesize: 4000,
+            timeout: 3600000,
+            acceptedFiles: fileExtensions,
+            renameFile: function (file) {
+               
+                return file.name;
+            }
+        });
+        myDropzone.on("complete", function (file) {
+            //debugger;
+            /* Maybe display some more file information on your page */
+            // $('#panelFolderDetails').trigger('documentUpdated', {
+            //     refresh: true // any argument
+            // });
+            this.removeFile(file);
+            $("#uploadDocumentsModal").modal('hide');
+
+            //workaround for the modal overlay not being removed if the details are refreshed first
+            setTimeout(function () {
+                $(document).trigger('RefreshBrowserDetailsView', {
+                    refresh: true, // any argument
+                    id: providerName + '_@id'
+                });
+            }, 700);
+        });
+        myDropzone.on('sending', function (file, xhr, formData) {
+            //debugger;
+            formData.append('folderId', '@id');
+        });
+        myDropzone.on('error', function (file, err, formData) {
+            //debugger;
+            //formData.append('folderId', '@id');
+            alert("Error occured during upload. Please contact your system administrator." + err)
+            $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(err);
+        });
+        myDropzone.on("addedfile", function (file) {
+            var dropzone = this;
+            var fileNameTaken = false;
+            var existingDocs = GetAllDocumentsInCurrentView();
+            $.each(existingDocs,
+                function(index, doc) {
+                    if (file.name.trim().toLowerCase() === doc.name.trim().toLowerCase()) {
+                        fileNameTaken = true;
+                    }
+                });
+            if (fileNameTaken) {
+                if (!confirm("File with the same name '" + file.name + "' already exists. Do you want to overwrite?")) {
+                    dropzone.removeFile(file);
+                    
+                }
+            }
+        });
+
+
+        $("#downloadFile").click(function () {
+
+            $.each(GetSelectedDocuments(), function (i, file) {
+                DownloadDocument(file.id);
+            });
+        })
+
+        $("#documentInfo").click(function () {
+            OpenDocumentDetailsView();
+        })
+
+        $("#restoreFile").click(function () {
+            restoreDocument();
+        })
+
+    });
+
+    function bindFileFolderViewEvents() {
+       
+        //File from the list is selected - class toggle
+        $(".documentItem").on("click", function () {
+            //debugger;
+            var documentId = '';
+            $(this).toggleClass('documentItemSelected');
+
+            ActivateDeactiveActions();
+
+            if (this.attributes['data-type'].value == "FileDocument") {
+                documentId = this.attributes['data-id'].value;
+                folderId = this.attributes['data-folderId'].value;
+
+                $("#documentDetailsContainer").loadComponent({
+                    "type": "DocumentDetails",
+                    "id": "DocumentDetails",
+                    "params": {
+                        "userId": "@userId",
+                        "documentId": documentId,
+                        "folderId": folderId,
+                        "isShared": '@(id == "sharedcontent")'
+                    }
+                });
+            }
+
+        });
+
+        //File/Folder from the list is selected by double clicking - class toggle
+        $(".documentItem").on("dblclick", function () {
+            $(this).toggleClass('documentItemSelected');
+
+            if (this.attributes['data-type'].value == "FileDocument") {
+                @*var id = this.attributes['data-id'].value;
+                var url = "@driveUrl/download?id=" + encodeURIComponent(id);
+                window.open(url);*@
+
+                var id = this.attributes['data-id'].value;
+                var extension = this.attributes['data-extension'].value;
+                var url = "@driveUrl/documents/" + encodeURIComponent(id) + extension;
+                window.open(url);
+            } else {
+
+                if (isTrashFolder == 'True') {
+                    $("#confirmRestoreModal").modal('show');
+                    return;
+                }
+
+                var folderId = this.attributes['data-id'].value;
+                $(document).trigger('RefreshBrowserDetailsView', {
+                    refresh: true, // any argument
+                    id: providerName + '_' + folderId,
+                    isShared: '@(id == "sharedcontent")'
+                });
+                $(document).trigger('RefreshTreeView', {
+                    refresh: true, // any argument
+                    expandTreeNodeId: providerName + "_" + folderId
+                });
+
+            }
+
+        });
+
+    }
+
+    function onDataBound(arg) {
+        bindFileFolderViewEvents();
+
+    }
+
+    function restoreDocument() {
+
+        var queue = [];
+        var name = '@id';
+
+        $.each(GetSelectedDocuments(), function (i, file) {
+            queue.push("processing");
+
+            var url = "";
+            if (file.type == "FileDocument") {
+                url = "/api/user/library/doc/restore/?id=" + encodeURIComponent(file.id)
+
+            } else {
+                url = "/api/user/library/folder/restore/?id=" + encodeURIComponent(file.id)
+            }
+
+            LibraryService(url, 'POST', {}, function () {
+                var i = queue.pop();
+                if (queue.length == 0) {
+                    //debugger;
+                    $('#confirmRestoreModal').modal('hide');
+
+                    $(document).trigger('RefreshTreeView', {
+                        refresh: true, // any argument
+                        expandTreeNodeId: providerName + "_" + name
+                    });
+                    setTimeout(function () {
+                        $(document).trigger('RefreshBrowserDetailsView', {
+                            refresh: true, // any argument
+                            id: providerName + '_@id'
+                        });
+                    }, 700);
+                }
+            });
+        });
+
+    }
+
+    function ActivateDeactiveActions() {
+        //debugger;
+        $("#downloadFile").removeClass("hidden");
+        $("#sharedocs").removeClass("hidden");
+        $("#movedocs").removeClass("hidden");
+        $("#copydocs").removeClass("hidden");
+        $("#deletedocs").removeClass("hidden");
+        $("#renamedoc").removeClass("hidden");
+        $("#documentInfo").removeClass("hidden");
+        $("#CreateNewFolderLink").removeClass("hidden");
+        $("#UploadDocumentLink").removeClass("hidden");
+        $("#sharegroups").removeClass("hidden");
+        $("#restoreFile").removeClass("hidden");
+        $("#deletePermanently").removeClass("hidden");
+
+        if (GetSelectedDocuments().length > 1) {
+            $("#renamedoc").addClass("hidden");
+            $("#documentInfo").removeClass("hidden");
+        }
+
+        //hide if we are showing trash mode
+        if (isTrashFolder == 'True') {
+            $("#copydocs").addClass("hidden");
+            $("#CreateNewFolderLink").addClass("hidden");
+            $("#UploadDocumentLink").addClass("hidden");
+            $("#sharedocs").addClass("hidden");
+            $("#deletedocs").addClass("hidden");
+            $("#renamedoc").addClass("hidden");
+            $("#movedocs").addClass("hidden");
+            $("#sharegroups").addClass("hidden");
+
+        } else {
+            $("#restoreFile").addClass("hidden");
+            $("#deletePermanently").addClass("hidden");
+        }
+
+        //if we are showing share items, do not display these actions
+        if (isShareFolder == 'True') {
+            $("#copydocs").addClass("hidden");
+            $("#CreateNewFolderLink").addClass("hidden");
+            $("#UploadDocumentLink").addClass("hidden");
+            $("#sharedocs").addClass("hidden");
+            $("#deletedocs").addClass("hidden");
+            $("#renamedoc").addClass("hidden");
+            $("#movedocs").addClass("hidden");
+            $("#sharegroups").addClass("hidden");
+            $("#restoreFile").addClass("hidden");
+            $("#deletePermanently").addClass("hidden");
+        }
+
+    }
+
+    function OpenDocumentDetailsView() {
+        $(".DocumentDetailsView").addClass("expandDetailsViewDiv");
+
+        $(".MainDocumentList").addClass("decreaseListViewDiv");
+    }
+    function CloseDocumentDetailsView() {
+
+        $(".DocumentDetailsView").removeClass("expandDetailsViewDiv");
+
+        $(".MainDocumentList").removeClass("decreaseListViewDiv");
+
+    }
+    function DownloadDocument(id){
+        var url = "@driveUrl/download?id=" + encodeURIComponent(id);
+        window.open(url);
+    }
+
+    function Sort(field) {
+        //debugger;
+        //var docExplorer = $("#listView").data('kendoListView');
+        //docExplorer.dataSource.sort({ field: field, dir: "desc" })
+        //docExplorer.dataSource.read();
+        //docExplorer.refresh();
+
+    }
+
+
+    var GetSelectedDocuments = function () {
+        var documentsSelected = [];
+        $('div.documentItemSelected').each(function (i, item) {
+            //if (item.attributes['data-type'].value == "FileDocument") {
+            var type = item.attributes['data-type'].value
+            documentsSelected.push({
+                id: item.attributes['data-id'].value,
+                name: item.childNodes[3].innerText,
+                folderId: item.attributes['data-folderId'].value,
+                type: type
+            });
+            // }
+        });
+        return documentsSelected;
+    }
+
+    var GetAllDocumentsInCurrentView = function () {
+        var documentsSelected = [];
+        $('div.documentItem').each(function (i, item) {
+            //if (item.attributes['data-type'].value == "FileDocument") {
+            var type = item.attributes['data-type'].value;
+            documentsSelected.push({
+                id: item.attributes['data-id'].value,
+                name: item.childNodes[3].innerText,
+                folderId: item.attributes['data-folderId'].value,
+                type: type
+            });
+            // }
+        });
+        return documentsSelected;
+    }
+
+    //Create new folder, then refresh tree view
+    var CreateNewFolder = function () {
+        var newName = $("#folderNewName").val();
+        var url = '/api/user/library/folder?name=' + newName + '&ownerId=' + encodeURIComponent('@folder.OwnerId');
+        var name = '@id';
+        if (name && name != '') {
+            url += '&parentId=' + encodeURIComponent(name);
+        }
+        LibraryService(url, 'POST', {}, function () {
+            $("#myCreateNewFolderModal").modal("hide");
+
+
+            // debugger;
+            $(document).trigger('RefreshTreeView', {
+                refresh: true, // any argument
+                expandTreeNodeId: providerName + "_" + name
+            });
+            setTimeout(function () {
+                $(document).trigger('RefreshBrowserDetailsView', {
+                    refresh: true, // any argument
+                    id: providerName + '_@id'
+                });
+            }, 700);
+
+        });
+    };
+
+    //Delete all selected documents
+    var DeletePermanently = function () {
+        var documentsSelected = GetSelectedDocuments();
+        var queue = [];
+        var name = '@id';
+
+        $.each(documentsSelected, function (i, doc) {
+            queue.push("processing");
+            var url = "";
+            if (doc.type == "FileDocument") {
+                url = "/api/user/library/doc/?id=" + encodeURIComponent(doc.id) + '&softDelete=false'
+
+            } else {
+                url = "/api/user/library/folder/?id=" + encodeURIComponent(doc.id) + '&softDelete=false'
+            }
+
+            LibraryService(url, "DELETE", {}, function () {
+                var i = queue.pop();
+                if (queue.length == 0) {
+                    $('#confirmDeletePermanentlyModal').modal('hide');
+
+                    $(document).trigger('RefreshTreeView', {
+                        refresh: true, // any argument
+                        expandTreeNodeId: providerName + "_" + name
+                    });
+
+                    setTimeout(function () {
+                        $(document).trigger('RefreshBrowserDetailsView', {
+                            refresh: true, // any argument
+                            id:  providerName + '_@id'
+                        });
+                    }, 700);
+                }
+            });
+        });
+    };
+    $("#confirmDeletePermanentlyModal").on('show.bs.modal', function (e) {
+        var itemsForDeletion = "";
+        $.each(GetSelectedDocuments(), function (i, doc) {
+            //debugger;
+            itemsForDeletion = itemsForDeletion + "<li>" + doc.name + "</li>";
+        });
+        $("#permanentlyDeleteItemName").html("<ul>" + itemsForDeletion + "</ul>");
+    });
+
+    //Delete all selected documents
+    var DeleteSelected = function () {
+        var documentsSelected = GetSelectedDocuments();
+        var queue = [];
+        var name = '@id';
+
+        $.each(documentsSelected, function (i, doc) {
+            queue.push("processing");
+            var url = "";
+            if (doc.type == "FileDocument") {
+                url = "/api/user/library/doc/?id=" + encodeURIComponent(doc.id) + '&softDelete=true'
+
+            } else {
+                url = "/api/user/library/folder/?id=" + encodeURIComponent(doc.id) + '&softDelete=true'
+            }
+
+            LibraryService(url, "DELETE", {}, function () {
+                var i = queue.pop();
+                if (queue.length == 0) {
+                    $('#confirmDeleteModal').modal('hide');
+
+                    $(document).trigger('RefreshTreeView', {
+                        refresh: true, // any argument
+                        expandTreeNodeId:  providerName + "_" + name
+                    });
+
+                    setTimeout(function () {
+                        $(document).trigger('RefreshBrowserDetailsView', {
+                            refresh: true, // any argument
+                            id:  providerName + '_@id'
+                        });
+                    }, 700);
+                }
+            });
+        });
+    };
+
+
+    $("#confirmDeleteModal").on('show.bs.modal', function (e) {
+        var itemsForDeletion = "";
+        $.each(GetSelectedDocuments(), function (i, doc) {
+            //debugger;
+            itemsForDeletion = itemsForDeletion + "<li>" + doc.name + "</li>";
+        });
+        $("#deleteItemName").html("<ul>" + itemsForDeletion + "</ul>");
+    });
+
+    $("#doc-gridView").click(function (event) {
+        //debugger;
+        event.preventDefault();
+        $(".documentItem").removeClass("document-list");
+        $(".documentItem").addClass("document-grid");
+        $(".thumbn i").addClass("fa-4x");
+        $(".document-header").addClass("hidden");
+    });
+    $("#doc-listView").click(function (event) {
+        event.preventDefault();
+        $(".documentItem").addClass("document-list");
+        $(".documentItem").removeClass("document-grid");
+        $(".thumbn i").removeClass("fa-4x");
+        $(".document-header").removeClass("hidden");
+    });
+
+
+
+    //ShareDocument method to save selected user
+    $("#selectUser").click(function () {
+        var usersAutocomplete = $('#users').data('kendoMultiSelect');
+
+        var promises = [];
+
+        promises.push($("#frmSharedDocuments").form().post());
+
+        $.when.apply($, promises).done(function () {
+            usersAutocomplete.value('');
+            //alert("done");
+            $('#shareItemModal').modal('hide');
+        });
+
+    });
+    $("#shareItemModal").on('show.bs.modal', function (e) {
+        var usersAutocomplete = $('#users').data('kendoMultiSelect');
+        usersAutocomplete.value("");
+        $.each(GetSelectedDocuments(), function (i, doc) {
+            $("#id").val(doc.id);
+            $("#frmSharedDocuments").append("<input type='hidden' name='documentsToShare' value='" + doc.type + "_" + doc.id + "'>")
+        });
+
+
+        var itemsForSharing = "";
+        $.each(GetSelectedDocuments(), function (i, doc) {
+            //debugger;
+            itemsForSharing = itemsForSharing + "<li>" + doc.name + "</li>";
+        });
+        $("#documentsTobeShareList").html("<ul>" + itemsForSharing + "</ul>");
+    });
+
+
+    $("#selectGroups").click(function () {
+        var groupsAutocomplete = $('#gropus').data('kendoMultiSelect');
+        //debugger;
+        var promises = [];
+
+        promises.push($("#frmSharedDocumentsWithUserGroups").form().post());
+
+        $.when.apply($, promises).done(function () {
+            groupsAutocomplete.value('');
+
+            $('#shareGroupsModal').modal('hide');
+
+            //debugger;
+            $(document).trigger('RefreshTreeView', {
+                refresh: true, // any argument
+                expandTreeNodeId: providerName + "_" + currentSelectedFolderId
+            });
+        });
+
+    });
+    $("#shareGroupsModal").on('show.bs.modal', function (e) {
+        var groupsAutocomplete = $('#groups').data('kendoMultiSelect');
+        groupsAutocomplete.value("");
+        $.each(GetSelectedDocuments(), function (i, doc) {
+
+            $("#frmSharedDocumentsWithUserGroups").append("<input type='hidden' name='documentsToShareWithGroups' value='" + doc.type + "_" + doc.id + "'>")
+        });
+
+
+        var itemsForSharing = "";
+        $.each(GetSelectedDocuments(), function (i, doc) {
+            //debugger;
+            itemsForSharing = itemsForSharing + "<li>" + doc.name + "</li>";
+        });
+        $("#documentsTobeShareWithGroupsList").html("<ul>" + itemsForSharing + "</ul>");
+    });
+
+
+    //Rename Document
+    var RenameSelected = function () {
+
+        var documentsSelected = GetSelectedDocuments();
+        var newName = $("#renameItemNewName").val();
+
+        $.each(documentsSelected, function (i, doc) {
+            var url = "";
+            if (doc.type == "FileDocument") {
+                url = "/api/user/library/doc/?documentId=" + encodeURIComponent(doc.id) + "&newName=" + encodeURIComponent(newName);
+
+            } else {
+                url = "/api/user/library/rename/?id=" + encodeURIComponent(doc.id) + "&newName=" + encodeURIComponent(newName);
+            }
+
+            LibraryService(url, "PUT", {}, function () {
+                $("#renameItemNameModal").modal("hide");
+
+                setTimeout(function () {
+                    $(document).trigger('RefreshBrowserDetailsView', {
+                        refresh: true, // any argument
+                        id:  providerName + '_@id'
+                    });
+                }, 700);
+            })
+
+        });
+    };
+    $("#renameItemNameModal").on('show.bs.modal', function (e) {
+        $("#renameItemNewName").val("");
+    });
+
+    //Move items to a different Folder
+    function MoveSelected() {
+        var destinationId = $('#destinationFolder option:selected').val();
+        var queue = [];
+
+
+        $.each(GetSelectedDocuments(), function (i, doc) {
+            queue.push("processing");
+            var url = "";
+            if (doc.type == "FileDocument") {
+                url = "/api/user/library/doc/move/?documentId=" + encodeURIComponent(doc.id) + "&sourceFolderId=" + encodeURIComponent(doc.folderId) + "&destinationFolderId=" + encodeURIComponent(destinationId)
+
+            } else {
+                url = "/api/user/library/move/?folderId=" + encodeURIComponent(doc.id) + "&destinationId=" + encodeURIComponent(destinationId);
+
+            }
+            LibraryService(url, "PUT", {}, function () {
+                var i = queue.pop();
+                if (queue.length == 0) {
+                    $(document).trigger('RefreshBrowserDetailsView', {
+                        refresh: true, // any argument
+                        id:  providerName + '_@id'
+                    });
+
+                }
+
+            });
+
+
+        });
+
+        $('#moveItemModal').modal('hide');
+
+    };
+    $("#moveItemModal").on('show.bs.modal', function (e) {
+        var itemsForMoving = "";
+        $.each(GetSelectedDocuments(), function (i, doc) {
+            //debugger;
+            itemsForMoving = itemsForMoving + "<li>" + doc.name + "</li>";
+        });
+        $("#moveItemsNames").html("<ul>" + itemsForMoving + "</ul>");
+
+        BindMoveFolders();
+    });
+
+    //Copy files to other locations
+    $("#copyItemModal").on('show.bs.modal', function (e) {
+        var itemsForCopying = "";
+        $.each(GetSelectedDocuments(), function (i, doc) {
+            //debugger;
+            itemsForCopying = itemsForCopying + "<li>" + doc.name + "</li>";
+        });
+        $("#documentsToCopy").html("<ul>" + itemsForCopying + "</ul>");
+
+        BindCopyFolders();
+    });
+    var CopySelected = function () {
+        var destinationId = $('#destinationFolderCopy option:selected').val();
+        var queue = [];
+        var destinationItems = GetFolderItems(userId, destinationId);   // Docs and Folders with itemType
+
+
+        $.each(GetSelectedDocuments(), function (i, doc) {
+            queue.push("processing");
+
+            var url = "";
+            if (doc.type == "FileDocument") {
+                url = "/api/user/library/doc/copy/?documentId=" + encodeURIComponent(doc.id) + "&sourceFolderId=" + encodeURIComponent(doc.folderId) + "&destinationFolderId=" + encodeURIComponent(destinationId)
+
+            } else {
+                url = "/api/user/library/copy/?folderId=" + encodeURIComponent(doc.id) + "&destinationId=" + encodeURIComponent(destinationId);
+
+            }
+            //debugger;
+            //if a file with the same name exists then rename the new file
+            var sameName = GetSameName(doc.name, destinationItems);
+            if (sameName && sameName != '') {
+                doc.name = "Copy of " + doc.name;
+            }
+
+            if (destinationId != "" && GetSelectedDocuments().length == 1)
+                url += '&newName=' + encodeURIComponent(doc.name);
+            LibraryService(url, "PUT", {}, function () {
+                var i = queue.pop();
+                if (queue.length == 0) {
+                    $('#copyItemModal').modal('hide');
+                }
+
+            })
+        })
+    };
+
+    var GetFolderItems = function(userId, destinationId){
+        var results = [];
+        var url = '/api/user/library/folder?userId=' + encodeURIComponent(userId) + '&id=' + encodeURIComponent(destinationId);
+        LibraryService(url, 'GET', {}, function (folder) {
+            $.each(folder.ChildFolders, function (i, item) {
+                results.push({ name: item, itemType: 'folder' });
+            });
+            $.each(folder.documents, function (i, item) {
+                results.push({ name: item, itemType: 'doc' });
+            });
+        });
+
+        return results;
+    };
+
+    var GetSameName = function (name, items) {
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if (item.name == name) return item;
+        }
+
+        return null;
+    };
+
+    var BindMoveFolders = function () {
+        $('#destinationFolder').empty();
+        for (var i = 0; i < allFoldersExceptMe.length; i++) {
+            var folder = allFoldersExceptMe[i];
+            $('#destinationFolder').append($('<option value="' + folder.Id + '">' + GetFolderPath(folder) + '</option>'));
+        }
+    };
+
+    var BindCopyFolders = function () {
+        $('#destinationFolderCopy').empty();
+        for (var i = 0; i < allFoldersExceptMe.length; i++) {
+            var folder = allFoldersExceptMe[i];
+            $('#destinationFolderCopy').append($('<option value="' + folder.Id + '">' + GetFolderPath(folder) + '</option>'));
+        }
+    };
+
+
+    var GetFolderPath = function (folder) {
+        var result = '';
+        //debugger;
+        if (folder) {
+
+            var parent = GetFolderPath(folder.ParentFolder);
+            if (parent == '/') parent = '';
+
+            result = parent + '/' + folder.Title;
+        }
+
+        return result;
+    };
+
+    var allFoldersExceptMe = [];
+    var allFolders = [];
+    var GetAvailableFolders = function () {
+        LibraryService('/api/user/library/folders?userId=' + encodeURIComponent('@userId'), 'GET', {}, function (data) {
+            data = data.sort(function (a, b) {
+                if (a.path < b.path) return -1;
+
+                if (a.path > b.path) return 1;
+
+                return 0;
+            });
+
+            //debugger;
+            allFolders = [];
+            allFoldersExceptMe = [];
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                allFolders.push(item);
+
+                var folderId = currentSelectedFolderId;
+                if (!folderId && item.ParentId == null) continue;  // Exclude self(implicit root)
+                if (folderId && item.Id == folderId) continue;           // Exlude self
+
+                allFoldersExceptMe.push(item);
+            }
+
+            //debugger;
+            // Moved this here due to need to synchronize this with getAvailableFolders
+            //self.bindMoveFolders();
+            // self.bindCopyFolders();
+        });
+    };
+
+    // Utility functions
+    var LibraryService = function (url, method, data, callback) {
+        $.ajax({
+            url: url,
+            type: method,
+            data: data,
+            contentType: 'application/json',
+            //xhrFields: {
+            //    withCredentials: true
+            //},
+            success: function (data) {
+                if (callback) {
+                    callback(data)
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+
+    };
+
+
+
+    //<component id="documentDetails" type="DocumentDetails"   arg-userId="User.GetUserId()"></component>
+</script>
+
+
+<!-- Share Item Modal -->
+<div id="shareItemModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Share Document</h4>
+            </div>
+            <div class="modal-body form-group">
+                <form id="frmSharedDocuments" method="post" action="/api/user/library/sharedocument/users" class="form form-horizontal" data-ajax-form>
+                    <input type="hidden" id="id" name="id" value="" />
+                    <label>The following document will be share:</label>
+                    <span id="documentsTobeShareList"></span>
+                    <br />
+
+                    @(Html.Kendo().MultiSelect()
+                    .Name("users")
+                    .Filter("startswith")
+                    .Placeholder("Start typing the user's name...")
+                    .DataTextField("DisplayName")
+                    .DataValueField("Id")
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .PageSize(7)
+                        .Read(read => read.Url(routes.ClientApi("/users/data/?clientId=&siteId=&directoryId=" + directoryId + "&poolId=")))
+                        .ServerOperation(false)
+
+                    )
+                   
+
+                    )
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="selectUser" type="button" class="btn btn-default btn-primary" data-dismiss="modal">Done</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Share Groups Modal--> 
+<div id="shareGroupsModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Share Document(s) with groups</h4>
+            </div>
+            <div class="modal-body form-group">
+                <form id="frmSharedDocumentsWithUserGroups" method="post" action="/api/user/library/sharedocument/groups" class="form form-horizontal" data-ajax-form>
+                    
+                    <label>The following document will be share:</label>
+                    <span id="documentsTobeShareWithGroupsList"></span>
+                    <br />
+                    <label>Select one or more groups:</label>
+                    @{ 
+                       
+                    }
+                    @(Html.Kendo().MultiSelect()
+                    .Name("groups")
+                    .Filter("startswith")
+                    .Placeholder("Start typing the group's name...")
+                    .DataTextField("Name")
+                    .DataValueField("Id")
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .PageSize(7)
+                        .Group(g => g.Add("GroupType", typeof(string)))
+                        .Read(read => read.Url("/api/usergroups/usergroups"))
+                        .ServerOperation(false)
+
+                    )
+
+
+                    )
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="selectGroups" type="button" class="btn btn-default btn-primary" data-dismiss="modal">Done</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Delete Item (Soft Delete) Modal -->
+<div id="confirmDeleteModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Item(s)</h4>
+            </div>
+            <div class="modal-body form-group">
+                <span>Are you sure you want to delete the following item(s) : </span><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;<span id="deleteItemName"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" onclick="DeleteSelected()">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Delete Item Hard Delete Modal -->
+<div id="confirmDeletePermanentlyModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Delete Item(s) Permanently </h4>
+            </div>
+            <div class="modal-body form-group">
+                <h3>Are you sure you want to delete the following item(s) permanently? </h3><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;<span id="permanentlyDeleteItemName"></span>
+                <br /><br />
+                <div class="warning">Warning: You can’t undo this action.</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" onclick="DeletePermanently()">Yes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Restore Item from trash Modal -->
+<div id="confirmRestoreModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Restore Confirmation(s)</h4>
+            </div>
+            <div class="modal-body form-group">
+                <h3>This folder is in your trash </h3><br />
+                <div>
+                    To view this folder, you'll need to restore it from your trash.
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span id="deleteItemName"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" onclick="restoreDocument()">Restore</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Rename Item Name Modal -->
+<div id="renameItemNameModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Rename Item</h4>
+            </div>
+            <div class="modal-body form-group">
+                <label for="renameItemNewName">Enter the new item name:</label>
+                <input type="text" class="form-control" placeholder="New Item name" id="renameItemNewName" name="renameItemNewName" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-primary" onclick="RenameSelected()">Rename</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upload files Modal -->
+<div id="uploadDocumentsModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Upload Document(s)</h4>
+            </div>
+            <div class="modal-body form-group">
+                <div class="jumbotron">
+                    <div class="dropzoneForm dropzone" id="docActionDropZone">
+                        <div class="dz-message dz-default">
+                            <span>Drag and drop or click here to select files for upload</span>
+                        </div>
+                    </div>
+
+                </div>
+                
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Done uploading</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create New Folder Modal -->
+<div id="myCreateNewFolderModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Folder</h4>
+            </div>
+            <div class="modal-body form-group">
+                <label for="folderNewName">Enter the new folder name:</label>
+                <input type="text" class="form-control" placeholder="New folder name" id="folderNewName" name="folderNewName" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-primary" onclick="CreateNewFolder()">Create</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Copy Item Modal -->
+<div id="copyItemModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Copy Item(s)</h4>
+            </div>
+            <div class="modal-body form-group">
+                <label for="destinationFolderCopy">You selected the following items to copy: </label>
+                <span id="documentsToCopy"></span>
+
+                <label for="destinationFolderCopy">Select a destination folder: </label>
+                <select id="destinationFolderCopy" class="form-control" data-bind="foreach: allFoldersExceptMe">
+                    @*<option data-bind="value: id, text: name"></option>*@
+                </select>
+            </div>
+           
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-primary" onclick="CopySelected()">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Move Item Modal -->
+<div id="moveItemModal" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Move Item(s)</h4>
+            </div>
+            <div class="modal-body form-group">
+                <label for="destinationFolder">The following selected items will be moved: </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span id="moveItemsNames"></span>
+
+                <label for="destinationFolder">Select a destination folder: </label>
+                <select id="destinationFolder" class="form-control" data-bind="foreach: allFoldersExceptMe">
+                    @*<option data-bind="value: id, text: name"></option>*@
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default btn-primary" onclick="MoveSelected()">Move</button>
+            </div>
+        </div>
+    </div>
+</div>
+

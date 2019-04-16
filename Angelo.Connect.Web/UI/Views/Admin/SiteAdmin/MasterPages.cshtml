@@ -1,0 +1,132 @@
+﻿@model IEnumerable<PageMasterViewModel>
+
+@{
+    var siteId = (string)ViewData["SiteId"];
+    var masterPageId = (string)ViewData["MasterPageId"];
+}
+
+@section Title{
+    @Html.Localize("Master Pages")
+}
+
+@section Panel{
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#editPageMasterTab" data-toggle="tab">
+                @Html.Localize("Master Page Details")
+            </a>
+        </li>
+        <li>
+            <a href="#pageMasterLayoutTab" data-toggle="tab">
+                @Html.Localize("Master Page Layout")
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="editPageMasterTab" class="tab-pane fade in active" style="display:none" >
+            <div id="pageMasterEditToolbar" class="toolbar">
+                <a name="save"  asp-authorize asp-policy="@PolicyNames.SiteMasterPagesEdit"  class="fa fa-save" title="@Html.Localize("Save")"></a>
+                @*<a name="delete" class="fa fa-trash-o" title="@Html.Localize("Delete")" disabled></a>*@
+                @*<a name="design" class="fa fa-pencil-square pull-right"><span>Design</span></a>*@
+            </div>
+            <component id="pageMasterEditForm" type="PageMasterEditForm" arg-siteId="@siteId"></component>
+            <label class="col-sm-4">Preview</label>
+            <div id="masterPageImage" class="col-sm-7" style="padding-top:2em; padding-bottom:20px;">
+            </div>
+        </div>
+
+        <div id="pageMasterLayoutTab" class="tab-pane fade in">
+            <div class="text-muted placeholder">
+                Not Implemented
+            </div>
+        </div>
+    </div>
+}
+
+<div id="pageMasterPageList">
+    <div id="contentToolbar" class="toolbar">
+        <a name="add" asp-authorize asp-policy="@PolicyNames.SiteMasterPagesCreate" class="fa fa-plus-square">
+            <span>@Html.Localize("Create")</span>
+        </a>
+    </div>
+    <component id="pageMasterList" type="PageMasterList" arg-siteId="@siteId"></component>
+</div>
+
+@section Scripts{
+    <script>
+        // List View
+        $.on("pageMasterList.change", function (event, data) {
+            var row = data.sender.select();
+            var model = data.sender.dataItem(row);
+            $("#pageMasterEditForm").component().invoke({ siteId: model.SiteId, pageMasterId: model.Id });
+            onListViewChange(data);
+            var templateName = model.ViewTemplateId;
+            $("#editPageMasterTab").css("display", "block");
+        });
+
+        // Add
+        $.on("contentToolbar.add", function () {
+            $("#editPageMasterTab").css("display", "block");
+            $("#pageMasterEditForm").component().invoke({ siteId: "@siteId" });
+            $("#viewTemplatesDropDown")[0].selectedIndex = 0;
+            $('#masterPageImage').html("");
+            var templateId = $("#viewTemplatesDropDown").val();
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/api/masterpages/viewtemplate",
+                data: { templateId: templateId },
+                success: function (data) {
+                    var imageString = "<img style='padding:1px 1px 1px 1px; box-shadow: 5px 10px 18px #888888;' src='" + data.PreviewPath + "'" + "/>";
+                    $('#masterPageImage').append(imageString);
+                    $("#previewPath").val(data.PreviewPath);
+                },
+                error: function (data) {
+                    alert("@Html.Localize("Alert.Page.Master.Error")");
+                }
+            });
+
+        });
+
+        // Edit
+        $.on("pageMasterEditToolbar.save", function (event, data) {
+            $("#pageMasterEditForm").form().put();
+        });
+
+        $.on("pageMasterEditForm.submit", function (event, data) {
+            var listView = $("#pageMasterList").getKendoListView();
+            listView.dataSource.read();
+        });
+
+        function onDropdownChange(data) {
+            $('#masterPageImage').html("");
+            var templateId = data.value;
+           // debugger;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/api/masterpages/viewtemplate",
+                data: { templateId: templateId },
+                success: function (data) {
+                    var imageString = "<img style='padding:1px 1px 1px 1px; box-shadow: 5px 10px 18px #888888;' src='" + data.PreviewPath + "'" + "/>";
+                    $('#masterPageImage').append(imageString);
+                    $("#previewPath").val(data.PreviewPath);
+                },
+                error: function (data) {
+                    alert("@Html.Localize("Alert.Page.Master.Error")");
+                }
+            });
+        }
+
+        function onListViewChange(data) {
+            $('#masterPageImage').html("");
+            var row = data.sender.select();
+            var model = data.sender.dataItem(row);
+            var currentImage = model.PreviewPath.toString();
+            var imageString = "<img style='padding:1px 1px 1px 1px; box-shadow: 5px 10px 18px #888888;' src='" + currentImage + "'" + "/>";
+            $('#masterPageImage').append(imageString);
+        }
+    </script>
+}

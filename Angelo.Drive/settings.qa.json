@@ -1,0 +1,9 @@
+﻿{
+  "ConnectionStrings": {
+    "ConnectDB": "Data Source=QaDB;Initial Catalog=Angelo.Connect;Integrated Security=True;MultipleActiveResultSets=true",
+    "DriveDB": "Data Source=QaDB;Initial Catalog=Angelo.Drive;Integrated Security=True"
+  },
+  "OpenIdConnect": {
+    "Authority": "https://aegisqa.schoolinsites.com/"
+  }
+}

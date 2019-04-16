@@ -1,0 +1,21 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.1",
+    "Microsoft.AspNetCore.Mvc": "1.1.8",
+    "Microsoft.EntityFrameworkCore": "1.1.6",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.6",
+    "Telerik.UI.for.AspNet.Core.Trial": "2016.3.1118",
+    "Angelo.Connect.Core": { "target": "project" },
+    "Angelo.Plugins": { "target": "project" }
+  },
+
+  "frameworks": {
+    "netstandard1.6": {}
+  },
+
+  "buildOptions": {
+    "embed": [ "UI/Views/**", "wwwroot/**" ]
+  }
+}

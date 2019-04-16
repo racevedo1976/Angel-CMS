@@ -1,0 +1,39 @@
+﻿@model SiteViewModel
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var clientId = (string)ViewData["ClientId"];
+}
+
+@(Html.Kendo().Grid<SiteCollectionViewModel>()
+        .Name(componentId)
+        .Columns(columns =>
+            {
+                columns.Bound(c => c.Id).Hidden(true);
+                columns.Bound(c => c.ClientId).Hidden(true);
+                columns.Bound(c => c.Name);
+            }
+        )
+        .Scrollable()
+        .Selectable(selectable => selectable
+            .Enabled(true)
+            .Type(GridSelectionType.Row)
+        )
+        .Sortable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5)
+        )
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(7)
+            .Read(read => read.Url("/api/siteCollections/data/?clientId=" + clientId))
+            .ServerOperation(false)
+            .Model(model =>
+                {
+                    model.Id(x => x.Id);
+                }
+            )
+        )
+)

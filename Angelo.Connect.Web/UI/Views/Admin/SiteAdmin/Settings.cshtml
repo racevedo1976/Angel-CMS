@@ -1,0 +1,34 @@
+﻿@{ 
+    var siteId = (string)ViewData["SiteId"];
+}
+
+@section Title {
+    @Html.Localize("Site Settings")
+}
+
+<div id="settingsTab">
+    <div id="settingsToolbar" class="toolbar">
+        <a name="save" asp-authorize asp-policy="@("CanEditSiteSettings")" class="fa fa-save pull-right" title="@Html.Localize("Save")"></a>
+    </div>
+    <component id="siteSettingsEditForm" type="SiteSettingsEditForm" arg-siteId="@siteId"></component>
+</div>
+
+@section Scripts {
+    <script>
+        $.on("settingsToolbar.save", function () {
+            $("#siteSettingsEditForm").form().post();
+        });
+
+        $("#enableGoogleTracking").on("change", function () {
+            if (this.checked) {
+                $("input[name=GoogleTrackingId]").removeAttr("disabled");
+            } else {
+                $("input[name=GoogleTrackingId]").val(" ");
+                $("input[name=GoogleTrackingId]").attr("disabled", "disabled");
+            }
+
+        });
+
+
+    </script>
+}

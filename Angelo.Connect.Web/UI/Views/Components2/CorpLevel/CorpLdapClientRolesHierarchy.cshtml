@@ -1,0 +1,35 @@
+﻿<h4>Select directory for ldap configuraton and role mapping</h4>
+@{ 
+    var clientId = (string)ViewData["clientId"];
+    var componentId = (string)ViewData["cid"];
+}
+
+<div class="demo-section k-content">
+   
+    @(Html.Kendo().TreeView()
+        .Name(componentId)
+        .DataTextField("name")
+        .LoadOnDemand(true)
+       
+        .DataSource(dataSource =>
+        {
+            dataSource.Read(read =>
+                    read.Url("/sys/corp/api/ldap/hierarchy?clientId=" + clientId)
+                );
+
+
+        })
+
+    )
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".k-treeview .k-icon").removeClass("k-i-loading");
+    });
+
+   
+  
+
+
+</script>

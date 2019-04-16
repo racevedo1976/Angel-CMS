@@ -1,0 +1,142 @@
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+@using Angelo.Connect.News.Models
+@using Angelo.Connect.News.Services
+@using Angelo.Connect.Rendering;
+
+@inject NewsQueryService NewsQueryService
+@model NewsWidget
+@{
+    var NewsPosts = NewsQueryService.QueryByWidget(Model.Id);
+    var postNumMax = 10;
+    //var treeContext = ViewData.GetTreeContext();
+    //var encodedUrl = ViewContext.GetRelativeUrlEncoded();
+}
+
+<div class="container">
+    <h3>
+        @Model.Title
+    </h3>
+
+    <hr />
+    <div id="NewsContainer">
+        @foreach (var post in NewsPosts.OrderByDescending(x => x.Posted).Take(postNumMax).ToList())
+        {
+            <div class="row padded">
+                <div class="col-sm-4">
+                    <img src="@post.Image" style="width: 100%; height: auto;" alt="@post.Caption" />
+                </div>
+                <div class="col-sm-8" style="padding-left: 15px">
+                    <a class="text-info" href="/sys/content/newspost/@post.Id">
+                        @post.Title
+                    </a>
+                    <br />
+                    <p class="card-text" style="height: 50px; overflow: hidden">
+                        @post.Excerp
+                    </p>
+                    <p>
+                        <small class="text-muted">
+                            <i>@post.Posted.ToString("ddd MMM dd hh:mm tt")</i>
+                        </small>
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="loadMoreContainer" class="padded" style="display:none;">
+        <button id="loadMore" class="btn btn-default" role="button"><span></span>Load More</button>
+    </div>
+    <div id="loadingContainer" class="padded" style="display:none;">
+        <i class="fa fa-spinner loading-animate" style="font-size: 20px;"></i>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var queryCount = 1;
+    var queryLock = false;
+
+    $(window).scroll(function () {
+        getNewsPosts();
+    });
+
+    $("#loadMoreContainer").on("click", function () {
+        getNewsPosts();
+    });
+
+    function getNewsPosts(){
+        if (queryLock == false)
+        {
+            var end = $(".site-footer").offset().top;
+            var viewEnd = $(window).scrollTop() + $(window).height();
+            var distance = end - viewEnd;
+        
+            if (distance < 300) {
+                queryLock = true;
+                $.ajax({
+                    url: ("/sys/content/newspost/range"),
+                    type: 'GET',
+                    timeout: 2000,
+                    dataType: "json",
+                    data: {
+                        'id': '@Model.Id',
+                        'skip': 10 * queryCount
+                    },
+                    beforeSend: function () {
+                        $("#loadingContainer").toggle();
+                    },
+                    complete: function () {
+                        $("#loadingContainer").toggle();
+                    },
+                    success: function (data) {
+                        if (jQuery.isEmptyObject(data)) {
+                            if($("#loadMoreContainer").css('display') == 'inline')
+                                $("#loadMoreContainer").toggle();
+                        }else
+                        {
+                            appendPosts(data);
+                            queryCount += 1;
+                            queryLock = false;
+                        }
+                    },
+                    error: function (data, status, err) {
+                        if (status == "timeout" && $("#loadMoreContainer").css('display') == 'none') {
+                            $("#loadMoreContainer").toggle();
+
+                            queryLock = false;
+                        }
+                        
+                    }
+                })
+                .fail(function (xhr) {
+                })
+                .done(function (data) {
+                })
+                .always(function (response) {
+                });
+            }
+        }
+    }
+
+    function appendPosts(json)
+    {
+        $.each(json, function (key, item) {
+            $("#NewsContainer").append('<div class="row padded">' +
+                '<div class="col-sm-4">' +
+                    '<img src="' + item.Image + '" style="width: 100%; height: auto;" alt="' + item.Caption + '" />' +
+                '</div>' +
+                '<div class="col-sm-8" style="padding-left: 15px">' +
+                    '<a class="text-info" href="/sys/content/newspost/' + item.Id + '">' + item.Title +
+                    '</a>' +
+                    '<br />' +
+                    '<p class="card-text" style="height: 50px; overflow: hidden">' + item.Excerp +
+                    '</p>' +
+                    '<p>' +
+                        '<small class="text-muted">' +
+                            '<i>' + item.PostedStr + '</i>' +
+                        '</small>' +
+                    '</p>' +
+                '</div>' +
+            '</div>');
+        });
+    }
+</script>

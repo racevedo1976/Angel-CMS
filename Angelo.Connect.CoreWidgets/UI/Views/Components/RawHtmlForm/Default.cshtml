@@ -1,0 +1,11 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.RawHtml
+
+<form class="form" action="/sys/widgets/html" data-ajax-form="true">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="form-group">
+        <label class="form-label">Raw Html</label>
+        <div>
+            <textarea class="form-control" name="Html" style="height: 340px">@Model.Html</textarea>
+        </div>
+    </div>
+</form>

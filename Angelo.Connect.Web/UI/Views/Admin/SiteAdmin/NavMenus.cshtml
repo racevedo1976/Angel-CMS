@@ -1,0 +1,201 @@
+﻿@model IEnumerable<NavigationMenuViewModel>
+
+@{
+    var siteId = (string)ViewData["SiteId"];
+    var navigationMenuId = (string)ViewData["NavigationMenuId"];
+    var create = (bool)ViewData["Create"];
+}
+
+@section Title{
+    @Html.Localize("Title")
+}
+
+
+@section Panel{
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#editMenuTab" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+        <li>
+            &nbsp;
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="editMenuTab" class="tab-pane fade in active">
+
+            <div id="navigationMenuEditSubPane" class="tab-sub-pane" style="display:none">
+                <div id="navigationMenuEditToolbar" class="toolbar">
+                    &nbsp;
+                </div>
+                <component id="navigationMenuEditForm" type="NavigationMenuEditForm"></component>
+            </div>
+
+            <div id="navigationMenuAddSubPane" class="tab-sub-pane" style="display:none">
+                <div id="navigationMenuAddToolbar" class="toolbar">
+                    <a name="back" class="fa fa-arrow-left" title="Back">Back</a>
+                    <a name="save" asp-authorize asp-policy="@("CanEditSiteNavMenus")" class="fa fa-save" title="@Html.Localize("Save")">Save</a>
+                </div>
+                <component id="navigationMenuAddForm" type="NavigationMenuAddForm"></component>
+            </div>
+
+            <div id="navigationMenuItemEditSubPane" class="tab-sub-pane" style="display:none">
+                <div id="navigationMenuItemEditToolbar" class="toolbar">
+                    <a name="back" class="fa fa-arrow-left" title="Back">Back</a>
+                    <a name="save"  asp-authorize asp-policy="@("CanEditSiteNavMenus")" class="fa fa-save" title="@Html.Localize("Save")">Save</a>
+                </div>
+                <component id="navigationMenuItemEditForm" type="NavigationMenuItemEditForm" arg-siteId="@siteId" arg-navigationMenuId="@navigationMenuId"></component>
+            </div>
+
+        </div>
+    </div>
+}
+
+<div id="mainGrid">
+    <div id="navigationMenuGridToolbar" class="toolbar">
+        <a name="add" asp-authorize asp-policy="@("CanCreateSiteNavMenus")" class="fa fa-plus-square">
+            <span>@Html.Localize("Create")</span>
+        </a>
+        <a name="delete" asp-authorize asp-policy="@("CanDeleteSiteNavMenus")"class="fa fa-trash-o" disabled="disabled">
+            <span>@Html.Localize("Delete")</span>
+        </a>
+    </div>
+    <component id="navigationMenuGrid" type="NavigationMenuGrid" arg-siteId="@siteId"></component>
+</div>
+
+@section Scripts{
+    <script>
+        // Main Grid --------------------------------------------------------------
+
+        $.on("navigationMenuGrid.change", function (event, data) {
+            var row = data.sender.select();
+            var model = data.sender.dataItem(row);
+
+            $("#navigationMenuGridToolbar").toolbar().enable("delete");
+
+            $("#navigationMenuAddForm").component().invoke({});
+            $("#navigationMenuEditForm").component().invoke({ navMenuId: model.Id });
+            SetActiveSubPane("navigationMenuEditSubPane");
+        })
+
+        $.on("navigationMenuGridToolbar.add", function () {
+            $("#navigationMenuEditForm").component().invoke({ });
+            $("#navigationMenuAddForm").component().invoke({ siteId: "@siteId" });
+            SetActiveSubPane("navigationMenuAddSubPane");
+        });
+
+        $.on("navigationMenuGridToolbar.delete", function () {
+            var grid = $("#navigationMenuGrid").getKendoGrid();
+            var row = grid.select();
+            var model = grid.dataItem(row);
+            if (model && confirm("Are you sure you want to delete the \"" + model.Title + "\" navigation menu?")) {
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "@routes.SiteApi("navigationmenu")/" + model.id,
+                    //data: { navMenuId: model.id },
+                    success: function () {
+                        HideTabPane("editMenuTab");
+                        $("#navigationMenuGridToolbar").toolbar().disable("delete");
+                        $("#navigationMenuGrid").component().invoke({ siteId: "@siteId" });
+                    }
+                });
+            }
+        });
+
+        // Edit Details --------------------------------------------------------------
+
+        $.on("navigationMenuEditForm.save", function (event, data) {
+            $("#navigationMenuEditForm").form().post();
+        })
+
+        $.on("navigationMenuEditForm.submit", function (event, data) {
+            var grid = $("#navigationMenuGrid").getKendoGrid();
+            grid.dataSource.read();
+        });
+
+        $.on("navigationMenuEditForm.addItem", function (event, data) {
+            $("#navigationMenuItemEditForm").component().invoke({ navMenuId: data.navMenuId, parentId: data.itemId, siteId: "@siteId" });
+            SetActiveSubPane("navigationMenuItemEditSubPane");
+        });
+
+        $.on("navigationMenuEditForm.deleteItem", function (event, data) {
+            if (data && confirm("Are you sure you want to delete the \"" + data.text + "\" navigation menu item?")) {
+                $.ajax({
+                    type: "DELETE",
+                    dataType: "json",
+                    url: "@routes.SiteApi("navigationmenuitems")/" + data.itemId,
+                    //data: { id: data.itemId },
+                    success: function () {
+                        $("#navigationMenuEditForm").component().invoke({ navMenuId: data.navMenuId });
+                    }
+                });
+            }
+        });
+
+        $.on("navigationMenuEditForm.editItem", function (event, data) {
+            $("#navigationMenuItemEditForm").component().invoke({ id: data.itemId, siteId: "@siteId" });
+            SetActiveSubPane("navigationMenuItemEditSubPane");
+        });
+
+        // Create Details ------------------------------------------------------------
+
+        $.on("navigationMenuAddToolbar.back", function (event, data) {
+            HideTabPane("editMenuTab");
+            var grid = $("#navigationMenuGrid").getKendoGrid();
+            grid.dataSource.read();
+        });
+
+        $.on("navigationMenuAddToolbar.save", function (event, data) {
+            $("#navigationMenuAddForm").form().post();
+        });
+
+        $.on("navigationMenuAddForm.submit", function (event, data) {
+            var grid = $("#navigationMenuGrid").getKendoGrid();
+            grid.dataSource.read();
+
+            $("#navigationMenuAddForm").component().invoke({});
+            $("#navigationMenuEditForm").component().invoke({ navMenuId: data.result.Id });
+            SetActiveSubPane("navigationMenuEditSubPane");
+        });
+
+        // Menu Item Edit ----------------------------------------------------------
+
+        $.on("navigationMenuItemEditToolbar.back", function (event, data) {
+            SetActiveSubPane("navigationMenuEditSubPane");
+        });
+
+        $.on("navigationMenuItemEditToolbar.save", function (event, data) {
+            $("#navigationMenuItemEditForm").form().post();
+        });
+
+        $.on("navigationMenuItemEditForm.submit", function (event, data) {
+            $("#navigationMenuEditForm").component().invoke({ navMenuId: data.result.NavMenuId, itemId: data.result.Id });
+            SetActiveSubPane("navigationMenuEditSubPane");
+        });
+
+        HideTabPane = function (tabPane) {
+            $("#" + tabPane + " >.tab-sub-pane").css("display", "none");
+        }
+
+        SetActiveSubPane = function (subPane) {
+            $("#" + subPane).siblings(".tab-sub-pane").css("display", "none");
+            $("#" + subPane).css("display", "");
+        }
+
+        //ShowParentTabSubPane = function (childName) {
+        //    var subPane = $("#" + childName).parents("div.tab-sub-pane")[0];
+        //    if (subPane) {
+        //        $(subPane).siblings(".tab-sub-pane").css("display", "none");
+        //        $(subPane).css("display", "");
+        //    }
+        //}
+
+        //InvokeComponent = function (cid, data) {
+        //    $("#" + cid).component().invoke(data);
+        //    ShowParentTabSubPane(cid);
+        //}
+    </script>
+}

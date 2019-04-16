@@ -1,0 +1,85 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.UI.Components
+
+@model Slide
+
+<div class="form-group">
+    <input class="form-control" asp-for="Title" placeholder="Slide Title..." spellcheck="true" />
+</div>
+<hr/>
+<div class="form-horizontal">
+    <input type="hidden" asp-for="ImageUrl"/>
+    <div class="form-group">
+        <label class="form-label col-sm-3">Background Image</label>
+        <div class="col-sm-4">
+            <button type="button" class="btn btn-primary btn-block">Upload Image</button>
+            <button type="button" class="btn btn-default btn-block" onclick="showPicker()">Select from Library</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <labal class="col-sm-3">Background Color</labal>
+        <div class="col-sm-9">
+            @Html.EditorFor(x => x.Color, "Color", nameof(Slide.Color))
+        </div>
+    </div>
+    <div class="form-group" style='height:400px;width:400px;background-size:contain;background-image:url("@Model.ImageUrl")'>
+    </div>
+</div>
+<script type="text/javascript">
+    function showPicker() {
+        var picker = $('#slideImagePicker');
+        var parent = $('.modal-content');
+        var buffer = $('#modalBuffer');
+
+        buffer.html(parent.html());
+        parent.html(picker.html())
+    }
+    function hidePicker() {
+        var picker = $('#slideImagePicker');
+        var parent = $('.modal-content');
+        var buffer = $('#modalBuffer');
+
+        parent.html(buffer.html());
+        buffer.empty();
+    }
+    function savePicker() {
+        hidePicker();
+    }
+</script>
+
+
+@{
+    var settings = new DocumentPickerSettings() { IsMultiSelect = false, AreContentDocumentsHidden = false, AreContentFoldersHidden = true };
+}
+
+<div id="slideImagePicker" class="hidden">
+    <div tabindex="-1" aria-labelledby="myLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myLabel">Select Slide Media</h4>
+                </div>
+                <div class="modal-body">
+                    @await Component.InvokeAsync("DocumentPicker", new { folderId = default(string), settings = settings })
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="hidePicker()">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="savePicker()">Select</button>
+                </div>
+            </div>
+        </div>
+    </div></div>
+
+<script type="text/javascript">
+    //$('#slideImagePicker .modal-body > div').on('highlighted', function (event, data) {
+    //    debugger;
+    //});
+    //$('#slideImagePicker .modal-body > div').on('selected', function (event, data) {
+    //    debugger;
+    //});
+    $('#slideImagePicker .modal-body > div').on('highlighted', function (event, data) {
+    });
+    $('#slideImagePicker').on('selected', function (event, data) {
+    });
+</script>

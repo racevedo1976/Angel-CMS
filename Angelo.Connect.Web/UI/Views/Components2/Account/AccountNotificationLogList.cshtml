@@ -1,0 +1,42 @@
+﻿@model IList<NotificationLogEntryViewModel>
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var notificationId = (string)ViewData["notificationId"];
+    var logType = (string)ViewData["logType"];
+    var apiLogRoute = routes.SiteApi("notifications/log?notificationId=" + notificationId);
+}
+
+
+@(Html.Kendo().Grid<NotificationLogEntryViewModel>()
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        columns.Bound(n => n.LogEntryType).Title("Type").Width(120);
+        columns.Bound(n => n.ToAddress).Title("To");
+        columns.Bound(n => n.Id).Hidden();
+    })
+    .Pageable()
+    .Sortable(true)
+    .Filterable()
+    .Scrollable(scr => scr.Height(430))
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Read(read =>
+        {
+            read.Type(HttpVerbs.Post)
+            .Url(apiLogRoute);
+        })
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+        })
+    )
+)
+

@@ -1,0 +1,37 @@
+﻿@model IList<RoleViewModel>
+
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var rolesDataUrl = @routes.SiteApi("roles/data");
+}
+
+
+@(Html.Kendo().Grid<RoleViewModel>()
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Name).Title(Html.ShortNameFor(x => x.First().Name).ToString());
+        columns.Bound(p => p.IsDefault).Title(Html.ShortNameFor(x => x.First().IsDefault).ToString());
+        columns.Bound(p => p.IsLocked).Title(Html.ShortNameFor(x => x.First().IsLocked).ToString());
+        columns.Bound(p => p.Id).Hidden(true);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable(scr => scr.Height(430))
+    .Filterable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .Read(read =>
+        {
+            read.Type(HttpVerbs.Post)
+            .Url(rolesDataUrl);
+        })
+    )
+)
+
+

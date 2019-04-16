@@ -1,0 +1,47 @@
+﻿@model Angelo.Connect.CoreWidgets.Models.RawHtml
+@{
+    var apiUrl = $"/api/widgets/raw/{Model.Id}";
+
+    var editorId = "editor_" + Model.Id.Replace("-", "");
+}
+
+<div class="editor-border" id="border_@editorId">
+@(
+    Html.Kendo().Editor()
+        .Name(editorId)
+        .Tag("div")
+        .HtmlAttributes(new { contenteditable = "true" })
+        .Tools(tools => tools
+            .Clear()
+            .Bold().Italic().Underline().Strikethrough()
+            .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+            .InsertUnorderedList().InsertOrderedList()
+            .Outdent().Indent()
+            .CreateLink().Unlink()
+            //.InsertImage()
+            //.InsertFile()
+            .SubScript()
+            .SuperScript()
+            .TableEditing()
+            .ViewHtml()
+            .Formatting()
+            .CleanFormatting()
+            .FontName()
+            .FontSize()
+            .ForeColor().BackColor()
+        )
+        .Value(Model.Html)
+        .Events(events => events
+            .Change("function(e){ $.post('" + apiUrl + "', { html: e.sender.value() }); }")
+        )
+)
+</div>
+
+<script>
+    $("#@editorId").focusin(function () {
+        $('#border_@editorId').removeClass('editor-border');
+    });
+    $("#@editorId").focusout(function () {
+        $('#border_@editorId').addClass('editor-border');
+    });
+</script>

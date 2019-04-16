@@ -1,0 +1,172 @@
+[
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-4-8",
+    "style": {
+      "classes": "cs-row-nopadding",
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "slideshow lux",
+        "view": "slideshow-carousel",
+        "style": {}
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "background": "bg-fancy",
+          "classes": "cs-padding20",
+          "paddingTop": "0",
+          "paddingBottom": "0"
+        },
+        "model": {
+          "html": "<div style=\"padding:10px;\"><div style=\"text-align:center;\"><img src=\"/templates/nebula/images/schoollogo.png\" alt=\"Logo\" /></div><h1 style=\"text-align:left;\"><span style=\"color:#ffffff;\">Welcome</span></h1><p style=\"text-align:left;\"><span style=\"color:#ffffff;\">Our\n Vision: We will be recognized nationally for its rigorous curriculum, \nacademic excellence and extracurricular achievement. Strengthened by \ndiversity, our district will foster partnerships of staff, families and \nthe community to develop students&rsquo; educational, physical and \nsocial-emotional well-being.</span></p></div>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "body",
+    "type": "zone",
+    "view": "zone-1",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "zone",
+        "view": "zone-4",
+        "style": {},
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "30px",
+              "paddingBottom": "30px"
+            },
+            "model": {
+              "html": "<div style=\"text-align:center;\"><img src=\"/templates/nebula/images/homelink1.png\" alt=\"Button\" /></div>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "30px",
+              "paddingBottom": "30px"
+            },
+            "model": {
+              "html": "<div style=\"text-align:center;\"><img src=\"/templates/nebula/images/homelink2.png\" alt=\"Button\" /></div>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-3",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "30px",
+              "paddingBottom": "30px"
+            },
+            "model": {
+              "html": "<div style=\"text-align:center;\"><img src=\"/templates/nebula/images/homelink3.png\" alt=\"Button\" /></div>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-4",
+            "type": "html",
+            "view": "html-raw",
+            "style": {
+              "paddingTop": "30px",
+              "paddingBottom": "30px"
+            },
+            "model": {
+              "html": "<div style=\"text-align:center;\"><img src=\"/templates/nebula/images/homelink4.png\" alt=\"Button\" /></div>",
+              "staticToolbar": false
+            }
+          }
+        ]
+      },
+      {
+        "zone": "cell-1",
+        "type": "zone",
+        "view": "zone-3",
+        "style": {},
+        "model": {},
+        "children": [
+          {
+            "zone": "cell-1",
+            "type": "image",
+            "view": "image-inline",
+            "style": {},
+            "model": {
+              "caption": "Sample Image 3",
+              "src": "/demo/images/newnews1.jpg",
+              "radius": "0px",
+              "linkNewWindow": false
+            }
+          },
+          {
+            "zone": "cell-1",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<p><span style=\"color:#ffffff;\">Library Renovations on track</span></p><p><span style=\"color:#ffffff;\">Revolutionary advances in information technology are transforming libraries and societies. </span></p>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "image",
+            "view": "image-inline",
+            "style": {},
+            "model": {
+              "caption": "Sample Image 8",
+              "src": "/demo/images/newnews2.jpg",
+              "radius": "0px",
+              "linkNewWindow": false
+            }
+          },
+          {
+            "zone": "cell-2",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<p><span style=\"color:#ffffff;\">District Test Scores Promising</span></p><p><span style=\"color:#ffffff;\">The new state standardized test reveals district students adjusting bet</span>ter. </p>",
+              "staticToolbar": false
+            }
+          },
+          {
+            "zone": "cell-3",
+            "type": "html",
+            "view": "html-raw",
+            "style": {},
+            "model": {
+              "html": "<iframe src=\"https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FSCHOOLinSITES&amp;tabs=timeline&amp;width=340&amp;height=500&amp;small_header=true&amp;adapt_container_width=true&amp;hide_cover=false&amp;show_facepile=false&amp;appId\" style=\"border:none;overflow:hidden;\" scrolling=\"no\" allowtransparency=\"true\" allow=\"encrypted-media\" width=\"340\" height=\"500\" frameborder=\"0\"></iframe>",
+              "staticToolbar": false
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

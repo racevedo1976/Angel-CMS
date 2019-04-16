@@ -1,0 +1,60 @@
+﻿@using Angelo.Connect.NavMenu.Services;
+@using Angelo.Connect.Abstractions;
+@using Angelo.Connect.Models;
+@using Angelo.Connect.Rendering;
+
+@inject AutoNavViewService autoNavService
+
+@{
+    var renderingContext = ViewData.GetRenderingContext();
+
+    string menuTitle = null;
+    IEnumerable<Page> menuItems = null;
+
+    if (renderingContext.ContentType == typeof(Page).FullName && renderingContext is ShellContext)
+    {
+        menuItems = autoNavService.GetChildPages(renderingContext.ContentId);
+        menuTitle = (renderingContext as ShellContext).WindowTitle;
+    }
+    else
+    {
+        menuTitle = "Sample Page Menu";
+        menuItems = new List<Page>
+        {
+            new Page { Title = "Sample Menu Item 1", Path = "#" },
+            new Page { Title = "Sample Menu Item 2", Path = "#" },
+            new Page { Title = "Sample Menu Item 3", Path = "#" },
+        };
+    }
+
+
+    var menuId = "navToggle_" + Guid.NewGuid().ToString("N").Substring(0, 8);
+}
+
+
+<div class="navbar navbar-default navbar-vertical" role="navigation">
+    <div class="navbar-header">
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#@menuId">
+            <span class="sr-only">Toggle Menu</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">
+            @menuTitle
+        </a>
+    </div>
+    <div id="@menuId" class="collapse navbar-collapse">
+        <ul class="nav-stacked nav-pills nav">
+            @foreach (var item in menuItems)
+            {
+                <li>
+                    <a href="@item.Path">@item.Title</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+
+

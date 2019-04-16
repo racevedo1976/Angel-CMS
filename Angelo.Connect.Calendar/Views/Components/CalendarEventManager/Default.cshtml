@@ -1,0 +1,262 @@
+﻿@using Angelo.Connect.Calendar.Models
+@using Kendo.Mvc
+@using Kendo.Mvc.UI
+@using Kendo.Mvc.UI.Fluent
+
+@model CalendarEvent
+
+@{
+    //var disableTabsIfNew = string.IsNullOrEmpty(Model.SiteId)? "disabled='disabled'" : "";
+}
+<link rel="stylesheet" href="assets/calendar/css/calendar.css">
+
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Details')" id="defaultOpen">Details</button>
+    <button class="tablinks" onclick="openTab(event, 'DescriptionTab')">Description</button>
+    <button id="btnEventGroups" class="tablinks" onclick="openTab(event, 'Groups')">Event Groups</button>
+    @*<button class="tablinks" @Html.Raw(disableTabsIfNew) onclick="openTab(event, 'Tags')">Tags</button>*@
+</div>
+
+<form id="EventPostForm" class="form" data-ajax-form="true"  action="/admin/calendardata/UpdateCalendarEvent">
+    <div id="Details" class="tabcontent">
+        @await Component.InvokeAsync("CalendarEditEventDetails", Model)
+    </div>
+
+    <div id="DescriptionTab" class="tabcontent" style="display:none">
+
+        <div class="form-group">
+            <label class="form-label" asp-for="Description">Event Details</label>
+            <div class="k-content">
+                @*<textarea asp-for="Description" class="form-control" rows="6" onchange="saveEvent()"></textarea>*@
+                @(Html.Kendo().Editor()
+                  .Name("Description")
+                  .HtmlAttributes(new { style = "height:500px;width:790px;", aria_label = "editor" })
+                  .Resizable(resizable => resizable.Content(true).Toolbar(true))
+                  .Encoded(false)
+                  .Tools(tools => tools.Clear()                   //remove all tools
+                    .Bold().Italic().Underline().Strikethrough()
+                    .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+                    .InsertUnorderedList().InsertOrderedList()
+                    .Outdent().Indent()
+                    .CreateLink().Unlink()
+                    //.InsertImage()
+                    //.InsertFile()
+                    .SubScript()
+                    .SuperScript()
+                    .TableEditing()
+                    .ViewHtml()
+                    .Formatting()
+                    .CleanFormatting()
+                    .FontName()
+                    .FontSize()
+                    .ForeColor().BackColor()
+                   )
+                  //.ImageBrowser(imageBrowser => imageBrowser
+                  //    .Image("~/Content/UserFiles/Images/{0}")
+                  //    .Read("Read", "ImageBrowser")
+                  //    .Create("Create", "ImageBrowser")
+                  //    .Destroy("Destroy", "ImageBrowser")
+                  //    .Upload("Upload", "ImageBrowser")
+                  //    .Thumbnail("Thumbnail", "ImageBrowser")
+                  //)
+                  //.Events(events => events
+                  //    .Change("saveEvent")
+                  // )
+                  .Value(@<text>
+                       
+                </text>)
+                )
+            </div>
+        </div>
+
+    </div>
+</form>
+
+    <div id="Groups" class="tabcontent"  style="display:none">
+        @*@await Component.InvokeAsync("CalendarEventGroups", new { id = Model.EventId })*@
+        <div id="calendarGroupsContent">
+            <component id="calendarEventGroups" type="CalendarEventGroups"
+                       arg-id="@Model.EventId" arg-allEventGroups="false"></component>
+        </div>
+        
+    </div>
+
+    @*<div id="Tags" class="tabcontent">
+    @await Component.InvokeAsync("CalendarEventTags", new { id = Model.EventId })
+    </div>
+    *@
+
+    <style>
+        /* Style the tab */
+        div.tab {
+            float: left;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            width: 15%;
+            height: 600px;
+        }
+
+            /* Style the buttons inside the tab */
+            div.tab button {
+                display: block;
+                background-color: inherit;
+                color: black;
+                padding: 22px 16px;
+                width: 100%;
+                border: none;
+                outline: none;
+                text-align: left;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+                /* Change background color of buttons on hover */
+                div.tab button:hover {
+                    background-color: #ddd;
+                }
+
+                /* Create an active/current "tab button" class */
+                div.tab button.active {
+                    background-color: #ccc;
+                }
+
+        /* Style the tab content */
+        .tabcontent {
+            float: left;
+            padding: 0px 12px;
+            width: 85%;
+            border-left: none;
+            height: 600px;
+            overflow: auto;
+        }
+
+        @@media screen and (max-width: 600px) {
+          .tablinks {
+            font-size: 10px;
+          }
+        }
+    </style>
+
+    <script language="javascript">
+
+        function openTab(evt, cityName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the link that opened the tab
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+
+            //saveEvent();
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        //document.getElementById("defaultOpen").click();
+        document.getElementById("Details").style.display = "block";
+        document.getElementById("defaultOpen").className += " active";
+
+        function areEventGroupChecked() {
+            //-----------------------------------
+            //Category validation
+            var isCategorySelected = false;
+            $('.chkbx:checkbox:checked').each(function () {
+                if (this.checked)
+                    isCategorySelected = true;
+            });
+            if (!isCategorySelected) {
+                alert("Select an event category.");
+                $("#btnEventGroups").addClass("eventError");
+                $("#btnEventGroups").css("border-color", "red");
+                $("#btnEventGroups").css("border-width", "1px");
+                $("#btnEventGroups").css("border-style", "solid");
+                return false;
+            }
+
+            return isCategorySelected;
+        }
+
+        function saveEvent(callback) {
+            
+            var promises = [];
+            
+
+            if (!areEventGroupChecked()) {
+                return false;
+            }
+
+            if ($("#eventTitle").val() == "") {
+                alert("Please enter an event title.");
+                $("#eventTitle").css("border-color", "red");
+                $("#eventTitle").css("border-width", "1px");
+                $("#eventTitle").css("border-style", "solid");
+                return false;
+            }
+
+            promises.push($("#EventPostForm").form().post());
+
+            $.when.apply($, promises)
+                .done(function () {
+                    
+                    saveCatSelected().done(function () {
+
+                        callback()
+                    });
+                    //do something after save
+                    //check disabled links or something like that
+                    $("button.tablinks").removeAttr("disabled");
+
+                    // //refresh any calendar widget
+                    var x = document.getElementsByClassName("fc");
+                    var i;
+                    for (i = 0; i < x.length; i++) {
+                        $(x[i]).fullCalendar('refetchEvents');
+                    }
+
+                    return result;
+                })
+                .fail(function () {
+                    
+                    
+                });
+
+            return true;
+        }
+
+        $(document).on("change", "#CalendarEventGroupsRadioButtons input[type='radio']", function (e) {
+            radioButtonsWidgetCalendarGroups(e)
+        });
+
+        function radioButtonsWidgetCalendarGroups(e) {
+            var showAll = e.currentTarget.value;
+
+            invokeEventGroup(showAll);
+         }
+
+
+        function invokeEventGroup(showAllShared) {
+           
+            $('#calendarGroupsContent').loadComponent({
+               "type": "CalendarEventGroups",
+               "id": "calendarEventGroups",
+               "params": {
+                   "id": "@Model.EventId",
+                   "allEventGroups": showAllShared
+               }
+           }).done(function () { });
+
+        }
+
+        invokeEventGroup(false);
+    </script>

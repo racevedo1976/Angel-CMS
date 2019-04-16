@@ -1,0 +1,347 @@
+﻿@using Angelo.Connect.SlideShow.Models
+@using Angelo.Connect.Abstractions
+@using Angelo.Connect.UI.Components
+@using Angelo.Connect
+@using Microsoft.Extensions.Options
+
+@model SlideShowWidget
+@inject IFolderManager<Slide> _slideShowService
+@inject IDocumentService<Slide> _slideService
+@inject IOptions<DriveOptions> _driveOptions
+
+@{
+    var driveOptions = _driveOptions.Value;
+}
+
+@{
+    var slides = (string.IsNullOrEmpty(Model.Id)
+        ? Enumerable.Empty<Slide>()
+        : _slideService.Query().Where(x => x.WidgetId == Model.Id)).ToArray();
+}
+
+<link rel="stylesheet" href="assets/slideshow/css/reset.css">
+<link rel="stylesheet" href="assets/slideshow/css/slidingpanel.css">
+
+<script type="text/javascript" src="assets/slideshow/js/modernizr.js"></script>
+<script type="text/javascript" src="assets/slideshow/js/slidingpanel.js"></script>
+
+<component id="contentSelector" type="ContentSelector"></component>
+
+<input type="hidden" asp-for="Id" />
+<input type="hidden" asp-for="SiteId" />
+
+<div class="container-fluid">
+
+    <div class="row">
+        <!-- Slide list panel-->
+        <div class="slideshowpanel active padded" id="slidelist">
+            <div id="currentSlideListContainer">
+            </div>
+            <div>
+                <a class="slideshowpanel" href="#editslide" onclick="editSlideComponent('0',this)" level="1" caption="">
+                    <div class="thumbnail" style="width:150pt;float:left;margin-right:5px;">
+                        <div style="text-align:center;height:80pt;">
+                            <span class="glyphicon glyphicon-plus" style="background-color:#333333;font-size:2em;padding:15pt;margin:15pt;" aria-hidden="true"></span>
+                        </div>
+                        <div class="caption panel-footer">
+                            New Slide
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- Editing Slide panel-->
+        <div class="slideshowpanel padded" id="editslide" style="display: none">
+            <form class="form AddEditSlideForm" method="post" data-ajax-form="true" action="/api/widgets/slideshow/slide">
+                <input type="hidden" id="slideSubmit" name="slideSubmit" value="false" />
+                <div id="addEditSlideContainer">
+                </div>
+                <div class="form-group">
+                    <a href="#slidelist" class="btn btn-primary btn-block slideshowpanel" role="button" onclick="saveSlide(this)"  level="1" caption="slide edit">Save Slide</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Layer list panel-->
+        <div class="slideshowpanel padded" id="managelayers" style="display: none">
+            <div id="layerListContainer">
+
+            </div>
+        </div>
+
+        <!-- Editing Layer panel-->
+        <div class="slideshowpanel padded" id="editlayers" style="display: none">
+                <form class="form EditSlideLayerForm" method="post" data-ajax-form="true" action="/api/widgets/slideshow/layer">
+                    <input type="hidden" id="layerSubmit" name="layerSubmit" value="false" />
+                    <div id="editLayerContainer">
+
+                    </div>
+                </form>
+
+        </div>
+
+        <!-- Document Library Picker panel-->
+        <div class="slideshowpanel padded" id="documentLibraryPicker" style="display: none;" >
+            <div>
+                @{
+                    var settings = new DocumentPickerSettings() { IsMultiSelect = false, AreContentDocumentsHidden = false, AreContentFoldersHidden = true };
+                }
+                @await Component.InvokeAsync("DocumentPicker", new { folderId = default(string), settings = settings })
+            </div>
+            <a href="#editslide" class="slideshowpanel btn btn-default btn-block">Select Image</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    var currentSlideId = "";
+    var currentSlideName = "";
+    var currentLayerId = "";
+    var driveAuth = '@_driveOptions.Value.Authority';
+
+    var container = $("#currentSlideListContainer");
+    var editSlideForm = $("#addEditSlideContainer");
+    var layerContainer = $("#layerListContainer");
+    var layerEditContainer = $("#editLayerContainer");
+    @*var refreshComponent = function () {
+            $.get("/api/widgets/slideshow/slidelist?id=@Model.Id", function (data) {
+                //debugger;
+                container.html(data);
+            });
+        };*@
+    var loadSlideList = function () {
+        container.loadComponent({
+            "type": "SlideList",
+            "id": "SlideList1",
+            "params": {
+                "widgetId": "@Model.Id"
+            }
+        });
+    }
+
+    var loadSlideLayerList = function (id, clickedElement) {
+        
+        currentSlideId = id;
+        layerContainer.loadComponent({
+            "type": "SlideLayerList",
+            "id": "SlideLayerList1",
+            "params": {
+                "slideId": id
+            }
+        }).done(function () {
+            
+            buildCrumbs(2, "");
+            
+            applySlideInSlideOutEffect(clickedElement);
+            
+        });
+    }
+
+    var loadEditLayerContainer = function (id, layerType, clickedElement){
+        layerEditContainer.loadComponent({
+            "type": "SlideLayerEdit",
+            "id": "SlideLayerEdit1",
+            "params": {
+                "layerId": id,
+                "slideId": currentSlideId,
+                "layerType": layerType
+            }
+        }).done(function () {
+            buildCrumbs(3, "");
+            applySlideInSlideOutEffect(clickedElement);
+        });
+    }
+
+    var editSlideComponent = function (id, clickedElement) {
+        currentSlideId = id;
+        $.get("/admin/SlideShowData/EditSlideComponent?widgetId=@Model.Id&id=" + id, function (data) {
+            //debugger;
+            editSlideForm.html(data);
+
+            applySlideInSlideOutEffect(clickedElement);
+        });
+    };
+
+    loadSlideList();
+
+    function saveSlide(clickedElement) {
+        var promises = [];
+        
+        $('input[id="slideSubmit"]').val("true");
+        promises.push($(".AddEditSlideForm").form().post());
+
+        $.when.apply($, promises).done(function () {
+
+            editSlideForm.html("");
+            $('input[id="slideSubmit"]').val("false");
+            loadSlideList();
+            applySlideInSlideOutEffect(clickedElement);
+        });
+    }
+
+    function saveLayer(clickedElement) {
+        var promises = [];
+
+        $('input[id="layerSubmit"]').val("true");
+        promises.push($(".EditSlideLayerForm").form().post());
+
+        $.when.apply($, promises).done(function () {
+            
+            $('input[id="layerSubmit"]').val("false");
+            loadSlideLayerList(currentSlideId, clickedElement);
+
+        });
+    }
+
+    function buildCrumbs(level, caption) {
+        var $crumbsContainer = $("<div></div>");
+        var selectedSlideId = "'" + currentSlideId + "'";
+        if (!caption) {
+            caption = "slide edit";
+        }
+        if (level >= 3) {
+            $crumbsContainer.prepend(' > ', '<a class="slideshowpanel" href="#managelayers" onclick="loadSlideLayerList(' + selectedSlideId + ', this)" level="3" caption="">Layers</a>');
+        }
+        if (level >= 2) {
+
+            $crumbsContainer.prepend(' > ', '<a class="slideshowpanel" href="#editslide" level="2" caption="" onclick="editSlideComponent(' + selectedSlideId + ', this)">' + caption + '</a>');
+        }
+        if (level >= 1) {
+            $crumbsContainer.prepend('<a class="slideshowpanel" href="#slidelist" level="1" caption="" onclick="showSlideList(this)">Slides</a>');
+        }
+
+
+        $(".slideBreadCrumbs").html($crumbsContainer)
+    }
+
+    function showSlideList(clickedElement) {
+
+        loadSlideList();
+
+        applySlideInSlideOutEffect(clickedElement);
+    }
+
+    $('#documents').on('selected', function (event, data) {
+        alert("hooked to the selected!");
+    });
+
+    // Or use the global event system
+    $.on("documents.selected", function (event, data) {
+        $("#ImageUrl").val(driveAuth + '/download?id=' + data.documentId);
+    });
+
+    function applySlideInSlideOutEffect(clickedElement) {
+        
+        var $target = $($(clickedElement).attr('href')),
+            $level = $(clickedElement).attr('level'),
+            $caption = $(clickedElement).attr('caption'),
+            $other = $target.siblings('.active'),
+            animIn = function () {
+                $target.addClass('active').show().css({
+                    left: -($target.width() + 20)
+                }).animate({
+                    left: 0
+                }, 500);
+            };
+
+        if (!$target.hasClass('active') && $other.length > 0) {
+            $other.each(function (index, self) {
+                var $this = $(this);
+                $this.removeClass('active').animate({
+                    left: -($this.width() + 20)
+                }, 500, animIn);
+            });
+        } else if (!$target.hasClass('active')) {
+            animIn();
+        }
+
+        buildCrumbs($level, $caption);
+    }
+</script>
+
+
+<style>
+    #left, #right {
+    position: relative;
+    float: left;
+    margin: 0 5px 0 0;
+    border: 1px solid black;
+    width: 200px;
+    height: 300px;
+    overflow: hidden;
+}
+
+div.slideshowpanel {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    /*display: none;*/
+}
+.slideBreadCrumbs{
+    padding:10px;
+    margin-bottom:10px;
+    /*border-bottom: 1px solid #333333;*/
+}
+</style>
+<script language="javascript">
+    //jQuery(function ($) {
+
+    //    $(document).on('click', 'a.slideshowpanel', function () {
+    //    //$('a.panel').click(function () {
+    //        var $target = $($(this).attr('href')),
+    //            $level = $(this).attr('level'),
+    //            $caption = $(this).attr('caption'),
+    //            $other = $target.siblings('.active'),
+    //            animIn = function () {
+    //                $target.addClass('active').show().css({
+    //                    left: -($target.width() + 20)
+    //                }).animate({
+    //                    left: 0
+    //                }, 500);
+    //            };
+
+    //        if (!$target.hasClass('active') && $other.length > 0) {
+    //            $other.each(function (index, self) {
+    //                var $this = $(this);
+    //                $this.removeClass('active').animate({
+    //                    left: -($this.width() + 20)
+    //                }, 500, animIn);
+    //            });
+    //        } else if (!$target.hasClass('active')) {
+    //            animIn();
+    //        }
+
+    //        buildCrumbs($level, $caption);
+    //    });
+
+    //});
+</script>
+
+@*<main class="cd-main-content">
+    <h1>Slide In Panel</h1>
+    <a href="#0" class="cd-btn">Fire Panel</a>
+    <!-- your content here -->
+</main>
+<div class="cd-panel from-right">
+    <header class="cd-panel-header">
+        <h1>Title Goes Here</h1>
+        <a href="#0" class="cd-panel-close">Close</a>
+    </header>
+    <div class="cd-panel-container">
+        <div class="cd-panel-content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam magnam accusamus obcaecati nisi eveniet quo veniam quibusdam veritatis autem accusantium doloribus nam mollitia maxime explicabo nemo quae aspernatur impedit cupiditate dicta molestias consectetur, sint reprehenderit maiores. Tempora, exercitationem, voluptate. Sapiente modi officiis nulla sed ullam, amet placeat, illum necessitatibus, eveniet dolorum et maiores earum tempora, quas iste perspiciatis quibusdam vero accusamus veritatis. Recusandae sunt, repellat incidunt impedit tempore iusto, nostrum eaque necessitatibus sint eos omnis! Beatae, itaque, in. Vel reiciendis consequatur saepe soluta itaque aliquam praesentium, neque tempora. Voluptatibus sit, totam rerum quo ex nemo pariatur tempora voluptatem est repudiandae iusto, architecto perferendis sequi, asperiores dolores doloremque odit. Libero, ipsum fuga repellat quae numquam cumque nobis ipsa voluptates pariatur, a rerum aspernatur aliquid maxime magnam vero dolorum omnis neque fugit laboriosam eveniet veniam explicabo, similique reprehenderit at. Iusto totam vitae blanditiis. Culpa, earum modi rerum velit voluptatum voluptatibus debitis, architecto aperiam vero tempora ratione sint ullam voluptas non! Odit sequi ipsa, voluptatem ratione illo ullam quaerat qui, vel dolorum eligendi similique inventore quisquam perferendis reprehenderit quos officia! Maxime aliquam, soluta reiciendis beatae quisquam. Alias porro facilis obcaecati et id, corporis accusamus? Ab porro fuga consequatur quisquam illo quae quas tenetur.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque similique, at excepturi adipisci repellat ut veritatis officia, saepe nemo soluta modi ducimus velit quam minus quis reiciendis culpa ullam quibusdam eveniet. Dolorum alias ducimus, ad, vitae delectus eligendi, possimus magni ipsam repudiandae iusto placeat repellat omnis veritatis adipisci aliquam hic ullam facere voluptatibus ratione laudantium perferendis quos ut. Beatae expedita, itaque assumenda libero voluptatem adipisci maiores voluptas accusantium, blanditiis saepe culpa laborum iusto maxime quae aperiam fugiat odit consequatur soluta hic. Sed quasi beatae quia repellendus, adipisci facilis ipsa vel, aperiam, consequatur eaque mollitia quaerat. Iusto fugit inventore eveniet velit.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque similique, at excepturi adipisci repellat ut veritatis officia, saepe nemo soluta modi ducimus velit quam minus quis reiciendis culpa ullam quibusdam eveniet. Dolorum alias ducimus, ad, vitae delectus eligendi, possimus magni ipsam repudiandae iusto placeat repellat omnis veritatis adipisci aliquam hic ullam facere voluptatibus ratione laudantium perferendis quos ut. Beatae expedita, itaque assumenda libero voluptatem adipisci maiores voluptas accusantium, blanditiis saepe culpa laborum iusto maxime quae aperiam fugiat odit consequatur soluta hic. Sed quasi beatae quia repellendus, adipisci facilis ipsa vel, aperiam, consequatur eaque mollitia quaerat. Iusto fugit inventore eveniet velit.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam magnam accusamus obcaecati nisi eveniet quo veniam quibusdam veritatis autem accusantium doloribus nam mollitia maxime explicabo nemo quae aspernatur impedit cupiditate dicta molestias consectetur, sint reprehenderit maiores. Tempora, exercitationem, voluptate. Sapiente modi officiis nulla sed ullam, amet placeat, illum necessitatibus, eveniet dolorum et maiores earum tempora, quas iste perspiciatis quibusdam vero accusamus veritatis. Recusandae sunt, repellat incidunt impedit tempore iusto, nostrum eaque necessitatibus sint eos omnis! Beatae, itaque, in. Vel reiciendis consequatur saepe soluta itaque aliquam praesentium, neque tempora. Voluptatibus sit, totam rerum quo ex nemo pariatur tempora voluptatem est repudiandae iusto, architecto perferendis sequi, asperiores dolores doloremque odit. Libero, ipsum fuga repellat quae numquam cumque nobis ipsa voluptates pariatur, a rerum aspernatur aliquid maxime magnam vero dolorum omnis neque fugit laboriosam eveniet veniam explicabo, similique reprehenderit at. Iusto totam vitae blanditiis. Culpa, earum modi rerum velit voluptatum voluptatibus debitis, architecto aperiam vero tempora ratione sint ullam voluptas non! Odit sequi ipsa, voluptatem ratione illo ullam quaerat qui, vel dolorum eligendi similique inventore quisquam perferendis reprehenderit quos officia! Maxime aliquam, soluta reiciendis beatae quisquam. Alias porro facilis obcaecati et id, corporis accusamus? Ab porro fuga consequatur quisquam illo quae quas tenetur.</p>
+        </div> <!-- cd-panel-content -->
+    </div> <!-- cd-panel-container -->
+</div> <!-- cd-panel -->*@

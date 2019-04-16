@@ -1,0 +1,206 @@
+﻿@model  Angelo.Connect.Assignments.UI.ViewModels.AssignmentDetailsViewModel
+
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Models;
+@using Angelo.Connect.Assignments.Models;
+
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var ownerLevel = (string)ViewData["ownerLevel"];
+    var ownerId = (string)ViewData["ownerId"];
+    var TimeZoneList = (List<SelectListItem>)ViewData["timeZoneList"];
+}
+
+<form id="@componentId" action="/api/assignments" class="form-horizontal-l" data-ajax-form>
+    
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.OwnerLevel)
+    @Html.HiddenFor(x => x.OwnerId)
+    @Html.HiddenFor(x => x.CreatedUTC)
+    @Html.HiddenFor(x => x.CreatedBy)
+
+    <div class="container-fluid">
+
+        <div class="table span12">
+
+            <div class="row" style="padding-top:5px;">
+                <h2>Edit Assignment - Test 1</h2>
+            </div>
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+
+            <div class="row"><h3>Assignment Status:</h3></div>
+            <div class="row inline-headers">
+                <div class="col-sm-1">
+                    @Html.RadioButtonFor(model => model.Status, AssignmentStatus.Draft, new { @style = "transform: scale(1.5);" })
+                </div>
+                <div class="col-sm-11">
+                    <h4>Save as Draft</h4><br />
+                    <span>(save but do not make publicly visible)</span>
+                </div>
+            </div> 
+            <div>&nbsp;</div>
+            <div class="row inline-headers">
+                <div class="col-sm-1">
+                    @Html.RadioButtonFor(model => model.Status, AssignmentStatus.Published, new { @style = "transform: scale(1.5);" })
+                </div>
+                <div class="col-sm-11">
+                    <h4>Publish Assignment</h4><br />
+                    <span>(make publicly visible)</span>
+                </div>
+            </div>
+
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <div class="row" style="padding:5px;">
+                <div class="col-sm-4">
+                    <h3>Title:</h3>
+                </div>
+                <div class="col-sm-8">
+                    @Html.TextBoxFor(model => model.Title, new { style = "width:100%; height:35px", @class = "form-field" })
+                </div>
+            </div>
+
+            <div class="row" style="padding:5px;">
+                <div class="col-sm-4">
+                    <h3>Description:</h3>
+                </div>
+                <div class="col-sm-8">
+                    &nbsp;
+                </div>
+            </div>
+            <div class="row" style="border-style:solid; border-width:1px;">
+
+                @(Html.Kendo().EditorFor(model => model.AssignmentBody)
+                    .HtmlAttributes(new { style = "width: 100%; height: 300px;" })
+                    .Tools(tools => tools
+                        .Bold().Italic().Underline()
+                        .JustifyLeft().JustifyCenter().JustifyRight()
+                    //.InsertUnorderedList().InsertOrderedList()
+                    //.Outdent().Indent()
+                    //.FontName()
+                    //.FontSize()
+                    //.ForeColor()//.BackColor()
+                    ).Encoded(false)
+                )
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <H3>Assignment Due Date &amp; Time:</H3>
+            </div>
+            <div class="row">
+                @(Html.Kendo().DatePicker()
+                    .Name("DueDate")
+                    .Value(Model.DueDate)
+                    .Enable(true)
+                )
+                @(Html.Kendo().TimePicker()
+                    .Name("DueTime")
+                    .Value(Model.DueTime)
+                    .Enable(true)
+                )
+            </div>
+            <div class="row" style="padding-top:5px;">
+                @Html.DropDownListFor(model => model.TimeZoneId, TimeZoneList, 
+                    new { @class = "form-control", style = "width: 350px; max-width:350px;" })
+            </div>
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <h3>Assign To:</h3>
+            </div>
+            <div class="row">
+                <label>Categories:</label>
+            </div>
+            <div class="row">
+                @(Html.Kendo().MultiSelect()
+                .Name("CategoryIds")
+                .DataTextField("Title")
+                .DataValueField("Id")
+                .Placeholder("Click here to select categories...")
+                .AutoBind(false)
+                .Value(Model.Categories)
+                .Filter("contains")
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(20)
+                    .Read(read =>
+                    {
+                        read.Type(HttpVerbs.Post)
+                        .Url("/api/assignments/categories?ownerLevel=" + ownerLevel + "&ownerId=" + ownerId);
+                    })
+                )
+                )
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label>Connection Groups:</label>
+            </div>
+            <div class="row">
+                @(Html.Kendo().MultiSelect()
+                .Name("ConnectionGroupIds")
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .Placeholder("Click here to select groups...")
+                .AutoBind(false)
+                .Value(Model.ConnectionGroups)
+                .Filter("contains")
+                .DataSource(dataSource => dataSource
+                     .Ajax()
+                     .PageSize(20)
+                     .Read(read =>
+                     {
+                         read.Type(HttpVerbs.Post)
+                         .Url("/api/assignments/connectiongroups?ownerLevel=" + ownerLevel + "&ownerId=" + ownerId);
+                     })
+                )
+                )
+            </div>
+
+
+
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <div class="row"><h3>Options:</h3></div>
+            <div class="row">
+                @Html.CheckBoxFor(model => model.AllowComments, new { @style = "transform: scale(1.5);" })
+                <label for="AllowComments">&nbsp;Allow Comments</label>
+            </div>
+            <div class="row">
+                @Html.CheckBoxFor(model => model.SendNotification, new { @style = "transform: scale(1.5);" })
+                <label for="SendNotification">&nbsp;Send Notification</label>
+            </div>
+
+
+         </div>
+
+    </div>
+
+</form>
+
+<script>
+    (function () {
+        $('#@componentId [name="ScheduleAction"]').on('change', function (e) {
+            var enabled = (($(this).val() == "Schduled") && ($(this)[0].checked)); 
+            $('#@componentId [name="ScheduledDate"]').data('kendoDatePicker').enable(enabled);
+            $('#@componentId [name="ScheduledTime"]').data('kendoTimePicker').enable(enabled);
+            if (enabled)
+                $("#TimeZoneId").removeAttr("disabled");
+            else
+                $("#TimeZoneId").attr("disabled", "disabled");
+        });
+    })();
+
+</script>
+

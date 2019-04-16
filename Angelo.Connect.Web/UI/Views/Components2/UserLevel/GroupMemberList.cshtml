@@ -1,0 +1,35 @@
+﻿@model IList<GroupMembershipViewModel>
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+
+@{
+    var componentId = (string)ViewData["cid"];
+   
+    var GroupId = (string)ViewData["GroupId"];
+}
+
+
+@(Html.Kendo().Grid(Model)
+    .Name(componentId)
+    .Columns(columns =>
+    {
+        columns.Bound(n => n.FirstName).Title(Html.Localize("First Name").ToString());
+        columns.Bound(n => n.LastName).Title(Html.Localize("Last Name").ToString());
+        columns.Bound(n => n.Id).Hidden(true);
+    })
+    .Pageable()
+    .Sortable()
+    .Scrollable(scr => scr.Height(430))
+    .Filterable()
+    .Selectable(s => s.Mode(GridSelectionMode.Single))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+        })
+    )
+)
+

@@ -1,0 +1,90 @@
+﻿@model UserProfileViewModel
+
+@section Title{
+    My User Profile
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/views/user/profile.css" asp-append-version="true" />
+}
+
+@section AdminMenu{
+    @Html.Partial("~/UI/Views/Admin/Shared/_UserMenu.cshtml")
+}
+
+@section Panel {
+}
+
+@{
+    var providerSelectList = (List<SelectListItem>)ViewData["providerSelectList"];
+}
+
+@using (Html.BeginForm("ProfileEdit", "Account",null, FormMethod.Post ,null, new { @class = "form-horizontal" }))
+{
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                Edit Profile
+               
+            </div>
+
+        </div>
+
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group registration-padding">
+            <label asp-for="FirstName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group registration-padding">
+            <label asp-for="LastName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group registration-padding">
+            <label asp-for="DisplayName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="DisplayName" class="form-control" />
+                <span asp-validation-for="DisplayName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2  control-label" asp-for="WirelessProviderId"></label>
+            <div class="col-sm-10">
+                @Html.DropDownListFor(model => model.WirelessProviderId, providerSelectList, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group registration-padding">
+            <label asp-for="BirthDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                @*<input asp-for="BirthDate" class="form-control" />*@
+                <input name="BirthDate" id="BirthDate" class="form-control" value="@Model.BirthDate.Value.ToString("MM/dd/yyyy")" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group registration-padding">
+            <label class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input type="submit" class="btn btn-primary form-control" value="Save"/>
+            </div>
+        </div>
+       
+    
+    </div>
+}

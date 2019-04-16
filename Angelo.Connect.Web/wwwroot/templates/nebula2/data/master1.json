@@ -1,0 +1,93 @@
+[
+  {
+    "zone": "footer",
+    "type": "zone",
+    "view": "zone-2",
+    "style": {
+      "paddingTop": "15px",
+      "paddingBottom": "15px"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "search",
+        "view": "search-search1",
+        "style": {
+          "classes": "text-center",
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "title": ""
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "classes": "text-center",
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<a href=\"http://www.schoolinsites.com/\">\r\n<img alt=\"SCHOOLinSITES\" src=\"/img/sislogo.png\">\r\n</a>\r\n",
+          "staticToolbar": false
+        }
+      }
+    ]
+  },
+  {
+    "zone": "header",
+    "type": "zone",
+    "view": "zone-3",
+    "style": {
+      "background": "bg-dark",
+      "paddingTop": "0",
+      "paddingBottom": "0"
+    },
+    "model": {},
+    "children": [
+      {
+        "zone": "cell-1",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<div class=\"cs-socialmediaback\"><div class=\"cs-socialmedia\"><a href=\"https://twitter.com\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-twitter\"></em></a></div><div class=\"cs-socialmedia\"><a href=\"https://www.instagram.com/\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-instagram\"></em></a></div><div class=\"cs-socialmedia\"><a href=\"https://www.facebook.com/\" target=\"_blank\" aria-label=\"icon\"><em class=\"fa fa-facebook\"></em></a></div></div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-2",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<div style=\"text-align:center;\">403 Star Way, Mobile, AL 36608<br />Ph: 251.284.4566 | Fx: 251.284.4567</div>",
+          "staticToolbar": false
+        }
+      },
+      {
+        "zone": "cell-3",
+        "type": "html",
+        "view": "html-raw",
+        "style": {
+          "paddingTop": "15px",
+          "paddingBottom": "15px"
+        },
+        "model": {
+          "html": "<a href=\"/Calendar\" target=\"_blank\"><img src=\"/templates/nebula/images/button-calendar.png\" alt=\"Calendar\" /></a> <a href=\"/Contact\" target=\"_blank\"><img src=\"/templates/nebula/images/button-contact.png\" alt=\"Contact\" /></a>",
+          "staticToolbar": false
+        }
+      }
+    ]
+  }
+]

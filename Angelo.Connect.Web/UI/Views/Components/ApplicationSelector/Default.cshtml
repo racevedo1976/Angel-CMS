@@ -1,0 +1,17 @@
+﻿@{ 
+    var clientId = (string)ViewData["ClientId"];
+    var appId = (string)ViewData["AppId"];
+    var items = (List<SelectListItem>)ViewData["SelectListItems"];
+    var returnUrl = (string)ViewData["ReturnUrl"];
+}
+
+    <div style="margin-left:5px; margin-bottom:10px;">
+        <label>Application:</label>
+        <form id="appChange" asp-area="admin" asp-controller="dashboard" asp-action="index">
+            <input type="hidden" name="clientId" value="@clientId" />
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+            @Html.DropDownList("appId", items, new { @onchange = "appChange.submit()" })
+        </form>            
+    </div>
+
+  

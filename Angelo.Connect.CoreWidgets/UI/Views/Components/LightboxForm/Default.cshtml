@@ -1,0 +1,103 @@
+﻿@using Angelo.Connect
+@using Microsoft.Extensions.Options
+
+@inject IOptions<DriveOptions> _driveOptions
+
+@model Angelo.Connect.CoreWidgets.Models.Lightbox
+@{ 
+    bool canCrop = false;
+    if (!string.IsNullOrEmpty(Model.ImageSrc))
+    {
+        canCrop = Model.ImageSrc.Contains(_driveOptions.Value.Authority);
+    }
+}
+
+<div data-module="widgets/lightboxform" data-drive-url="@_driveOptions.Value.Authority" data-user-id="@User.GetUserId()">
+
+    <form class="form" action="/sys/widgets/lightbox" data-ajax-form="true">
+        <input type="hidden" name="Id" value="@Model.Id" />
+
+        <div class="form-group">
+            <label class="form-label">Lightbox Trigger</label>
+            <select class="form-control" asp-for="@Model.TriggerType">
+                <option value="Image" selected="@(Model.TriggerType == "Image")">@Html.Localize("Image")</option>
+                <option value="Link" selected="@(Model.TriggerType == "Link")">@Html.Localize("Hyperlink")</option>
+                <option value="Button" selected="@(Model.TriggerType == "Button")">@Html.Localize("Button")</option>
+                <option value="Timer" selected="@(Model.TriggerType == "Timer")">@Html.Localize("Timer")</option>
+            </select>
+        </div>
+
+        <div class="form-group" data-group="Image">
+            <label class="form-label">Url</label>
+            <div class="input-group">
+                <input class="form-control" asp-for="ImageSrc"/>
+                <span class="input-group-btn">
+                    <a class="btn btn-default" name="selectImage">...</a>
+                </span>             
+            </div>
+            <a href="#" name="cropImage" show-if="@canCrop"><i class="fa fa-crop"></i></a>
+        </div>
+        <div class="form-group" data-group="Image">
+            <label class="form-label">@Html.Localize("Caption")</label>
+            <div>
+                <input class="form-control" asp-for="Caption" spellcheck="true" />
+            </div>
+        </div>
+        <div class="form-group" data-group="Image">
+            <label class="form-label">@Html.Localize("Height")</label>
+            <div>
+                <input class="form-control" asp-for="ImageHeight" />
+            </div>
+        </div>
+        <div class="form-group" data-group="Image">
+            <label class="form-label">@Html.Localize("Width")</label>
+            <div>
+                <input class="form-control" asp-for="ImageWidth" />
+            </div>
+        </div>
+        <div class="form-group" data-group="Image">
+            <label class="form-label">@Html.Localize("Rounded")</label>
+            <div>
+                <select class="form-control" asp-for="ImageRadius">
+                    <option value="0px" @(Model.ImageRadius == "0px" || Model.ImageRadius == null ? "selected" : "")>None</option>
+                    <option value="5px" @(Model.ImageRadius == "5px" ? "selected" : "")>5px</option>
+                    <option value="10px" @(Model.ImageRadius == "10px" ? "selected" : "")>10px</option>
+                    <option value="15px" @(Model.ImageRadius == "15px" ? "selected" : "")>15px</option>
+                    <option value="20px" @(Model.ImageRadius == "20px" ? "selected" : "")>20px</option>
+                    <option value="10%" @(Model.ImageRadius == "10%" ? "selected" : "")>10% </option>
+                    <option value="25%" @(Model.ImageRadius == "25%" ? "selected" : "")>25% </option>
+                    <option value="50%" @(Model.ImageRadius == "50%" ? "selected" : "")>50% </option>
+                    <option value="100%" @(Model.ImageRadius == "100%" ? "selected" : "")>100% (circle)</option>
+                </select>
+            </div>
+        </div>
+    
+    
+        <div class="form-group" data-group="Icon">
+            <label class="form-label">@Html.Localize("Icon Css")</label>
+            <div>
+                <input class="form-control" asp-for="IconType"/>
+            </div>
+        </div>
+
+
+        <div class="form-group" data-group="Button,Link">
+            <label class="form-label">@Html.Localize("Text")</label>
+            <div>
+                <input class="form-control" asp-for="Text" />
+            </div>
+        </div>
+
+
+        <div class="form-group" data-group="Timer">
+            <label class="form-label">@Html.Localize("Timer Delay")</label>
+            <div>
+                <input type="number" class="form-control" asp-for="Timer"/>
+            </div>
+            <div>
+                <i class="text-muted">(In Seconds)</i>
+            </div>
+        </div>
+    </form>
+
+</div>

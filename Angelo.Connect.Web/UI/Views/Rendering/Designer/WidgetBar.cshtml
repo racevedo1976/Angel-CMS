@@ -1,0 +1,107 @@
+﻿@using Angelo.Connect.Abstractions;
+@using Angelo.Connect.Rendering;
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Widgets;
+@using Angelo.Connect.Extensions
+@using Angelo.Connect.Models
+
+@inject Angelo.Connect.Widgets.WidgetProvider widgetProvider;
+@inject Angelo.Connect.Services.ProductManager productManager;
+@inject IContextAccessor<UserContext> userContextAccessor;
+@inject IContextAccessor<SiteContext> siteContextAccessor
+@{
+    var renderingContext = ViewData.GetRenderingContext() as ShellContext;
+    var userContext = userContextAccessor.GetContext();
+    var productContext = siteContextAccessor.GetContext()?.ProductContext;
+
+    // Get all widgets views from product definition
+    var productWidgetViews = productManager.GetProductWidgets(productContext);
+
+    // Get all widgets in the system and filter
+    var widgets = widgetProvider.Widgets.Where(x => x.Views.Any(y => productWidgetViews.Contains(y.Id)));
+    var widgetCategories = widgetProvider.GetCategories().Where(cat => widgets.Any(x => x.Category == cat));
+    var firstCategory = widgetCategories?.First();
+
+    Func<WidgetConfig, IEnumerable<WidgetViewEntry>> allowedViews = widget => {
+        return widget.Views.Where(y => productWidgetViews.Contains(y.Id));
+    };
+
+    // Per Dave, only allow menus to be added to master pages
+    if (!renderingContext.MasterPageEditable)
+    {
+        widgetCategories = widgetCategories.Where(x => x != "Menus");
+        widgets = widgets.Where(x => x.Category != "Menus" && x.WidgetName != "Search" && x.WidgetName != "Translate");
+    }
+}
+
+<div class="designer-bar">
+    <div class="designer-bar-toggle">
+        <a href="#toggle">
+            <i class="fa fa-chevron-down" title="@Html.Localize("Toggle")"></i>
+        </a>
+    </div>
+    <div class="designer-bar-body">
+        <div class="designer-bar-menu clearfix">
+            <span class="designer-bar-title">
+                Content
+            </span>
+            <div class="designer-bar-tabs">
+                @foreach (var category in widgetCategories)
+                {
+                    <a data-category-id="@category" css-active="@category == firstCategory">
+                        @category
+                    </a>
+                }
+            </div>
+            <div class="designer-bar-buttons pull-right">
+                <label>@Html.Localize("Forms") </label>
+                <a name="forms">
+                    <i class="fa fa-check-square-o" title="@Html.Localize("Show widget forms")"></i>
+                </a>
+                @if (userContext.IsCorpUser)
+                {
+                    <a name="sitecss" onclick="$.dialog('/sys/site/css/dialog')">
+                        <i class="fa fa-css3" title="@Html.Localize("Edit site css")"></i>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="designer-bar-views">
+            @foreach (var widget in widgets)
+            {
+                @foreach (var view in allowedViews(widget))
+                {
+                    <span class="designer-widget"
+                          css-visible="@widget.Category == firstCategory"
+                          css-draggable="@true"
+                          data-zone-index="-1"
+                          data-widget-type="@widget.WidgetType"
+                          data-widget-view="@view.Id"
+                          data-category-id="@widget.Category"
+                          data-drop-delegate="designer.createWidget"
+                          data-drag-helper="clone">
+                        
+                        <a id="@view.Id" title="@view.Title">
+                            @{
+                                if (String.IsNullOrEmpty(view.IconImage))
+                                {
+                                    @:<i class="@view.IconClass fa-fw"></i>
+                                }
+                                else
+                                {
+                                    @:<img src="/img/icons/@view.IconImage" />
+                                }
+                            }
+                        <span data-category-id="@widget.Category">
+                            @view.Title
+                        </span>
+                    </a>
+                </span>
+                }
+
+            }
+        </div>
+
+    </div>
+</div>

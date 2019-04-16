@@ -1,0 +1,21 @@
+﻿@{ 
+    var webLoginLink = (string)ViewData["webLoginLink"];
+}
+
+<h1>@Html.Localize("Page.Login.ConfirmEmail.Title")</h1>
+<hr />
+
+<div>
+    <p>
+        @Html.Localize("Label.Login.EmailConfirmed")
+    </p>
+    <br />
+    <p>
+        @if (!string.IsNullOrEmpty(webLoginLink))
+        {
+            <a href="@webLoginLink">
+                @Html.Localize("Label.Login.ClickToLogin")
+            </a>
+        }
+    </p>
+</div>

@@ -1,0 +1,17 @@
+﻿[
+  {
+    "id": "fake-blog-notice",
+    "text": "NOTICE: This is a fictional blog post provided for demo purposes only.",
+    "style": "alert-info"
+  },
+  {
+    "id": "page-seed-notice",
+    "text": "This page was created automatically from a template using sample content.",
+    "style": "alert-info"
+  },
+  {
+    "id": "seed1.pagealert",
+    "text": "This page was created automatically from a template using sample content.",
+    "style": "alert-info"
+  }
+]

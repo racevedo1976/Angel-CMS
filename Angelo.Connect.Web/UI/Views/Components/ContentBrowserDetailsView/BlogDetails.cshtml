@@ -1,0 +1,45 @@
+﻿
+@{
+    //var fileDocuments = (IEnumerable<FileDocument>)Model;
+    //var model = (IEnumerable<BlogPost>)ViewData["model"];
+
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["siteId"];
+}
+
+<form id="@componentId" action="/api/pages" class="form-horizontal" data-ajax-form>
+
+    <div style="margin-bottom: 15px">
+        <strong style="font-size: 24px">
+            My First Blog Post
+        </strong>
+
+        
+            <hr />
+            <div class="row">
+                <div class="col-sm-3">
+                    <img src="/img/Admin/Templates/district1.png" style="width: 100%; height: auto;" />
+                </div>
+                <div class="col-sm-9" style="padding-left: 15px">
+                    <a class="text-info" href="/sys/content/blog/post?id=">
+                        My Post Title
+                    </a>
+                    <br />
+                    <p class="card-text" style="height: 50px; overflow: hidden">
+                        Something about my Post
+                    </p>
+                    <p>
+                        <small class="text-muted">
+                            <i>2/16/2018 2:30 AM</i>
+                        </small>
+                    </p>
+                </div>
+            </div>
+        
+        <!--
+        <pre>@Json.Serialize(Model)</pre>
+        -->
+    </div>
+
+</form>
+    

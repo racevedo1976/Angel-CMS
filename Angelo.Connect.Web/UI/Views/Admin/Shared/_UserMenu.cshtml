@@ -1,0 +1,41 @@
+﻿
+@using Angelo.Connect.Web
+@using Angelo.Connect.Menus
+
+@inject MenuProvider menuProvider
+
+@{
+    var menuItems = await menuProvider.GetMenuItemsAsync(MenuType.UserOptions);
+}
+
+<ul class="menu-list list-unstyled" style="margin-left: 10px">
+    <li>
+        <ul class="list-unstyled" style="margin-left: 10px">
+            @foreach (var item in menuItems)
+            {
+                <li>
+                    <a href="@item.Url" css-active="item.Active">
+                        @item.Icon.Render()
+                        @Html.Localize(item.Title)
+                    </a>
+                    @if (item.MenuItems.Count() > 0)
+                    {
+                        <a class="menu-toggle @(item.Active ? "fa fa-caret-up" : "fa fa-caret-down")" data-expand="$(this).next()" data-toggle-css="['fa fa-caret-down', 'fa fa-caret-up']"></a>
+                    }
+                    <ul class="list-unstyled menu-section" css-open="@item.Active">
+                        @foreach (var link in item.MenuItems)
+                        {
+                            <li>
+                                <a href="@link.Url" css-active="link.Active">
+                                    @link.Icon.Render()
+                                    @Html.Localize(link.Title)
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </li>
+</ul>
+

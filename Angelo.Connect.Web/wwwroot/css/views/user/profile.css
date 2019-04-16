@@ -1,0 +1,14 @@
+﻿/* Profile */
+.mock-profile {
+    margin: 0 !important;
+    padding: 20px !important;
+    text-align: center;
+    border-bottom: 1px #ddd solid;
+    border-right: 1px #ddd solid;
+    background: #f3f3f3;
+}
+
+.mock-profile i.glyphicon {
+    font-size: 128px;
+    opacity: .7;
+}

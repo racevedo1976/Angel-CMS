@@ -1,0 +1,121 @@
+﻿@model  Angelo.Connect.Assignments.UI.ViewModels.AssignmentDetailsViewModel
+
+@using Kendo.Mvc.UI
+@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Security;
+@using Angelo.Connect.Models;
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var ownerLevel = (string)ViewData["ownerLevel"];
+    var ownerId = (string)ViewData["ownerId"];
+}
+
+<form id="@componentId" action="/api/notifications" class="form-horizontal" data-ajax-form>
+    
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.Status)
+    @Html.HiddenFor(x => x.OwnerLevel)
+    @Html.HiddenFor(x => x.OwnerId)
+    @Html.HiddenFor(x => x.CreatedUTC)
+    @Html.HiddenFor(x => x.CreatedBy)
+
+    <div class="container-fluid">
+
+        <div class="table span12">
+
+            <div class="row inline-headers">
+                <h3>Assignment Details:</h3>
+            </div>
+
+            <div class="row" style="border-bottom:solid">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label>Title:</label>
+            </div>
+            <div class="row">
+                <div class="static-text-box">@Model.Title</div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label>Description:</label>
+            </div>
+            <div class="row">
+                <div class="static-text-box">
+                    @Html.Raw(Model.AssignmentBody)
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label>Due Date:</label>
+            </div>
+            <div class="row">
+                <div class="static-text-box">
+                    @Model.DueDT.ToString("f") <br />
+                    @Model.TimeZoneName
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label>Category:</label>
+            </div>
+            <div class="row">
+                <div class="static-text-box">
+                    @for (var index1 = 0; index1 < Model.Categories.Count; index1++)
+                    {
+                        if (index1 > 0)
+                        {
+                            <i class="fa fa-plus" style="padding:5px;" />
+                        }
+                        <span style="white-space: nowrap;">@Model.Categories[index1].Title</span>
+                    }
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label>Connection Groups:</label>
+            </div>
+            <div class="row">
+                <div class="static-text-box">
+                    @for (var index1 = 0; index1 < Model.ConnectionGroups.Count; index1++)
+                    {
+                        if (index1 > 0)
+                        {
+                            <i class="fa fa-plus" style="padding:5px;" />
+                        }
+                        <span style="white-space: nowrap;">@Model.ConnectionGroups[index1].Name</span>
+                    }
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <label>Options:</label>
+            </div>
+            <div class="row">
+                @Html.CheckBoxFor(model => model.AllowComments, new { @disabled = "disabled" })
+                <label for="AllowComments">Allow Comments</label>
+            </div>
+            <div class="row">
+                @Html.CheckBoxFor(model => model.SendNotification, new { @disabled = "disabled" })
+                <label for="SendNotification">Send Notification</label>
+            </div>
+
+            
+
+        </div>
+    </div>
+
+</form>
+
+

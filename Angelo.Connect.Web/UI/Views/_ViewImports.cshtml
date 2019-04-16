@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using Microsoft.Extensions.Configuration;
+
+@using Angelo;
+@using Angelo.Connect.Configuration;
+@using Angelo.Connect.Icons;
+@using Angelo.Connect.Web;
+@using Angelo.Connect.Web.UI;
+@using Angelo.Connect.Web.UI.Components;
+@using Angelo.Connect.Web.UI.ViewModels.Admin;
+@using Angelo.Common.Mvc;
+@using Angelo.Common.Mvc.Saas;
+@using Kendo.Mvc;
+@using Kendo.Mvc.UI;
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Angelo.Connect.Core
+@addTagHelper *, Angelo.Connect.Web
+@addTagHelper *, Angelo.Common.Mvc
+@addTagHelper *, Kendo.Mvc
+
+@inject SiteContext CurrentSite;
+@inject IConfigurationRoot Configuration;
+@inject Angelo.Connect.UI.Routes routes;

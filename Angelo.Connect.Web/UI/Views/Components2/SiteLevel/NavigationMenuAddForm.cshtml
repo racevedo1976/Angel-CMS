@@ -1,0 +1,24 @@
+﻿@model NavigationMenuViewModel
+@{
+    var componentId = (string)ViewData["cid"];
+    var formTitle = (string)ViewData["FormTitle"];
+
+}
+
+<div style="margin:15px;">
+    <h4>@formTitle</h4>
+</div>
+
+<form id="@componentId" action="@routes.SiteApi("navigationmenu")" class="form-horizontal" data-ajax-form>
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.SiteId)
+
+    <div class="form-group">
+        <table style="border-collapse:separate; border-spacing:5px;">
+            <tr>
+                <td><span style="margin-left:5px; margin-right:25px; font-size:large; font-weight:700;">@Html.Localize("Title"):</span></td>
+                <td><input type="text" class="form-control" asp-for="Title" required spellcheck="true" /></td>
+            </tr>
+        </table>
+    </div>
+</form>

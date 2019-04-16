@@ -1,0 +1,24 @@
+﻿@model string
+@{
+    Layout = "_ModalLayout";
+
+    var pagePath = ViewData["PagePath"];
+    var pageId = ViewData["PageId"];
+    var pageProvider = ViewData["PageProvider"];
+}
+
+@section ModalTitle {
+    @Html.Localize("Publish Confirmation")
+}
+
+
+@section ModalBody {
+
+    <h4>
+        <i class="fa fa-check text-success"></i>&nbsp;
+        "@Model"
+        @Html.Localize("has been published")
+    </h4>
+
+}
+

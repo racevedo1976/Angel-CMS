@@ -1,0 +1,41 @@
+﻿@using Angelo.Connect.Kendo.Extensions
+@using Angelo.Connect.Models
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var siteId = (string)ViewData["siteId"];
+    var masterPageId = (string)ViewData["masterPageId"];
+}
+
+
+<div class="k-content">
+    @(Html.Kendo().ListView<PageMaster>()
+    .Name(componentId)
+    .TagName("div")
+    .ClientTemplateId("PageMasterTemplate")
+    .Selectable(ListViewSelectionMode.Single)
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Url("/api/masterpages/data/?siteId=" + siteId))
+        .ServerOperation(false)
+    )
+    )
+</div>
+
+
+<script type="text/x-kendo-tmpl" id="PageMasterTemplate">
+    <div class="thumbnail layoutItem" style="float:left;margin-left:10px;margin-top:10px;">
+        <img src="@Url.Content("~")#:PreviewPath#" alt="#:Title# image" />
+       
+        <div class="caption">
+            #:Title#
+        </div>
+    </div>
+</script>
+
+<style>
+    .thumbnail:hover{
+       box-shadow: 5px 10px 18px #888888
+    }
+    
+</style>

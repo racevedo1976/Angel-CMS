@@ -1,0 +1,294 @@
+﻿@using Angelo.Connect.Security;
+@using Angelo.Connect.Models;
+
+@{
+    var ownerLevel = (OwnerLevel)ViewData["ownerLevel"];
+    var ownerId = (string)ViewData["ownerId"];
+}
+
+@section Title {
+    @Html.Localize("Manage Notifications")
+}
+
+
+@section Panel {
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active">
+            <a href="#detailsTabPane" data-toggle="tab">
+                @Html.Localize("Details")
+            </a>
+        </li>
+        <li>
+            <a href="#logPane" data-toggle="tab">
+                @Html.Localize("Sent Log")
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="detailsTabPane" class="tab-pane fade in active">
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="detailsEditToolbar" class="toolbar">
+                    <a name="save" class="fa fa-save pull-right" title="Save notification details."><span>@Html.Localize("Save")</span></a>
+                </div>
+                <component id="notificationDetailsEdit" type="SiteNotificationDetailsEdit"></component>
+            </div>
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="detailsViewToolbar" class="toolbar">
+                    <a name="unschedule" class="fa fa-calendar-minus-o pull-right" title="Unschedule"><span>Unschedule</span></a>
+                </div>
+                <component id="notificationDetailsView" type="SiteNotificationDetailsView"></component>
+            </div>
+
+        </div>
+
+        <div id="logPane" class="tab-pane fade">
+
+            <div class="tab-sub-pane" style="display:none">
+                <div id="logToolbar" class="toolbar">
+                </div>
+                <component id="logList" type="SiteNotificationLogList"></component>
+            </div>
+
+        </div>
+
+    </div>
+
+}
+
+<div id="NotificationListSection">
+    <div id="listToolbar" class="toolbar">
+        <a name="create" class="fa fa-plus-square" title="Create a new notification."><span>@Html.Localize("Create")</span></a>
+        <a name="delete" class="fa fa-trash-o pull-right" title="Delete the selected notification." disabled><span>@Html.Localize("Delete")</span></a>
+    </div>
+    <component id="notificationList" type="SiteNotificationList" arg-ownerLevel="@ownerLevel.ToString()" arg-ownerId="@ownerId"></component>
+</div>
+
+@section Scripts {
+    <script>
+        var routes = {
+            notificationRoute: '@routes.SiteApi("notifications")',
+            unscheduleRoute: '@routes.SiteApi("notifications/unschedule")',
+            statusChangeRoute: '@routes.SiteApi("notifications/statuschange")',
+        };
+
+
+
+        $(document).ready(function () {
+            $(".admin-outer-body").css("width", "calc(100% - 500px)");
+            $(".admin-outer-right").css("width", "500px");
+            MonitorStatusChange();
+        });
+
+
+        $.on("notificationList.change", function (event, data) {
+            var row = data.sender.select()
+            var model = data.sender.dataItem(row);
+            if (model) {
+                if (model.Status == "@NotificationStatus.Draft") {
+                    $("#listToolbar").toolbar().enable("delete");
+                    $("#notificationDetailsView").html("");
+                    $("#detailsEditToolbar").toolbar().disable("save");
+                    InvokeComponent("notificationDetailsEdit", { id: model.Id, ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+                    HideTabPane("logPane");
+                } else {
+                    $("#listToolbar").toolbar().disable("delete");
+                    $("#notificationDetailsEdit").html("");
+                    if (model.Status == "@NotificationStatus.Scheduled") {
+                        $("#detailsViewToolbar").toolbar().enable("unschedule");
+                    } else {
+                        $("#detailsViewToolbar").toolbar().disable("unschedule");
+                    }
+                    InvokeComponent("notificationDetailsView", { id: model.Id, ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+                    InvokeComponent("logList", { notificationId: model.Id });
+                }
+            }
+            else {
+                $("#listToolbar").toolbar().enable("create");
+                $("#listToolbar").toolbar().disable("delete");
+                HideTabPane("DetailsTabPane");
+                HideTabPane("logPane");
+            }
+        })
+
+
+        $.on("notificationDetailsEdit.load", function (event, data) {
+            $("#detailsEditToolbar").toolbar().enable("save");
+        });
+
+
+        $.on("listToolbar.create", function () {
+            $("#listToolbar").toolbar().disable("delete");
+            $("#notificationDetailsView").html("");
+            $("#detailsEditToolbar").toolbar().disable("save");
+            InvokeComponent("notificationDetailsEdit", { ownerLevel: "@ownerLevel", ownerId: "@ownerId" });
+            HideTabPane("logPane");
+            $('.nav-tabs a[href="#detailsTabPane"]').tab('show');
+        });
+
+
+        $.on("listToolbar.delete", function () {
+            var model = GetSelectedModel();
+            if (model) {
+                $("#listToolbar").toolbar().disable("delete");
+                if (confirm("@Html.Localize("Confirm.Notification.Delete")")) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: routes.notificationRoute,
+                        data: { Id: model.Id },
+                        success: function (result) {
+                            HideTabPane("detailsTabPane");
+                            HideTabPane("logPane");
+                            var grid = $("#notificationList").getKendoGrid();
+                            var dataItem = grid.dataSource.get(model.Id);
+                            grid.dataSource.pushDestroy(dataItem);
+                        },
+                        error: function (xhr) {
+                            alert("Error: Unable to delete notification.");
+                            $("#listToolbar").toolbar().enable("delete");
+                        }
+                    });
+                }
+            }
+        });
+
+
+        $.on("detailsViewToolbar.unschedule", function () {
+            var model = GetSelectedModel();
+            if (model) {
+                $("#detailsViewToolbar").toolbar().disable("unschedule");
+                $.ajax({
+                    type: 'POST',
+                    url: routes.unscheduleRoute,
+                    data: { Id: model.Id },
+                    success: function (result) {
+                        model.Status = "@NotificationStatus.Draft";
+                        UpdateGridRow(model);
+                        SelectGridRow(model.Id);
+                    },
+                    error: function (xhr) {
+                        alert("Error: Unable to unschedule notification.");
+                        $("#detailsViewToolbar").toolbar().enable("unschedule");
+                    }
+                });
+            }
+        });
+
+
+        $.on("detailsEditToolbar.save", function () {
+            $("#notificationDetailsEdit").form().post();
+        });
+
+
+        $.on("notificationDetailsEdit.submit", function (event, data) {
+            UpdateGridRow(data.result);
+            SelectGridRow(data.result.Id);
+        });
+
+
+
+        GetSelectedModel = function () {
+            var grid = $("#notificationList").getKendoGrid();
+            var item = grid.select();
+            return grid.dataItem(item);
+        }
+
+        UpdateGridRow = function (data) {
+            if (!data.Id) return;
+            var grid = $("#notificationList").getKendoGrid();
+            var dataItem = grid.dataSource.get(data.Id);
+            if (dataItem) {
+                dataItem.Status = (data.Status) ? data.Status : dataItem.Status;
+                dataItem.Title = (data.Title) ? data.Title : dataItem.Title;
+                dataItem.ScheduledDT = new Date(data.ScheduledDT);
+                grid.dataSource.pushUpdate(dataItem);
+            } else {
+                grid.dataSource.pushCreate({
+                    Id: data.Id,
+                    Status: data.Status,
+                    Title: data.Title,
+                    CreatedDT: new Date(data.CreatedUTC),
+                    ScheduledDT: new Date(data.ScheduledDT)
+                });
+            }
+        }
+
+
+        SelectGridRow = function (Id) {
+            var grid = $("#notificationList").getKendoGrid();
+            var dataItem = grid.dataSource.get(Id);
+            if (dataItem) {
+                var row = grid.content.find("tr[data-uid=" + dataItem.uid + "]");
+                grid.select(row);
+            }
+        }
+
+        MonitorStatusChange = function () {
+            var rData = [];
+            var grid = $("#notificationList").getKendoGrid();
+            var sData = grid.dataSource.data();
+            for (index = 0; index < sData.length; index++) {
+                row = sData[index];
+                if (["@NotificationStatus.Scheduled",
+                     "@NotificationStatus.Processing",
+                     "@NotificationStatus.Error"].indexOf(row.Status) > -1) {
+                    rData.push({ Id: row.Id, Status: row.Status });
+                }
+            }
+            if (rData.length > 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: routes.statusChangeRoute,
+                    data: { data: rData },
+                    success: function (result) {
+                        var sModel = GetSelectedModel();
+                        var sId = (sModel) ? sModel.Id : "";
+                        for (index2 = 0; index2 < result.length; index2++) {
+                            var model = result[index2];
+                            UpdateGridRow(model);
+                            if (sId == model.Id) {
+                                SelectGridRow(sId);
+                            }
+                        }
+                        setTimeout(MonitorStatusChange, 5000);
+                    },
+                    error: function (xhr) {
+                        setTimeout(MonitorStatusChange, 30000);
+                    }
+                });
+            } else {
+                setTimeout(MonitorStatusChange, 5000);
+            }
+        }
+
+
+
+
+
+
+        HideTabPane = function (tabPane) {
+            $("#" + tabPane + " >.tab-sub-pane").css("display", "none");
+        }
+
+        ShowParentTabSubPane = function (childName) {
+            var subPane = $("#" + childName).parents("div.tab-sub-pane")[0];
+            if (subPane) {
+                $(subPane).siblings(".tab-sub-pane").css("display", "none");
+                $(subPane).css("display", "");
+            }
+        }
+
+        InvokeComponent = function (cid, data) {
+            $("#" + cid).component().invoke(data);
+            ShowParentTabSubPane(cid);
+        }
+
+
+
+    </script>
+}
+
+
+

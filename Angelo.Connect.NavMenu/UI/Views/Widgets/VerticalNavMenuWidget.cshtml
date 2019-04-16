@@ -1,0 +1,62 @@
+﻿@using Angelo.Connect.NavMenu.Services;
+@inject NavMenuViewService navMenuService
+
+@model Angelo.Connect.NavMenu.Models.NavMenuWidget
+
+@{
+    var menuItems = await navMenuService.GetNavMenuViewItemsAsync(Model.NavMenuId);
+    var toggleTargetId = Guid.NewGuid().ToString("N");
+}
+
+@if (menuItems.Count == 0)
+{
+    <span style="font-size:large;">Navigation Menu</span>
+}
+else
+{
+    <div class="navbar navbar-default navbar-vertical" role="navigation">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#@toggleTargetId">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div id="@toggleTargetId" class="collapse navbar-collapse">
+            <ul class="nav-stacked nav-pills nav">
+                @foreach (var itemL1 in menuItems)
+                {
+                    @if (itemL1.Children.Count > 0)
+                    {
+                        <li>
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                @itemL1.Title
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @foreach (var itemL2 in itemL1.Children)
+                                {
+                                    @if (itemL2.Children.Count > 0)
+                                    {
+                                        @await Html.PartialAsync("~/UI/Views/Widgets/NavigationSubItem.cshtml", itemL2)
+                                    }
+                                    else
+                                    {
+                                        <li><a href="@itemL2.Link" target="@itemL2.Target">@itemL2.Title</a></li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li><a href="@itemL1.Link" target="@itemL1.Target">@itemL1.Title</a></li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+

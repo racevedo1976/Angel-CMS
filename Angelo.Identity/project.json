@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.6",
+    "Microsoft.Extensions.Logging": "1.1.2",
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.6",
+    "Angelo.Common": { "target": "project" },
+    "System.Collections": "4.3.0",
+    "Novell.Directory.LDAP": { "target": "project" }
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.1"
+      }
+    }
+  },
+  "version": "1.1.0"
+}

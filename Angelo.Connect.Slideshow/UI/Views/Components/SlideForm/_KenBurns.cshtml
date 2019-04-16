@@ -1,0 +1,64 @@
+﻿@using Angelo.Connect.SlideShow.Models
+
+@model KenBurnsEffect
+
+<h4>Ken Burns is a pan/zoom effect that will move and scale the background image slowly</h4>
+<div>
+    <div class="row">
+        <label class="form-label col-sm-2">Ken Burns / Pan Zoom</label>
+        <div class="col-sm-4">
+            @Html.EditorFor(x => x.IsEnabled, null, nameof(KenBurnsEffect.IsEnabled))
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-2">Scale (in %)</label>
+        <div class="col-sm-3">
+            <label asp-for="ScaleFrom">From</label>
+            @Html.EditorFor(x => x.ScaleFrom, null, nameof(KenBurnsEffect.ScaleFrom), new { Minimum = 0, Maximum = 360 })
+        </div>
+        <div class="col-sm-3">
+            <label asp-for="ScaleTo">To</label>
+            @Html.EditorFor(x => x.ScaleTo, null, nameof(KenBurnsEffect.ScaleTo), new { Minimum = 0, Maximum = 360 })
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-2">Horizontal Offsets</label>
+        <div class="col-sm-3">
+            <label asp-for="HorizontalOffsetFrom">From</label>
+            @Html.EditorFor(x => x.HorizontalOffsetFrom, null, nameof(KenBurnsEffect.HorizontalOffsetFrom), new { Minimum = 0 })
+        </div>
+        <div class="col-sm-3">
+            <label asp-for="HorizontalOffsetTo">To</label>
+            @Html.EditorFor(x => x.HorizontalOffsetTo, null, nameof(KenBurnsEffect.HorizontalOffsetTo), new { Minimum = 0 })
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-2">Vertical Offsets</label>
+        <div class="col-sm-3">
+            <label asp-for="VerticalOffsetFrom">From</label>
+            @Html.EditorFor(x => x.VerticalOffsetFrom, null, nameof(KenBurnsEffect.VerticalOffsetFrom), new { Minimum = 0 })
+        </div>
+        <div class="col-sm-3">
+            <label asp-for="VerticalOffsetTo">To</label>
+            @Html.EditorFor(x => x.VerticalOffsetTo, null, nameof(KenBurnsEffect.VerticalOffsetTo), new { Minimum = 0 })
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-2">Rotation</label>
+        <div class="col-sm-3">
+            <label asp-for="RotationFrom">From</label>
+            @Html.EditorFor(x => x.RotationFrom, null, nameof(KenBurnsEffect.RotationFrom), new { Minimum = 0 })
+        </div>
+        <div class="col-sm-3">
+            <label asp-for="RotationTo">To</label>
+            @Html.EditorFor(x => x.RotationTo, null, nameof(KenBurnsEffect.RotationTo), new { Minimum = 0 })
+        </div>
+    </div>
+    <div class="row">
+        <label class="form-label col-sm-2">Duration</label>
+        <div class="col-sm-6">
+            @Html.EditorFor(x => x.Duration, null, nameof(KenBurnsEffect.Duration), new { Minimum = 0 })
+            <label class="form-label">ms</label> 
+        </div>
+    </div>
+</div>

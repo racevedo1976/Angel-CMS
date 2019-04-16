@@ -1,0 +1,78 @@
+﻿@model ClientProductAppViewModel
+
+@using Angelo.Connect.Web.UI.Controllers
+
+@{
+    var componentId = (string)ViewData["cid"];
+    var componentContainer = componentId + "_component";
+    var productList = ViewBag.AvailableProducts as IEnumerable<SelectListItem>;
+    var addonList = ViewBag.AvailableAddons as IEnumerable<SelectListItem>;
+
+    var updateAddonListFunctionName = "func1" + componentId;
+    var addonCheckboxListName = componentId + "_addons";
+}
+
+    <form id="@componentId" action="@routes.CorpApi("client/app")" class="form form-horizontal" data-ajax-form>
+        @Html.HiddenFor(x => x.ClientProductAppId)
+        @Html.HiddenFor(x => x.ClientId)
+        @Html.HiddenFor(x => x.SubscriptionEndUTC)
+        @Html.HiddenFor(x => x.SubscriptionStartUTC)
+        @Html.HiddenFor(x => x.SubscriptionType)
+
+        <div class="row" hide-if="ViewContext.ModelState.IsValid">
+            <div class="col-sm-11">
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary(excludePropertyErrors: false)
+                </div>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <label class="col-sm-4">@Html.ShortNameFor(x => x.Title)</label>
+            <div class="col-sm-8">
+                <input name="Title" required placeholder="REQUIRED" type="text" asp-for="Title" class="form-control" />
+                @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <label class="col-sm-4">Product:</label>
+            <div class="col-sm-8">
+                @Html.DropDownListFor(m => m.ProductId, productList, "Select a product.", htmlAttributes: new { @onchange = updateAddonListFunctionName + "(this.value)", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.ProductId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4">Addons:</label>
+            <div class="col-sm-8">
+                @(Html.Angelo().CheckboxList(Model)
+        .Name(addonCheckboxListName)
+        .Bind(x => x.AddonIds)
+        .Bind(addonList)
+        .FetchUrl(routes.CorpApi("client/apps/addons"))
+        .AutoHeight()
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-4">Max Site Count:</label>
+            <div class="col-sm-8">
+                @Html.EditorFor(x => x.MaxSiteCount, new { htmlAttributes = new { @type = "number", @min = "0", @step = "1" } })
+                @Html.ValidationMessageFor(x => x.MaxSiteCount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+    </form>
+
+<script>
+    function @(updateAddonListFunctionName)(val)
+    {
+        var checkboxList = AngeloCheckboxList("@addonCheckboxListName");
+        checkboxList.fetch({productId: val});
+    }
+</script>
+
