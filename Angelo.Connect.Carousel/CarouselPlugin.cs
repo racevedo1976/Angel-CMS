@@ -23,7 +23,7 @@ namespace Angelo.Connect.Carousel
         {
         }
 
-        public string Author { get; } = "SchoolInSites";
+        public string Author { get; } = "MySites";
         public string Description { get; } = "Carousel Plugin";
         public string Name { get; } = "Carousel Plugin";
         public string Version { get; } = "0.0.1";

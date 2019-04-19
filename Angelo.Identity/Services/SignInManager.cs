@@ -260,7 +260,7 @@ namespace Angelo.Identity
                 isValidDirectory = true;
             }
             #region Backwards Compatability
-            else if(user.DirectoryId == "pcmac-directory")
+            else if(user.DirectoryId == "MyCompany-directory")
             {
                 // TODO: Remove this once UAT data is refreshed
                 isValidDirectory = true;

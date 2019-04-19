@@ -25,7 +25,7 @@ namespace Angelo.Connect.Documents
 
         }
 
-        public string Author { get; } = "SchoolInSites";
+        public string Author { get; } = "MySites";
         public string Description { get; } = "Documents Plugin";
         public string Name { get; } = "Documents Plugin";
         public string Version { get; } = "0.0.1";

@@ -7,6 +7,6 @@ namespace Angelo.Connect.Configuration
 {
     public class ConnectCoreConstants
     {
-        public const string CorporateId = "pcmac";
+        public const string CorporateId = "MyCompany";
     }
 }

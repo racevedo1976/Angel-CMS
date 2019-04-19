@@ -95,7 +95,7 @@ namespace Angelo.Connect.Web.Migrations.Application
             _identityDb.SecurityPools.Add(new Angelo.Identity.Models.SecurityPool
             {
                 PoolId = DbKeys.PoolIds.PcMacCorp,
-                Name = "PcMac CMS Owner Pool",
+                Name = "MyCompany CMS Owner Pool",
                 TenantId = tenant.Id,
                 PoolType = PoolType.Corporate,
             });
@@ -283,7 +283,7 @@ namespace Angelo.Connect.Web.Migrations.Application
             {
                 Id = DbKeys.ClientIds.PcMac,
                 Name = "PC|Mac",
-                ShortName = "PcMac",
+                ShortName = "MyCompany",
                 Active = true,
                 AnniversaryDate = DateTime.UtcNow,
                 SecurityPoolId = DbKeys.PoolIds.PcMacClient,
@@ -340,13 +340,13 @@ namespace Angelo.Connect.Web.Migrations.Application
                 Published = true,
                 Domains = new List<SiteDomain>()
                 {
-                    new SiteDomain(){ DomainKey = "schoolinsites.com" },
-                    new SiteDomain(){ DomainKey = "sis.pcmac.org" },
+                    new SiteDomain(){ DomainKey = "Mysites.com" },
+                    new SiteDomain(){ DomainKey = "sis.MyCompany.org" },
                     new SiteDomain(){ DomainKey = "localhost:60000", IsDefault = _Dev },
-                    new SiteDomain(){ DomainKey = "connect.qa.pcmac.org"},
-                    new SiteDomain(){ DomainKey = "inspirationsdqa.schoolinsites.com", IsDefault = _QA },
-                    new SiteDomain(){ DomainKey = "inspirationsduat.schoolinsites.com", IsDefault = _UAT },
-                    new SiteDomain(){ DomainKey = "inspirationsddemo.schoolinsites.com", IsDefault = _Demo }
+                    new SiteDomain(){ DomainKey = "connect.qa.MyCompany.org"},
+                    new SiteDomain(){ DomainKey = "inspirationsdqa.Mysites.com", IsDefault = _QA },
+                    new SiteDomain(){ DomainKey = "inspirationsduat.Mysites.com", IsDefault = _UAT },
+                    new SiteDomain(){ DomainKey = "inspirationsddemo.Mysites.com", IsDefault = _Demo }
                 }
             });
 
@@ -365,11 +365,11 @@ namespace Angelo.Connect.Web.Migrations.Application
                 Published = true,
                 Domains = new List<SiteDomain>()
                 {
-                    new SiteDomain(){ DomainKey = "schoolinsites2.com" },
-                    new SiteDomain(){ DomainKey = "guidancehsqa.schoolinsites.com", IsDefault = _QA },
+                    new SiteDomain(){ DomainKey = "Mysites2.com" },
+                    new SiteDomain(){ DomainKey = "guidancehsqa.Mysites.com", IsDefault = _QA },
                     new SiteDomain(){ DomainKey = "localhost:60001", IsDefault = _Dev},
-                    new SiteDomain(){ DomainKey = "guidancehsuat.schoolinsites.com", IsDefault = _UAT},
-                    new SiteDomain(){ DomainKey = "guidancehsdemo.schoolinsites.com", IsDefault = _Demo }
+                    new SiteDomain(){ DomainKey = "guidancehsuat.Mysites.com", IsDefault = _UAT},
+                    new SiteDomain(){ DomainKey = "guidancehsdemo.Mysites.com", IsDefault = _Demo }
                 }
             });
 
@@ -388,12 +388,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                 Published = true,
                 Domains = new List<SiteDomain>()
                 {
-                    new SiteDomain(){ DomainKey = "schoolinsites3.com" },
-                    new SiteDomain(){ DomainKey = "sis3.pcmac.org" },
-                    new SiteDomain(){ DomainKey = "sis3qa.pcmac.org", IsDefault = _QA },
+                    new SiteDomain(){ DomainKey = "Mysites3.com" },
+                    new SiteDomain(){ DomainKey = "sis3.MyCompany.org" },
+                    new SiteDomain(){ DomainKey = "sis3qa.MyCompany.org", IsDefault = _QA },
                     new SiteDomain(){ DomainKey = "localhost:60002", IsDefault = _Dev},
-                    new SiteDomain(){ DomainKey = "sis3uat.pcmac.org", IsDefault = _UAT},
-                    new SiteDomain(){ DomainKey = "sis3demo.pcmac.org", IsDefault = _Demo}
+                    new SiteDomain(){ DomainKey = "sis3uat.MyCompany.org", IsDefault = _UAT},
+                    new SiteDomain(){ DomainKey = "sis3demo.MyCompany.org", IsDefault = _Demo}
                 }
             });
         }
@@ -452,9 +452,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 Domains = new List<SiteDomain>()
                 {
                     new SiteDomain(){ DomainKey = "localhost:60010", IsDefault = _Dev},
-                    new SiteDomain(){ DomainKey = "bocadqa.schoolinsites.com", IsDefault = _QA },
-                    new SiteDomain(){ DomainKey = "bocaduat.schoolinsites.com", IsDefault = _UAT },
-                    new SiteDomain(){ DomainKey = "bocaddemo.schoolinsites.com", IsDefault = _Demo }
+                    new SiteDomain(){ DomainKey = "bocadqa.Mysites.com", IsDefault = _QA },
+                    new SiteDomain(){ DomainKey = "bocaduat.Mysites.com", IsDefault = _UAT },
+                    new SiteDomain(){ DomainKey = "bocaddemo.Mysites.com", IsDefault = _Demo }
                 }
             });
 
@@ -787,12 +787,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.Gabi,
-                    UserName = "gabi",
-                    Email = "gabi@schoolinsites.com",
-                    PasswordHash = "Gabi.Admin.1",
-                    FirstName = "Gabi",
-                    LastName = "Constantine",
-                    DisplayName = "Gabi",
+                    UserName = "test1",
+                    Email = "test1@Mysites.com",
+                    PasswordHash = "test1.Admin.1",
+                    FirstName = "test1",
+                    LastName = "test1",
+                    DisplayName = "test1",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -821,12 +821,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.Dave,
-                    UserName = "david",
-                    Email = "d.constantine@schoolinsites.com",
-                    PasswordHash = "David.Admin.1",
-                    FirstName = "David",
-                    LastName = "Constantine",
-                    DisplayName = "David",
+                    UserName = "test2",
+                    Email = "test2@Mysites.com",
+                    PasswordHash = "test2.Admin.1",
+                    FirstName = "test2",
+                    LastName = "test2",
+                    DisplayName = "test2",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -848,19 +848,19 @@ namespace Angelo.Connect.Web.Migrations.Application
             );
             #endregion
 
-            #region Michael
+            #region Test3
             CreateUser(
                 new User()
                 {
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
-                    Id = DbKeys.UserIds.Michael,
-                    UserName = "Michael",
-                    Email = "michael@pcmac.org",
-                    PasswordHash = "Michael.1",
-                    FirstName = "Michael",
-                    LastName = "Johnson",
-                    DisplayName = "Mike J.",
+                    Id = DbKeys.UserIds.Test3,
+                    UserName = "Test3",
+                    Email = "Test3@mysite.org",
+                    PasswordHash = "Test3.1",
+                    FirstName = "Test3",
+                    LastName = "Test3",
+                    DisplayName = "Test3",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -868,7 +868,7 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Michael"),
+                    new Claim(ClaimType.FirstName, "Test3"),
                     new Claim(ClaimType.LastName, "Johnson"),
                     new Claim(ClaimType.DisplayName, "Aries Dane"),
                     new Claim(ClaimType.Gender, "M"),
@@ -893,12 +893,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.Chris,
-                    UserName = "Chris",
-                    Email = "chris@pcmac.org",
-                    PasswordHash = "Chris.1",
-                    FirstName = "Chris",
-                    LastName = "Van",
-                    DisplayName = "Chris V.",
+                    UserName = "Test4",
+                    Email = "Test4@mySites.com",
+                    PasswordHash = "Test4.1",
+                    FirstName = "Test4",
+                    LastName = "Test4",
+                    DisplayName = "Test4 V.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -906,9 +906,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Chris"),
-                    new Claim(ClaimType.LastName, "Van"),
-                    new Claim(ClaimType.DisplayName, "Chris Van"),
+                    new Claim(ClaimType.FirstName, "Test4"),
+                    new Claim(ClaimType.LastName, "Test4"),
+                    new Claim(ClaimType.DisplayName, "Test4 Van"),
                     new Claim(ClaimType.Gender, "M")
                 },
                 new string[]
@@ -927,12 +927,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.Ricardo,
-                    UserName = "Ricardo",
-                    Email = "ricardo@pcmac.org",
-                    PasswordHash = "Ricardo.1",
-                    FirstName = "Ricardo",
+                    UserName = "Test5",
+                    Email = "Test5@mySites.com",
+                    PasswordHash = "Test5.1",
+                    FirstName = "Test5",
                     LastName = "Lopez",
-                    DisplayName = "Ricardo L.",
+                    DisplayName = "Test5 L.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -940,9 +940,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Ricardo"),
+                    new Claim(ClaimType.FirstName, "Test5"),
                     new Claim(ClaimType.LastName, "Lopez"),
-                    new Claim(ClaimType.DisplayName, "Ricardo Lopez"),
+                    new Claim(ClaimType.DisplayName, "Test5 Lopez"),
                     new Claim(ClaimType.Gender, "M"),
 
                     // library claims
@@ -964,12 +964,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.Sherry,
-                    UserName = "Sherry",
-                    Email = "sherry@schoolinsites.com",
-                    PasswordHash = "Sherry.1",
-                    FirstName = "Sherry",
+                    UserName = "Test6",
+                    Email = "Test6@Mysites.com",
+                    PasswordHash = "Test6.1",
+                    FirstName = "Test6",
                     LastName = "Harris",
-                    DisplayName = "Sherry H.",
+                    DisplayName = "Test6 H.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -977,7 +977,7 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Sherry"),
+                    new Claim(ClaimType.FirstName, "Test6"),
                     new Claim(ClaimType.LastName, "Harris"),
                     new Claim(ClaimType.DisplayName, "Sharry Harris"),
                     new Claim(ClaimType.Gender, "F")
@@ -990,19 +990,19 @@ namespace Angelo.Connect.Web.Migrations.Application
             );
             #endregion
 
-            #region Christie
+            #region Test4tie
             CreateUser(
                 new User()
                 {
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
-                    Id = DbKeys.UserIds.Christie,
-                    UserName = "Christie",
-                    Email = "christie@schoolinsites.com",
-                    PasswordHash = "Christie.1",
-                    FirstName = "Christie",
+                    Id = DbKeys.UserIds.Test4tie,
+                    UserName = "Test4tie",
+                    Email = "Test4tie@Mysites.com",
+                    PasswordHash = "Test4tie.1",
+                    FirstName = "Test4tie",
                     LastName = "Stuckey",
-                    DisplayName = "Christie S.",
+                    DisplayName = "Test4tie S.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -1010,9 +1010,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Christie"),
+                    new Claim(ClaimType.FirstName, "Test4tie"),
                     new Claim(ClaimType.LastName, "Stuckey"),
-                    new Claim(ClaimType.DisplayName, "Christie Stuckey"),
+                    new Claim(ClaimType.DisplayName, "Test4tie Stuckey"),
                     new Claim(ClaimType.Gender, "F")
                 },
                 new string[]
@@ -1030,12 +1030,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.Stephanie,
-                    UserName = "Stephanie",
-                    Email = "stephanie@schoolinsites.com",
-                    PasswordHash = "Stephanie.1",
-                    FirstName = "Stephanie",
+                    UserName = "Test7",
+                    Email = "Test7@Mysites.com",
+                    PasswordHash = "Test7.1",
+                    FirstName = "Test7",
                     LastName = "Jacobs",
-                    DisplayName = "Stephanie J.",
+                    DisplayName = "Test7 J.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -1043,9 +1043,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Stephanie"),
+                    new Claim(ClaimType.FirstName, "Test7"),
                     new Claim(ClaimType.LastName, "Jacobs"),
-                    new Claim(ClaimType.DisplayName, "Stephanie Jacobs"),
+                    new Claim(ClaimType.DisplayName, "Test7 Jacobs"),
                     new Claim(ClaimType.Gender, "F")
                 },
                 new string[]
@@ -1064,12 +1064,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.JonathanG,
-                    UserName = "JonathanG",
-                    Email = "jonathang@inspirationsd.schoolinsites.com",
-                    PasswordHash = "Jonathan.1",
-                    FirstName = "Jonathan",
+                    UserName = "Test8",
+                    Email = "Test8@Mysites.com",
+                    PasswordHash = "Test8.1",
+                    FirstName = "Test8",
                     LastName = "Gardner",
-                    DisplayName = "Jonathan G.",
+                    DisplayName = "Test8 G.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -1077,9 +1077,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Jonathan"),
+                    new Claim(ClaimType.FirstName, "Test8"),
                     new Claim(ClaimType.LastName, "Gardner"),
-                    new Claim(ClaimType.DisplayName, "Jonathan Gardner"),
+                    new Claim(ClaimType.DisplayName, "Test8 Gardner"),
                     new Claim(ClaimType.Gender, "M")
                 },
                 new string[]
@@ -1099,12 +1099,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.JohnnyB,
-                    UserName = "Johnny",
-                    Email = "johnnyb@inspirationsd.schoolinsites.com",
-                    PasswordHash = "Johnny.1",
-                    FirstName = "Johnny",
+                    UserName = "Test9",
+                    Email = "Test9b@Mysites.com",
+                    PasswordHash = "Test9.1",
+                    FirstName = "Test9",
                     LastName = "Baseballcoach",
-                    DisplayName = "Johnny B.",
+                    DisplayName = "Test9 B.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -1112,9 +1112,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Johnny"),
+                    new Claim(ClaimType.FirstName, "Test9"),
                     new Claim(ClaimType.LastName, "Baseballcoach"),
-                    new Claim(ClaimType.DisplayName, "Johnny Baseballcoach"),
+                    new Claim(ClaimType.DisplayName, "Test9 Baseballcoach"),
                     new Claim(ClaimType.Gender, "M")
                 },
                 new string[]
@@ -1131,12 +1131,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.BillyB,
-                    UserName = "Billy",
-                    Email = "billyb@inspirationsd.schoolinsites.com",
-                    PasswordHash = "Billy.1",
-                    FirstName = "Billy",
+                    UserName = "Test10",
+                    Email = "Test10b@Mysites.com",
+                    PasswordHash = "Test10.1",
+                    FirstName = "Test10",
                     LastName = "Baseballplayer",
-                    DisplayName = "Billy B.",
+                    DisplayName = "Test10 B.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -1144,9 +1144,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Billy"),
+                    new Claim(ClaimType.FirstName, "Test10"),
                     new Claim(ClaimType.LastName, "Baseballplayer"),
-                    new Claim(ClaimType.DisplayName, "Billy Baseballplayer"),
+                    new Claim(ClaimType.DisplayName, "Test10 Baseballplayer"),
                     new Claim(ClaimType.Gender, "M")
                 },
                 new string[]
@@ -1163,12 +1163,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.SophieJ,
-                    UserName = "SophieJ",
-                    Email = "sophiej@inspirationsd.schoolinsites.com",
-                    PasswordHash = "Sophie.1",
-                    FirstName = "Sophie",
+                    UserName = "Test11J",
+                    Email = "Test11j@Mysites.com",
+                    PasswordHash = "Test11.1",
+                    FirstName = "Test11",
                     LastName = "Jordan",
-                    DisplayName = "Sophie J.",
+                    DisplayName = "Test11 J.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -1176,9 +1176,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Sophie"),
+                    new Claim(ClaimType.FirstName, "Test11"),
                     new Claim(ClaimType.LastName, "Jordan"),
-                    new Claim(ClaimType.DisplayName, "Sophie Jordan"),
+                    new Claim(ClaimType.DisplayName, "Test11 Jordan"),
                     new Claim(ClaimType.Gender, "F")
                 },
                 new string[]
@@ -1195,12 +1195,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.OliverB,
-                    UserName = "Oliver",
-                    Email = "oliverb@inspirationsd.schoolinsites.com",
-                    PasswordHash = "Oliver.1",
-                    FirstName = "Oliver",
+                    UserName = "Test12",
+                    Email = "Test12b@Mysites.com",
+                    PasswordHash = "Test12.1",
+                    FirstName = "Test12",
                     LastName = "Burke",
-                    DisplayName = "Oliver B.",
+                    DisplayName = "Test12 B.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -1208,9 +1208,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Oliver"),
+                    new Claim(ClaimType.FirstName, "Test12"),
                     new Claim(ClaimType.LastName, "Burke"),
-                    new Claim(ClaimType.DisplayName, "Oliver Burke"),
+                    new Claim(ClaimType.DisplayName, "Test12 Burke"),
                     new Claim(ClaimType.Gender, "M")
                 },
                 new string[]
@@ -1227,12 +1227,12 @@ namespace Angelo.Connect.Web.Migrations.Application
                     TenantId = tenant.Id,
                     DirectoryId = DbKeys.DirectoryIds.PcMac,
                     Id = DbKeys.UserIds.YasminM,
-                    UserName = "YasminM",
-                    Email = "yasminm@inspirationsd.schoolinsites.com",
-                    PasswordHash = "Yasmin.1",
-                    FirstName = "Yasmin",
+                    UserName = "Test13M",
+                    Email = "Test13m@Mysites.com",
+                    PasswordHash = "Test13.1",
+                    FirstName = "Test13",
                     LastName = "Mcguire",
-                    DisplayName = "Yasmin M.",
+                    DisplayName = "Test13 M.",
                     Title = "",
                     Suffix = "",
                     BirthDate = DateTime.MinValue,
@@ -1240,9 +1240,9 @@ namespace Angelo.Connect.Web.Migrations.Application
                 },
                 new Claim[]
                 {
-                    new Claim(ClaimType.FirstName, "Yasmin"),
+                    new Claim(ClaimType.FirstName, "Test13"),
                     new Claim(ClaimType.LastName, "Mcguire"),
-                    new Claim(ClaimType.DisplayName, "Yasmin Mcguire"),
+                    new Claim(ClaimType.DisplayName, "Test13 Mcguire"),
                     new Claim(ClaimType.Gender, "F")
                 },
                 new string[]

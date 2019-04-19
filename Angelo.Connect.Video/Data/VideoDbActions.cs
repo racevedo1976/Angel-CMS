@@ -50,7 +50,7 @@ namespace Angelo.Connect.Video.Data
 
         public static void InsertSeedData(VideoDbContext dbContext)
         {
-            var clientId = "PcMac";
+            var clientId = "MyCompany";
 
             if(dbContext.VideoStreamLinks.Count() == 0)
             {

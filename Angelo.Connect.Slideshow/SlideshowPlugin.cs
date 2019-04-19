@@ -24,7 +24,7 @@ namespace Angelo.Connect.SlideShow
         {
         }
 
-        public string Author { get; } = "SchoolInSites";
+        public string Author { get; } = "MySites";
         public string Description { get; } = "Initial Slideshow Plugin";
         public string Name { get; } = "Slideshow Plugin";
         public string Version { get; } = "0.0.1";

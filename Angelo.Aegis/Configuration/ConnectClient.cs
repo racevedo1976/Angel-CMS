@@ -12,8 +12,8 @@ namespace Angelo.Aegis.Configuration
         {
 
             ClientId = "Angelo.Connect.Web";
-            ClientName = "Angelo Connect CMS by SchoolInSites";
-            ClientUri = "http://schoolinsites.com";
+            ClientName = "Angel Connect CMS ";
+            ClientUri = "http://MySite.com";
             LogoUri = "/img/sis-logo.png";
             RequireConsent = false;
 

@@ -120,7 +120,7 @@ namespace Angelo.Connect.Web.UI.Controllers.Admin
             var thisUser = await _userManager.GetUserAsync(userId);
             var userSiteRoles = await _poolManager.GetUserRolesAsync(siteSecurityPoolId, userId);
             var userClientRoles = await _poolManager.GetUserRolesAsync(clientSecurityPoolId, userId);
-            var userCorpRoles = await _poolManager.GetUserRolesAsync("pcmac-corp-pool", userId);
+            var userCorpRoles = await _poolManager.GetUserRolesAsync("MyCompany-corp-pool", userId);
             //TODO: pull in user claims (permissions)
             var model = thisUser.ProjectTo<UserProfileViewModel>();
             model.SiteRoles = userSiteRoles;
@@ -145,7 +145,7 @@ namespace Angelo.Connect.Web.UI.Controllers.Admin
             var thisUser = await _userManager.GetUserAsync(userId);
             var userSiteRoles = await _poolManager.GetUserRolesAsync(siteSecurityPoolId, userId);
             var userClientRoles = await _poolManager.GetUserRolesAsync(clientSecurityPoolId, userId);
-            var userCorpRoles = await _poolManager.GetUserRolesAsync("pcmac-corp-pool", userId);
+            var userCorpRoles = await _poolManager.GetUserRolesAsync("MyCompany-corp-pool", userId);
             //TODO: pull in user claims (permissions)
             var model = thisUser.ProjectTo<UserProfileViewModel>();
 

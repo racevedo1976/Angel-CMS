@@ -14,7 +14,7 @@ namespace Angelo.Connect.UI.Plugins
         public string Name { get; } = "Layout Plugin";
         public string Description { get; } = "Provides layout components to group, structure, and align other content components";
         public string Version { get; } = "1.0.0";
-        public string Author { get; } = "SchoolInSites";
+        public string Author { get; } = "MySites";
 
         public void Startup(PluginBuilder pluginBuilder)
         {

@@ -39,7 +39,7 @@ namespace Angelo.Connect.Web.Migrations.Application
                 return MigrationResult.Failed("Cannot connect to database.");
 
             // site for each environment
-            List<string> siteDomains = new List<string>(new string[] { "mcpss.schoolinsites.com", "localhost:60002", "cityscapetemplateqa.schoolinsites.com", "cityscapetemplateuat.schoolinsites.com" });
+            List<string> siteDomains = new List<string>(new string[] { "mcpss.Mysites.com", "localhost:60002", "cityscapetemplateqa.Mysites.com", "cityscapetemplateuat.Mysites.com" });
             List<string> siteIds = new List<string>();
             Site site = new Site();
 

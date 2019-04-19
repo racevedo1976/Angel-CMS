@@ -385,7 +385,7 @@ namespace Angelo.Connect.Services
         protected void SendEmail(Notification note, User user)
         {
             var msg = new MimeMessage();
-            msg.From.Add(new MailboxAddress("SchoolInSites", "donotreply@schoolinsites.com"));
+            msg.From.Add(new MailboxAddress("MySites", "donotreply@Mysites.com"));
             msg.To.Add(new MailboxAddress(user.Email, user.Email));
             msg.Subject = note.EmailSubject;
             msg.Body = CreateEmailBody(note, user);
@@ -474,7 +474,7 @@ namespace Angelo.Connect.Services
             var bodyText = (textMessage.Length > 160) ? textMessage.Substring(0, 160) : textMessage;
 
             var msg = new MimeMessage();
-            msg.From.Add(new MailboxAddress("SchoolInSites", "donotreply@schoolinsites.com"));
+            msg.From.Add(new MailboxAddress("MySites", "donotreply@Mysites.com"));
             msg.To.Add(CreateSmsMailboxAddress(toNumber, providerId));
             msg.Subject = "";
             msg.Body = new TextPart("plain") { Text = bodyText };

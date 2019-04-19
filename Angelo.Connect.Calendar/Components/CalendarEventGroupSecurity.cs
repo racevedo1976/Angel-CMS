@@ -135,8 +135,8 @@ namespace Angelo.Connect.Calendar.Components
 //                AllowRoles = true,
 //                AllowUsers = true,
 //                Claim = new Claim(BlogClaimTypes.BlogCategoryContribute, categoryId),
-//                UserDirectoryId = "pcmac-directory",
-//                RolePoolId = "pcmac-client-pool",
+//                UserDirectoryId = "MyCompany-directory",
+//                RolePoolId = "MyCompany-client-pool",
 //                ResourceType = typeof(Models.BlogCategory).ToString()
 //            };
 

@@ -10,7 +10,7 @@ namespace Angelo.Connect.Security
     {
         public string Resolve()
         {
-            return "pcmac-corp-pool";
+            return "MyCompany-corp-pool";
         }
     }
 }

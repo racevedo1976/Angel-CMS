@@ -24,7 +24,7 @@ namespace Angelo.Connect.Calendar
         {
         }
 
-        public string Author { get; } = "SchoolInSites";
+        public string Author { get; } = "MySites";
         public string Description { get; } = "Initial Calendar Plugin";
         public string Name { get; } = "Calendar Plugin";
         public string Version { get; } = "0.0.1";

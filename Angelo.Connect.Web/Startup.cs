@@ -159,7 +159,7 @@ namespace Angelo.Connect.Web
                 options.IdentityConnectionString = _configuration.GetConnectionString("IdentityDB");
                 options.NotifyMeUnsubscribeDefaultDomain = _configuration["NotifyMe:UnsubscribeDefaultDomain"];
                 options.NotifyMeUnsubscribePath = _configuration["NotifyMe:UnsubscribePath"];
-                options.EmailServerHost = _configuration.GetValue("NotifyMe:EmailServerHost", "antispam.pcmac.org");
+                options.EmailServerHost = _configuration.GetValue("NotifyMe:EmailServerHost", "antispam.MyCompany.org");
                 options.EmailServerPort = _configuration.GetValue("NotifyMe:EmailServerPort", 25);
                 options.TemplatesPath = _configuration.GetValue<string>("TemplatesDirectory");
                 options.TemplateExportPath = _configuration.GetValue<string>("TemplatesDirectory");

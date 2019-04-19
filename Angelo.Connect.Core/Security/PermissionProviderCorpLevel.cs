@@ -13,7 +13,7 @@ namespace Angelo.Connect.Security
     {
         public PoolType Level { get; } = PoolType.Corporate;
 
-        private const string _corpId = "pcmac";
+        private const string _corpId = "MyCompany";
         private List<Permission> _permissions;
 
         public PermissionProviderCorpLevel()

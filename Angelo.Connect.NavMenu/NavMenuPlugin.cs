@@ -18,7 +18,7 @@ namespace Angelo.Connect.NavMenu
         public string Name { get; } = "Navigation Menu Plugin";
         public string Version { get; } = "0.0.1";
         public string Description { get; } = "Plugin created during demo";
-        public string Author { get; } = "SchoolInSites";
+        public string Author { get; } = "MySites";
 
         public void Startup(PluginBuilder pluginBuilder)
         {

@@ -19,7 +19,7 @@ namespace Angelo.Connect.CoreWidgets
         public string Name { get; } = "Core Widgets Plugin";
         public string Description { get; } = "Plugin containing multiple widgets for use with the cms framework.";
         public string Version { get; } = "0.0.1-beta1";
-        public string Author { get; } = "SchoolInSites";
+        public string Author { get; } = "MySites";
 
         public void Startup(PluginBuilder pluginBuilder)
         {

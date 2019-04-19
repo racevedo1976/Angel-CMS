@@ -17,7 +17,7 @@ namespace Angelo
 
         public static class ClientTenantKeys
         {
-            public static string PcMac = "pcmac";
+            public static string PcMac = "MyCompany";
             public static string Boca = "boca";
             public static string Wemo = "wemo";
         }
